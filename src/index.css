@@ -1,0 +1,70 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/*
+カラーテーマは以下のページからコピペ
+https://ui.jln.dev/
+*/
+
+@layer base {
+  :root {
+    --background: 155 36% 100%;
+    --foreground: 155 71% 1%;
+    --muted: 155 5% 95%;
+    --muted-foreground: 155 8% 33%;
+    --popover: 155 36% 100%;
+    --popover-foreground: 155 71% 1%;
+    --card: 155 36% 100%;
+    --card-foreground: 155 71% 1%;
+    --border: 155 13% 90%;
+    --input: 155 13% 90%;
+    --primary: 155 58% 29%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 155 14% 80%;
+    --secondary-foreground: 155 14% 20%;
+    --accent: 155 23% 71%;
+    --accent-foreground: 155 23% 11%;
+    --destructive: 8 49.51% 37.56%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 155 58% 29%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 200 19% 18%;
+    --foreground: 0 0% 96%;
+    --muted: 200 12% 22%;
+    --muted-foreground: 200 12% 72%;
+    --popover: 200 19% 15%;
+    --popover-foreground: 0 0% 100%;
+    --card: 200 19% 16%;
+    --card-foreground: 0 0% 100%;
+    --border: 200 9% 23%;
+    --input: 200 9% 26%;
+    --primary: 123 49% 59%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 123 30% 25%;
+    --secondary-foreground: 123 30% 85%;
+    --accent: 200 19% 33%;
+    --accent-foreground: 200 19% 93%;
+    --destructive: 4 91% 59%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 123 49% 59%;
+  }
+}
