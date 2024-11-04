@@ -24,21 +24,12 @@ export interface Genre {
   name: string;
 }
 
-export interface FavoriteBook {
-  id: string;
+export interface Review {
+  id: number;
   bookId: string;
-  userId: string;
-  title: string;
-  imageUrl: string;
-  createdAt: Date;
-}
-
-export interface BookBrowsingHistory {
-  id: string;
-  bookId: string;
-  userId: string;
-  title: string;
-  imageUrl: string;
-  createdAt: Date;
-  isFavorite: boolean;
+  name: string;
+  comment: string;
+  rating: number;
+  avatarUrl: string;
+  updatedAt: string;
 }
