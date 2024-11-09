@@ -1,5 +1,4 @@
 import BookList from '@/components/book-list/book-list';
-import BookListEmpty from '@/components/book-list/book-list-empty';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import BookPagination from '@/components/book-pagination';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -36,10 +35,12 @@ const loader = ({ request }: LoaderFunctionArgs) => {
 const ErrorElement = () => {
   const error = useAsyncError();
   console.log(error);
-
-  return <BookListEmpty />;
+  return (
+    <div className="flex h-24 w-full items-center justify-center">
+      <p>読み込みエラー</p>
+    </div>
+  );
 };
-
 export default function Page() {
   const { bookResponse, genres, genreIds } = useLoaderData() as LoaderFunctionReturnType;
 
@@ -47,8 +48,8 @@ export default function Page() {
     <>
       <Suspense fallback={<Skeleton className="my-2 h-5 w-32 rounded-full" />}>
         <Await resolve={genres} errorElement={<ErrorElement />}>
-          {(resolved: Genre[]) => {
-            const genreString = resolved
+          {(genres: Genre[]) => {
+            const genreString = genres
               .filter((genre) => genreIds.includes(genre.id))
               .map((genre) => genre.name)
               .join(' & ');
@@ -62,11 +63,11 @@ export default function Page() {
       <div className="flex flex-col gap-y-4 pb-4">
         <Suspense fallback={<BookListSkeleton />}>
           <Await resolve={bookResponse} errorElement={<ErrorElement />}>
-            {(resolved: BookResponse) => (
+            {(bookResponse: BookResponse) => (
               <>
-                <BookPagination totalPages={resolved.totalPages} />
-                <BookList books={resolved.books} />
-                <BookPagination totalPages={resolved.totalPages} />
+                <BookPagination totalPages={bookResponse.totalPages} />
+                <BookList books={bookResponse.books} />
+                <BookPagination totalPages={bookResponse.totalPages} />
               </>
             )}
           </Await>

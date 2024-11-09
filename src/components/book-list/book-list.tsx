@@ -11,8 +11,8 @@ export default function BookList({ books }: Props) {
 
   return (
     <ul className="grid grid-cols-2 justify-items-center gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 lg:grid-cols-5">
-      {books.map((book, index) => (
-        <li key={`${book.id}-${index}`}>
+      {books.map((book) => (
+        <li key={book.id}>
           <BookCard book={book} />
         </li>
       ))}

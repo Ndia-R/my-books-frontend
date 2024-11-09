@@ -1,4 +1,3 @@
-import BookIdNotFound from '@/routes/book/[bookId]/not-found';
 import BookIdPage from '@/routes/book/[bookId]/page';
 
 import DiscoverPage from '@/routes/discover/page';
@@ -16,12 +15,7 @@ export const router = createBrowserRouter(
         <Route index element={<RootPage />} loader={RootPage.loader} />
 
         <Route path="book">
-          <Route
-            path=":bookId"
-            element={<BookIdPage />}
-            loader={BookIdPage.loader}
-            errorElement={<BookIdNotFound />}
-          />
+          <Route path=":bookId" element={<BookIdPage />} loader={BookIdPage.loader} />
         </Route>
 
         <Route path="favorites">

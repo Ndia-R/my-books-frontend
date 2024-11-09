@@ -1,15 +1,14 @@
 import BookList from '@/components/book-list/book-list';
-import BookListEmpty from '@/components/book-list/book-list-empty';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import BookPagination from '@/components/book-pagination';
 import { getBooksByQuery } from '@/lib/data';
+import ErrorElement from '@/routes/error-element';
 import { BookResponse } from '@/types/book';
 import { Suspense } from 'react';
 import {
   Await,
   LoaderFunctionArgs,
   ScrollRestoration,
-  useAsyncError,
   useLoaderData,
 } from 'react-router-dom';
 
@@ -29,13 +28,6 @@ const loader = ({ request }: LoaderFunctionArgs) => {
   return { bookResponse, query, page };
 };
 
-const ErrorElement = () => {
-  const error = useAsyncError();
-  console.log(error);
-
-  return <BookListEmpty />;
-};
-
 export default function Page() {
   const { bookResponse, query } = useLoaderData() as LoaderFunctionReturnType;
 
@@ -46,11 +38,11 @@ export default function Page() {
       <div className="flex flex-col gap-y-4 pb-4">
         <Suspense fallback={<BookListSkeleton />}>
           <Await resolve={bookResponse} errorElement={<ErrorElement />}>
-            {(resolvedBookResponse: BookResponse) => (
+            {(bookResponse: BookResponse) => (
               <>
-                <BookPagination totalPages={resolvedBookResponse.totalPages} />
-                <BookList books={resolvedBookResponse.books} />
-                <BookPagination totalPages={resolvedBookResponse.totalPages} />
+                <BookPagination totalPages={bookResponse.totalPages} />
+                <BookList books={bookResponse.books} />
+                <BookPagination totalPages={bookResponse.totalPages} />
               </>
             )}
           </Await>

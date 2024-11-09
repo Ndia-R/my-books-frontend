@@ -10,13 +10,13 @@ export default function ReviewList({ reviews }: Props) {
 
   return (
     <>
-      <div className="mx-auto w-full lg:w-3/4">
-        <div className="p-6">
-          {reviews.map((review) => (
-            <ReviewItem className="mb-6" review={review} key={review.id} />
-          ))}
-        </div>
-      </div>
+      <ul className="flex flex-col gap-y-6 p-6">
+        {reviews.map((review) => (
+          <li key={review.id}>
+            <ReviewItem review={review} />
+          </li>
+        ))}
+      </ul>
     </>
   );
 }

@@ -9,6 +9,7 @@ import {
   Await,
   LoaderFunctionArgs,
   ScrollRestoration,
+  useAsyncError,
   useLoaderData,
 } from 'react-router-dom';
 
@@ -62,30 +63,38 @@ const loader = ({ params }: LoaderFunctionArgs) => {
   return { book, genres, reviews: ret };
 };
 
+const ErrorElement = () => {
+  const error = useAsyncError();
+  console.log(error);
+  return (
+    <div className="flex h-24 w-full items-center justify-center">
+      <p>読み込みエラー</p>
+    </div>
+  );
+};
+
 export default function Page() {
   const { book, genres, reviews } = useLoaderData() as LoaderFunctionReturnType;
 
   return (
     <>
       <Suspense fallback={<BookDetailSkeleton />}>
-        <Await resolve={genres}>
+        <Await resolve={genres} errorElement={<ErrorElement />}>
           {(genres) => (
-            <Await resolve={book}>
+            <Await resolve={book} errorElement={<ErrorElement />}>
               {(book) => <BookDetail book={book} genres={genres} />}
             </Await>
           )}
         </Await>
       </Suspense>
 
-      <Suspense
-        fallback={
-          <div className="flex h-96 items-center justify-center">
-            <ReviewListSkeleton />
-          </div>
-        }
-      >
-        <Await resolve={reviews}>{(reviews) => <ReviewList reviews={reviews} />}</Await>
-      </Suspense>
+      <div className="mx-auto w-full lg:w-3/4">
+        <Suspense fallback={<ReviewListSkeleton />}>
+          <Await resolve={reviews} errorElement={<ErrorElement />}>
+            {(reviews) => <ReviewList reviews={reviews} />}
+          </Await>
+        </Suspense>
+      </div>
 
       <ScrollRestoration />
     </>

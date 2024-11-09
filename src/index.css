@@ -24,24 +24,63 @@ https://ui.jln.dev/
 
 @layer base {
   :root {
-    --background: 155 36% 100%;
-    --foreground: 155 71% 1%;
-    --muted: 155 5% 95%;
-    --muted-foreground: 155 8% 33%;
-    --popover: 155 36% 100%;
-    --popover-foreground: 155 71% 1%;
-    --card: 155 36% 100%;
-    --card-foreground: 155 71% 1%;
-    --border: 155 13% 90%;
-    --input: 155 13% 90%;
-    --primary: 155 58% 29%;
+    /* --background: 210 25% 98%;
+    --foreground: 234 10% 37%;
+    --muted: 210 12% 90%;
+    --muted-foreground: 210 12% 30%;
+    --popover: 210 25% 95%;
+    --popover-foreground: 234 10% 27%;
+    --card: 210 25% 96%;
+    --card-foreground: 234 10% 32%;
+    --border: 210 15% 93%;
+    --input: 210 15% 90%;
+    --primary: 140 59% 43%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 155 14% 80%;
-    --secondary-foreground: 155 14% 20%;
-    --accent: 155 23% 71%;
-    --accent-foreground: 155 23% 11%;
-    --destructive: 8 49.51% 37.56%;
-    --destructive-foreground: 0 0% 100%;
+    --secondary: 140 30% 75%;
+    --secondary-foreground: 140 30% 15%;
+    --accent: 210 25% 83%;
+    --accent-foreground: 210 25% 23%;
+    --destructive: 8 93% 44%;
+    --destructive-foreground: 0 0% 100%; */
+
+    --background: 112 100% 97%;
+    --foreground: 60 2% 30%;
+    --muted: 112 12% 90%;
+    --muted-foreground: 112 12% 30%;
+    --popover: 112 100% 94%;
+    --popover-foreground: 60 2% 20%;
+    --card: 112 100% 95%;
+    --card-foreground: 60 2% 25%;
+    --border: 112 90% 92%;
+    --input: 112 90% 89%;
+    --primary: 123 43% 39%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 123 30% 75%;
+    --secondary-foreground: 123 30% 15%;
+    --accent: 112 100% 82%;
+    --accent-foreground: 112 100% 2%;
+    --destructive: 2 96% 27%;
+    --destructive-foreground: 2 96% 87%;
+
+    /* --background: 0 0% 100%;
+    --foreground: 167 62% 25%;
+    --muted: 0 12% 90%;
+    --muted-foreground: 0 12% 30%;
+    --popover: 0 0% 97%;
+    --popover-foreground: 167 62% 15%;
+    --card: 0 0% 98%;
+    --card-foreground: 167 62% 20%;
+    --border: 0 0% 95%;
+    --input: 0 0% 92%;
+    --primary: 143 88% 29%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 143 30% 75%;
+    --secondary-foreground: 143 30% 15%;
+    --accent: 0 0% 85%;
+    --accent-foreground: 0 0% 25%;
+    --destructive: 7 100% 27%;
+    --destructive-foreground: 7 100% 87%; */
+
     --ring: 155 58% 29%;
     --radius: 0.5rem;
   }

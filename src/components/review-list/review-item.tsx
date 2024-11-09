@@ -4,12 +4,11 @@ import { Review } from '@/types/book';
 
 type Props = {
   review: Review;
-  className?: string;
 };
 
-export default function ReviewItem({ review, className }: Props) {
+export default function ReviewItem({ review }: Props) {
   return (
-    <div className={className}>
+    <div>
       <div className="flex flex-col items-center justify-between gap-y-4 sm:flex-row">
         <div className="flex items-center gap-x-4">
           <img

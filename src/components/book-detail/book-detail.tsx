@@ -24,7 +24,7 @@ export default function BookDetail({ book, genres }: Props) {
           />
           <div className="my-4 flex items-center gap-x-2">
             <Button className="w-32 rounded-full" size="lg">
-              購入
+              読む
             </Button>
             <FavoriteButton book={book} />
           </div>

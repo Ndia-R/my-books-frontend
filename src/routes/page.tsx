@@ -4,9 +4,10 @@ import GenreList from '@/components/genre-list/genre-list';
 import GenreListSkeleton from '@/components/genre-list/genre-list-skeleton';
 import Hero from '@/components/layout/hero';
 import { getGenres, getNewReleases } from '@/lib/data';
+import ErrorElement from '@/routes/error-element';
 import { Book, Genre } from '@/types/book';
 import { Suspense } from 'react';
-import { Await, useAsyncError, useLoaderData } from 'react-router-dom';
+import { Await, useLoaderData } from 'react-router-dom';
 
 type LoaderFunctionReturnType = {
   genres: Promise<Genre[]>;
@@ -17,13 +18,6 @@ const loader = () => {
   const genres = getGenres();
   const newReleases = getNewReleases();
   return { genres, newReleases };
-};
-
-const ErrorElement = () => {
-  const error = useAsyncError();
-  console.log(error);
-
-  return <div>ジャンル取得失敗</div>;
 };
 
 export default function Page() {
@@ -47,7 +41,7 @@ export default function Page() {
       <div className="flex flex-col">
         <p className="font-bold text-primary">ニューリリース</p>
         <div className="my-4 flex flex-col gap-y-4">
-          <Suspense fallback={<BookListSkeleton paginationOff={true} />}>
+          <Suspense fallback={<BookListSkeleton paginationOff />}>
             <Await resolve={newReleases} errorElement={<ErrorElement />}>
               {(newReleases: Book[]) => <BookList books={newReleases} />}
             </Await>
