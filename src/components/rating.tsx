@@ -6,17 +6,10 @@ type Props = {
   rating: number;
   max?: number;
   readOnly?: boolean;
-  className?: string;
   onChange?: (rating: number) => void;
 };
 
-export default function Rating({
-  rating,
-  max = 5,
-  readOnly = false,
-  className,
-  onChange,
-}: Props) {
+export default function Rating({ rating, max = 5, readOnly = false, onChange }: Props) {
   // 評価が最大を超えていたら、最大にする
   const initRating = rating > max ? max : rating;
 
@@ -43,7 +36,7 @@ export default function Rating({
   };
 
   return (
-    <div className={className}>
+    <>
       <div className="flex h-10 items-center text-foreground">
         <p
           className={cn('w-8', currentRating !== dispRating && 'text-foreground/40')}
@@ -78,6 +71,6 @@ export default function Rating({
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
 }

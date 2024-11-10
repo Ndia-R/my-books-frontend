@@ -25,6 +25,8 @@ export default function BookPagination({ totalPages }: Props) {
     navigate(`${location.pathname}?${params.toString()}`);
   };
 
+  if (totalPages === 0) return null;
+
   return (
     <div className="flex justify-center">
       <Pagination total={totalPages} page={page} onChangePage={handleChange} />

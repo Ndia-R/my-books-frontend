@@ -3,13 +3,13 @@ import BookDetailSkeleton from '@/components/book-detail/book-detail-skeleton';
 import ReviewList from '@/components/review-list/review-list';
 import ReviewListSkeleton from '@/components/review-list/review-list-skeleton';
 import { getBookById, getGenres } from '@/lib/data';
+import ErrorElement from '@/routes/error-element';
 import { Book, Genre, Review } from '@/types/book';
 import { Suspense } from 'react';
 import {
   Await,
   LoaderFunctionArgs,
   ScrollRestoration,
-  useAsyncError,
   useLoaderData,
 } from 'react-router-dom';
 
@@ -61,16 +61,6 @@ const loader = ({ params }: LoaderFunctionArgs) => {
   });
 
   return { book, genres, reviews: ret };
-};
-
-const ErrorElement = () => {
-  const error = useAsyncError();
-  console.log(error);
-  return (
-    <div className="flex h-24 w-full items-center justify-center">
-      <p>読み込みエラー</p>
-    </div>
-  );
 };
 
 export default function Page() {

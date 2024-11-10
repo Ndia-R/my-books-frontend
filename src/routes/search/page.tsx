@@ -1,6 +1,6 @@
 import BookList from '@/components/book-list/book-list';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
-import BookPagination from '@/components/book-pagination';
+import BookPagination from '@/components/book-list/book-pagination';
 import { getBooksByQuery } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
 import { BookResponse } from '@/types/book';

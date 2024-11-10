@@ -9,7 +9,7 @@ type Props = {
 export default function ReviewItem({ review }: Props) {
   return (
     <div>
-      <div className="flex flex-col items-center justify-between gap-y-4 sm:flex-row">
+      <div className="flex flex-col items-center justify-between gap-y-4 p-4 pb-0 sm:flex-row">
         <div className="flex items-center gap-x-4">
           <img
             className="w-16 rounded-full"
@@ -23,7 +23,7 @@ export default function ReviewItem({ review }: Props) {
             </p>
           </div>
         </div>
-        <Rating className="mx-4" rating={review.rating} readOnly />
+        <Rating rating={review.rating} readOnly />
       </div>
       <p className="p-4 text-muted-foreground">{review.comment}</p>
     </div>

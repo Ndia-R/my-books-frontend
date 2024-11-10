@@ -10,10 +10,10 @@ export const FETCH_BOOKS_MAX_RESULTS = 20;
  * 書籍の検索
  * @param q クエリ文字列
  * @param page? ページ番号のインデックス（0 から開始）
- * @return bookResponse
+ * @return Promise<BookResponse | undefined>
  */
 export const getBooksByQuery = async (q: string | undefined | null, page: number = 0) => {
-  if (!q) return [];
+  if (!q) return undefined;
 
   const url = `${BOOKS_API_ENDPOINT}/books/search?q=${q}&page=${page}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
   const res = await fetch(url);
@@ -32,11 +32,9 @@ export const getBooksByQuery = async (q: string | undefined | null, page: number
 /**
  * １冊分の本の情報を取得
  * @param bookId 取得する書籍のID
- * @return Book
+ * @return Promise<Book | undefined>
  */
-export const getBookById = async (
-  bookId: string | undefined
-): Promise<Book | undefined> => {
+export const getBookById = async (bookId: string | undefined) => {
   if (!bookId) return undefined;
 
   const url = `${BOOKS_API_ENDPOINT}/books/${bookId}`;
@@ -55,7 +53,7 @@ export const getBookById = async (
 
 /**
  * ジャンル一覧の取得
- * @return Genre[]
+ * @return Promise<Genre[]>
  */
 export const getGenres = async () => {
   const url = `${BOOKS_API_ENDPOINT}/genres`;
@@ -76,13 +74,13 @@ export const getGenres = async () => {
  * ジャンル検索
  * @param genreIds ジャンルID
  * @param page? ページ番号のインデックス（0 から開始）
- * @return bookResponse
+ * @return Promise<BookResponse | undefined>
  */
 export const getBooksByGenreId = async (
   genreIds: number[] | undefined | null,
   page: number = 0
 ) => {
-  if (!genreIds?.length) return [];
+  if (!genreIds?.length) return undefined;
 
   const ids = genreIds.join(',');
   const url = `${BOOKS_API_ENDPOINT}/books/discover?genreId=${ids}&page=${page}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
@@ -101,9 +99,9 @@ export const getBooksByGenreId = async (
 
 /**
  * 最近リリースされた本の情報を取得（１０冊分）
- * @return Book
+ * @return Promise<Book>
  */
-export const getNewReleases = async (): Promise<Book | undefined> => {
+export const getNewReleases = async () => {
   const url = `${BOOKS_API_ENDPOINT}/books/new-releases`;
   const res = await fetch(url);
 

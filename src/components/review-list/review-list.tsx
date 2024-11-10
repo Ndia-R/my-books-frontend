@@ -6,13 +6,11 @@ type Props = {
 };
 
 export default function ReviewList({ reviews }: Props) {
-  console.log(reviews);
-
   return (
     <>
-      <ul className="flex flex-col gap-y-6 p-6">
+      <ul className="flex flex-col p-6">
         {reviews.map((review) => (
-          <li key={review.id}>
+          <li className="border-t border-t-muted" key={review.id}>
             <ReviewItem review={review} />
           </li>
         ))}

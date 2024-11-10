@@ -1,15 +1,15 @@
 import BookList from '@/components/book-list/book-list';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
-import BookPagination from '@/components/book-pagination';
+import BookPagination from '@/components/book-list/book-pagination';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getBooksByGenreId, getGenres } from '@/lib/data';
+import ErrorElement from '@/routes/error-element';
 import { BookResponse, Genre } from '@/types/book';
 import { Suspense } from 'react';
 import {
   Await,
   LoaderFunctionArgs,
   ScrollRestoration,
-  useAsyncError,
   useLoaderData,
 } from 'react-router-dom';
 
@@ -32,15 +32,6 @@ const loader = ({ request }: LoaderFunctionArgs) => {
   return { bookResponse, genres, genreIds };
 };
 
-const ErrorElement = () => {
-  const error = useAsyncError();
-  console.log(error);
-  return (
-    <div className="flex h-24 w-full items-center justify-center">
-      <p>読み込みエラー</p>
-    </div>
-  );
-};
 export default function Page() {
   const { bookResponse, genres, genreIds } = useLoaderData() as LoaderFunctionReturnType;
 

@@ -1,3 +1,4 @@
+import ReviewDialog from '@/components/book-detail/review-dialog';
 import FavoriteButton from '@/components/favorite-button';
 import GenreList from '@/components/genre-list/genre-list';
 import Rating from '@/components/rating';
@@ -71,9 +72,7 @@ export default function BookDetail({ book, genres }: Props) {
 
             <div className="flex flex-col items-center justify-end gap-y-4 sm:items-end">
               <Rating rating={4.5} readOnly />
-              <Button className="rounded-full" variant="outline">
-                レビューを書く
-              </Button>
+              <ReviewDialog />
             </div>
           </div>
         </div>
