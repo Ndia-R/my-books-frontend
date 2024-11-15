@@ -1,4 +1,4 @@
-import Card from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { FETCH_BOOKS_MAX_RESULTS } from '@/lib/data';
 

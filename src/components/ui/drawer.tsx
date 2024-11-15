@@ -24,14 +24,14 @@ interface DrawerProps extends HTMLAttributes<HTMLDivElement> {
   side?: 'left' | 'right';
 }
 
-export function Drawer({
+const Drawer = ({
   className,
   children,
   open,
   onOpenChange,
   side = 'left',
   ...props
-}: DrawerProps) {
+}: DrawerProps) => {
   // 外部からのopen状態を優先し、指定がない場合は内部状態を利用
   const [isOpen, setIsOpen] = useState(open ?? false);
 
@@ -110,13 +110,13 @@ export function Drawer({
       </div>
     </DrawerContext.Provider>
   );
-}
+};
 
 interface DrawerTriggerProps {
   children: ReactNode;
   asChild?: boolean;
 }
-export function DrawerTrigger({ children, asChild = false }: DrawerTriggerProps) {
+const DrawerTrigger = ({ children, asChild = false }: DrawerTriggerProps) => {
   const context = useContext(DrawerContext);
 
   if (!context) {
@@ -134,13 +134,13 @@ export function DrawerTrigger({ children, asChild = false }: DrawerTriggerProps)
       {children}
     </button>
   );
-}
+};
 
 interface DrawerContentProps {
   children: ReactNode;
   className?: string;
 }
-export function DrawerContent({ children, className }: DrawerContentProps) {
+const DrawerContent = ({ children, className }: DrawerContentProps) => {
   const context = useContext(DrawerContext);
 
   if (!context) {
@@ -148,4 +148,6 @@ export function DrawerContent({ children, className }: DrawerContentProps) {
   }
 
   return <div className={cn('relative', className)}>{children}</div>;
-}
+};
+
+export { Drawer, DrawerContent, DrawerTrigger };

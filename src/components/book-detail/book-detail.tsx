@@ -2,7 +2,7 @@ import ReviewDialog from '@/components/book-detail/review-dialog';
 import FavoriteButton from '@/components/favorite-button';
 import GenreList from '@/components/genre-list/genre-list';
 import Rating from '@/components/rating';
-import Button from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { formatDate, formatIsbn, priceToString } from '@/lib/util';
 import { Book, Genre } from '@/types/book';
 

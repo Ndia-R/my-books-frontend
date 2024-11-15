@@ -1,6 +1,6 @@
 import Logo from '@/components/layout/logo';
 import MenuList from '@/components/layout/menu-list';
-import Button from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
 import { useWindowSize } from '@/hooks/useWindowSize';
 import { MenuIcon } from 'lucide-react';

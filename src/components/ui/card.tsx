@@ -3,7 +3,7 @@ import { HTMLAttributes } from 'react';
 
 type CardProps = HTMLAttributes<HTMLDivElement>;
 
-export default function Card({ className, children, ...props }: CardProps) {
+const Card = ({ className, children, ...props }: CardProps) => {
   return (
     <div
       className={cn(
@@ -15,4 +15,6 @@ export default function Card({ className, children, ...props }: CardProps) {
       {children}
     </div>
   );
-}
+};
+
+export { Card };

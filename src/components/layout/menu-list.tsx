@@ -1,4 +1,4 @@
-import Button from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/util';
 import { Link, useLocation } from 'react-router-dom';
 

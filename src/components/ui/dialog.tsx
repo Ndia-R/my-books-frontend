@@ -25,13 +25,7 @@ interface DialogProps extends DialogHTMLAttributes<HTMLDialogElement> {
   onOpenChange?: (isOpen: boolean) => void;
 }
 
-export function Dialog({
-  className,
-  children,
-  open,
-  onOpenChange,
-  ...props
-}: DialogProps) {
+const Dialog = ({ className, children, open, onOpenChange, ...props }: DialogProps) => {
   // 外部からのopen状態を優先し、指定がない場合は内部状態を利用
   const [isOpen, setIsOpen] = useState(open ?? false);
 
@@ -123,13 +117,13 @@ export function Dialog({
       </dialog>
     </DialogContext.Provider>
   );
-}
+};
 
 interface DialogTriggerProps {
   children: ReactNode;
   asChild?: boolean;
 }
-export function DialogTrigger({ children, asChild = false }: DialogTriggerProps) {
+const DialogTrigger = ({ children, asChild = false }: DialogTriggerProps) => {
   const context = useContext(DialogContext);
 
   if (!context) {
@@ -147,13 +141,13 @@ export function DialogTrigger({ children, asChild = false }: DialogTriggerProps)
       {children}
     </button>
   );
-}
+};
 
 interface DialogContentProps {
   children: ReactNode;
   className?: string;
 }
-export function DialogContent({ children, className }: DialogContentProps) {
+const DialogContent = ({ children, className }: DialogContentProps) => {
   const context = useContext(DialogContext);
 
   if (!context) {
@@ -161,34 +155,34 @@ export function DialogContent({ children, className }: DialogContentProps) {
   }
 
   return <div className={cn('relative', className)}>{children}</div>;
-}
+};
 
 interface DialogHeaderProps {
   children: ReactNode;
   className?: string;
 }
-export function DialogHeader({ children, className }: DialogHeaderProps) {
+const DialogHeader = ({ children, className }: DialogHeaderProps) => {
   return (
     <div className={cn('mb-4 flex items-center justify-between', className)}>
       {children}
     </div>
   );
-}
+};
 
 interface DialogTitleProps {
   children: ReactNode;
   className?: string;
 }
-export function DialogTitle({ children, className }: DialogTitleProps) {
+const DialogTitle = ({ children, className }: DialogTitleProps) => {
   return <h2 className={cn('text-lg font-semibold', className)}>{children}</h2>;
-}
+};
 
 interface DialogCloseProps {
   children: ReactNode;
   className?: string;
   onClick?: () => void;
 }
-export function DialogClose({ children, className, onClick }: DialogCloseProps) {
+const DialogClose = ({ children, className, onClick }: DialogCloseProps) => {
   const context = useContext(DialogContext);
 
   if (!context) {
@@ -209,4 +203,6 @@ export function DialogClose({ children, className, onClick }: DialogCloseProps) 
       {children}
     </button>
   );
-}
+};
+
+export { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger };

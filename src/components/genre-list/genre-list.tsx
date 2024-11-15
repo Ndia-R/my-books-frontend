@@ -1,4 +1,4 @@
-import Button from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/util';
 import { Genre } from '@/types/book';
 import { Link } from 'react-router-dom';

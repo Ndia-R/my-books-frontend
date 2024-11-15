@@ -1,5 +1,5 @@
 import Logo from '@/components/layout/logo';
-import Button from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/util';
 import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from 'lucide-react';
 

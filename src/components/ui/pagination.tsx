@@ -1,4 +1,4 @@
-import Button from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/util';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { HTMLAttributes } from 'react';
@@ -9,13 +9,13 @@ interface PaginationProps extends HTMLAttributes<HTMLUListElement> {
   onChangePage: (page: number) => void;
 }
 
-export default function Pagination({
+const Pagination = ({
   total,
   page,
   onChangePage,
   className,
   ...props
-}: PaginationProps) {
+}: PaginationProps) => {
   const pageNumbers = createPageNumbers(page, total);
 
   return (
@@ -62,7 +62,9 @@ export default function Pagination({
       </Button>
     </ul>
   );
-}
+};
+
+export { Pagination };
 
 const createPageNumbers = (page: number, total: number) => {
   const pages = [];

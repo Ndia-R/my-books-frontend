@@ -1,5 +1,6 @@
-import Button from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 import { useState } from 'react';
 
 export default function ReviewDialog() {
@@ -14,6 +15,7 @@ export default function ReviewDialog() {
           </Button>
         </DialogTrigger>
         <DialogContent>
+          <Textarea></Textarea>
           <p>
             Lorem ipsum dolor sit amet consectetur, adipisicing elit. Iure temporibus quos
             sapiente, laboriosam officiis cupiditate corporis animi quae laborum incidunt

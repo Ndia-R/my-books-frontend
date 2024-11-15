@@ -1,5 +1,5 @@
 import FavoriteButton from '@/components/favorite-button';
-import Card from '@/components/ui/card';
+import { Card } from '@/components/ui/card';
 import { Book } from '@/types/book';
 import { Link } from 'react-router-dom';
 

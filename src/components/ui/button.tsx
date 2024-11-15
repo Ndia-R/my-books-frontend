@@ -21,13 +21,13 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   size?: 'default' | 'sm' | 'lg' | 'icon';
 }
 
-export default function Button({
+const Button = ({
   variant = 'default',
   size = 'default',
   children,
   className,
   ...props
-}: ButtonProps) {
+}: ButtonProps) => {
   return (
     <button
       className={cn(
@@ -41,4 +41,6 @@ export default function Button({
       {children}
     </button>
   );
-}
+};
+
+export { Button };
