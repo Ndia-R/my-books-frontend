@@ -1,8 +1,12 @@
 import { cn } from '@/lib/util';
-import React, {
+import {
+  Children,
+  cloneElement,
   createContext,
   DialogHTMLAttributes,
+  isValidElement,
   MouseEvent,
+  ReactElement,
   ReactNode,
   TransitionEvent,
   useCallback,
@@ -29,7 +33,7 @@ const Dialog = ({ className, children, open, onOpenChange, ...props }: DialogPro
   // 外部からのopen状態を優先し、指定がない場合は内部状態を利用
   const [isOpen, setIsOpen] = useState(open ?? false);
 
-  // openが更新されたら内部状態も更新
+  // propsのopenが更新されたら内部状態も更新
   useEffect(() => {
     if (open !== undefined) {
       setIsOpen(open);
@@ -57,7 +61,7 @@ const Dialog = ({ className, children, open, onOpenChange, ...props }: DialogPro
 
   // 閉じるアニメーションが終わったときにDialogをcloseする
   // dialogRef.current?.close()のタイミングが早すぎてパッと消えてしまうのを防ぐ
-  const handleTransitionEnd = (e: TransitionEvent) => {
+  const handleTransitionEnd = (e: TransitionEvent<HTMLDialogElement>) => {
     if (!isOpen && e.propertyName) {
       dialogRef.current?.close();
     }
@@ -65,7 +69,7 @@ const Dialog = ({ className, children, open, onOpenChange, ...props }: DialogPro
 
   // バックドロップクリックで閉じる
   const handleClickOutside = useCallback(
-    (e: MouseEvent) => {
+    (e: MouseEvent<HTMLDialogElement>) => {
       if (e.target === dialogRef.current) {
         closeDialog();
       }
@@ -90,11 +94,11 @@ const Dialog = ({ className, children, open, onOpenChange, ...props }: DialogPro
   }, [handleKeyDown]);
 
   // 子要素を分割
-  const trigger = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === DialogTrigger
+  const trigger = Children.toArray(children).find(
+    (child) => isValidElement(child) && child.type === DialogTrigger
   );
-  const content = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === DialogContent
+  const content = Children.toArray(children).find(
+    (child) => isValidElement(child) && child.type === DialogContent
   );
 
   return (
@@ -103,7 +107,7 @@ const Dialog = ({ className, children, open, onOpenChange, ...props }: DialogPro
       {isOpen && <div className="fixed inset-0 z-50 bg-black/60" />}
       <dialog
         className={cn(
-          'fixed w-[300px] rounded-lg bg-background p-4 text-foreground',
+          'fixed w-[300px] rounded-lg bg-background text-foreground',
           'transition-all duration-200',
           isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95',
           className
@@ -113,7 +117,7 @@ const Dialog = ({ className, children, open, onOpenChange, ...props }: DialogPro
         onClick={handleClickOutside} // バックドロップクリック時の処理
         onTransitionEnd={handleTransitionEnd} // アニメーション終了時の処理
       >
-        <div className="relative">{content}</div>
+        <div className="relative p-4 md:p-6">{content}</div>
       </dialog>
     </DialogContext.Provider>
   );
@@ -131,7 +135,7 @@ const DialogTrigger = ({ children, asChild = false }: DialogTriggerProps) => {
   }
 
   if (asChild) {
-    return React.cloneElement(children as React.ReactElement, {
+    return cloneElement(children as ReactElement, {
       onClick: context.openDialog,
     });
   }

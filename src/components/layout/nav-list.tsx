@@ -2,7 +2,7 @@ import Logo from '@/components/layout/logo';
 import MenuList from '@/components/layout/menu-list';
 import { Button } from '@/components/ui/button';
 import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
-import { useWindowSize } from '@/hooks/useWindowSize';
+import { useWindowSize } from '@/hooks/use-window-size';
 import { MenuIcon } from 'lucide-react';
 import { useState } from 'react';
 

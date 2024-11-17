@@ -1,6 +1,6 @@
 import { cn } from '@/lib/util';
 import { StarIcon } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   rating: number;
@@ -10,11 +10,15 @@ type Props = {
 };
 
 export default function Rating({ rating, max = 5, readOnly = false, onChange }: Props) {
-  // 評価が最大を超えていたら、最大にする
-  const initRating = rating > max ? max : rating;
+  const [currentRating, setCurrentRating] = useState(0);
+  const [dispRating, setDispRating] = useState(0);
 
-  const [currentRating, setCurrentRating] = useState(initRating);
-  const [dispRating, setDispRating] = useState(initRating);
+  // propsのratingが更新されたら内部状態も更新
+  useEffect(() => {
+    const initRating = rating > max ? max : rating; // 評価が最大を超えていたら、最大にする
+    setDispRating(initRating);
+    setCurrentRating(initRating);
+  }, [max, rating]);
 
   const handleMouseClick = (newDispRating: number) => {
     if (readOnly) return;
@@ -39,7 +43,11 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
     <>
       <div className="flex h-10 items-center text-foreground">
         <p
-          className={cn('w-8', currentRating !== dispRating && 'text-foreground/40')}
+          className={cn(
+            'w-8',
+            currentRating !== dispRating && 'text-foreground/40',
+            !readOnly && 'cursor-pointer'
+          )}
           onClick={() => handleMouseClick(0)}
           onMouseEnter={() => handleMouseEnter(0)}
           onMouseLeave={() => handleMouseLeave()}
@@ -51,7 +59,10 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
           <div className="flex" key={index}>
             <div className="w-3 overflow-hidden">
               <StarIcon
-                className={cn(index + 1 - 0.5 > dispRating && 'text-foreground/10')}
+                className={cn(
+                  index + 1 - 0.5 > dispRating && 'text-foreground/10',
+                  !readOnly && 'cursor-pointer'
+                )}
                 onClick={() => handleMouseClick(index + 1 - 0.5)}
                 onMouseEnter={() => handleMouseEnter(index + 1 - 0.5)}
                 onMouseLeave={() => handleMouseLeave()}
@@ -61,6 +72,7 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
               <StarIcon
                 className={cn(
                   index + 1 > dispRating && 'text-foreground/10',
+                  !readOnly && 'cursor-pointer',
                   '-translate-x-3'
                 )}
                 onClick={() => handleMouseClick(index + 1)}

@@ -26,7 +26,7 @@ export default function Footer({ className }: Props) {
               <FacebookIcon className="size-5" />
             </Button>
           </div>
-          <p className="h-7 text-center text-sm ">© 2024 Xxxxx, Inc.</p>
+          <p className="grid h-7 place-items-center text-sm">© 2024 Xxxxx, Inc.</p>
           <div className="flex justify-center sm:justify-end">
             <Logo size="sm" />
           </div>

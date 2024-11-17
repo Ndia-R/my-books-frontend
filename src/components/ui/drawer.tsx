@@ -1,7 +1,10 @@
 import { cn } from '@/lib/util';
-import React, {
+import {
+  Children,
+  cloneElement,
   createContext,
   HTMLAttributes,
+  isValidElement,
   ReactNode,
   useCallback,
   useContext,
@@ -35,7 +38,7 @@ const Drawer = ({
   // 外部からのopen状態を優先し、指定がない場合は内部状態を利用
   const [isOpen, setIsOpen] = useState(open ?? false);
 
-  // openが更新されたら内部状態も更新
+  // propsのopenが更新されたら内部状態も更新
   useEffect(() => {
     if (open !== undefined) {
       setIsOpen(open);
@@ -80,11 +83,11 @@ const Drawer = ({
   }, [handleKeyDown]);
 
   // 子要素を分割
-  const trigger = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === DrawerTrigger
+  const trigger = Children.toArray(children).find(
+    (child) => isValidElement(child) && child.type === DrawerTrigger
   );
-  const content = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === DrawerContent
+  const content = Children.toArray(children).find(
+    (child) => isValidElement(child) && child.type === DrawerContent
   );
 
   return (
@@ -124,7 +127,7 @@ const DrawerTrigger = ({ children, asChild = false }: DrawerTriggerProps) => {
   }
 
   if (asChild) {
-    return React.cloneElement(children as React.ReactElement, {
+    return cloneElement(children as React.ReactElement, {
       onClick: context.openDrawer,
     });
   }
