@@ -2,6 +2,7 @@ import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useRef, useState } from 'react';
 
@@ -33,9 +34,16 @@ export default function ReviewDialog() {
         onOpenChange={setIsOpen}
       >
         <DialogTrigger asChild>
-          <Button className="rounded-full" variant="outline">
-            レビューを書く
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button className="rounded-full" variant="outline">
+                レビューを書く
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>ログインしてこの本のレビューを書きましょう</p>
+            </TooltipContent>
+          </Tooltip>
         </DialogTrigger>
 
         <DialogContent>

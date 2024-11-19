@@ -3,6 +3,7 @@ import FavoriteButton from '@/components/favorite-button';
 import GenreList from '@/components/genre-list/genre-list';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { formatDate, formatIsbn, priceToString } from '@/lib/util';
 import { Book, Genre } from '@/types/book';
 
@@ -27,7 +28,15 @@ export default function BookDetail({ book, genres }: Props) {
             <Button className="w-32 rounded-full" size="lg">
               読む
             </Button>
-            <FavoriteButton book={book} />
+
+            <Tooltip>
+              <TooltipTrigger>
+                <FavoriteButton book={book} />
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>ログインしてこの本をお気に入りリストに加えましょう</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 

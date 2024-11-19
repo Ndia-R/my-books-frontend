@@ -45,7 +45,9 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
         <p
           className={cn(
             'w-8',
-            currentRating !== dispRating && 'text-foreground/40',
+            currentRating !== dispRating
+              ? 'text-muted-foreground/50'
+              : 'text-muted-foreground',
             !readOnly && 'cursor-pointer'
           )}
           onClick={() => handleMouseClick(0)}
@@ -59,10 +61,14 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
           <div className="flex" key={index}>
             <div className="w-3 overflow-hidden">
               <StarIcon
-                className={cn(
-                  index + 1 - 0.5 > dispRating && 'text-foreground/10',
-                  !readOnly && 'cursor-pointer'
-                )}
+                className={cn(!readOnly && 'cursor-pointer')}
+                style={{
+                  fill:
+                    index + 1 - 0.5 > dispRating
+                      ? 'hsl(var(--foreground) / 0.1)'
+                      : 'hsl(var(--primary))',
+                }}
+                strokeWidth={0}
                 onClick={() => handleMouseClick(index + 1 - 0.5)}
                 onMouseEnter={() => handleMouseEnter(index + 1 - 0.5)}
                 onMouseLeave={() => handleMouseLeave()}
@@ -70,11 +76,14 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
             </div>
             <div className="w-3 overflow-hidden">
               <StarIcon
-                className={cn(
-                  index + 1 > dispRating && 'text-foreground/10',
-                  !readOnly && 'cursor-pointer',
-                  '-translate-x-3'
-                )}
+                className={cn(!readOnly && 'cursor-pointer', '-translate-x-3')}
+                style={{
+                  fill:
+                    index + 1 > dispRating
+                      ? 'hsl(var(--foreground) / 0.1)'
+                      : 'hsl(var(--primary))',
+                }}
+                strokeWidth={0}
                 onClick={() => handleMouseClick(index + 1)}
                 onMouseEnter={() => handleMouseEnter(index + 1)}
                 onMouseLeave={() => handleMouseLeave()}
