@@ -2,25 +2,28 @@ import { cn } from '@/lib/util';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
-const INVISIBLE_DURATION = 100;
+type SheetSideType = 'top' | 'right' | 'bottom' | 'left';
 
-interface DialogContextType {
-  openDialog: () => void;
-  closeDialog: () => void;
+const DEFAULT_SIDE: SheetSideType = 'right';
+const INVISIBLE_DURATION = 150;
+
+interface SheetContextType {
+  openSheet: () => void;
+  closeSheet: () => void;
   isOpen: boolean;
 }
 
-const DialogContext = React.createContext<DialogContextType | undefined>(undefined);
+const SheetContext = React.createContext<SheetContextType | undefined>(undefined);
 
 // ----------------------------------------------------------------------------
-// Dialog
+// Sheet
 // ----------------------------------------------------------------------------
-interface DialogProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
+interface SheetProps extends React.HTMLAttributes<HTMLDivElement> {
   open?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
 }
 
-const Dialog = ({ children, open, onOpenChange }: DialogProps) => {
+const Sheet = ({ children, open, onOpenChange }: SheetProps) => {
   // 外部からのopen状態を優先し、指定がない場合は内部状態を利用
   const [isOpen, setIsOpen] = useState(open ?? false);
 
@@ -31,7 +34,7 @@ const Dialog = ({ children, open, onOpenChange }: DialogProps) => {
     }
   }, [open]);
 
-  const openDialog = useCallback(() => {
+  const openSheet = useCallback(() => {
     if (onOpenChange) {
       onOpenChange(true);
     } else {
@@ -39,7 +42,7 @@ const Dialog = ({ children, open, onOpenChange }: DialogProps) => {
     }
   }, [onOpenChange]);
 
-  const closeDialog = useCallback(() => {
+  const closeSheet = useCallback(() => {
     if (onOpenChange) {
       onOpenChange(false);
     } else {
@@ -49,33 +52,32 @@ const Dialog = ({ children, open, onOpenChange }: DialogProps) => {
 
   // 子要素を分割
   const trigger = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === DialogTrigger
+    (child) => React.isValidElement(child) && child.type === SheetTrigger
   );
   const content = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === DialogContent
+    (child) => React.isValidElement(child) && child.type === SheetContent
   );
 
   return (
-    <DialogContext.Provider value={{ openDialog, closeDialog, isOpen }}>
+    <SheetContext.Provider value={{ openSheet, closeSheet, isOpen }}>
       {trigger}
       {content}
-    </DialogContext.Provider>
+    </SheetContext.Provider>
   );
 };
 
 // ----------------------------------------------------------------------------
-// DialogTrigger
+// SheetTrigger
 // ----------------------------------------------------------------------------
-interface DialogTriggerProps extends React.HTMLAttributes<HTMLButtonElement> {
+interface SheetTriggerProps extends React.HTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
-
-const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
+const SheetTrigger = React.forwardRef<HTMLButtonElement, SheetTriggerProps>(
   ({ children, asChild = false, ...props }, ref) => {
-    const context = useContext(DialogContext);
+    const context = useContext(SheetContext);
 
     if (!context) {
-      throw new Error('DialogTrigger must be used within Dialog');
+      throw new Error('SheetTrigger must be used within Sheet');
     }
 
     if (asChild && React.isValidElement(children)) {
@@ -86,7 +88,7 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
           if (children.props.onClick) {
             children.props.onClick(e);
           }
-          context.openDialog();
+          context.openSheet();
         },
       };
       return React.cloneElement(children, { ...mergeChildProps, ref });
@@ -98,7 +100,7 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
         if (props.onClick) {
           props.onClick(e);
         }
-        context.openDialog();
+        context.openSheet();
       },
     };
 
@@ -111,16 +113,16 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
 );
 
 // ----------------------------------------------------------------------------
-// DialogOverlay
+// SheetOverlay
 // ----------------------------------------------------------------------------
-type DialogOverlayProps = React.HTMLAttributes<HTMLDivElement>;
+type SheetOverlayProps = React.HTMLAttributes<HTMLDivElement>;
 
-const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlayProps>(
+const SheetOverlay = React.forwardRef<HTMLDivElement, SheetOverlayProps>(
   ({ className, ...props }, ref) => {
-    const context = useContext(DialogContext);
+    const context = useContext(SheetContext);
 
     if (!context) {
-      throw new Error('DialogOverlay must be used within Dialog');
+      throw new Error('SheetOverlay must be used within Sheet');
     }
 
     return (
@@ -138,18 +140,27 @@ const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlayProps>(
 );
 
 // ----------------------------------------------------------------------------
-// DialogContent
+// SheetContent
 // ----------------------------------------------------------------------------
-interface DialogContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  onEscapeKeyDown?: () => void;
-  onPointerDownOutside?: () => void;
+interface SheetContentProps extends React.HTMLAttributes<HTMLDivElement> {
+  side?: SheetSideType;
 }
-const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
-  ({ className, children, ...props }, ref) => {
-    const context = useContext(DialogContext);
+
+const POSITION_LIST = {
+  top: 'inset-x-0 top-0 border-b data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top',
+  bottom:
+    'inset-x-0 bottom-0 border-t data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom',
+  left: 'inset-y-0 left-0 h-full w-3/4 border-r data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left sm:max-w-sm',
+  right:
+    'inset-y-0 right-0 h-full w-3/4  border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
+};
+
+const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
+  ({ className, children, side = DEFAULT_SIDE, ...props }, ref) => {
+    const context = useContext(SheetContext);
 
     if (!context) {
-      throw new Error('DialogContent must be used within Dialog');
+      throw new Error('SheetContent must be used within Sheet');
     }
 
     const [isVisible, setIsVisible] = useState(false);
@@ -166,7 +177,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
       // ESCキーで閉じるための関数とイベントリスナーの登録
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape' && context.isOpen) {
-          context.closeDialog();
+          context.closeSheet();
           setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
         }
       };
@@ -178,7 +189,7 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
 
     // バックドロップクリックで閉じる
     const handleClickOutside = () => {
-      context.closeDialog();
+      context.closeSheet();
       setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
     };
 
@@ -186,11 +197,12 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
       <>
         {isVisible && (
           <>
-            <DialogOverlay onClick={handleClickOutside} />
+            <SheetOverlay onClick={handleClickOutside} />
             <div
               ref={ref}
               className={cn(
-                'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
+                'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
+                POSITION_LIST[side],
                 className
               )}
               data-state={context.isOpen ? 'open' : 'closed'}
@@ -206,4 +218,4 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
   }
 );
 
-export { Dialog, DialogContent, DialogOverlay, DialogTrigger };
+export { Sheet, SheetContent, SheetOverlay, SheetTrigger };

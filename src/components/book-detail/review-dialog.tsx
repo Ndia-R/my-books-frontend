@@ -28,25 +28,33 @@ export default function ReviewDialog() {
 
   return (
     <>
-      <Dialog
-        className="w-1/2 min-w-[360px] max-w-[600px]"
-        open={isOpen}
-        onOpenChange={setIsOpen}
-      >
-        <DialogTrigger asChild>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button className="rounded-full" variant="outline">
-                レビューを書く
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>ログインしてこの本のレビューを書きましょう</p>
-            </TooltipContent>
-          </Tooltip>
-        </DialogTrigger>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            className="rounded-full"
+            variant="outline"
+            onClick={() => setIsOpen(true)}
+          >
+            レビューを書く
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>ログインしてこの本のレビューを書きましょう</p>
+        </TooltipContent>
+      </Tooltip>
 
-        <DialogContent>
+      <Tooltip>
+        <TooltipTrigger>レビューを書く</TooltipTrigger>
+        <TooltipContent>
+          <p>ログインしてこの本のレビューを書きましょう</p>
+        </TooltipContent>
+      </Tooltip>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogTrigger asChild>
+          <Button onClick={() => console.log('FFF')}>ボタン</Button>
+        </DialogTrigger>
+        <DialogContent className="w-1/2 min-w-[360px] max-w-[600px] rounded-lg p-4 md:p-6">
           <div className="mb-3 flex items-start justify-between">
             <div>
               <p className="font-semibold leading-10">レビュー</p>

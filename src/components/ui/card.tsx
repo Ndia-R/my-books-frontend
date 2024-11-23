@@ -1,9 +1,19 @@
 import { cn } from '@/lib/util';
-import { HTMLAttributes } from 'react';
+import React from 'react';
 
-type CardProps = HTMLAttributes<HTMLDivElement>;
+// ----------------------------------------------------------------------------
+// Card
+// ----------------------------------------------------------------------------
+const Card = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => {
+  // 子要素を分割
+  const content = React.Children.toArray(children).find(
+    (child) => React.isValidElement(child) && child.type === CardContent
+  );
 
-const Card = ({ className, children, ...props }: CardProps) => {
   return (
     <div
       className={cn(
@@ -12,9 +22,24 @@ const Card = ({ className, children, ...props }: CardProps) => {
       )}
       {...props}
     >
-      {children}
+      {content}
     </div>
   );
 };
 
-export { Card };
+// ----------------------------------------------------------------------------
+// CardContent
+// ----------------------------------------------------------------------------
+type CardContentProps = React.HTMLAttributes<HTMLDivElement>;
+
+const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
+  ({ className, children, ...props }, ref) => {
+    return (
+      <div ref={ref} className={cn('', className)} {...props}>
+        {children}
+      </div>
+    );
+  }
+);
+
+export { Card, CardContent };

@@ -30,7 +30,7 @@ export default function BookDetail({ book, genres }: Props) {
             </Button>
 
             <Tooltip>
-              <TooltipTrigger>
+              <TooltipTrigger asChild>
                 <FavoriteButton book={book} />
               </TooltipTrigger>
               <TooltipContent>

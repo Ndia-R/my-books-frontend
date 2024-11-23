@@ -1,65 +1,66 @@
 import { cn } from '@/lib/util';
-import {
-  Children,
-  cloneElement,
-  createContext,
-  HTMLAttributes,
-  isValidElement,
-  ReactNode,
-  useCallback,
-  useContext,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 
-type TooltipSideType = 'top' | 'bottom' | 'left' | 'right';
+type TooltipSideType = 'top' | 'right' | 'bottom' | 'left';
+
+const DEFAULT_SIDE: TooltipSideType = 'top';
+const DEFAULT_SIDE_OFFSET = 8;
 
 interface TooltipContextType {
   openTooltip: () => void;
   closeTooltip: () => void;
   isOpen: boolean;
-  side: TooltipSideType;
+  setSide: (value: TooltipSideType) => void;
+  setSideOffset: (value: number) => void;
 }
 
-const TooltipContext = createContext<TooltipContextType | undefined>(undefined);
+const TooltipContext = React.createContext<TooltipContextType | undefined>(undefined);
 
-interface TooltipProps extends HTMLAttributes<HTMLDivElement> {
+// ----------------------------------------------------------------------------
+// Tooltip
+// ----------------------------------------------------------------------------
+interface TooltipProps extends React.HTMLAttributes<HTMLDivElement> {
   open?: boolean;
   onOpenChange?: (isOpen: boolean) => void;
-  side?: TooltipSideType;
-  sideOffset?: number;
 }
 
-const Tooltip = ({
-  className,
-  children,
-  side = 'top',
-  sideOffset = 8,
-  ...props
-}: TooltipProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [transformStyle, setTransformStyle] = useState('');
+const Tooltip = ({ className, children, open, onOpenChange }: TooltipProps) => {
+  // 外部からのopen状態を優先し、指定がない場合は内部状態を利用
+  const [isOpen, setIsOpen] = useState(open ?? false);
 
-  const ref = useRef<HTMLDivElement | null>(null);
+  // propsのopenが更新されたら内部状態も更新
+  useEffect(() => {
+    if (open !== undefined) {
+      setIsOpen(open);
+    }
+  }, [open]);
 
   const openTooltip = useCallback(() => {
-    setIsOpen(true);
-  }, []);
+    if (onOpenChange) {
+      onOpenChange(true);
+    } else {
+      setIsOpen(true);
+    }
+  }, [onOpenChange]);
 
   const closeTooltip = useCallback(() => {
-    setIsOpen(false);
-  }, []);
+    if (onOpenChange) {
+      onOpenChange(false);
+    } else {
+      setIsOpen(false);
+    }
+  }, [onOpenChange]);
 
-  // 子要素を分割
-  const trigger = Children.toArray(children).find(
-    (child) => isValidElement(child) && child.type === TooltipTrigger
-  );
-  const content = Children.toArray(children).find(
-    (child) => isValidElement(child) && child.type === TooltipContent
-  );
+  // Tooltipを表示する方向とオフセット
+  const [side, setSide] = useState<TooltipSideType>(DEFAULT_SIDE);
+  const [sideOffset, setSideOffset] = useState(DEFAULT_SIDE_OFFSET);
 
-  const handleMouseEnter = () => {
-    if (ref && ref.current) {
+  // ポインタ（マウス、ペン、タッチ）が要素内に入った時のイベントで
+  // Tooltipを表示する座標の計算（style属性に指定する文字列作成）
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [transformStyle, setTransformStyle] = useState('');
+  const handlePointerEnter = () => {
+    if (ref.current) {
       const { left, top, right, bottom, width, height } =
         ref.current.getBoundingClientRect();
       const positions = {
@@ -89,20 +90,43 @@ const Tooltip = ({
       setTransformStyle(
         `translate(calc(${pos.x}px + ${pos.offset.x}), calc(${pos.y}px + ${pos.offset.y}))`
       );
+
+      openTooltip();
     }
   };
 
+  const handlePointerLeave = () => {
+    closeTooltip();
+  };
+
+  const handlePointerDown = () => {
+    closeTooltip();
+  };
+
+  // 子要素を分割
+  const trigger = React.Children.toArray(children).find(
+    (child) => React.isValidElement(child) && child.type === TooltipTrigger
+  );
+  const content = React.Children.toArray(children).find(
+    (child) => React.isValidElement(child) && child.type === TooltipContent
+  );
+
   return (
-    <TooltipContext.Provider value={{ openTooltip, closeTooltip, isOpen, side }}>
-      <div ref={ref} onMouseEnter={handleMouseEnter}>
+    <TooltipContext.Provider
+      value={{ openTooltip, closeTooltip, isOpen, setSide, setSideOffset }}
+    >
+      <div
+        ref={ref}
+        onPointerEnter={handlePointerEnter}
+        onPointerLeave={handlePointerLeave}
+        onPointerDown={handlePointerDown}
+      >
         {trigger}
       </div>
-
       {isOpen && (
         <div
           className={cn('z-50 fixed top-0 left-0', className)}
           style={{ transform: transformStyle }}
-          {...props}
         >
           {content}
         </div>
@@ -111,62 +135,76 @@ const Tooltip = ({
   );
 };
 
-interface TooltipTriggerProps {
-  children: ReactNode;
+// ----------------------------------------------------------------------------
+// TooltipTrigger
+// ----------------------------------------------------------------------------
+interface TooltipTriggerProps extends React.HTMLAttributes<HTMLButtonElement> {
   asChild?: boolean;
 }
-const TooltipTrigger = ({ children, asChild = false }: TooltipTriggerProps) => {
-  const context = useContext(TooltipContext);
 
-  if (!context) {
-    throw new Error('TooltipTrigger must be used within Tooltip');
+const TooltipTrigger = React.forwardRef<HTMLButtonElement, TooltipTriggerProps>(
+  ({ children, asChild = false, ...props }, ref) => {
+    if (asChild && React.isValidElement(children)) {
+      const mergeChildProps = {
+        ...props,
+        ...children.props,
+      };
+      return React.cloneElement(children, { ...mergeChildProps, ref });
+    }
+
+    return (
+      <button ref={ref} {...props}>
+        {children}
+      </button>
+    );
   }
+);
 
-  if (asChild) {
-    return cloneElement(children as React.ReactElement, {
-      onMouseEnter: context.openTooltip,
-      onMouseLeave: context.closeTooltip,
-      onClick: context.closeTooltip,
-    });
-  }
-
-  return (
-    <div
-      className="cursor-pointer"
-      onMouseEnter={context.openTooltip}
-      onMouseLeave={context.closeTooltip}
-      onClick={context.closeTooltip}
-    >
-      {children}
-    </div>
-  );
-};
-
-interface TooltipContentProps {
-  children: ReactNode;
-  className?: string;
-  isOpen?: boolean;
+// ----------------------------------------------------------------------------
+// TooltipContent
+// ----------------------------------------------------------------------------
+interface TooltipContentProps extends React.HTMLAttributes<HTMLDivElement> {
   side?: TooltipSideType;
+  sideOffset?: number;
 }
-const TooltipContent = ({ children, className }: TooltipContentProps) => {
-  const context = useContext(TooltipContext);
 
-  if (!context) {
-    throw new Error('TooltipContent must be used within Tooltip');
+const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
+  (
+    {
+      children,
+      className,
+      side = DEFAULT_SIDE,
+      sideOffset = DEFAULT_SIDE_OFFSET,
+      ...props
+    },
+    ref
+  ) => {
+    const context = useContext(TooltipContext);
+
+    if (!context) {
+      throw new Error('TooltipContent must be used within Tooltip');
+    }
+
+    useEffect(() => {
+      context.setSide(side);
+      context.setSideOffset(sideOffset);
+    }, [context, side, sideOffset]);
+
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          'z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
+          className
+        )}
+        data-state={context.isOpen ? 'open' : 'closed'}
+        data-side={side}
+        {...props}
+      >
+        {children}
+      </div>
+    );
   }
-
-  return (
-    <div
-      className={cn(
-        'z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
-        className
-      )}
-      data-state={context.isOpen ? 'open' : 'closed'}
-      data-side={context.side}
-    >
-      {children}
-    </div>
-  );
-};
+);
 
 export { Tooltip, TooltipContent, TooltipTrigger };

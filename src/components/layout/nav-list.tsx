@@ -1,7 +1,7 @@
 import Logo from '@/components/layout/logo';
 import MenuList from '@/components/layout/menu-list';
 import { Button } from '@/components/ui/button';
-import { Drawer, DrawerContent, DrawerTrigger } from '@/components/ui/drawer';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useWindowSize } from '@/hooks/use-window-size';
 import { MenuIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -22,19 +22,19 @@ export default function NavList() {
       </div>
 
       <div className="md:hidden">
-        <Drawer open={isOpen} onOpenChange={setIsOpen}>
-          <DrawerTrigger asChild>
+        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+          <SheetTrigger asChild>
             <Button className="rounded-full" variant="ghost" size="icon">
               <MenuIcon className="size-5" />
             </Button>
-          </DrawerTrigger>
-          <DrawerContent className="p-8">
+          </SheetTrigger>
+          <SheetContent className="w-fit p-8" side="left">
             <div className="mb-8" onClick={() => setIsOpen(false)}>
               <Logo />
             </div>
             <MenuList onClick={() => setIsOpen(false)} />
-          </DrawerContent>
-        </Drawer>
+          </SheetContent>
+        </Sheet>
       </div>
     </div>
   );
