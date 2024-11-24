@@ -4,6 +4,7 @@ import GenreList from '@/components/genre-list/genre-list';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { formatDate, formatIsbn, priceToString } from '@/lib/util';
 import { Book, Genre } from '@/types/book';
 
@@ -14,6 +15,20 @@ type Props = {
 
 export default function BookDetail({ book, genres }: Props) {
   const genreList = genres.filter((genre) => book.genreIds.includes(genre.id));
+
+  const { confirmDialog } = useConfirmDialog();
+  const handleConfirmDialog = async () => {
+    const { isCancel, text } = await confirmDialog({
+      icon: '?',
+      title: 'このアンケートを削除しますか？',
+      message: '削除したアンケートは元に戻りません。',
+    });
+    console.log(text);
+
+    if (isCancel) return;
+
+    console.log('action');
+  };
 
   return (
     <>
@@ -37,6 +52,8 @@ export default function BookDetail({ book, genres }: Props) {
                 <p>ログインしてこの本をお気に入りリストに加えましょう</p>
               </TooltipContent>
             </Tooltip>
+
+            <Button onClick={handleConfirmDialog}>ConfirmDialog</Button>
           </div>
         </div>
 

@@ -9,11 +9,6 @@ const Card = ({
   children,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => {
-  // 子要素を分割
-  const content = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === CardContent
-  );
-
   return (
     <div
       className={cn(
@@ -22,7 +17,16 @@ const Card = ({
       )}
       {...props}
     >
-      {content}
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          switch (child.type) {
+            case CardContent:
+              return child;
+            default:
+              return null;
+          }
+        }
+      })}
     </div>
   );
 };

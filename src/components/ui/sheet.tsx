@@ -8,9 +8,9 @@ const DEFAULT_SIDE: SheetSideType = 'right';
 const INVISIBLE_DURATION = 150;
 
 interface SheetContextType {
+  isOpen: boolean;
   openSheet: () => void;
   closeSheet: () => void;
-  isOpen: boolean;
 }
 
 const SheetContext = React.createContext<SheetContextType | undefined>(undefined);
@@ -50,18 +50,19 @@ const Sheet = ({ children, open, onOpenChange }: SheetProps) => {
     }
   }, [onOpenChange]);
 
-  // 子要素を分割
-  const trigger = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === SheetTrigger
-  );
-  const content = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === SheetContent
-  );
-
   return (
-    <SheetContext.Provider value={{ openSheet, closeSheet, isOpen }}>
-      {trigger}
-      {content}
+    <SheetContext.Provider value={{ isOpen, openSheet, closeSheet }}>
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          switch (child.type) {
+            case SheetTrigger:
+            case SheetContent:
+              return child;
+            default:
+              return null;
+          }
+        }
+      })}
     </SheetContext.Provider>
   );
 };

@@ -5,9 +5,9 @@ import ReactDOM from 'react-dom';
 const INVISIBLE_DURATION = 100;
 
 interface DialogContextType {
+  isOpen: boolean;
   openDialog: () => void;
   closeDialog: () => void;
-  isOpen: boolean;
 }
 
 const DialogContext = React.createContext<DialogContextType | undefined>(undefined);
@@ -47,18 +47,19 @@ const Dialog = ({ children, open, onOpenChange }: DialogProps) => {
     }
   }, [onOpenChange]);
 
-  // 子要素を分割
-  const trigger = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === DialogTrigger
-  );
-  const content = React.Children.toArray(children).find(
-    (child) => React.isValidElement(child) && child.type === DialogContent
-  );
-
   return (
-    <DialogContext.Provider value={{ openDialog, closeDialog, isOpen }}>
-      {trigger}
-      {content}
+    <DialogContext.Provider value={{ isOpen, openDialog, closeDialog }}>
+      {React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          switch (child.type) {
+            case DialogTrigger:
+            case DialogContent:
+              return child;
+            default:
+              return null;
+          }
+        }
+      })}
     </DialogContext.Provider>
   );
 };
@@ -145,7 +146,7 @@ interface DialogContentProps extends React.HTMLAttributes<HTMLDivElement> {
   onPointerDownOutside?: () => void;
 }
 const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
-  ({ className, children, ...props }, ref) => {
+  ({ className, children, onEscapeKeyDown, onPointerDownOutside, ...props }, ref) => {
     const context = useContext(DialogContext);
 
     if (!context) {
@@ -154,11 +155,14 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
 
     const [isVisible, setIsVisible] = useState(false);
 
+    const invisibleDialog = () =>
+      setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
+
     useEffect(() => {
       if (context.isOpen) {
         setIsVisible(true);
       } else {
-        setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
+        invisibleDialog();
       }
     }, [context.isOpen]);
 
@@ -166,27 +170,31 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
       // ESCキーで閉じるための関数とイベントリスナーの登録
       const handleKeyDown = (e: KeyboardEvent) => {
         if (e.key === 'Escape' && context.isOpen) {
-          context.closeDialog();
-          setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
+          if (onEscapeKeyDown) {
+            onEscapeKeyDown();
+          } else {
+            context.closeDialog();
+            invisibleDialog();
+          }
         }
       };
       document.addEventListener('keydown', handleKeyDown);
       return () => {
         document.removeEventListener('keydown', handleKeyDown);
       };
-    }, [context]);
+    }, [context, onEscapeKeyDown]);
 
     // バックドロップクリックで閉じる
     const handleClickOutside = () => {
       context.closeDialog();
-      setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
+      invisibleDialog();
     };
 
     return ReactDOM.createPortal(
       <>
         {isVisible && (
           <>
-            <DialogOverlay onClick={handleClickOutside} />
+            <DialogOverlay onClick={onPointerDownOutside || handleClickOutside} />
             <div
               ref={ref}
               className={cn(
@@ -206,4 +214,68 @@ const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
   }
 );
 
-export { Dialog, DialogContent, DialogOverlay, DialogTrigger };
+// ----------------------------------------------------------------------------
+// DialogHeader
+// ----------------------------------------------------------------------------
+const DialogHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn('flex flex-col space-y-1.5 text-center sm:text-left', className)}
+    {...props}
+  />
+);
+
+// ----------------------------------------------------------------------------
+// DialogFooter
+// ----------------------------------------------------------------------------
+const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
+  <div
+    className={cn(
+      'flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2',
+      className
+    )}
+    {...props}
+  />
+);
+
+// ----------------------------------------------------------------------------
+// DialogTitle
+// ----------------------------------------------------------------------------
+type DialogTitleProps = React.HTMLAttributes<HTMLDivElement>;
+const DialogTitle = React.forwardRef<HTMLDivElement, DialogTitleProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn('text-lg font-semibold leading-none tracking-tight', className)}
+        {...props}
+      />
+    );
+  }
+);
+
+// ----------------------------------------------------------------------------
+// DialogDescription
+// ----------------------------------------------------------------------------
+type DialogDescriptionProps = React.HTMLAttributes<HTMLDivElement>;
+const DialogDescription = React.forwardRef<HTMLDivElement, DialogDescriptionProps>(
+  ({ className, ...props }, ref) => {
+    return (
+      <div
+        ref={ref}
+        className={cn('text-sm text-muted-foreground', className)}
+        {...props}
+      />
+    );
+  }
+);
+
+export {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogTitle,
+  DialogTrigger,
+};

@@ -1,8 +1,9 @@
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useRef, useState } from 'react';
 
@@ -11,6 +12,7 @@ export default function ReviewDialog() {
   const [rating, setRating] = useState(0);
   const commentRef = useRef<HTMLTextAreaElement | null>(null);
   const { toast } = useToast();
+  const { confirmDialog } = useConfirmDialog();
 
   useEffect(() => {
     if (isOpen) {
@@ -21,7 +23,26 @@ export default function ReviewDialog() {
     }
   }, [isOpen]);
 
-  const handlePost = () => {
+  const handlePost = async () => {
+    if (rating === 0) {
+      const { isCancel: isCancelStar } = await confirmDialog({
+        icon: '?',
+        title: '星が「0」ですが投稿しますか？',
+      });
+      if (isCancelStar) return;
+    }
+
+    if (commentRef.current && !commentRef.current.value) {
+      const { isAction: isCancelComment } = await confirmDialog({
+        icon: 'i',
+        title: 'コメントが未入力です',
+        message: 'コメントが未入力のまま投稿はできません。',
+        actionOnly: true,
+        persistent: true,
+      });
+      if (isCancelComment) return;
+    }
+
     toast({ description: 'レビューを投稿しました' });
     setIsOpen(false);
   };
@@ -43,19 +64,13 @@ export default function ReviewDialog() {
         </TooltipContent>
       </Tooltip>
 
-      <Tooltip>
-        <TooltipTrigger>レビューを書く</TooltipTrigger>
-        <TooltipContent>
-          <p>ログインしてこの本のレビューを書きましょう</p>
-        </TooltipContent>
-      </Tooltip>
-
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogTrigger asChild>
-          <Button onClick={() => console.log('FFF')}>ボタン</Button>
-        </DialogTrigger>
-        <DialogContent className="w-1/2 min-w-[360px] max-w-[600px] rounded-lg p-4 md:p-6">
-          <div className="mb-3 flex items-start justify-between">
+        <DialogContent
+          className="w-1/2 min-w-[360px] max-w-[600px] p-4 md:p-6"
+          onPointerDownOutside={() => setIsOpen(false)}
+          onEscapeKeyDown={() => console.log('ESC')}
+        >
+          <div className="flex items-start justify-between">
             <div>
               <p className="font-semibold leading-10">レビュー</p>
               <p className="text-xs text-muted-foreground md:text-sm">
@@ -70,7 +85,7 @@ export default function ReviewDialog() {
             </div>
           </div>
 
-          <Textarea className="mb-6" ref={commentRef} />
+          <Textarea ref={commentRef} />
 
           <div className="flex justify-center">
             <Button className="w-48 rounded-full" onClick={handlePost}>

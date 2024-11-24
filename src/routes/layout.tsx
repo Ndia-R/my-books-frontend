@@ -1,3 +1,4 @@
+import { ConfirmDialog } from '@/components/confirm-dialog';
 import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import { Toaster } from '@/components/ui/toaster';
@@ -14,6 +15,7 @@ export default function Layout() {
         <Footer className="sticky top-full" />
       </div>
       <Toaster />
+      <ConfirmDialog />
     </>
   );
 }

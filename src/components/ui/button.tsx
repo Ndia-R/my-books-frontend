@@ -3,6 +3,7 @@ import React, { ButtonHTMLAttributes } from 'react';
 
 const VARIANT_LIST = {
   default: 'bg-primary text-primary-foreground hover:bg-primary/90',
+  destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
   outline:
     'border border-primary/50 text-primary bg-background hover:bg-primary/20 hover:border-primary',
   secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
@@ -17,7 +18,7 @@ const SIZE_LIST = {
 };
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'default' | 'outline' | 'secondary' | 'ghost';
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
   size?: 'default' | 'sm' | 'lg' | 'icon';
 }
 

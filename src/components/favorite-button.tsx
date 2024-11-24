@@ -10,7 +10,7 @@ type Props = {
 export default function FavoriteButton({ book }: Props) {
   const isFavorite = !book.isFavorite;
   return (
-    <>
+    <div>
       <Button
         className={cn(
           'size-8 rounded-full text-muted-foreground',
@@ -21,6 +21,6 @@ export default function FavoriteButton({ book }: Props) {
       >
         <HeartIcon className="size-4" />
       </Button>
-    </>
+    </div>
   );
 }
