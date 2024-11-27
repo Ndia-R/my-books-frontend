@@ -1,3 +1,4 @@
+import { ProtectedRoute } from '@/auth/protected-route';
 import BookIdPage from '@/routes/book/[bookId]/page';
 import DiscoverPage from '@/routes/discover/page';
 import FavoritesPage from '@/routes/favorite/page';
@@ -19,14 +20,6 @@ export const router = createBrowserRouter(
           <Route path=":bookId" element={<BookIdPage />} loader={BookIdPage.loader} />
         </Route>
 
-        <Route path="favorites">
-          <Route index element={<FavoritesPage />} />
-        </Route>
-
-        <Route path="settings">
-          <Route index element={<SettingsPage />} />
-        </Route>
-
         <Route path="search">
           <Route index element={<SearchPage />} loader={SearchPage.loader} />
         </Route>
@@ -41,6 +34,16 @@ export const router = createBrowserRouter(
 
         <Route path="sign-up">
           <Route index element={<SignUpPage />} />
+        </Route>
+
+        <Route element={<ProtectedRoute />}>
+          <Route path="favorites">
+            <Route index element={<FavoritesPage />} />
+          </Route>
+
+          <Route path="settings">
+            <Route index element={<SettingsPage />} />
+          </Route>
         </Route>
       </Route>
     </Route>

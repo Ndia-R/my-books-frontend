@@ -1,3 +1,4 @@
+import { useAuth } from '@/auth/use-auth';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
@@ -14,6 +15,7 @@ export default function ReviewDialog() {
   const ref = useRef<HTMLTextAreaElement | null>(null);
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
+  const { isAuthenticated } = useAuth();
 
   useEffect(() => {
     if (isOpen) {
@@ -22,9 +24,9 @@ export default function ReviewDialog() {
   }, [isOpen]);
 
   const handleAnimationStart = (e: React.AnimationEvent) => {
-    if (e.animationName === 'enter' && ref.current) {
+    if (e.animationName === 'enter') {
       setText('');
-      ref.current.focus();
+      ref.current?.focus();
     }
   };
 
@@ -62,14 +64,16 @@ export default function ReviewDialog() {
           <Button
             className="rounded-full"
             variant="outline"
-            onClick={() => setIsOpen(true)}
+            onClick={() => isAuthenticated && setIsOpen(true)}
           >
             レビューを書く
           </Button>
         </TooltipTrigger>
-        <TooltipContent>
-          <p>ログインしてこの本のレビューを書きましょう</p>
-        </TooltipContent>
+        {!isAuthenticated && (
+          <TooltipContent>
+            <p>ログインしてこの本のレビューを書きましょう</p>
+          </TooltipContent>
+        )}
       </Tooltip>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -89,7 +93,7 @@ export default function ReviewDialog() {
             <div>
               <Rating rating={rating} onChange={setRating} />
               <p className="text-center text-xs text-muted-foreground md:text-sm">
-                {rating === 0 ? 'クリックで星を決定' : ''}
+                {rating === 0 ? '星をクリックして決定' : ''}
               </p>
             </div>
           </div>

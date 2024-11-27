@@ -13,9 +13,7 @@ export default function Page() {
   const ref = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    if (ref.current) {
-      ref.current.focus();
-    }
+    ref.current?.focus();
   }, []);
 
   return (

@@ -13,11 +13,11 @@ export default function ReviewItem({ review }: Props) {
         <div className="flex items-center gap-x-4">
           <img
             className="w-16 rounded-full"
-            src={review.avatarUrl}
-            alt={review.avatarUrl}
+            src={review.user.avatarUrl}
+            alt="avatar-image"
           />
           <div>
-            <p className="text-lg font-semibold">{review.name}</p>
+            <p className="text-lg font-semibold">{review.user.account}</p>
             <p className="text-sm text-muted-foreground">
               {formatDate(review.updatedAt)}
             </p>

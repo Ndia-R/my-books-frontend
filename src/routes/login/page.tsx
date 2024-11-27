@@ -1,10 +1,11 @@
+import { useAuth } from '@/auth/use-auth';
 import Logo from '@/components/layout/logo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Page() {
   const [account, setAccount] = useState('');
@@ -12,10 +13,21 @@ export default function Page() {
   const [isShownPassword, setIsShownPassword] = useState(false);
   const ref = useRef<HTMLInputElement | null>(null);
 
+  const location = useLocation();
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    await login({ account, password });
+
+    const origin = location.state?.from?.pathname || '/';
+    navigate(origin);
+  };
+
   useEffect(() => {
-    if (ref.current) {
-      ref.current.focus();
-    }
+    ref.current?.focus();
   }, []);
 
   return (
@@ -25,13 +37,14 @@ export default function Page() {
         <p className="font-semibold">ログイン</p>
         <Card>
           <CardContent className="p-6">
-            <form className="flex w-64 flex-col gap-y-4" action="">
+            <form className="flex w-64 flex-col gap-y-4" onSubmit={handleSubmit}>
               <div>
                 <p className="text-xs">アカウント</p>
                 <Input
                   className="my-2 rounded-full"
                   value={account}
                   ref={ref}
+                  name="account"
                   onChange={(e) => setAccount(e.target.value)}
                 />
               </div>
@@ -42,6 +55,7 @@ export default function Page() {
                     className="my-2 rounded-full"
                     type={isShownPassword ? 'text' : 'password'}
                     value={password}
+                    name="password"
                     onChange={(e) => setPassword(e.target.value)}
                   />
                   <Button

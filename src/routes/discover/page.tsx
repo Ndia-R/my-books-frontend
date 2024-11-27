@@ -1,13 +1,13 @@
 import BookList from '@/components/book-list/book-list';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import BookPagination from '@/components/book-list/book-pagination';
-import { Skeleton } from '@/components/ui/skeleton';
 import { getBooksByGenreId, getGenres } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
 import { BookResponse, Genre } from '@/types/book';
 import { Suspense } from 'react';
 import {
   Await,
+  defer,
   LoaderFunctionArgs,
   ScrollRestoration,
   useLoaderData,
@@ -15,11 +15,11 @@ import {
 
 type LoaderFunctionReturnType = {
   bookResponse: Promise<BookResponse>;
-  genres: Promise<Genre[]>;
+  genres: Genre[];
   genreIds: number[];
 };
 
-const loader = ({ request }: LoaderFunctionArgs) => {
+const loader = async ({ request }: LoaderFunctionArgs) => {
   const url = new URL(request.url);
   const ids = url.searchParams.get('genreId');
 
@@ -27,29 +27,22 @@ const loader = ({ request }: LoaderFunctionArgs) => {
   const page = Number(url.searchParams.get('page') ?? '1');
 
   const bookResponse = getBooksByGenreId(genreIds, page - 1);
-  const genres = getGenres();
+  const genres = await getGenres();
 
-  return { bookResponse, genres, genreIds };
+  return defer({ bookResponse, genres, genreIds });
 };
 
 export default function Page() {
   const { bookResponse, genres, genreIds } = useLoaderData() as LoaderFunctionReturnType;
 
+  const genreString = genres
+    .filter((genre) => genreIds.includes(genre.id))
+    .map((genre) => genre.name)
+    .join(' & ');
+
   return (
     <>
-      <Suspense fallback={<Skeleton className="my-2 h-5 w-32 rounded-full" />}>
-        <Await resolve={genres} errorElement={<ErrorElement />}>
-          {(genres: Genre[]) => {
-            const genreString = genres
-              .filter((genre) => genreIds.includes(genre.id))
-              .map((genre) => genre.name)
-              .join(' & ');
-            return (
-              <p className="my-2 text-sm text-muted-foreground">{`「 ${genreString} 」のジャンル`}</p>
-            );
-          }}
-        </Await>
-      </Suspense>
+      <p className="my-2 text-sm text-muted-foreground">{`「 ${genreString} 」のジャンル`}</p>
 
       <div className="flex flex-col gap-y-4 pb-4">
         <Suspense fallback={<BookListSkeleton />}>

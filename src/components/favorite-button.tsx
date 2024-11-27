@@ -5,7 +5,7 @@ import { HeartIcon } from 'lucide-react';
 
 type Props = {
   book: Book;
-  className: string;
+  className?: string;
 };
 
 export default function FavoriteButton({ className, book }: Props) {

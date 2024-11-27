@@ -1,15 +1,15 @@
 export interface Book {
-  id: string; // ID
-  title: string; // タイトル
-  description: string; // 概要
-  genreIds: number[]; // ジャンルID
-  authors: string[]; // 作者
-  publisher: string; // 出版社
-  publishedDate: string; // 出版日
-  price: number; // 価格
-  pageCount: number; // ページ数
-  isbn: string; // ISBN
-  imageUrl: string; // イメージ画像URL
+  id: string;
+  title: string;
+  description: string;
+  genreIds: number[];
+  authors: string[];
+  publisher: string;
+  publishedDate: string;
+  price: number;
+  pageCount: number;
+  isbn: string;
+  imageUrl: string;
 }
 
 export interface BookResponse {
@@ -24,12 +24,17 @@ export interface Genre {
   name: string;
 }
 
+export interface UserInfo {
+  id: string;
+  account: string;
+  avatarUrl: string;
+}
+
 export interface Review {
   id: number;
   bookId: string;
-  name: string;
   comment: string;
   rating: number;
-  avatarUrl: string;
   updatedAt: string;
+  user: UserInfo;
 }

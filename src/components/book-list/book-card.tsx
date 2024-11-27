@@ -1,3 +1,4 @@
+import { useAuth } from '@/auth/use-auth';
 import FavoriteButton from '@/components/favorite-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Book } from '@/types/book';
@@ -8,14 +9,17 @@ type Props = {
 };
 
 export default function BookCard({ book }: Props) {
+  const { isAuthenticated } = useAuth();
   return (
     <>
       <Card>
         <CardContent className="relative flex w-40 flex-col items-center px-3 pb-2 pt-6 sm:w-48 sm:px-4">
-          <FavoriteButton
-            className="absolute bottom-8 right-2 sm:bottom-10"
-            book={book}
-          />
+          {isAuthenticated && (
+            <FavoriteButton
+              className="absolute bottom-8 right-2 sm:bottom-10"
+              book={book}
+            />
+          )}
           <Link className="flex justify-center" to={`/book/${book.id}`}>
             <img
               className="h-44 rounded object-cover sm:h-52"
