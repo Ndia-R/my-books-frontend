@@ -16,7 +16,7 @@ export default function NavList() {
 
   return (
     <div>
-      <div className="hidden md:flex md:items-center md:gap-x-10">
+      <div className="hidden md:flex md:items-center md:gap-x-8">
         <Logo />
         <MenuList />
       </div>

@@ -27,7 +27,7 @@ export default function SearchBar() {
 
   return (
     <div>
-      <form className="relative h-10 w-64 lg:w-80" onSubmit={handleSubmit}>
+      <form className="relative h-10 w-full" onSubmit={handleSubmit}>
         <Input
           className="rounded-full border-foreground/10 pl-10 pr-4"
           type="search"

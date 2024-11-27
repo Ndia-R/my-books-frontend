@@ -22,7 +22,7 @@ export default function Page() {
     <div className="">
       <div className="mt-6 flex flex-col items-center justify-items-center gap-y-4 sm:mt-16">
         <Logo size="lg" />
-        <p className="font-semibold">ログイン</p>
+        <p className="font-semibold">アカウントの作成</p>
         <Card>
           <CardContent className="p-6">
             <form className="flex w-64 flex-col gap-y-4" action="">
@@ -34,6 +34,7 @@ export default function Page() {
                   ref={ref}
                   onChange={(e) => setAccount(e.target.value)}
                 />
+                {/* <p className="text-xs">error</p> */}
               </div>
               <div>
                 <p className="text-xs">パスワード</p>
@@ -57,16 +58,17 @@ export default function Page() {
                       <EyeOffIcon className="size-4" />
                     )}
                   </Button>
+                  {/* <p className="text-xs">error</p> */}
                 </div>
               </div>
               <Button className="mt-6 w-full rounded-full" type="submit">
-                ログイン
+                新規登録
               </Button>
             </form>
             <div className="mt-6 flex justify-center gap-x-1 text-xs">
-              <p className="text-muted-foreground">アカウントをお持ちでない方はこちら</p>
-              <Link to={'/sign-up'}>
-                <p className="text-primary hover:underline">新規登録</p>
+              <p className="text-muted-foreground">アカウントをお持ちですか？</p>
+              <Link to={'/login'}>
+                <p className="text-primary hover:underline">ログイン</p>
               </Link>
             </div>
           </CardContent>

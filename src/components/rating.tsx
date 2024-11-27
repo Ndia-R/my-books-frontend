@@ -1,5 +1,5 @@
 import { cn } from '@/lib/util';
-import { StarIcon } from 'lucide-react';
+import { StarHalfIcon, StarIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -57,40 +57,49 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
           {dispRating.toFixed(1)}
         </p>
 
-        {[...Array<number>(max)].map((_, index) => (
-          <div className="flex" key={index}>
-            <div className="w-3 overflow-hidden">
+        <div className="relative">
+          <div className="flex">
+            {[...Array<number>(max)].map((_, index) => (
               <StarIcon
-                className={cn(!readOnly && 'cursor-pointer')}
-                style={{
-                  fill:
-                    index + 1 - 0.5 > dispRating
-                      ? 'hsl(var(--foreground) / 0.1)'
-                      : 'hsl(var(--primary))',
-                }}
+                key={index}
+                style={{ fill: 'hsl(var(--foreground) / 0.1)' }}
                 strokeWidth={0}
-                onClick={() => handleMouseClick(index + 1 - 0.5)}
-                onMouseEnter={() => handleMouseEnter(index + 1 - 0.5)}
-                onMouseLeave={() => handleMouseLeave()}
               />
-            </div>
-            <div className="w-3 overflow-hidden">
-              <StarIcon
-                className={cn(!readOnly && 'cursor-pointer', '-translate-x-3')}
-                style={{
-                  fill:
-                    index + 1 > dispRating
-                      ? 'hsl(var(--foreground) / 0.1)'
-                      : 'hsl(var(--primary))',
-                }}
-                strokeWidth={0}
-                onClick={() => handleMouseClick(index + 1)}
-                onMouseEnter={() => handleMouseEnter(index + 1)}
-                onMouseLeave={() => handleMouseLeave()}
-              />
-            </div>
+            ))}
           </div>
-        ))}
+
+          <div className="absolute left-0 top-0 flex">
+            {[...Array<number>(Math.floor(dispRating))].map((_, index) => (
+              <StarIcon
+                key={index}
+                style={{ fill: 'hsl(var(--primary))' }}
+                strokeWidth={0}
+              />
+            ))}
+            {!Number.isInteger(dispRating) && (
+              <StarHalfIcon style={{ fill: 'hsl(var(--primary))' }} strokeWidth={0} />
+            )}
+          </div>
+
+          <div className="absolute left-0 top-0 flex">
+            {[...Array<number>(max)].map((_, index) => (
+              <div className="flex" key={index}>
+                <div
+                  className={cn('w-3 h-6 bg-transparent', !readOnly && 'cursor-pointer')}
+                  onClick={() => handleMouseClick(index + 1 - 0.5)}
+                  onMouseEnter={() => handleMouseEnter(index + 1 - 0.5)}
+                  onMouseLeave={() => handleMouseLeave()}
+                />
+                <div
+                  className={cn('w-3 h-6 bg-transparent', !readOnly && 'cursor-pointer')}
+                  onClick={() => handleMouseClick(index + 1)}
+                  onMouseEnter={() => handleMouseEnter(index + 1)}
+                  onMouseLeave={() => handleMouseLeave()}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </>
   );

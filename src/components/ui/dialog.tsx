@@ -1,8 +1,6 @@
 import { cn } from '@/lib/util';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
-
-const INVISIBLE_DURATION = 100;
 
 interface DialogContextType {
   isOpen: boolean;
@@ -116,27 +114,37 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
 // ----------------------------------------------------------------------------
 type DialogOverlayProps = React.HTMLAttributes<HTMLDivElement>;
 
-const DialogOverlay = React.forwardRef<HTMLDivElement, DialogOverlayProps>(
-  ({ className, ...props }, ref) => {
-    const context = useContext(DialogContext);
+const DialogOverlay = ({ className, ...props }: DialogOverlayProps) => {
+  const context = useContext(DialogContext);
 
-    if (!context) {
-      throw new Error('DialogOverlay must be used within Dialog');
-    }
-
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-          className
-        )}
-        data-state={context.isOpen ? 'open' : 'closed'}
-        {...props}
-      ></div>
-    );
+  if (!context) {
+    throw new Error('DialogOverlay must be used within Dialog');
   }
-);
+
+  // 閉じるアニメーションが終わった時にopacity:0にする
+  // data-[state=closed]でopacity:0へのアニメーションはするが、
+  // それが終わるとopacity:1へリセットされてしまい、ちらつくので
+  // これを防ぐ
+  const ref = useRef<HTMLDivElement | null>(null);
+  const handleAnimationEnd = (e: React.AnimationEvent) => {
+    if (e.animationName === 'exit' && ref.current) {
+      ref.current.style.opacity = '0';
+    }
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+        className
+      )}
+      data-state={context.isOpen ? 'open' : 'closed'}
+      {...props}
+      onAnimationEnd={handleAnimationEnd}
+    ></div>
+  );
+};
 
 // ----------------------------------------------------------------------------
 // DialogContent
@@ -145,74 +153,93 @@ interface DialogContentProps extends React.HTMLAttributes<HTMLDivElement> {
   onEscapeKeyDown?: () => void;
   onPointerDownOutside?: () => void;
 }
-const DialogContent = React.forwardRef<HTMLDivElement, DialogContentProps>(
-  ({ className, children, onEscapeKeyDown, onPointerDownOutside, ...props }, ref) => {
-    const context = useContext(DialogContext);
+const DialogContent = ({
+  className,
+  children,
+  onEscapeKeyDown,
+  onPointerDownOutside,
+  ...props
+}: DialogContentProps) => {
+  const context = useContext(DialogContext);
 
-    if (!context) {
-      throw new Error('DialogContent must be used within Dialog');
-    }
-
-    const [isVisible, setIsVisible] = useState(false);
-
-    const invisibleDialog = () =>
-      setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
-
-    useEffect(() => {
-      if (context.isOpen) {
-        setIsVisible(true);
-      } else {
-        invisibleDialog();
-      }
-    }, [context.isOpen]);
-
-    useEffect(() => {
-      // ESCキーで閉じるための関数とイベントリスナーの登録
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape' && context.isOpen) {
-          if (onEscapeKeyDown) {
-            onEscapeKeyDown();
-          } else {
-            context.closeDialog();
-            invisibleDialog();
-          }
-        }
-      };
-      document.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-      };
-    }, [context, onEscapeKeyDown]);
-
-    // バックドロップクリックで閉じる
-    const handleClickOutside = () => {
-      context.closeDialog();
-      invisibleDialog();
-    };
-
-    return ReactDOM.createPortal(
-      <>
-        {isVisible && (
-          <>
-            <DialogOverlay onClick={onPointerDownOutside || handleClickOutside} />
-            <div
-              ref={ref}
-              className={cn(
-                'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
-                className
-              )}
-              data-state={context.isOpen ? 'open' : 'closed'}
-              {...props}
-            >
-              {children}
-            </div>
-          </>
-        )}
-      </>,
-      document.body
-    );
+  if (!context) {
+    throw new Error('DialogContent must be used within Dialog');
   }
-);
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (context.isOpen) {
+      setIsVisible(true);
+    }
+  }, [context.isOpen]);
+
+  useEffect(() => {
+    // ESCキーで閉じるための関数とイベントリスナーの登録
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && context.isOpen) {
+        if (onEscapeKeyDown) {
+          onEscapeKeyDown();
+        } else {
+          context.closeDialog();
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [context, onEscapeKeyDown]);
+
+  // バックドロップクリックで閉じる
+  const handleClickOutside = () => {
+    context.closeDialog();
+  };
+
+  // 閉じるアニメーションが終わった時にopacity:0にする
+  // data-[state=closed]でopacity:0へのアニメーションはするが、
+  // それが終わるとopacity:1へリセットされてしまい、ちらつくので
+  // これを防ぐ
+  const ref = useRef<HTMLDivElement | null>(null);
+  const handleAnimationEnd = (e: React.AnimationEvent) => {
+    if (e.animationName === 'exit' && ref.current) {
+      ref.current.style.opacity = '0';
+      setIsVisible(false);
+    }
+  };
+
+  const mergeProps = {
+    ...props,
+    onAnimationEnd: (e: React.AnimationEvent<HTMLDivElement>) => {
+      if (props.onAnimationEnd) {
+        props.onAnimationEnd(e);
+      }
+      handleAnimationEnd(e);
+    },
+  };
+
+  return ReactDOM.createPortal(
+    <>
+      {isVisible && (
+        <>
+          <DialogOverlay onClick={onPointerDownOutside || handleClickOutside} />
+          <div
+            ref={ref}
+            className={cn(
+              'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
+              className
+            )}
+            data-state={context.isOpen ? 'open' : 'closed'}
+            {...mergeProps}
+          >
+            {children}
+          </div>
+        </>
+      )}
+    </>,
+    document.body
+  );
+};
 
 // ----------------------------------------------------------------------------
 // DialogHeader

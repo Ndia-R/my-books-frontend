@@ -7,14 +7,12 @@ type Props = {
 
 export default function ReviewList({ reviews }: Props) {
   return (
-    <>
-      <ul className="flex flex-col p-6">
-        {reviews.map((review) => (
-          <li className="border-t border-t-muted" key={review.id}>
-            <ReviewItem review={review} />
-          </li>
-        ))}
-      </ul>
-    </>
+    <ul className="flex flex-col p-6">
+      {reviews.map((review) => (
+        <li className="border-t border-t-muted" key={review.id}>
+          <ReviewItem review={review} />
+        </li>
+      ))}
+    </ul>
   );
 }

@@ -21,13 +21,14 @@ export default function BookListSkeleton({ paginationOff = false }: Props) {
           {[...Array<number>(FETCH_BOOKS_MAX_RESULTS)].map((_, index) => (
             <li key={index}>
               <Card>
-                <CardContent className="flex w-40 flex-col items-center gap-2 px-3 pb-2 pt-6 sm:w-48 sm:px-4 sm:pb-2 sm:pt-4">
+                <CardContent className="relative flex w-40 flex-col items-center px-3 pb-2 pt-6 sm:w-48 sm:px-4">
                   <Skeleton className="h-44 w-32 rounded object-cover sm:h-52 sm:w-36" />
-                  <div className="flex w-full items-center justify-between">
-                    <Skeleton className="h-3 w-16 rounded-lg" />
-                    <Skeleton className="size-8 rounded-full" />
+                  <div className="flex h-6 w-full items-center">
+                    <Skeleton className="mt-2 h-3 w-16 rounded-lg" />
                   </div>
-                  <Skeleton className="mb-3 h-5 w-4/5 rounded-full sm:mb-4 sm:h-6" />
+                  <div className="flex h-8 w-full items-center justify-center sm:h-10">
+                    <Skeleton className="h-4 w-4/5 rounded-full sm:h-5" />
+                  </div>
                 </CardContent>
               </Card>
             </li>

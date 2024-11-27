@@ -6,6 +6,7 @@ import LoginPage from '@/routes/login/page';
 import RootPage from '@/routes/page';
 import SearchPage from '@/routes/search/page';
 import SettingsPage from '@/routes/settings/page';
+import SignUpPage from '@/routes/sign-up/page';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 
 export const router = createBrowserRouter(
@@ -36,6 +37,10 @@ export const router = createBrowserRouter(
 
         <Route path="login">
           <Route index element={<LoginPage />} />
+        </Route>
+
+        <Route path="sign-up">
+          <Route index element={<SignUpPage />} />
         </Route>
       </Route>
     </Route>

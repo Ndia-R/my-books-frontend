@@ -18,7 +18,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/util';
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type IconType = {
   [key: string]: {
@@ -53,14 +53,19 @@ const defaultOptions: ConfirmDialogOptions = {
 
 export const CONFIRM_DIALOG_EVENT = 'CONFIRM_DIALOG_EVENT';
 
-const ConfirmDialog = () => {
-  const [options, setOptions] = useState<ConfirmDialogOptions>(defaultOptions);
-  const [isOpen, setIsOpen] = useState(false);
+type SELECTED_BUTTON = 'action' | 'cancel' | undefined;
 
+const ConfirmDialog = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [options, setOptions] = useState<ConfirmDialogOptions>(defaultOptions);
+  const refTextarea = useRef<HTMLTextAreaElement | null>(null);
+  const Icon = iconTypes[options.icon].icon || InfoIcon;
+
+  // hooksから呼ぶためにイベントリスナー登録
   useEffect(() => {
     const handleEvent = (event: CustomEvent<ConfirmDialogOptions>) => {
       setIsOpen(true);
-      setOptions((prev) => ({ ...prev, ...event.detail }));
+      setOptions({ ...defaultOptions, ...event.detail });
     };
     document.addEventListener(CONFIRM_DIALOG_EVENT, handleEvent as EventListener);
     return () => {
@@ -68,12 +73,13 @@ const ConfirmDialog = () => {
     };
   }, []);
 
-  const Icon = iconTypes[options.icon].icon || InfoIcon;
-
-  const refTextarea = useRef<HTMLTextAreaElement | null>(null);
-
   // アニメーションフラグ（閉じれないことを伝えるためにぶるっとする）
   const [isPersistentAnimation, setIsPersistentAnimation] = useState(false);
+  const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
+    if (e.propertyName === 'transform') {
+      setIsPersistentAnimation(false);
+    }
+  };
 
   // ダイアログを閉じる時のイベント
   const handleCloseDialog = () => {
@@ -84,31 +90,38 @@ const ConfirmDialog = () => {
     handleClickCancel();
   };
 
-  // アニメーション終了イベント
-  const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
-    if (e.propertyName === 'transform') {
-      setIsPersistentAnimation(false);
-    }
-  };
+  // 押したボタンによって、戻り値（resolveの引数も変更する）
+  const [selected, setSelected] = useState<SELECTED_BUTTON>();
 
-  // アクションボタン
   const handleClickAction = () => {
     setIsOpen(false);
-    options.resolve?.({
-      isAction: true,
-      isCancel: false,
-      text: refTextarea.current?.value || '',
-    });
+    setSelected('action');
   };
 
-  // キャンセルボタン
   const handleClickCancel = () => {
     setIsOpen(false);
-    options.resolve?.({
-      isAction: false,
-      isCancel: true,
-      text: '',
-    });
+    setSelected('cancel');
+  };
+
+  const handleAnimationEnd = (e: React.AnimationEvent) => {
+    if (e.animationName === 'exit') {
+      switch (selected) {
+        case 'action':
+          options.resolve?.({
+            isAction: true,
+            isCancel: false,
+            text: refTextarea.current?.value || '',
+          });
+          return;
+        case 'cancel':
+          options.resolve?.({
+            isAction: false,
+            isCancel: true,
+            text: '',
+          });
+          return;
+      }
+    }
   };
 
   return (
@@ -122,6 +135,7 @@ const ConfirmDialog = () => {
           onTransitionEnd={handleTransitionEnd}
           onEscapeKeyDown={handleCloseDialog}
           onPointerDownOutside={handleCloseDialog}
+          onAnimationEnd={handleAnimationEnd}
         >
           <DialogHeader>
             <DialogTitle className="my-2 flex items-center">
@@ -144,13 +158,19 @@ const ConfirmDialog = () => {
               />
             </div>
           )}
+
           <DialogFooter className="flex justify-end">
             {!options.actionOnly && (
-              <Button variant="ghost" onClick={handleClickCancel}>
+              <Button
+                className="rounded-full"
+                variant="ghost"
+                onClick={handleClickCancel}
+              >
                 キャンセル
               </Button>
             )}
             <Button
+              className={cn('rounded-full', options.actionLabel === 'OK' && 'sm:w-20')}
               variant={iconTypes[options.icon].variant || 'default'}
               onClick={handleClickAction}
             >

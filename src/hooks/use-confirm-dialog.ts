@@ -1,5 +1,6 @@
 import { CONFIRM_DIALOG_EVENT } from '@/components/confirm-dialog';
 
+// 確認ダイアログの引数
 type ConfirmDialogOptions = {
   icon: string; // アイコンの種類（「''」「'i'」「'?'」「'!'」「'c'」）
   title: string; // タイトル
@@ -14,6 +15,7 @@ type ConfirmDialogOptions = {
   resolve?: (value: ConfirmDialogResult) => void;
 };
 
+// 確認ダイアログの戻り値
 type ConfirmDialogResult = {
   isAction: boolean;
   isCancel: boolean;

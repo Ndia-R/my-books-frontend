@@ -1,3 +1,4 @@
+import LoginButton from '@/components/layout/login-button';
 import NavList from '@/components/layout/nav-list';
 import ThemeToggleButton from '@/components/layout/theme-toggle-button';
 import SearchBar from '@/components/search-bar';
@@ -15,6 +16,7 @@ export default function Header({ className }: Props) {
           <NavList />
           <span className="flex-1"></span>
           <SearchBar />
+          <LoginButton />
           <ThemeToggleButton />
         </div>
       </div>

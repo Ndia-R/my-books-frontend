@@ -39,23 +39,14 @@
 
   // スペルチェックの対象外にするワード
   "cSpell.words": [
-    "bradlc",
     "clsx",
-    "dbaeumer",
     "Devcontainer",
-    "dsznajder",
-    "ecmel",
-    "esbenp",
-    "formulahendry",
-    "kohler",
+    "disp",
     "lucide",
-    "mhutchie",
-    "mosapride",
-    "oderwat",
     "shadcn",
-    "shardulm",
     "tailwindcss",
-    "tseslint",
     "zenkaku"
-  ]
+  ],
+  // スペルチェックの対象外にするファイル
+  "cSpell.files": ["devcontainer.json"]
 }

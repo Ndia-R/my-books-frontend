@@ -6,6 +6,8 @@ type Props = {
 };
 
 export default function Logo({ size = 'md' }: Props) {
+  const LOGO_TITLE = 'My Books';
+
   return (
     <div className="text-primary hover:bg-transparent hover:text-primary/80">
       <Link to="/">
@@ -15,7 +17,7 @@ export default function Logo({ size = 'md' }: Props) {
             size === 'sm' ? 'text-xl' : size === 'md' ? 'text-3xl' : 'text-5xl'
           )}
         >
-          My Books
+          {LOGO_TITLE}
         </h1>
       </Link>
     </div>
