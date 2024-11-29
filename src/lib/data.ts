@@ -1,9 +1,8 @@
 // import { getUser } from '@/lib/auth';
 // import prisma from '@/lib/db';
+import { BOOKS_API_ENDPOINT } from '@/constants/constants';
 import { Book, BookResponse, Genre } from '@/types/book';
 
-// const BOOKS_API_ENDPOINT = 'http://vsv-emerald/my-books';
-const BOOKS_API_ENDPOINT = 'http://localhost:18080/my-books';
 export const FETCH_BOOKS_MAX_RESULTS = 20;
 
 /**

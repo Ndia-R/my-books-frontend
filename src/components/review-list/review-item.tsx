@@ -1,6 +1,6 @@
 import Rating from '@/components/rating';
 import { formatDate } from '@/lib/util';
-import { Review } from '@/types/book';
+import { Review } from '@/types/review';
 
 type Props = {
   review: Review;
@@ -17,7 +17,7 @@ export default function ReviewItem({ review }: Props) {
             alt="avatar-image"
           />
           <div>
-            <p className="text-lg font-semibold">{review.user.account}</p>
+            <p className="text-lg font-semibold">{review.user.name}</p>
             <p className="text-sm text-muted-foreground">
               {formatDate(review.updatedAt)}
             </p>

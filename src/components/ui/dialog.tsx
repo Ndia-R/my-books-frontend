@@ -79,7 +79,6 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
 
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
-        ...props,
         ...children.props,
         onClick: (e: React.MouseEvent) => {
           if (children.props.onClick) {
@@ -124,11 +123,11 @@ const DialogOverlay = ({ className, ...props }: DialogOverlayProps) => {
   // 閉じるアニメーションが終わった時にopacity:0にする
   // data-[state=closed]でopacity:0へのアニメーションはするが、
   // それが終わるとopacity:1へリセットされてしまい、ちらつくので
-  // これを防ぐ
+  // これを防ぐためにdisplay:'none'にする
   const ref = useRef<HTMLDivElement | null>(null);
   const handleAnimationEnd = (e: React.AnimationEvent) => {
     if (e.animationName === 'exit' && ref.current) {
-      ref.current.style.opacity = '0';
+      ref.current.style.display = 'none';
     }
   };
 
@@ -175,7 +174,6 @@ const DialogContent = ({
   }, [context.isOpen]);
 
   useEffect(() => {
-    // ESCキーで閉じるための関数とイベントリスナーの登録
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && context.isOpen) {
         if (onEscapeKeyDown) {
@@ -185,25 +183,31 @@ const DialogContent = ({
         }
       }
     };
+    const handlePointerDownOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        if (onPointerDownOutside) {
+          onPointerDownOutside();
+        } else {
+          context.closeDialog();
+        }
+      }
+    };
     document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handlePointerDownOutside);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handlePointerDownOutside);
     };
-  }, [context, onEscapeKeyDown]);
-
-  // バックドロップクリックで閉じる
-  const handleClickOutside = () => {
-    context.closeDialog();
-  };
+  }, [context, onEscapeKeyDown, onPointerDownOutside]);
 
   // 閉じるアニメーションが終わった時にopacity:0にする
   // data-[state=closed]でopacity:0へのアニメーションはするが、
   // それが終わるとopacity:1へリセットされてしまい、ちらつくので
-  // これを防ぐ
+  // これを防ぐためにdisplay:'none'にする
   const ref = useRef<HTMLDivElement | null>(null);
   const handleAnimationEnd = (e: React.AnimationEvent) => {
     if (e.animationName === 'exit' && ref.current) {
-      ref.current.style.opacity = '0';
+      ref.current.style.display = 'none';
       setIsVisible(false);
     }
   };
@@ -222,7 +226,7 @@ const DialogContent = ({
     <>
       {isVisible && (
         <>
-          <DialogOverlay onClick={onPointerDownOutside || handleClickOutside} />
+          <DialogOverlay />
           <div
             ref={ref}
             className={cn(

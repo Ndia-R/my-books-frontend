@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function Page() {
-  const [account, setAccount] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isShownPassword, setIsShownPassword] = useState(false);
   const ref = useRef<HTMLInputElement | null>(null);
@@ -25,12 +25,12 @@ export default function Page() {
           <CardContent className="p-6">
             <form className="flex w-64 flex-col gap-y-4" action="">
               <div>
-                <p className="text-xs">アカウント</p>
+                <p className="text-xs">メールアドレス</p>
                 <Input
                   className="my-2 rounded-full"
-                  value={account}
+                  value={email}
                   ref={ref}
-                  onChange={(e) => setAccount(e.target.value)}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
                 {/* <p className="text-xs">error</p> */}
               </div>

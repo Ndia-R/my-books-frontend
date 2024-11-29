@@ -4,6 +4,7 @@ import DiscoverPage from '@/routes/discover/page';
 import FavoritesPage from '@/routes/favorite/page';
 import RootLayout from '@/routes/layout';
 import LoginPage from '@/routes/login/page';
+import MyListPage from '@/routes/my-list/page';
 import RootPage from '@/routes/page';
 import SearchPage from '@/routes/search/page';
 import SettingsPage from '@/routes/settings/page';
@@ -39,6 +40,10 @@ export const router = createBrowserRouter(
         <Route element={<ProtectedRoute />}>
           <Route path="favorites">
             <Route index element={<FavoritesPage />} />
+          </Route>
+
+          <Route path="my-list">
+            <Route index element={<MyListPage />} />
           </Route>
 
           <Route path="settings">

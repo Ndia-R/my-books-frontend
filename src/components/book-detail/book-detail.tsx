@@ -2,6 +2,7 @@ import { useAuth } from '@/auth/use-auth';
 import ReviewDialog from '@/components/book-detail/review-dialog';
 import FavoriteButton from '@/components/favorite-button';
 import GenreList from '@/components/genre-list/genre-list';
+import MyListButton from '@/components/my-list-button';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -26,21 +27,39 @@ export default function BookDetail({ book, genres }: Props) {
             src={book.imageUrl}
             alt={book.title}
           />
-          <div className="my-4 flex items-center gap-x-2">
+          <div className="my-4 flex items-center">
+            <div className="w-20"></div>
             <Button className="w-32 rounded-full" size="lg">
               読む
             </Button>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <FavoriteButton book={book} />
-              </TooltipTrigger>
-              {!isAuthenticated && (
-                <TooltipContent>
-                  <p>ログインしてこの本をお気に入りリストに加えましょう</p>
-                </TooltipContent>
-              )}
-            </Tooltip>
+            <div className="flex w-20 items-center justify-center">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <MyListButton />
+                </TooltipTrigger>
+                {isAuthenticated ? (
+                  <TooltipContent>マイリストに追加</TooltipContent>
+                ) : (
+                  <TooltipContent>
+                    ログインしてこの本を「マイリスト」に加えましょう
+                  </TooltipContent>
+                )}
+              </Tooltip>
+
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <FavoriteButton book={book} />
+                </TooltipTrigger>
+                {isAuthenticated ? (
+                  <TooltipContent>お気に入りに追加</TooltipContent>
+                ) : (
+                  <TooltipContent>
+                    ログインしてこの本を「お気に入り」に加えましょう
+                  </TooltipContent>
+                )}
+              </Tooltip>
+            </div>
           </div>
         </div>
 

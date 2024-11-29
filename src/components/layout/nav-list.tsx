@@ -21,21 +21,19 @@ export default function NavList() {
         <MenuList />
       </div>
 
-      <div className="md:hidden">
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button className="rounded-full" variant="ghost" size="icon">
-              <MenuIcon className="size-5" />
-            </Button>
-          </SheetTrigger>
-          <SheetContent className="w-fit p-8" side="left">
-            <div className="mb-8" onClick={() => setIsOpen(false)}>
-              <Logo />
-            </div>
-            <MenuList onClick={() => setIsOpen(false)} />
-          </SheetContent>
-        </Sheet>
-      </div>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild>
+          <Button className="rounded-full md:hidden" variant="ghost" size="icon">
+            <MenuIcon className="size-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent className="w-fit p-8" side="left">
+          <div className="mb-8" onClick={() => setIsOpen(false)}>
+            <Logo />
+          </div>
+          <MenuList onClick={() => setIsOpen(false)} />
+        </SheetContent>
+      </Sheet>
     </div>
   );
 }

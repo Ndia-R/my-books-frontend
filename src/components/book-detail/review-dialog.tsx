@@ -70,9 +70,7 @@ export default function ReviewDialog() {
           </Button>
         </TooltipTrigger>
         {!isAuthenticated && (
-          <TooltipContent>
-            <p>ログインしてこの本のレビューを書きましょう</p>
-          </TooltipContent>
+          <TooltipContent>ログインしてこの本の「レビュー」を書きましょう</TooltipContent>
         )}
       </Tooltip>
 

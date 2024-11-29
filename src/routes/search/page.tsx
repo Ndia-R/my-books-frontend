@@ -33,7 +33,10 @@ export default function Page() {
 
   return (
     <>
-      <p className="my-2 text-sm text-muted-foreground">{`「 ${query} 」の検索結果`}</p>
+      <p className="my-2">
+        {`「 ${query} 」`}
+        <span className="text-sm text-muted-foreground">の検索結果</span>
+      </p>
 
       <div className="flex flex-col gap-y-4 pb-4">
         <Suspense fallback={<BookListSkeleton />}>

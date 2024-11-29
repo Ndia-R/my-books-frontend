@@ -86,7 +86,6 @@ const TooltipTrigger = React.forwardRef<HTMLButtonElement, TooltipTriggerProps>(
 
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
-        ...props,
         ...children.props,
       };
       return (

@@ -1,11 +1,10 @@
 import { cn } from '@/lib/util';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 type SheetSideType = 'top' | 'right' | 'bottom' | 'left';
 
 const DEFAULT_SIDE: SheetSideType = 'right';
-const INVISIBLE_DURATION = 150;
 
 interface SheetContextType {
   isOpen: boolean;
@@ -83,7 +82,6 @@ const SheetTrigger = React.forwardRef<HTMLButtonElement, SheetTriggerProps>(
 
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
-        ...props,
         ...children.props,
         onClick: (e: React.MouseEvent) => {
           if (children.props.onClick) {
@@ -118,33 +116,44 @@ const SheetTrigger = React.forwardRef<HTMLButtonElement, SheetTriggerProps>(
 // ----------------------------------------------------------------------------
 type SheetOverlayProps = React.HTMLAttributes<HTMLDivElement>;
 
-const SheetOverlay = React.forwardRef<HTMLDivElement, SheetOverlayProps>(
-  ({ className, ...props }, ref) => {
-    const context = useContext(SheetContext);
+const SheetOverlay = ({ className, ...props }: SheetOverlayProps) => {
+  const context = useContext(SheetContext);
 
-    if (!context) {
-      throw new Error('SheetOverlay must be used within Sheet');
-    }
-
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
-          className
-        )}
-        data-state={context.isOpen ? 'open' : 'closed'}
-        {...props}
-      ></div>
-    );
+  if (!context) {
+    throw new Error('SheetOverlay must be used within Sheet');
   }
-);
 
+  // 閉じるアニメーションが終わった時にopacity:0にする
+  // data-[state=closed]でopacity:0へのアニメーションはするが、
+  // それが終わるとopacity:1へリセットされてしまい、ちらつくので
+  // これを防ぐためにdisplay:'none'にする
+  const ref = useRef<HTMLDivElement | null>(null);
+  const handleAnimationEnd = (e: React.AnimationEvent) => {
+    if (e.animationName === 'exit' && ref.current) {
+      ref.current.style.display = 'none';
+    }
+  };
+
+  return (
+    <div
+      ref={ref}
+      className={cn(
+        'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+        className
+      )}
+      data-state={context.isOpen ? 'open' : 'closed'}
+      {...props}
+      onAnimationEnd={handleAnimationEnd}
+    ></div>
+  );
+};
 // ----------------------------------------------------------------------------
 // SheetContent
 // ----------------------------------------------------------------------------
 interface SheetContentProps extends React.HTMLAttributes<HTMLDivElement> {
   side?: SheetSideType;
+  onEscapeKeyDown?: () => void;
+  onPointerDownOutside?: () => void;
 }
 
 const POSITION_LIST = {
@@ -156,67 +165,99 @@ const POSITION_LIST = {
     'inset-y-0 right-0 h-full w-3/4  border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-sm',
 };
 
-const SheetContent = React.forwardRef<HTMLDivElement, SheetContentProps>(
-  ({ className, children, side = DEFAULT_SIDE, ...props }, ref) => {
-    const context = useContext(SheetContext);
+const SheetContent = ({
+  className,
+  children,
+  side = DEFAULT_SIDE,
+  onEscapeKeyDown,
+  onPointerDownOutside,
+  ...props
+}: SheetContentProps) => {
+  const context = useContext(SheetContext);
 
-    if (!context) {
-      throw new Error('SheetContent must be used within Sheet');
-    }
-
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-      if (context.isOpen) {
-        setIsVisible(true);
-      } else {
-        setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
-      }
-    }, [context.isOpen]);
-
-    useEffect(() => {
-      // ESCキーで閉じるための関数とイベントリスナーの登録
-      const handleKeyDown = (e: KeyboardEvent) => {
-        if (e.key === 'Escape' && context.isOpen) {
-          context.closeSheet();
-          setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
-        }
-      };
-      document.addEventListener('keydown', handleKeyDown);
-      return () => {
-        document.removeEventListener('keydown', handleKeyDown);
-      };
-    }, [context]);
-
-    // バックドロップクリックで閉じる
-    const handleClickOutside = () => {
-      context.closeSheet();
-      setTimeout(() => setIsVisible(false), INVISIBLE_DURATION);
-    };
-
-    return ReactDOM.createPortal(
-      <>
-        {isVisible && (
-          <>
-            <SheetOverlay onClick={handleClickOutside} />
-            <div
-              ref={ref}
-              className={cn(
-                'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
-                POSITION_LIST[side],
-                className
-              )}
-              data-state={context.isOpen ? 'open' : 'closed'}
-              {...props}
-            >
-              {children}
-            </div>
-          </>
-        )}
-      </>,
-      document.body
-    );
+  if (!context) {
+    throw new Error('SheetContent must be used within Sheet');
   }
-);
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    if (context.isOpen) {
+      setIsVisible(true);
+    }
+  }, [context.isOpen]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && context.isOpen) {
+        if (onEscapeKeyDown) {
+          onEscapeKeyDown();
+        } else {
+          context.closeSheet();
+        }
+      }
+    };
+    const handlePointerDownOutside = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        if (onPointerDownOutside) {
+          onPointerDownOutside();
+        } else {
+          context.closeSheet();
+        }
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    document.addEventListener('mousedown', handlePointerDownOutside);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('mousedown', handlePointerDownOutside);
+    };
+  }, [context, onEscapeKeyDown, onPointerDownOutside]);
+
+  // 閉じるアニメーションが終わった時にopacity:0にする
+  // data-[state=closed]でopacity:0へのアニメーションはするが、
+  // それが終わるとopacity:1へリセットされてしまい、ちらつくので
+  // これを防ぐためにdisplay:'none'にする
+  const ref = useRef<HTMLDivElement | null>(null);
+  const handleAnimationEnd = (e: React.AnimationEvent) => {
+    if (e.animationName === 'exit' && ref.current) {
+      ref.current.style.display = 'none';
+      setIsVisible(false);
+    }
+  };
+
+  const mergeProps = {
+    ...props,
+    onAnimationEnd: (e: React.AnimationEvent<HTMLDivElement>) => {
+      if (props.onAnimationEnd) {
+        props.onAnimationEnd(e);
+      }
+      handleAnimationEnd(e);
+    },
+  };
+
+  return ReactDOM.createPortal(
+    <>
+      {isVisible && (
+        <>
+          <SheetOverlay />
+          <div
+            ref={ref}
+            className={cn(
+              'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
+              POSITION_LIST[side],
+              className
+            )}
+            data-state={context.isOpen ? 'open' : 'closed'}
+            {...mergeProps}
+          >
+            {children}
+          </div>
+        </>
+      )}
+    </>,
+    document.body
+  );
+};
 
 export { Sheet, SheetContent, SheetOverlay, SheetTrigger };

@@ -23,18 +23,3 @@ export interface Genre {
   id: number;
   name: string;
 }
-
-export interface UserInfo {
-  id: string;
-  account: string;
-  avatarUrl: string;
-}
-
-export interface Review {
-  id: number;
-  bookId: string;
-  comment: string;
-  rating: number;
-  updatedAt: string;
-  user: UserInfo;
-}

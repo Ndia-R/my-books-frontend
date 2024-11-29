@@ -3,49 +3,51 @@ import Logo from '@/components/layout/logo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { EyeIcon, EyeOffIcon } from 'lucide-react';
+import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Page() {
-  const [account, setAccount] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isShownPassword, setIsShownPassword] = useState(false);
   const ref = useRef<HTMLInputElement | null>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { login } = useAuth();
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    await login({ account, password });
-
-    const origin = location.state?.from?.pathname || '/';
-    navigate(origin);
-  };
+  const { isLoading, login } = useAuth();
 
   useEffect(() => {
     ref.current?.focus();
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    await login({ email, password });
+
+    const pathname = location.state?.from?.pathname || '/';
+    const query = location.state?.from?.search || '';
+    navigate(pathname + query, { replace: true });
+  };
 
   return (
     <div className="">
       <div className="mt-6 flex flex-col items-center justify-items-center gap-y-4 sm:mt-16">
         <Logo size="lg" />
         <p className="font-semibold">ログイン</p>
-        <Card>
+        <Card className="rounded-3xl">
           <CardContent className="p-6">
-            <form className="flex w-64 flex-col gap-y-4" onSubmit={handleSubmit}>
+            <form className="flex w-72 flex-col gap-y-4" onSubmit={handleSubmit}>
               <div>
-                <p className="text-xs">アカウント</p>
+                <p className="text-xs">メールアドレス</p>
                 <Input
                   className="my-2 rounded-full"
-                  value={account}
+                  value={email}
                   ref={ref}
-                  name="account"
-                  onChange={(e) => setAccount(e.target.value)}
+                  name="email"
+                  autoComplete="off"
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div>
@@ -73,10 +75,15 @@ export default function Page() {
                   </Button>
                 </div>
               </div>
-              <Button className="mt-6 w-full rounded-full" type="submit">
-                ログイン
+              <Button
+                className="mt-6 w-full rounded-full"
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? <Loader2Icon className="animate-spin" /> : 'ログイン'}
               </Button>
             </form>
+
             <div className="mt-6 flex justify-center gap-x-1 text-xs">
               <p className="text-muted-foreground">アカウントをお持ちでない方はこちら</p>
               <Link to={'/sign-up'}>

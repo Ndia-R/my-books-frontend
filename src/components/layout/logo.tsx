@@ -1,3 +1,4 @@
+import { LOGO_TITLE } from '@/constants/constants';
 import { cn } from '@/lib/util';
 import { Link } from 'react-router-dom';
 
@@ -6,8 +7,6 @@ type Props = {
 };
 
 export default function Logo({ size = 'md' }: Props) {
-  const LOGO_TITLE = 'My Books';
-
   return (
     <div className="text-primary hover:bg-transparent hover:text-primary/80">
       <Link to="/">

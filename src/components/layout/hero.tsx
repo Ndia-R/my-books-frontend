@@ -6,7 +6,7 @@ export default function Hero() {
     '本の探索サイトへようこそ。多様なコレクションから、新しい知識を発見しましょう。厳選された書籍で、あなたの次の読書を見つけてください。知識の旅に一緒に出かけましょう。';
 
   return (
-    <div className="relative mb-4 flex h-[450px] w-full items-center gap-3 sm:mb-0 sm:gap-4 lg:h-[500px]">
+    <div className="relative mb-8 flex h-[460px] w-full items-center gap-3 sm:mb-0 sm:gap-4 lg:h-[500px]">
       <div className="flex w-3/4 flex-col justify-between lg:w-3/5">
         <div>
           <h1 className="w-fit text-5xl font-bold sm:text-6xl xl:text-7xl">

@@ -4,6 +4,14 @@ import { twMerge } from 'tailwind-merge';
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+/**
+ * sleep関数
+ * @param msec ミリ秒
+ *
+ * await sleep(3000);  // ３秒待つ
+ */
+export const sleep = (msec: number) =>
+  new Promise((resolve) => setTimeout(resolve, msec));
 
 /**
  * yyyy-MM-dd形式の文字列をyyyy年MM月dd日へ変換

@@ -4,7 +4,8 @@ import ReviewList from '@/components/review-list/review-list';
 import ReviewListSkeleton from '@/components/review-list/review-list-skeleton';
 import { getBookById, getGenres } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
-import { Book, Genre, Review } from '@/types/book';
+import { Book, Genre } from '@/types/book';
+import { Review } from '@/types/review';
 import { Suspense } from 'react';
 import {
   Await,
@@ -33,8 +34,9 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
       updatedAt: '2024-12-24',
       user: {
         id: 'abc',
-        account: 'Julia',
-        avatarUrl: '/images/avatar02.png',
+        name: 'Julia',
+        email: 'xxx@example.jp',
+        avatarUrl: '/images/avatar00.png',
       },
     },
     {
@@ -45,7 +47,8 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
       updatedAt: '2023-01-05',
       user: {
         id: 'def',
-        account: '山田 太郎',
+        name: '山田 太郎',
+        email: 'xxx@example.jp',
         avatarUrl: '/images/avatar03.png',
       },
     },
@@ -57,7 +60,8 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
       updatedAt: '2022-08-29',
       user: {
         id: 'xyz',
-        account: 'Lili',
+        name: 'Lili',
+        email: 'xxx@example.jp',
         avatarUrl: '/images/avatar06.png',
       },
     },
@@ -66,7 +70,7 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
   const ret = new Promise((resolve) => {
     setTimeout(() => {
       resolve(reviews);
-    }, 3000);
+    }, 2000);
   });
 
   return { book, genres, reviews: ret };

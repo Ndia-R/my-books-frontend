@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { MENU_LIST } from '@/constants/constants';
 import { cn } from '@/lib/util';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -9,11 +10,6 @@ type Props = {
 export default function MenuList({ onClick }: Props) {
   const location = useLocation();
   const pathname = location.pathname;
-
-  const MENU_LIST = [
-    { href: '/favorites', title: 'FAVORITES' },
-    { href: '/settings', title: 'SETTINGS' },
-  ];
 
   return (
     <ul className="flex flex-col gap-x-0 gap-y-2 md:flex-row">
