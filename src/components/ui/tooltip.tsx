@@ -79,10 +79,7 @@ interface TooltipTriggerProps extends React.HTMLAttributes<HTMLButtonElement> {
 const TooltipTrigger = React.forwardRef<HTMLButtonElement, TooltipTriggerProps>(
   ({ children, asChild = false, ...props }, ref) => {
     const context = useContext(TooltipContext);
-
-    if (!context) {
-      throw new Error('TooltipContent must be used within Tooltip');
-    }
+    if (!context) throw new Error('TooltipContent must be used within Tooltip');
 
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
@@ -91,6 +88,7 @@ const TooltipTrigger = React.forwardRef<HTMLButtonElement, TooltipTriggerProps>(
       return (
         <div
           ref={context.triggerRef}
+          className="w-fit"
           onPointerEnter={context.openTooltip}
           onPointerLeave={context.closeTooltip}
           onPointerDown={context.closeTooltip}
@@ -103,6 +101,7 @@ const TooltipTrigger = React.forwardRef<HTMLButtonElement, TooltipTriggerProps>(
     return (
       <div
         ref={context.triggerRef}
+        className="w-fit"
         onPointerEnter={context.openTooltip}
         onPointerLeave={context.closeTooltip}
         onPointerDown={context.closeTooltip}
@@ -135,10 +134,7 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
     ref
   ) => {
     const context = useContext(TooltipContext);
-
-    if (!context) {
-      throw new Error('TooltipContent must be used within Tooltip');
-    }
+    if (!context) throw new Error('TooltipContent must be used within Tooltip');
 
     const [transformStyle, setTransformStyle] = useState('');
 

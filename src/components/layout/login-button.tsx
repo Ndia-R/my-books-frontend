@@ -27,8 +27,6 @@ export default function LoginButton() {
 
   const handleClickLogin = () => {
     if (!isAuthenticated) {
-      console.log(location);
-
       navigate('/login', { state: { from: location } });
     }
   };
@@ -48,10 +46,13 @@ export default function LoginButton() {
               <DropdownMenuTrigger asChild>
                 <Avatar className="ml-2 cursor-pointer">
                   <AvatarImage
-                    src={user.avatarUrl || '/images/avatar01.png'}
+                    className="bg-primary"
+                    src={user.avatarUrl}
                     alt="avatar-image"
                   />
-                  <AvatarFallback>P</AvatarFallback>
+                  <AvatarFallback className="font-semibold">
+                    {user.name.slice(0, 1)}
+                  </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-40 p-2" side="bottom">
@@ -59,20 +60,14 @@ export default function LoginButton() {
                 <DropdownMenuSeparator />
                 {MENU_LIST.map((item) => (
                   <Link to={item.href} key={item.href}>
-                    <DropdownMenuItem
-                      className="my-1 cursor-pointer rounded-full px-4 hover:bg-primary/20 hover:text-primary"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <span className="text-xs">{item.title}</span>
+                    <DropdownMenuItem onClick={() => setIsOpen(false)}>
+                      {item.title}
                     </DropdownMenuItem>
                   </Link>
                 ))}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  className="cursor-pointer rounded-full px-4 hover:bg-primary/20 hover:text-primary"
-                  onClick={handleClickLogout}
-                >
-                  <span className="text-xs">ログアウト</span>
+                <DropdownMenuItem onClick={handleClickLogout}>
+                  ログアウト
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -81,10 +76,13 @@ export default function LoginButton() {
               <TooltipTrigger asChild>
                 <Avatar className="ml-2 cursor-pointer" onClick={handleClickAvatar}>
                   <AvatarImage
-                    src={user.avatarUrl || '/images/avatar01.png'}
+                    className="bg-primary"
+                    src={user.avatarUrl}
                     alt="avatar-image"
                   />
-                  <AvatarFallback>P</AvatarFallback>
+                  <AvatarFallback className="font-semibold">
+                    {user.name.slice(0, 1)}
+                  </AvatarFallback>
                 </Avatar>
               </TooltipTrigger>
               <TooltipContent side="bottom">プロフィールと一般設定</TooltipContent>

@@ -1,6 +1,8 @@
 import BookList from '@/components/book-list/book-list';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import BookPagination from '@/components/book-list/book-pagination';
+import GenreSelector from '@/components/genre-list/genre-selector';
+import { Separator } from '@/components/ui/separator';
 import { getBooksByGenreId, getGenres } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
 import { BookResponse, Genre } from '@/types/book';
@@ -33,19 +35,13 @@ const loader = async ({ request }: LoaderFunctionArgs) => {
 };
 
 export default function Page() {
-  const { bookResponse, genres, genreIds } = useLoaderData() as LoaderFunctionReturnType;
-
-  const genreString = genres
-    .filter((genre) => genreIds.includes(genre.id))
-    .map((genre) => genre.name)
-    .join(' & ');
+  const { bookResponse, genres } = useLoaderData() as LoaderFunctionReturnType;
 
   return (
     <>
-      <p className="my-2">
-        {`「 ${genreString} 」`}
-        <span className="text-sm text-muted-foreground">のジャンル</span>
-      </p>
+      <GenreSelector className="mb-4" genres={genres} />
+
+      <Separator className="mb-6" />
 
       <div className="flex flex-col gap-y-4 pb-4">
         <Suspense fallback={<BookListSkeleton />}>

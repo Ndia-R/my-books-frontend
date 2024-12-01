@@ -39,7 +39,6 @@ export default function ReviewDialog() {
       });
       if (isCancel) return;
     }
-
     toast({ description: 'レビューを投稿しました' });
     setIsOpen(false);
   };
@@ -49,7 +48,7 @@ export default function ReviewDialog() {
       const { isCancel } = await confirmDialog({
         icon: '?',
         title: '本当に閉じますか？',
-        message: '入力されているコメントはまだ投稿していません。',
+        message: 'コメントはまだ投稿していません。',
         persistent: true,
       });
       if (isCancel) return;

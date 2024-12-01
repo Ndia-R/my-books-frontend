@@ -8,16 +8,25 @@ type Props = {
 };
 
 export default function MyListButton({ className, size = 'md' }: Props) {
-  const buttonSize = size === 'sm' ? 'size-6' : size === 'md' ? 'size-8' : '';
-  const iconSize = size === 'sm' ? 'size-3' : size === 'md' ? 'size-4' : '';
+  const BUTTON_SIZE = {
+    sm: 'size-6',
+    md: 'size-8',
+    lg: '',
+  };
+  const ICON_SIZE = {
+    sm: 'size-3',
+    md: 'size-4',
+    lg: '',
+  };
+
   return (
     <div className={className}>
       <Button
-        className={cn(buttonSize, 'rounded-full text-muted-foreground')}
+        className={cn('rounded-full text-muted-foreground', BUTTON_SIZE[size])}
         variant="ghost"
         size="icon"
       >
-        <ListIcon className={iconSize} />
+        <ListIcon className={ICON_SIZE[size]} />
       </Button>
     </div>
   );

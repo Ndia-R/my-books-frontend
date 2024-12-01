@@ -72,18 +72,13 @@ interface DialogTriggerProps extends React.HTMLAttributes<HTMLButtonElement> {
 const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
   ({ children, asChild = false, ...props }, ref) => {
     const context = useContext(DialogContext);
-
-    if (!context) {
-      throw new Error('DialogTrigger must be used within Dialog');
-    }
+    if (!context) throw new Error('DialogTrigger must be used within Dialog');
 
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
         ...children.props,
         onClick: (e: React.MouseEvent) => {
-          if (children.props.onClick) {
-            children.props.onClick(e);
-          }
+          children.props.onClick?.(e);
           context.openDialog();
         },
       };
@@ -93,9 +88,7 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
     const mergeProps = {
       ...props,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (props.onClick) {
-          props.onClick(e);
-        }
+        props.onClick?.(e);
         context.openDialog();
       },
     };
@@ -115,10 +108,7 @@ type DialogOverlayProps = React.HTMLAttributes<HTMLDivElement>;
 
 const DialogOverlay = ({ className, ...props }: DialogOverlayProps) => {
   const context = useContext(DialogContext);
-
-  if (!context) {
-    throw new Error('DialogOverlay must be used within Dialog');
-  }
+  if (!context) throw new Error('DialogOverlay must be used within Dialog');
 
   // 閉じるアニメーションが終わった時にopacity:0にする
   // data-[state=closed]でopacity:0へのアニメーションはするが、
@@ -160,17 +150,22 @@ const DialogContent = ({
   ...props
 }: DialogContentProps) => {
   const context = useContext(DialogContext);
-
-  if (!context) {
-    throw new Error('DialogContent must be used within Dialog');
-  }
+  if (!context) throw new Error('DialogContent must be used within Dialog');
 
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const handleWheel = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
     if (context.isOpen) {
       setIsVisible(true);
+      document.addEventListener('wheel', handleWheel, { passive: false });
     }
+    return () => {
+      document.removeEventListener('wheel', handleWheel);
+    };
   }, [context.isOpen]);
 
   useEffect(() => {
@@ -183,22 +178,20 @@ const DialogContent = ({
         }
       }
     };
-    const handlePointerDownOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        if (onPointerDownOutside) {
-          onPointerDownOutside();
-        } else {
-          context.closeDialog();
-        }
-      }
-    };
+
     document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousedown', handlePointerDownOutside);
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handlePointerDownOutside);
     };
-  }, [context, onEscapeKeyDown, onPointerDownOutside]);
+  }, [context, onEscapeKeyDown]);
+
+  const handlePointerDownOutside = () => {
+    if (onPointerDownOutside) {
+      onPointerDownOutside();
+    } else {
+      context.closeDialog();
+    }
+  };
 
   // 閉じるアニメーションが終わった時にopacity:0にする
   // data-[state=closed]でopacity:0へのアニメーションはするが、
@@ -215,9 +208,7 @@ const DialogContent = ({
   const mergeProps = {
     ...props,
     onAnimationEnd: (e: React.AnimationEvent<HTMLDivElement>) => {
-      if (props.onAnimationEnd) {
-        props.onAnimationEnd(e);
-      }
+      props.onAnimationEnd?.(e);
       handleAnimationEnd(e);
     },
   };
@@ -226,7 +217,7 @@ const DialogContent = ({
     <>
       {isVisible && (
         <>
-          <DialogOverlay />
+          <DialogOverlay onClick={handlePointerDownOutside} />
           <div
             ref={ref}
             className={cn(

@@ -63,10 +63,7 @@ interface AvatarImageProps extends React.HTMLAttributes<HTMLImageElement> {
 const AvatarImage = React.forwardRef<HTMLImageElement, AvatarImageProps>(
   ({ className, ...props }, ref) => {
     const context = useContext(AvatarContext);
-
-    if (!context) {
-      throw new Error('AvatarImage must be used within Avatar');
-    }
+    if (!context) throw new Error('AvatarImage must be used within Avatar');
 
     if (context.imageError) return null;
 
@@ -89,10 +86,7 @@ type AvatarFallbackProps = React.HTMLAttributes<HTMLDivElement>;
 const AvatarFallback = React.forwardRef<HTMLDivElement, AvatarFallbackProps>(
   ({ className, ...props }, ref) => {
     const context = useContext(AvatarContext);
-
-    if (!context) {
-      throw new Error('AvatarFallback must be used within Avatar');
-    }
+    if (!context) throw new Error('AvatarFallback must be used within Avatar');
 
     if (!context.imageError) return null;
 

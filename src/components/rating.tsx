@@ -13,15 +13,15 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
   const [currentRating, setCurrentRating] = useState(0);
   const [dispRating, setDispRating] = useState(0);
 
-  // propsのratingが更新されたら内部状態も更新
   useEffect(() => {
-    const initRating = rating > max ? max : rating; // 評価が最大を超えていたら、最大にする
+    const initRating = rating > max ? max : rating;
     setDispRating(initRating);
     setCurrentRating(initRating);
   }, [max, rating]);
 
   const handleMouseClick = (newDispRating: number) => {
     if (readOnly) return;
+
     setDispRating(newDispRating);
     setCurrentRating(newDispRating);
     if (onChange) {

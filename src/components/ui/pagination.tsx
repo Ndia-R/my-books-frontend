@@ -37,7 +37,7 @@ const Pagination = ({
           ) : (
             <Button
               className="size-8 rounded-full"
-              variant={page === pageNumber ? 'default' : 'ghost'}
+              variant={page === pageNumber ? 'secondary' : 'ghost'}
               size="icon"
               onClick={() => {
                 if (page !== pageNumber) {

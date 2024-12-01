@@ -11,7 +11,7 @@ interface DropdownMenuContextType {
   isOpen: boolean;
   openDropdownMenu: () => void;
   closeDropdownMenu: () => void;
-  triggerRef: React.MutableRefObject<HTMLDivElement | null>;
+  triggerRef: React.MutableRefObject<HTMLDivElement | HTMLButtonElement | null>;
 }
 
 const DropdownMenuContext = React.createContext<DropdownMenuContextType | undefined>(
@@ -84,28 +84,43 @@ interface DropdownMenuTriggerProps extends React.HTMLAttributes<HTMLButtonElemen
 const DropdownMenuTrigger = React.forwardRef<HTMLButtonElement, DropdownMenuTriggerProps>(
   ({ children, asChild = false, ...props }, ref) => {
     const context = useContext(DropdownMenuContext);
-
-    if (!context) {
-      throw new Error('DropdownMenuContent must be used within DropdownMenu');
-    }
+    if (!context) throw new Error('DropdownMenuContent must be used within DropdownMenu');
 
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
         ...children.props,
+        onClick: (e: React.MouseEvent) => {
+          children.props.onClick?.(e);
+          context.openDropdownMenu();
+        },
       };
       return (
-        <div ref={context.triggerRef} onPointerDown={context.openDropdownMenu}>
+        <div
+          ref={context.triggerRef as React.MutableRefObject<HTMLDivElement>}
+          className="w-fit"
+          onPointerDown={context.openDropdownMenu}
+        >
           {React.cloneElement(children, { ...mergeChildProps, ref })}
         </div>
       );
     }
 
+    const mergeProps = {
+      ...props,
+      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+        props.onClick?.(e);
+        context.openDropdownMenu();
+      },
+    };
+
     return (
-      <div ref={context.triggerRef} onPointerDown={context.openDropdownMenu}>
-        <button ref={ref} {...props}>
-          {children}
-        </button>
-      </div>
+      <button
+        ref={context.triggerRef as React.MutableRefObject<HTMLButtonElement>}
+        className="w-fit"
+        {...mergeProps}
+      >
+        {children}
+      </button>
     );
   }
 );
@@ -130,17 +145,22 @@ const DropdownMenuContent = ({
   ...props
 }: DropdownMenuContentProps) => {
   const context = useContext(DropdownMenuContext);
-
-  if (!context) {
-    throw new Error('DropdownMenuContent must be used within DropdownMenu');
-  }
+  if (!context) throw new Error('DropdownMenuContent must be used within DropdownMenu');
 
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const handleWheel = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
     if (context.isOpen) {
       setIsVisible(true);
+      document.addEventListener('wheel', handleWheel, { passive: false });
     }
+    return () => {
+      document.removeEventListener('wheel', handleWheel);
+    };
   }, [context.isOpen]);
 
   useEffect(() => {
@@ -185,9 +205,7 @@ const DropdownMenuContent = ({
   const mergeProps = {
     ...props,
     onAnimationEnd: (e: React.AnimationEvent<HTMLDivElement>) => {
-      if (props.onAnimationEnd) {
-        props.onAnimationEnd(e);
-      }
+      props.onAnimationEnd?.(e);
       handleAnimationEnd(e);
     },
   };
@@ -258,23 +276,31 @@ const DropdownMenuContent = ({
 // ----------------------------------------------------------------------------
 // DropdownMenuItem
 // ----------------------------------------------------------------------------
-interface DropdownMenuItemProps extends React.HTMLAttributes<HTMLDivElement> {
+interface DropdownMenuItemProps extends React.HTMLAttributes<HTMLButtonElement> {
   inset?: boolean;
 }
-const DropdownMenuItem = React.forwardRef<HTMLDivElement, DropdownMenuItemProps>(
-  ({ className, inset, ...props }, ref) => (
-    <div
+const DropdownMenuItem = ({
+  className,
+  children,
+  inset,
+  ...props
+}: DropdownMenuItemProps) => {
+  const ref = useRef<HTMLButtonElement | null>(null);
+  return (
+    <button
       ref={ref}
       className={cn(
-        'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+        'relative w-full flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
         inset && 'pl-8',
         className
       )}
       {...props}
-    />
-  )
-);
-
+      onMouseEnter={() => ref.current?.focus()}
+    >
+      {children}
+    </button>
+  );
+};
 // ----------------------------------------------------------------------------
 // DropdownMenuSeparator
 // ----------------------------------------------------------------------------

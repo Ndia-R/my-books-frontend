@@ -129,7 +129,7 @@ const ConfirmDialog = () => {
       <Dialog open={isOpen}>
         <DialogContent
           className={cn(
-            'w-[400px] transition-transform ease-in-out [transition-duration:25ms]',
+            'w-[360px] sm:w-[400px] transition-transform ease-in-out [transition-duration:25ms]',
             isPersistentAnimation && 'scale-[1.02] transform'
           )}
           onTransitionEnd={handleTransitionEnd}
@@ -151,10 +151,10 @@ const ConfirmDialog = () => {
             <div className="mb-4 grid w-full items-center gap-1.5">
               <p className="text-xs">{options.inputLabel}</p>
               <Textarea
+                ref={refTextarea}
                 className="min-h-[16px] resize-none"
                 placeholder={options.inputPlaceholder}
                 rows={options.inputRows}
-                ref={refTextarea}
               />
             </div>
           )}

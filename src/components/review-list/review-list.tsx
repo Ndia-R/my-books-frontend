@@ -1,4 +1,5 @@
 import ReviewItem from '@/components/review-list/review-item';
+import { Separator } from '@/components/ui/separator';
 import { Review } from '@/types/review';
 
 type Props = {
@@ -9,7 +10,8 @@ export default function ReviewList({ reviews }: Props) {
   return (
     <ul className="flex flex-col p-6">
       {reviews.map((review) => (
-        <li className="border-t border-t-muted" key={review.id}>
+        <li key={review.id}>
+          <Separator />
           <ReviewItem review={review} />
         </li>
       ))}

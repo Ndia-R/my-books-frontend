@@ -8,9 +8,12 @@ import { useState } from 'react';
 
 export default function NavList() {
   const [isOpen, setIsOpen] = useState(false);
-  const { width } = useWindowSize(100);
 
-  if (isOpen && width >= 768) {
+  const DEBOUNCED_DELAY = 100;
+  const { width } = useWindowSize(DEBOUNCED_DELAY);
+
+  const TABLET_WIDTH = 768;
+  if (isOpen && width >= TABLET_WIDTH) {
     setIsOpen(false);
   }
 

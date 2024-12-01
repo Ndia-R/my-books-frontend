@@ -80,25 +80,34 @@ interface PopoverTriggerProps extends React.HTMLAttributes<HTMLButtonElement> {
 const PopoverTrigger = React.forwardRef<HTMLButtonElement, PopoverTriggerProps>(
   ({ children, asChild = false, ...props }, ref) => {
     const context = useContext(PopoverContext);
-
-    if (!context) {
-      throw new Error('PopoverContent must be used within Popover');
-    }
+    if (!context) throw new Error('PopoverContent must be used within Popover');
 
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
         ...children.props,
+        onClick: (e: React.MouseEvent) => {
+          children.props.onClick?.(e);
+          context.openPopover();
+        },
       };
       return (
-        <div ref={context.triggerRef} onPointerDown={context.openPopover}>
+        <div ref={context.triggerRef}>
           {React.cloneElement(children, { ...mergeChildProps, ref })}
         </div>
       );
     }
 
+    const mergeProps = {
+      ...props,
+      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+        props.onClick?.(e);
+        context.openPopover();
+      },
+    };
+
     return (
-      <div ref={context.triggerRef} onPointerDown={context.openPopover}>
-        <button ref={ref} {...props}>
+      <div ref={context.triggerRef}>
+        <button ref={ref} {...mergeProps}>
           {children}
         </button>
       </div>
@@ -126,17 +135,22 @@ const PopoverContent = ({
   ...props
 }: PopoverContentProps) => {
   const context = useContext(PopoverContext);
-
-  if (!context) {
-    throw new Error('PopoverContent must be used within Popover');
-  }
+  if (!context) throw new Error('PopoverContent must be used within Popover');
 
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    const handleWheel = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
     if (context.isOpen) {
       setIsVisible(true);
+      document.addEventListener('wheel', handleWheel, { passive: false });
     }
+    return () => {
+      document.removeEventListener('wheel', handleWheel);
+    };
   }, [context.isOpen]);
 
   useEffect(() => {
@@ -181,9 +195,7 @@ const PopoverContent = ({
   const mergeProps = {
     ...props,
     onAnimationEnd: (e: React.AnimationEvent<HTMLDivElement>) => {
-      if (props.onAnimationEnd) {
-        props.onAnimationEnd(e);
-      }
+      props.onAnimationEnd?.(e);
       handleAnimationEnd(e);
     },
   };

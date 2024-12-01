@@ -19,7 +19,7 @@ export default function SearchBar() {
     e.preventDefault();
     if (!query) return;
 
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams();
     params.set('q', query);
     params.set('page', '1');
     navigate(`/search?${params.toString()}`);

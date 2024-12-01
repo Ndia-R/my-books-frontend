@@ -10,8 +10,16 @@ type Props = {
 };
 
 export default function FavoriteButton({ className, size = 'md', book }: Props) {
-  const buttonSize = size === 'sm' ? 'size-6' : size === 'md' ? 'size-8' : '';
-  const iconSize = size === 'sm' ? 'size-3' : size === 'md' ? 'size-4' : '';
+  const BUTTON_SIZE = {
+    sm: 'size-6',
+    md: 'size-8',
+    lg: '',
+  };
+  const ICON_SIZE = {
+    sm: 'size-3',
+    md: 'size-4',
+    lg: '',
+  };
 
   // const isFavorite = !book.isFavorite;
   const isFavorite = false;
@@ -19,15 +27,15 @@ export default function FavoriteButton({ className, size = 'md', book }: Props) 
     <div className={className}>
       <Button
         className={cn(
-          buttonSize,
           'rounded-full text-muted-foreground',
+          BUTTON_SIZE[size],
           isFavorite && 'text-primary bg-primary/20'
         )}
         variant="ghost"
         size="icon"
       >
         <HeartIcon
-          className={iconSize}
+          className={ICON_SIZE[size]}
           style={{ fill: isFavorite ? 'hsl(var(--primary))' : '' }}
         />
       </Button>

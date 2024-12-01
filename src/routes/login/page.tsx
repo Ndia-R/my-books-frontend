@@ -3,6 +3,7 @@ import Logo from '@/components/layout/logo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -40,21 +41,27 @@ export default function Page() {
           <CardContent className="p-6">
             <form className="flex w-72 flex-col gap-y-4" onSubmit={handleSubmit}>
               <div>
-                <p className="text-xs">メールアドレス</p>
+                <Label className="text-xs" htmlFor="email">
+                  メールアドレス
+                </Label>
                 <Input
-                  className="my-2 rounded-full"
-                  value={email}
                   ref={ref}
+                  className="my-2 rounded-full"
+                  id="email"
+                  value={email}
                   name="email"
                   autoComplete="off"
                   onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
               <div>
-                <p className="text-xs">パスワード</p>
+                <Label className="text-xs" htmlFor="password">
+                  パスワード
+                </Label>
                 <div className="relative">
                   <Input
                     className="my-2 rounded-full"
+                    id="password"
                     type={isShownPassword ? 'text' : 'password'}
                     value={password}
                     name="password"

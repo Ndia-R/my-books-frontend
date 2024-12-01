@@ -27,9 +27,9 @@ export default function Page() {
               <div>
                 <p className="text-xs">メールアドレス</p>
                 <Input
+                  ref={ref}
                   className="my-2 rounded-full"
                   value={email}
-                  ref={ref}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 {/* <p className="text-xs">error</p> */}
