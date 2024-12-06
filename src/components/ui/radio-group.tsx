@@ -32,10 +32,10 @@ const RadioGroup = ({
   onValueChange,
   ...props
 }: RadioGroupProps) => {
-  // 外部からのvalue状態を優先し、指定がない場合は内部状態を利用
+  // 外部からの状態を優先し、指定がない場合は内部状態を利用
   const [innerValue, setInnerValue] = useState(value ?? '');
 
-  // propsのvalueが更新されたら内部状態も更新
+  // propsが更新されたら内部状態も更新
   useEffect(() => {
     if (value !== undefined) {
       setInnerValue(value);
@@ -78,11 +78,13 @@ const RadioGroupItem = React.forwardRef<HTMLButtonElement, RadioGroupItemProps>(
     const context = useContext(RadioGroupContext);
     if (!context) throw new Error('DialogTrigger must be used within Dialog');
 
+    const { setCheckedId, setValue, innerValue } = context;
+
     const handleClick = () => {
-      context.setCheckedId(props.id);
+      setCheckedId(props.id);
 
       const value = typeof props.value === 'string' ? props.value : '';
-      context.setValue(value);
+      setValue(value);
     };
 
     return (
@@ -96,7 +98,7 @@ const RadioGroupItem = React.forwardRef<HTMLButtonElement, RadioGroupItemProps>(
         {...props}
         onClick={handleClick}
       >
-        {context.innerValue === props.value && (
+        {innerValue === props.value && (
           <span className="flex items-center justify-center">
             <Circle className="size-2.5 fill-current text-current" />
           </span>

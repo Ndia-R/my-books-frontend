@@ -13,6 +13,9 @@ interface SelectContextType {
   openSelect: () => void;
   closeSelect: () => void;
   triggerRef: React.MutableRefObject<HTMLDivElement | HTMLButtonElement | null>;
+  focusedIndex: number;
+  setFocusedIndex: (index: number) => void;
+  itemsRef: React.MutableRefObject<HTMLButtonElement[]>;
   innerValue: string;
   setValue: (value: string) => void;
 }
@@ -32,6 +35,8 @@ interface SelectProps extends React.HTMLAttributes<HTMLDivElement> {
 const Select = ({ children, open, onOpenChange, value, onValueChange }: SelectProps) => {
   // 外部からの状態を優先し、指定がない場合は内部状態を利用
   const [isOpen, setIsOpen] = useState(open ?? false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const itemsRef = useRef<HTMLButtonElement[]>([]);
   const [innerValue, setInnerValue] = useState(value ?? '');
 
   // propsが更新されたら内部状態も更新
@@ -78,7 +83,17 @@ const Select = ({ children, open, onOpenChange, value, onValueChange }: SelectPr
 
   return (
     <SelectContext.Provider
-      value={{ isOpen, openSelect, closeSelect, triggerRef, innerValue, setValue }}
+      value={{
+        isOpen,
+        openSelect,
+        closeSelect,
+        triggerRef,
+        focusedIndex,
+        setFocusedIndex,
+        itemsRef,
+        innerValue,
+        setValue,
+      }}
     >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
@@ -107,17 +122,19 @@ const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
     const context = useContext(SelectContext);
     if (!context) throw new Error('SelectContent must be used within Select');
 
+    const { openSelect, triggerRef } = context;
+
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
         ...children.props,
         onClick: (e: React.MouseEvent) => {
           children.props.onClick?.(e);
-          context.openSelect();
+          openSelect();
         },
       };
       return (
         <div
-          ref={context.triggerRef as React.MutableRefObject<HTMLDivElement>}
+          ref={triggerRef as React.MutableRefObject<HTMLDivElement>}
           className={cn('w-fit', className)}
         >
           {React.cloneElement(children, { ...mergeChildProps, ref })}
@@ -129,13 +146,13 @@ const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
       ...props,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         props.onClick?.(e);
-        context.openSelect();
+        openSelect();
       },
     };
 
     return (
       <button
-        ref={context.triggerRef as React.MutableRefObject<HTMLButtonElement>}
+        ref={triggerRef as React.MutableRefObject<HTMLButtonElement>}
         className={cn(
           'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1',
           className
@@ -162,68 +179,100 @@ const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
 // SelectContent
 // ----------------------------------------------------------------------------
 interface SelectContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  position?: 'item-aligned' | 'popper';
   side?: SelectSideType;
   sideOffset?: number;
   onEscapeKeyDown?: () => void;
   onPointerDownOutside?: () => void;
+  position?: 'item-aligned' | 'popper';
 }
 
 const SelectContent = ({
   children,
   className,
-  position = 'item-aligned',
   side = DEFAULT_SIDE,
   sideOffset = DEFAULT_SIDE_OFFSET,
   onEscapeKeyDown,
   onPointerDownOutside,
+  position = 'item-aligned',
   ...props
 }: SelectContentProps) => {
   const context = useContext(SelectContext);
   if (!context) throw new Error('SelectContent must be used within Select');
 
+  const { isOpen, closeSelect, triggerRef, focusedIndex, itemsRef, setFocusedIndex } =
+    context;
+
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const handleWheel = (e: MouseEvent) => {
-      e.preventDefault();
-    };
+  const handleArrawNavigation = useCallback(
+    (key: string) => {
+      const isArrowUp = key === 'ArrowUp';
+      const itemCount = itemsRef.current.length;
 
-    if (context.isOpen) {
+      const newIndex = isArrowUp
+        ? (focusedIndex - 1 + itemCount) % itemCount
+        : (focusedIndex + 1) % itemCount;
+
+      setFocusedIndex(newIndex);
+      itemsRef.current[newIndex].focus();
+    },
+    [focusedIndex, itemsRef, setFocusedIndex]
+  );
+
+  const handleWheel = useCallback((e: WheelEvent) => {
+    e.preventDefault();
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!isOpen) return;
+
+      switch (e.key) {
+        case 'Escape':
+          if (onEscapeKeyDown) {
+            onEscapeKeyDown();
+          } else {
+            closeSelect();
+          }
+          break;
+
+        case 'Tab':
+          e.preventDefault();
+          break;
+
+        case 'ArrowUp':
+        case 'ArrowDown':
+          e.preventDefault();
+          handleArrawNavigation(e.key);
+          break;
+      }
+    },
+    [closeSelect, handleArrawNavigation, isOpen, onEscapeKeyDown]
+  );
+
+  useEffect(() => {
+    if (isOpen) {
       setIsVisible(true);
       document.addEventListener('wheel', handleWheel, { passive: false });
+      document.addEventListener('keydown', handleKeyDown);
+    } else {
+      setFocusedIndex(-1);
+      document.removeEventListener('wheel', handleWheel);
+      document.removeEventListener('keydown', handleKeyDown);
     }
     return () => {
       document.removeEventListener('wheel', handleWheel);
-    };
-  }, [context.isOpen]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && context.isOpen) {
-        if (onEscapeKeyDown) {
-          onEscapeKeyDown();
-        } else {
-          context.closeSelect();
-        }
-      }
-    };
-    const handlePointerDownOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        if (onPointerDownOutside) {
-          onPointerDownOutside();
-        } else {
-          context.closeSelect();
-        }
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousedown', handlePointerDownOutside);
-    return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handlePointerDownOutside);
     };
-  }, [context, onEscapeKeyDown, onPointerDownOutside]);
+  }, [handleKeyDown, handleWheel, isOpen, setFocusedIndex]);
+
+  const handlePointerDownOutside = () => {
+    if (onPointerDownOutside) {
+      onPointerDownOutside();
+    } else {
+      closeSelect();
+    }
+  };
 
   // 閉じるアニメーションが終わった時にopacity:0にする
   // data-[state=closed]でopacity:0へのアニメーションはするが、
@@ -250,9 +299,9 @@ const SelectContent = ({
   useEffect(() => {
     // triggerとなる要素からSelectを表示する座標を計算する
     // （style属性に指定する文字列作成）
-    if (context.triggerRef.current) {
+    if (triggerRef.current) {
       const { left, top, right, bottom, width, height } =
-        context.triggerRef.current.getBoundingClientRect();
+        triggerRef.current.getBoundingClientRect();
       const positions = {
         top: {
           x: left + width / 2,
@@ -281,12 +330,25 @@ const SelectContent = ({
         `translate(calc(${pos.x}px + ${pos.offset.x}), calc(${pos.y}px + ${pos.offset.y}))`
       );
     }
-  }, [context, context.triggerRef, side, sideOffset]);
+  }, [context, triggerRef, side, sideOffset]);
+
+  let itemIndex = 0;
+  const innerChildren = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      switch (child.type) {
+        case SelectItem:
+          return React.cloneElement(child, { ...child.props, index: itemIndex++ });
+        default:
+          return child;
+      }
+    }
+  });
 
   return ReactDOM.createPortal(
     <>
       {isVisible && (
         <>
+          <div className="fixed inset-0 z-50" onClick={handlePointerDownOutside} />
           <div className="fixed left-0 top-0 z-50" style={{ transform: transformStyle }}>
             <div
               ref={ref}
@@ -296,8 +358,8 @@ const SelectContent = ({
                   'data-[side=bottom]:translate-y-1 data-[side=left]:-translate-x-1 data-[side=right]:translate-x-1 data-[side=top]:-translate-y-1',
                 className
               )}
-              style={{ minWidth: `${context.triggerRef.current?.offsetWidth}px` }}
-              data-state={context.isOpen ? 'open' : 'closed'}
+              style={{ minWidth: `${triggerRef.current?.offsetWidth}px` }}
+              data-state={isOpen ? 'open' : 'closed'}
               data-side={side}
               {...mergeProps}
             >
@@ -308,7 +370,7 @@ const SelectContent = ({
                     'h-[var(--radix-select-trigger-height)] w-full min-w-[var(--radix-select-trigger-width)]'
                 )}
               >
-                {children}
+                {innerChildren}
               </div>
             </div>
           </div>
@@ -323,47 +385,56 @@ const SelectContent = ({
 // SelectItem
 // ----------------------------------------------------------------------------
 interface SelectItemProps extends React.HTMLAttributes<HTMLButtonElement> {
+  index?: number;
   value?: string;
 }
-const SelectItem = ({ className, children, value, ...props }: SelectItemProps) => {
+const SelectItem = ({
+  className,
+  children,
+  index = 0,
+  value,
+  ...props
+}: SelectItemProps) => {
   const context = useContext(SelectContext);
   if (!context) throw new Error('SelectItem must be used within Select');
 
-  const ref = useRef<HTMLButtonElement | null>(null);
+  const { innerValue, itemsRef, setFocusedIndex, setValue, closeSelect } = context;
 
   useEffect(() => {
-    if (context.innerValue === value) {
-      ref.current?.focus();
+    if (innerValue === value) {
+      itemsRef.current[index].focus();
+      setFocusedIndex(index);
     }
-  }, [context.innerValue, value]);
+  }, [index, innerValue, itemsRef, setFocusedIndex, value]);
 
   const mergeProps = {
     ...props,
     onMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) => {
       props.onMouseEnter?.(e);
-      ref.current?.focus();
+      itemsRef.current[index].focus();
     },
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
       if (props.onClick) {
         props.onClick(e);
         return;
       }
-      context.setValue(value ?? '');
-      context.closeSelect();
+      setValue(value ?? '');
+      closeSelect();
     },
   };
 
   return (
     <button
-      ref={ref}
+      ref={(el) => (itemsRef.current[index] = el as HTMLButtonElement)}
       className={cn(
         'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
         className
       )}
+      tabIndex={-1}
       {...mergeProps}
     >
       <span className="absolute left-2 flex size-3.5 items-center justify-center">
-        {context.innerValue === value && <CheckIcon className="size-4" />}
+        {innerValue === value && <CheckIcon className="size-4" />}
       </span>
       {children}
     </button>
@@ -404,9 +475,11 @@ const SelectValue = React.forwardRef<HTMLDivElement, SelectValueProps>(
     const context = useContext(SelectContext);
     if (!context) throw new Error('SelectValue must be used within Select');
 
+    const { innerValue } = context;
+
     return (
       <span ref={ref} className={cn('', className)} {...props}>
-        {context.innerValue || placeholder}
+        {innerValue || placeholder}
       </span>
     );
   }

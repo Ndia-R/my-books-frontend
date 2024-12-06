@@ -11,3 +11,6 @@ export const MENU_LIST = [
 // API Endpoits
 // export const BOOKS_API_ENDPOINT = 'http://vsv-emerald/my-books';
 export const BOOKS_API_ENDPOINT = 'http://localhost:18080/my-books';
+
+// export const BOOKS_IMAGE_URL = 'http://vsv-emerald/images';
+export const BOOKS_IMAGE_URL = 'http://localhost:18080/images';

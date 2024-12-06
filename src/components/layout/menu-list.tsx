@@ -15,18 +15,18 @@ export default function MenuList({ onClick }: Props) {
     <ul className="flex flex-col gap-x-0 gap-y-2 md:flex-row">
       {MENU_LIST.map((item) => (
         <li key={item.href}>
-          <Link to={item.href}>
-            <Button
-              className={cn(
-                'rounded-full w-full justify-center hover:bg-primary/20 hover:text-primary text-muted-foreground',
-                pathname === item.href && 'text-primary underline hover:text-primary'
-              )}
-              variant="ghost"
-              onClick={onClick}
-            >
+          <Button
+            className={cn(
+              'rounded-full w-full justify-center hover:bg-primary/20 hover:text-primary text-muted-foreground',
+              pathname === item.href && 'text-primary underline hover:text-primary'
+            )}
+            variant="ghost"
+            asChild
+          >
+            <Link to={item.href} onClick={onClick}>
               {item.title}
-            </Button>
-          </Link>
+            </Link>
+          </Button>
         </li>
       ))}
     </ul>

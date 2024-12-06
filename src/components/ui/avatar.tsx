@@ -65,14 +65,16 @@ const AvatarImage = React.forwardRef<HTMLImageElement, AvatarImageProps>(
     const context = useContext(AvatarContext);
     if (!context) throw new Error('AvatarImage must be used within Avatar');
 
-    if (context.imageError) return null;
+    const { imageError, setImageError } = context;
+
+    if (imageError) return null;
 
     return (
       <img
         ref={ref}
         className={cn('aspect-square h-full w-full', className)}
         {...props}
-        onError={() => context.setImageError(true)}
+        onError={() => setImageError(true)}
       />
     );
   }
@@ -88,7 +90,9 @@ const AvatarFallback = React.forwardRef<HTMLDivElement, AvatarFallbackProps>(
     const context = useContext(AvatarContext);
     if (!context) throw new Error('AvatarFallback must be used within Avatar');
 
-    if (!context.imageError) return null;
+    const { imageError } = context;
+
+    if (!imageError) return null;
 
     return (
       <div

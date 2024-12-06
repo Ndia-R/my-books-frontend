@@ -2,6 +2,7 @@ import BookDetail from '@/components/book-detail/book-detail';
 import BookDetailSkeleton from '@/components/book-detail/book-detail-skeleton';
 import ReviewList from '@/components/review-list/review-list';
 import ReviewListSkeleton from '@/components/review-list/review-list-skeleton';
+import { BOOKS_IMAGE_URL } from '@/constants/constants';
 import { getBookById, getGenres } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
 import { Book, Genre } from '@/types/book';
@@ -36,7 +37,7 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
         id: 'abc',
         name: 'Julia',
         email: 'xxx@example.jp',
-        avatarUrl: '/images/avatar00.png',
+        avatarUrl: `${BOOKS_IMAGE_URL}/avatars/avatar00.png`,
       },
     },
     {
@@ -49,7 +50,7 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
         id: 'def',
         name: '山田 太郎',
         email: 'xxx@example.jp',
-        avatarUrl: '/images/avatar03.png',
+        avatarUrl: `${BOOKS_IMAGE_URL}/avatars/avatar03.png`,
       },
     },
     {
@@ -62,7 +63,7 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
         id: 'xyz',
         name: 'Lili',
         email: 'xxx@example.jp',
-        avatarUrl: '/images/avatar06.png',
+        avatarUrl: `${BOOKS_IMAGE_URL}/avatars/avatar06.png`,
       },
     },
   ];

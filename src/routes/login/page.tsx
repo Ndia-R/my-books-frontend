@@ -33,8 +33,8 @@ export default function Page() {
   };
 
   return (
-    <div className="">
-      <div className="mt-6 flex flex-col items-center justify-items-center gap-y-4 sm:mt-16">
+    <div>
+      <div className="mt-3 flex flex-col items-center justify-items-center gap-y-3 sm:mt-16">
         <Logo size="lg" />
         <p className="font-semibold">ログイン</p>
         <Card className="rounded-3xl">

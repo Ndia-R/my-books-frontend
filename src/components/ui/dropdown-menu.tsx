@@ -4,14 +4,17 @@ import ReactDOM from 'react-dom';
 
 type DropdownMenuSideType = 'top' | 'right' | 'bottom' | 'left';
 
-const DEFAULT_SIDE: DropdownMenuSideType = 'top';
-const DEFAULT_SIDE_OFFSET = 8;
+const DEFAULT_SIDE: DropdownMenuSideType = 'bottom';
+const DEFAULT_SIDE_OFFSET = 4;
 
 interface DropdownMenuContextType {
   isOpen: boolean;
   openDropdownMenu: () => void;
   closeDropdownMenu: () => void;
   triggerRef: React.MutableRefObject<HTMLDivElement | HTMLButtonElement | null>;
+  focusedIndex: number;
+  setFocusedIndex: (index: number) => void;
+  itemsRef: React.MutableRefObject<HTMLButtonElement[]>;
 }
 
 const DropdownMenuContext = React.createContext<DropdownMenuContextType | undefined>(
@@ -27,10 +30,12 @@ interface DropdownMenuProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const DropdownMenu = ({ children, open, onOpenChange }: DropdownMenuProps) => {
-  // 外部からのopen状態を優先し、指定がない場合は内部状態を利用
+  // 外部からの状態を優先し、指定がない場合は内部状態を利用
   const [isOpen, setIsOpen] = useState(open ?? false);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const itemsRef = useRef<HTMLButtonElement[]>([]);
 
-  // propsのopenが更新されたら内部状態も更新
+  // propsが更新されたら内部状態も更新
   useEffect(() => {
     if (open !== undefined) {
       setIsOpen(open);
@@ -57,7 +62,15 @@ const DropdownMenu = ({ children, open, onOpenChange }: DropdownMenuProps) => {
 
   return (
     <DropdownMenuContext.Provider
-      value={{ isOpen, openDropdownMenu, closeDropdownMenu, triggerRef }}
+      value={{
+        isOpen,
+        openDropdownMenu,
+        closeDropdownMenu,
+        triggerRef,
+        focusedIndex,
+        setFocusedIndex,
+        itemsRef,
+      }}
     >
       {React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
@@ -82,41 +95,41 @@ interface DropdownMenuTriggerProps extends React.HTMLAttributes<HTMLButtonElemen
 }
 
 const DropdownMenuTrigger = React.forwardRef<HTMLButtonElement, DropdownMenuTriggerProps>(
-  ({ children, asChild = false, ...props }, ref) => {
+  ({ className, children, asChild = false, ...props }, ref) => {
     const context = useContext(DropdownMenuContext);
     if (!context) throw new Error('DropdownMenuContent must be used within DropdownMenu');
+
+    const { openDropdownMenu, triggerRef } = context;
 
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
         ...children.props,
         onClick: (e: React.MouseEvent) => {
           children.props.onClick?.(e);
-          context.openDropdownMenu();
+          openDropdownMenu();
         },
       };
       return (
         <div
-          ref={context.triggerRef as React.MutableRefObject<HTMLDivElement>}
-          className="w-fit"
-          onPointerDown={context.openDropdownMenu}
+          ref={triggerRef as React.MutableRefObject<HTMLDivElement>}
+          className={cn('w-fit', className)}
         >
           {React.cloneElement(children, { ...mergeChildProps, ref })}
         </div>
       );
     }
-
     const mergeProps = {
       ...props,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         props.onClick?.(e);
-        context.openDropdownMenu();
+        openDropdownMenu();
       },
     };
 
     return (
       <button
-        ref={context.triggerRef as React.MutableRefObject<HTMLButtonElement>}
-        className="w-fit"
+        ref={triggerRef as React.MutableRefObject<HTMLButtonElement>}
+        className={cn('w-fit', className)}
         {...mergeProps}
       >
         {children}
@@ -147,48 +160,92 @@ const DropdownMenuContent = ({
   const context = useContext(DropdownMenuContext);
   if (!context) throw new Error('DropdownMenuContent must be used within DropdownMenu');
 
+  const {
+    isOpen,
+    closeDropdownMenu,
+    triggerRef,
+    focusedIndex,
+    itemsRef,
+    setFocusedIndex,
+  } = context;
+
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const handleWheel = (e: MouseEvent) => {
-      e.preventDefault();
-    };
+  const handleArrawNavigation = useCallback(
+    (key: string) => {
+      const isArrowUp = key === 'ArrowUp';
+      const itemCount = itemsRef.current.length;
 
-    if (context.isOpen) {
+      let newIndex = focusedIndex;
+
+      if (focusedIndex === -1) {
+        newIndex = isArrowUp ? itemCount - 1 : 0;
+      } else {
+        newIndex = isArrowUp
+          ? (focusedIndex - 1 + itemCount) % itemCount
+          : (focusedIndex + 1) % itemCount;
+      }
+
+      setFocusedIndex(newIndex);
+      itemsRef.current[newIndex].focus();
+    },
+    [focusedIndex, itemsRef, setFocusedIndex]
+  );
+
+  const handleWheel = useCallback((e: WheelEvent) => {
+    e.preventDefault();
+  }, []);
+
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!isOpen) return;
+
+      switch (e.key) {
+        case 'Escape':
+          if (onEscapeKeyDown) {
+            onEscapeKeyDown();
+          } else {
+            closeDropdownMenu();
+          }
+          break;
+
+        case 'Tab':
+          e.preventDefault();
+          break;
+
+        case 'ArrowUp':
+        case 'ArrowDown':
+          e.preventDefault();
+          handleArrawNavigation(e.key);
+          break;
+      }
+    },
+    [closeDropdownMenu, handleArrawNavigation, isOpen, onEscapeKeyDown]
+  );
+
+  useEffect(() => {
+    if (isOpen) {
       setIsVisible(true);
       document.addEventListener('wheel', handleWheel, { passive: false });
+      document.addEventListener('keydown', handleKeyDown);
+    } else {
+      setFocusedIndex(-1);
+      document.removeEventListener('wheel', handleWheel);
+      document.removeEventListener('keydown', handleKeyDown);
     }
     return () => {
       document.removeEventListener('wheel', handleWheel);
-    };
-  }, [context.isOpen]);
-
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && context.isOpen) {
-        if (onEscapeKeyDown) {
-          onEscapeKeyDown();
-        } else {
-          context.closeDropdownMenu();
-        }
-      }
-    };
-    const handlePointerDownOutside = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) {
-        if (onPointerDownOutside) {
-          onPointerDownOutside();
-        } else {
-          context.closeDropdownMenu();
-        }
-      }
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('mousedown', handlePointerDownOutside);
-    return () => {
       document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('mousedown', handlePointerDownOutside);
     };
-  }, [context, onEscapeKeyDown, onPointerDownOutside]);
+  }, [handleKeyDown, handleWheel, isOpen, setFocusedIndex]);
+
+  const handlePointerDownOutside = () => {
+    if (onPointerDownOutside) {
+      onPointerDownOutside();
+    } else {
+      closeDropdownMenu();
+    }
+  };
 
   // 閉じるアニメーションが終わった時にopacity:0にする
   // data-[state=closed]でopacity:0へのアニメーションはするが、
@@ -215,9 +272,9 @@ const DropdownMenuContent = ({
   useEffect(() => {
     // triggerとなる要素からDropdownMenuを表示する座標を計算する
     // （style属性に指定する文字列作成）
-    if (context.triggerRef.current) {
+    if (triggerRef.current) {
       const { left, top, right, bottom, width, height } =
-        context.triggerRef.current.getBoundingClientRect();
+        triggerRef.current.getBoundingClientRect();
       const positions = {
         top: {
           x: left + width / 2,
@@ -246,12 +303,25 @@ const DropdownMenuContent = ({
         `translate(calc(${pos.x}px + ${pos.offset.x}), calc(${pos.y}px + ${pos.offset.y}))`
       );
     }
-  }, [context, context.triggerRef, side, sideOffset]);
+  }, [context, triggerRef, side, sideOffset]);
+
+  let itemIndex = 0;
+  const innerChildren = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      switch (child.type) {
+        case DropdownMenuItem:
+          return React.cloneElement(child, { ...child.props, index: itemIndex++ });
+        default:
+          return child;
+      }
+    }
+  });
 
   return ReactDOM.createPortal(
     <>
       {isVisible && (
         <>
+          <div className="fixed inset-0 z-50" onClick={handlePointerDownOutside} />
           <div className="fixed left-0 top-0 z-50" style={{ transform: transformStyle }}>
             <div
               ref={ref}
@@ -259,11 +329,11 @@ const DropdownMenuContent = ({
                 'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
                 className
               )}
-              data-state={context.isOpen ? 'open' : 'closed'}
+              data-state={isOpen ? 'open' : 'closed'}
               data-side={side}
               {...mergeProps}
             >
-              {children}
+              {innerChildren}
             </div>
           </div>
         </>
@@ -277,30 +347,52 @@ const DropdownMenuContent = ({
 // DropdownMenuItem
 // ----------------------------------------------------------------------------
 interface DropdownMenuItemProps extends React.HTMLAttributes<HTMLButtonElement> {
+  index?: number;
   inset?: boolean;
 }
 const DropdownMenuItem = ({
   className,
   children,
+  index = 0,
   inset,
   ...props
 }: DropdownMenuItemProps) => {
-  const ref = useRef<HTMLButtonElement | null>(null);
+  const context = useContext(DropdownMenuContext);
+  if (!context) throw new Error('DropdownMenuItem must be used within DropdownMenu');
+
+  const { itemsRef, closeDropdownMenu } = context;
+
+  const mergeProps = {
+    ...props,
+    onMouseEnter: (e: React.MouseEvent<HTMLButtonElement>) => {
+      props.onMouseEnter?.(e);
+      itemsRef.current[index].focus();
+    },
+    onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+      if (props.onClick) {
+        props.onClick(e);
+        return;
+      }
+      closeDropdownMenu();
+    },
+  };
+
   return (
     <button
-      ref={ref}
+      ref={(el) => (itemsRef.current[index] = el as HTMLButtonElement)}
       className={cn(
         'relative w-full flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
         inset && 'pl-8',
         className
       )}
-      {...props}
-      onMouseEnter={() => ref.current?.focus()}
+      tabIndex={-1}
+      {...mergeProps}
     >
       {children}
     </button>
   );
 };
+
 // ----------------------------------------------------------------------------
 // DropdownMenuSeparator
 // ----------------------------------------------------------------------------
@@ -318,18 +410,15 @@ const DropdownMenuSeparator = React.forwardRef<
 interface DropdownMenuLabelProps extends React.HTMLAttributes<HTMLDivElement> {
   inset?: boolean;
 }
-const DropdownMenuLabel = React.forwardRef<
-  HTMLDivElement,
-  DropdownMenuLabelProps & {
-    inset?: boolean;
-  }
->(({ className, inset, ...props }, ref) => (
-  <div
-    ref={ref}
-    className={cn('px-2 py-1.5 text-sm font-semibold', inset && 'pl-8', className)}
-    {...props}
-  />
-));
+const DropdownMenuLabel = React.forwardRef<HTMLDivElement, DropdownMenuLabelProps>(
+  ({ className, inset, ...props }, ref) => (
+    <div
+      ref={ref}
+      className={cn('px-2 py-1.5 text-sm font-semibold', inset && 'pl-8', className)}
+      {...props}
+    />
+  )
+);
 
 export {
   DropdownMenu,

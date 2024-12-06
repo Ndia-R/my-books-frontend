@@ -19,10 +19,10 @@ interface DialogProps extends React.DialogHTMLAttributes<HTMLDialogElement> {
 }
 
 const Dialog = ({ children, open, onOpenChange }: DialogProps) => {
-  // 外部からのopen状態を優先し、指定がない場合は内部状態を利用
+  // 外部からの状態を優先し、指定がない場合は内部状態を利用
   const [isOpen, setIsOpen] = useState(open ?? false);
 
-  // propsのopenが更新されたら内部状態も更新
+  // propsが更新されたら内部状態も更新
   useEffect(() => {
     if (open !== undefined) {
       setIsOpen(open);
@@ -74,12 +74,14 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
     const context = useContext(DialogContext);
     if (!context) throw new Error('DialogTrigger must be used within Dialog');
 
+    const { openDialog } = context;
+
     if (asChild && React.isValidElement(children)) {
       const mergeChildProps = {
         ...children.props,
         onClick: (e: React.MouseEvent) => {
           children.props.onClick?.(e);
-          context.openDialog();
+          openDialog();
         },
       };
       return React.cloneElement(children, { ...mergeChildProps, ref });
@@ -89,7 +91,7 @@ const DialogTrigger = React.forwardRef<HTMLButtonElement, DialogTriggerProps>(
       ...props,
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         props.onClick?.(e);
-        context.openDialog();
+        openDialog();
       },
     };
 
@@ -110,6 +112,8 @@ const DialogOverlay = ({ className, ...props }: DialogOverlayProps) => {
   const context = useContext(DialogContext);
   if (!context) throw new Error('DialogOverlay must be used within Dialog');
 
+  const { isOpen } = context;
+
   // 閉じるアニメーションが終わった時にopacity:0にする
   // data-[state=closed]でopacity:0へのアニメーションはするが、
   // それが終わるとopacity:1へリセットされてしまい、ちらつくので
@@ -128,7 +132,7 @@ const DialogOverlay = ({ className, ...props }: DialogOverlayProps) => {
         'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
         className
       )}
-      data-state={context.isOpen ? 'open' : 'closed'}
+      data-state={isOpen ? 'open' : 'closed'}
       {...props}
       onAnimationEnd={handleAnimationEnd}
     ></div>
@@ -152,44 +156,49 @@ const DialogContent = ({
   const context = useContext(DialogContext);
   if (!context) throw new Error('DialogContent must be used within Dialog');
 
+  const { isOpen, closeDialog } = context;
+
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const handleWheel = (e: MouseEvent) => {
-      e.preventDefault();
-    };
+  const handleWheel = useCallback((e: WheelEvent) => {
+    e.preventDefault();
+  }, []);
 
-    if (context.isOpen) {
-      setIsVisible(true);
-      document.addEventListener('wheel', handleWheel, { passive: false });
-    }
-    return () => {
-      document.removeEventListener('wheel', handleWheel);
-    };
-  }, [context.isOpen]);
+  const handleKeyDown = useCallback(
+    (e: KeyboardEvent) => {
+      if (!isOpen) return;
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && context.isOpen) {
+      if (e.key === 'Escape') {
         if (onEscapeKeyDown) {
           onEscapeKeyDown();
         } else {
-          context.closeDialog();
+          closeDialog();
         }
       }
-    };
+    },
+    [closeDialog, isOpen, onEscapeKeyDown]
+  );
 
-    document.addEventListener('keydown', handleKeyDown);
+  useEffect(() => {
+    if (isOpen) {
+      setIsVisible(true);
+      document.addEventListener('wheel', handleWheel, { passive: false });
+      document.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.removeEventListener('wheel', handleWheel);
+      document.removeEventListener('keydown', handleKeyDown);
+    }
     return () => {
+      document.removeEventListener('wheel', handleWheel);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [context, onEscapeKeyDown]);
+  }, [handleKeyDown, handleWheel, isOpen]);
 
   const handlePointerDownOutside = () => {
     if (onPointerDownOutside) {
       onPointerDownOutside();
     } else {
-      context.closeDialog();
+      closeDialog();
     }
   };
 
@@ -224,7 +233,7 @@ const DialogContent = ({
               'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
               className
             )}
-            data-state={context.isOpen ? 'open' : 'closed'}
+            data-state={isOpen ? 'open' : 'closed'}
             {...mergeProps}
           >
             {children}
