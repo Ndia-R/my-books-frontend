@@ -1,4 +1,4 @@
-import { sleep } from '@/lib/util';
+import * as auth from '@/lib/auth';
 import { UserInfo } from '@/types/user';
 import { createContext, useState } from 'react';
 
@@ -28,14 +28,9 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     console.log('ログイン処理');
     console.log(email, password);
 
-    await sleep(500);
+    const data = await auth.login(email, password);
 
-    setUser({
-      id: 'xxx',
-      name: 'User_xxx',
-      email,
-      avatarUrl: '/images/avatar00.png',
-    });
+    await auth.getUser(data.accessToken);
 
     setIsAuthenticated(true);
     setIsLoading(false);
