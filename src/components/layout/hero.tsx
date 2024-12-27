@@ -14,7 +14,7 @@ export default function Hero() {
 
   return (
     <div className="relative mb-8 flex h-[460px] w-full items-center gap-3 sm:mb-0 sm:gap-4 lg:h-[500px]">
-      <div className="flex w-3/4 flex-col justify-between lg:w-3/5">
+      <div className="z-10 flex w-3/4 flex-col justify-between lg:w-3/5">
         <div>
           <h1 className="w-fit text-5xl font-bold sm:text-6xl xl:text-7xl">{TITLE}</h1>
           <p className="my-6 w-full break-words text-sm text-muted-foreground">
@@ -25,7 +25,7 @@ export default function Hero() {
           <SearchBar />
         </div>
       </div>
-      <div className="absolute right-0 top-10 -z-10 w-[400px] opacity-40 sm:right-5 sm:w-[400px] lg:w-[450px] lg:opacity-100">
+      <div className="absolute right-0 top-10 w-[400px] opacity-25 sm:right-5 sm:w-[400px] lg:w-[450px] lg:opacity-100">
         <img src={imgUrl} alt="main-visual-image" />
       </div>
     </div>

@@ -12,7 +12,7 @@ export interface Book {
   imageUrl: string;
 }
 
-export interface BookResponse {
+export interface PaginatedBook {
   page: number;
   totalPages: number;
   totalItems: number;

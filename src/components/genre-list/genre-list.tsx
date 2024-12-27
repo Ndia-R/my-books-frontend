@@ -14,7 +14,12 @@ export default function GenreList({ genres, className, variant = 'default' }: Pr
     <ul className={cn('flex flex-wrap', className)}>
       {genres.map((genre) => (
         <li key={genre.id}>
-          <Button className="rounded-full" variant={variant} size="sm" asChild>
+          <Button
+            className={cn('rounded-full', variant === 'outline' && 'bg-transparent')}
+            variant={variant}
+            size="sm"
+            asChild
+          >
             <Link to={`/discover?genreId=${genre.id}`}>{genre.name}</Link>
           </Button>
         </li>

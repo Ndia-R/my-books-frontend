@@ -1,51 +1,50 @@
-import { BOOKS_API_ENDPOINT } from '@/constants/constants';
+import { fetchJSON, fetchWithAuth } from '@/lib/fetcher';
+import { AccessTokenResponse, LoginResponse } from '@/types/auth';
+
+const ACCESS_TOKEN_STORAGE_KEY = 'accessToken';
+
+export const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_STORAGE_KEY);
+
+export const setAccessToken = (token: string) =>
+  localStorage.setItem(ACCESS_TOKEN_STORAGE_KEY, token);
+
+export const clearAccessToken = () => localStorage.removeItem(ACCESS_TOKEN_STORAGE_KEY);
 
 export const login = async (email: string, password: string) => {
-  try {
-    const response = await fetch(`${BOOKS_API_ENDPOINT}/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
+  const url = `/login`;
+  const options: RequestInit = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+    credentials: 'include',
+  };
+  const loginResponse = (await fetchJSON(url, options)) as LoginResponse;
+  setAccessToken(loginResponse.accessToken);
+  return loginResponse;
+};
 
-    if (!response.ok) {
-      throw new Error('Invalid email or password');
-    }
-    const data = await response.json();
-    console.log(data);
-    return data;
-  } catch (err) {
-    console.log('login error:' + err);
+export const refreshAccessToken = async () => {
+  const url = `/refresh-token`;
+  const options = { method: 'POST' };
+  const accessTokenResponse = (await fetchWithAuth(url, options)) as AccessTokenResponse;
+  return accessTokenResponse.accessToken;
+};
+
+export const validateToken = async () => {
+  const url = `/validate-token`;
+  const options = { method: 'POST' };
+  try {
+    await fetchWithAuth(url, options);
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
   }
 };
 
-export const getUser = async (token: string) => {
-  console.log(token);
-  try {
-    const response = await fetch(`${BOOKS_API_ENDPOINT}/me`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      credentials: 'include',
-    });
-
-    if (!response.ok) {
-      throw new Error('error');
-    }
-    const data = await response.json();
-    console.log(data);
-
-    const user = {
-      id: data.id,
-      name: data.name,
-      email: data.email,
-      avatarUrl: data.avatarUrl,
-    };
-    return user;
-  } catch (err) {
-    console.log('error:' + err);
-  }
+export const logout = async () => {
+  const url = `/logout`;
+  const options = { method: 'POST' };
+  await fetchWithAuth(url, options);
+  clearAccessToken();
 };

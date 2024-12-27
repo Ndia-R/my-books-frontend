@@ -4,8 +4,10 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import ReactDOM from 'react-dom';
 
 type SelectSideType = 'top' | 'right' | 'bottom' | 'left';
+type SelectAlignType = 'start' | 'center' | 'end';
 
 const DEFAULT_SIDE: SelectSideType = 'bottom';
+const DEFAULT_ALIGN: SelectAlignType = 'center';
 const DEFAULT_SIDE_OFFSET = 4;
 
 interface SelectContextType {
@@ -180,6 +182,7 @@ const SelectTrigger = React.forwardRef<HTMLButtonElement, SelectTriggerProps>(
 // ----------------------------------------------------------------------------
 interface SelectContentProps extends React.HTMLAttributes<HTMLDivElement> {
   side?: SelectSideType;
+  align?: SelectAlignType;
   sideOffset?: number;
   onEscapeKeyDown?: () => void;
   onPointerDownOutside?: () => void;
@@ -190,6 +193,7 @@ const SelectContent = ({
   children,
   className,
   side = DEFAULT_SIDE,
+  align = DEFAULT_ALIGN,
   sideOffset = DEFAULT_SIDE_OFFSET,
   onEscapeKeyDown,
   onPointerDownOutside,
@@ -302,26 +306,41 @@ const SelectContent = ({
     if (triggerRef.current) {
       const { left, top, right, bottom, width, height } =
         triggerRef.current.getBoundingClientRect();
+
+      const getOffset = (align: SelectAlignType, size: number) => {
+        switch (align) {
+          case 'start':
+            return `0% - ${size / 2}px`;
+          case 'end':
+            return `-100% + ${size / 2}px`;
+          default:
+            return '-50%';
+        }
+      };
+
+      const offsetX = getOffset(align, width);
+      const offsetY = getOffset(align, height);
+
       const positions = {
         top: {
           x: left + width / 2,
           y: top,
-          offset: { x: '-50%', y: `-100% - ${sideOffset}px` },
+          offset: { x: offsetX, y: `-100% - ${sideOffset}px` },
         },
         bottom: {
           x: left + width / 2,
           y: bottom,
-          offset: { x: '-50%', y: `0% + ${sideOffset}px` },
+          offset: { x: offsetX, y: `0% + ${sideOffset}px` },
         },
         left: {
           x: left,
           y: top + height / 2,
-          offset: { x: `-100% - ${sideOffset}px`, y: '-50%' },
+          offset: { x: `-100% - ${sideOffset}px`, y: offsetY },
         },
         right: {
           x: right,
           y: top + height / 2,
-          offset: { x: `0% + ${sideOffset}px`, y: '-50%' },
+          offset: { x: `0% + ${sideOffset}px`, y: offsetY },
         },
       };
       const pos = positions[side];
@@ -330,7 +349,7 @@ const SelectContent = ({
         `translate(calc(${pos.x}px + ${pos.offset.x}), calc(${pos.y}px + ${pos.offset.y}))`
       );
     }
-  }, [context, triggerRef, side, sideOffset]);
+  }, [context, triggerRef, side, sideOffset, align]);
 
   let itemIndex = 0;
   const innerChildren = React.Children.map(children, (child) => {

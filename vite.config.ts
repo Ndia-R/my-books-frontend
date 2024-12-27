@@ -1,4 +1,5 @@
 import react from '@vitejs/plugin-react-swc';
+import fs from 'fs';
 import path from 'path';
 import { defineConfig } from 'vite';
 
@@ -14,5 +15,12 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
+  },
+  server: {
+    https: {
+      key: fs.readFileSync(path.resolve(__dirname, 'certs/localhost.key')),
+      cert: fs.readFileSync(path.resolve(__dirname, 'certs/localhost.crt')),
+    },
+    port: 5173, // 任意のポート番号
   },
 });

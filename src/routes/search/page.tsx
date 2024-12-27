@@ -3,7 +3,7 @@ import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import BookPagination from '@/components/book-list/book-pagination';
 import { getBooksByQuery } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
-import { BookResponse } from '@/types/book';
+import { PaginatedBook } from '@/types/book';
 import { Suspense } from 'react';
 import {
   Await,
@@ -13,7 +13,7 @@ import {
 } from 'react-router-dom';
 
 type LoaderFunctionReturnType = {
-  bookResponse: Promise<BookResponse>;
+  paginatedBook: Promise<PaginatedBook>;
   query: string;
   page: number;
 };
@@ -23,13 +23,13 @@ const loader = ({ request }: LoaderFunctionArgs) => {
   const query = url.searchParams.get('q') ?? undefined;
 
   const page = Number(url.searchParams.get('page') ?? '1');
-  const bookResponse = getBooksByQuery(query, page - 1);
+  const paginatedBook = getBooksByQuery(query, page - 1);
 
-  return { bookResponse, query, page };
+  return { paginatedBook, query, page };
 };
 
 export default function Page() {
-  const { bookResponse, query } = useLoaderData() as LoaderFunctionReturnType;
+  const { paginatedBook, query } = useLoaderData() as LoaderFunctionReturnType;
 
   return (
     <>
@@ -40,12 +40,12 @@ export default function Page() {
 
       <div className="flex flex-col gap-y-4 pb-4">
         <Suspense fallback={<BookListSkeleton />}>
-          <Await resolve={bookResponse} errorElement={<ErrorElement />}>
-            {(bookResponse: BookResponse) => (
+          <Await resolve={paginatedBook} errorElement={<ErrorElement />}>
+            {(paginatedBook: PaginatedBook) => (
               <>
-                <BookPagination totalPages={bookResponse.totalPages} />
-                <BookList books={bookResponse.books} />
-                <BookPagination totalPages={bookResponse.totalPages} />
+                <BookPagination totalPages={paginatedBook.totalPages} />
+                <BookList books={paginatedBook.books} />
+                <BookPagination totalPages={paginatedBook.totalPages} />
               </>
             )}
           </Await>

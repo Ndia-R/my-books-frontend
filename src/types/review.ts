@@ -1,4 +1,4 @@
-import { UserInfo } from '@/types/user';
+import { User } from '@/types/user';
 
 export interface Review {
   id: number;
@@ -6,5 +6,5 @@ export interface Review {
   comment: string;
   rating: number;
   updatedAt: string;
-  user: UserInfo;
+  user: User;
 }

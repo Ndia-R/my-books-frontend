@@ -1,6 +1,7 @@
-export interface UserInfo {
-  id: string;
-  name: string;
+export interface User {
+  id: number;
   email: string;
+  roles: string[];
+  name: string;
   avatarUrl: string;
 }

@@ -14,11 +14,11 @@ export default function MenuList({ onClick }: Props) {
   return (
     <ul className="flex flex-col gap-x-0 gap-y-2 md:flex-row">
       {MENU_LIST.map((item) => (
-        <li key={item.href}>
+        <li className="w-full" key={item.href}>
           <Button
             className={cn(
-              'rounded-full w-full justify-center hover:bg-primary/20 hover:text-primary text-muted-foreground',
-              pathname === item.href && 'text-primary underline hover:text-primary'
+              'rounded-full w-full hover:bg-transparent hover:text-foreground/50',
+              pathname === item.href && 'text-primary'
             )}
             variant="ghost"
             asChild

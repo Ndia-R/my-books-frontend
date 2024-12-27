@@ -15,7 +15,7 @@ export default function ReviewDialog() {
   const ref = useRef<HTMLTextAreaElement | null>(null);
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
 
   useEffect(() => {
     if (isOpen) {
@@ -61,14 +61,14 @@ export default function ReviewDialog() {
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
-            className="rounded-full"
+            className="rounded-full bg-transparent"
             variant="outline"
-            onClick={() => isAuthenticated && setIsOpen(true)}
+            onClick={() => user && setIsOpen(true)}
           >
             レビューを書く
           </Button>
         </TooltipTrigger>
-        {!isAuthenticated && (
+        {!user && (
           <TooltipContent>ログインしてこの本の「レビュー」を書きましょう</TooltipContent>
         )}
       </Tooltip>

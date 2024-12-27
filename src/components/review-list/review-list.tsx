@@ -11,7 +11,7 @@ export default function ReviewList({ reviews }: Props) {
     <ul className="flex flex-col p-6">
       {reviews.map((review) => (
         <li key={review.id}>
-          <Separator />
+          <Separator className="bg-foreground/10" />
           <ReviewItem review={review} />
         </li>
       ))}

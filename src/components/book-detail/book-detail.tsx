@@ -15,7 +15,7 @@ type Props = {
 };
 
 export default function BookDetail({ book, genres }: Props) {
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   const genreList = genres.filter((genre) => book.genreIds.includes(genre.id));
 
   return (
@@ -38,7 +38,7 @@ export default function BookDetail({ book, genres }: Props) {
                 <TooltipTrigger asChild>
                   <MyListButton />
                 </TooltipTrigger>
-                {isAuthenticated ? (
+                {user ? (
                   <TooltipContent>マイリストに追加</TooltipContent>
                 ) : (
                   <TooltipContent>
@@ -51,7 +51,7 @@ export default function BookDetail({ book, genres }: Props) {
                 <TooltipTrigger asChild>
                   <FavoriteButton book={book} />
                 </TooltipTrigger>
-                {isAuthenticated ? (
+                {user ? (
                   <TooltipContent>お気に入りに追加</TooltipContent>
                 ) : (
                   <TooltipContent>

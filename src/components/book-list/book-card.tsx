@@ -11,10 +11,10 @@ type Props = {
 };
 
 export default function BookCard({ book }: Props) {
-  const { isAuthenticated } = useAuth();
+  const { user } = useAuth();
   return (
     <>
-      <Card>
+      <Card className="border-card-foreground/5 bg-card/70">
         <CardContent className="relative flex w-40 flex-col items-center px-3 pb-2 pt-6 sm:w-48 sm:px-4">
           <Link className="flex justify-center" to={`/book/${book.id}`}>
             <img
@@ -25,7 +25,7 @@ export default function BookCard({ book }: Props) {
           </Link>
           <div className="mt-1 flex w-full items-center justify-between">
             <p className="text-xs text-muted-foreground">{book.publishedDate}</p>
-            {isAuthenticated && (
+            {user && (
               <div className="flex">
                 <Tooltip>
                   <TooltipTrigger asChild>

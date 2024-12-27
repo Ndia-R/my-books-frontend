@@ -29,7 +29,7 @@ export default function SearchBar() {
     <div>
       <form className="relative h-10 w-full" onSubmit={handleSubmit}>
         <Input
-          className="rounded-full border-foreground/10 pl-10 pr-4"
+          className="rounded-full border-foreground/20 bg-background/20 pl-10 pr-4"
           type="search"
           placeholder="検索"
           name="query"

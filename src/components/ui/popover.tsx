@@ -3,8 +3,10 @@ import React, { useCallback, useContext, useEffect, useRef, useState } from 'rea
 import ReactDOM from 'react-dom';
 
 type PopoverSideType = 'top' | 'right' | 'bottom' | 'left';
+type PopoverAlignType = 'start' | 'center' | 'end';
 
 const DEFAULT_SIDE: PopoverSideType = 'top';
+const DEFAULT_ALIGN: PopoverAlignType = 'center';
 const DEFAULT_SIDE_OFFSET = 8;
 
 interface PopoverContextType {
@@ -120,6 +122,7 @@ const PopoverTrigger = React.forwardRef<HTMLButtonElement, PopoverTriggerProps>(
 // ----------------------------------------------------------------------------
 interface PopoverContentProps extends React.HTMLAttributes<HTMLDivElement> {
   side?: PopoverSideType;
+  align?: PopoverAlignType;
   sideOffset?: number;
   onEscapeKeyDown?: () => void;
   onPointerDownOutside?: () => void;
@@ -129,6 +132,7 @@ const PopoverContent = ({
   children,
   className,
   side = DEFAULT_SIDE,
+  align = DEFAULT_ALIGN,
   sideOffset = DEFAULT_SIDE_OFFSET,
   onEscapeKeyDown,
   onPointerDownOutside,
@@ -208,26 +212,41 @@ const PopoverContent = ({
     if (context.triggerRef.current) {
       const { left, top, right, bottom, width, height } =
         context.triggerRef.current.getBoundingClientRect();
+
+      const getOffset = (align: PopoverAlignType, size: number) => {
+        switch (align) {
+          case 'start':
+            return `0% - ${size / 2}px`;
+          case 'end':
+            return `-100% + ${size / 2}px`;
+          default:
+            return '-50%';
+        }
+      };
+
+      const offsetX = getOffset(align, width);
+      const offsetY = getOffset(align, height);
+
       const positions = {
         top: {
           x: left + width / 2,
           y: top,
-          offset: { x: '-50%', y: `-100% - ${sideOffset}px` },
+          offset: { x: offsetX, y: `-100% - ${sideOffset}px` },
         },
         bottom: {
           x: left + width / 2,
           y: bottom,
-          offset: { x: '-50%', y: `0% + ${sideOffset}px` },
+          offset: { x: offsetX, y: `0% + ${sideOffset}px` },
         },
         left: {
           x: left,
           y: top + height / 2,
-          offset: { x: `-100% - ${sideOffset}px`, y: '-50%' },
+          offset: { x: `-100% - ${sideOffset}px`, y: offsetY },
         },
         right: {
           x: right,
           y: top + height / 2,
-          offset: { x: `0% + ${sideOffset}px`, y: '-50%' },
+          offset: { x: `0% + ${sideOffset}px`, y: offsetY },
         },
       };
       const pos = positions[side];
@@ -236,7 +255,7 @@ const PopoverContent = ({
         `translate(calc(${pos.x}px + ${pos.offset.x}), calc(${pos.y}px + ${pos.offset.y}))`
       );
     }
-  }, [context, context.triggerRef, side, sideOffset]);
+  }, [align, context, context.triggerRef, side, sideOffset]);
 
   return ReactDOM.createPortal(
     <>

@@ -5,7 +5,7 @@ import GenreSelector from '@/components/genre-list/genre-selector';
 import { Separator } from '@/components/ui/separator';
 import { getBooksByGenreId, getGenres } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
-import { BookResponse, Genre } from '@/types/book';
+import { Genre, PaginatedBook } from '@/types/book';
 import { Suspense } from 'react';
 import {
   Await,
@@ -16,7 +16,7 @@ import {
 } from 'react-router-dom';
 
 type LoaderFunctionReturnType = {
-  bookResponse: Promise<BookResponse>;
+  paginatedBook: Promise<PaginatedBook>;
   genres: Genre[];
   genreIds: number[];
 };
@@ -28,29 +28,29 @@ const loader = async ({ request }: LoaderFunctionArgs) => {
   const genreIds = ids?.split(',').map((id) => Number(id));
   const page = Number(url.searchParams.get('page') ?? '1');
 
-  const bookResponse = getBooksByGenreId(genreIds, page - 1);
+  const paginatedBook = getBooksByGenreId(genreIds, page - 1);
   const genres = await getGenres();
 
-  return defer({ bookResponse, genres, genreIds });
+  return defer({ paginatedBook, genres, genreIds });
 };
 
 export default function Page() {
-  const { bookResponse, genres } = useLoaderData() as LoaderFunctionReturnType;
+  const { paginatedBook, genres } = useLoaderData() as LoaderFunctionReturnType;
 
   return (
     <>
       <GenreSelector className="mb-4" genres={genres} />
 
-      <Separator className="mb-6" />
+      <Separator className="mb-6 bg-foreground/10" />
 
       <div className="flex flex-col gap-y-4 pb-4">
         <Suspense fallback={<BookListSkeleton />}>
-          <Await resolve={bookResponse} errorElement={<ErrorElement />}>
-            {(bookResponse: BookResponse) => (
+          <Await resolve={paginatedBook} errorElement={<ErrorElement />}>
+            {(paginatedBook: PaginatedBook) => (
               <>
-                <BookPagination totalPages={bookResponse.totalPages} />
-                <BookList books={bookResponse.books} />
-                <BookPagination totalPages={bookResponse.totalPages} />
+                <BookPagination totalPages={paginatedBook.totalPages} />
+                <BookList books={paginatedBook.books} />
+                <BookPagination totalPages={paginatedBook.totalPages} />
               </>
             )}
           </Await>

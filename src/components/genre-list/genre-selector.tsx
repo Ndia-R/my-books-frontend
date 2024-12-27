@@ -55,7 +55,7 @@ export default function GenreSelector({ className, genres }: Props) {
         <div className="flex items-center space-x-2">
           <p className="text-sm text-muted-foreground">選択条件</p>
           <Select value={selectType} onValueChange={setSelectType}>
-            <SelectTrigger className="w-[100px]">
+            <SelectTrigger className="w-[100px] border-foreground/20 bg-background/20">
               <SelectValue placeholder="選択してください" />
             </SelectTrigger>
             <SelectContent>
