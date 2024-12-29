@@ -1,4 +1,3 @@
-import { useAuth } from '@/auth/use-auth';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
@@ -6,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { useUser } from '@/hooks/use-user';
 import React, { useEffect, useRef, useState } from 'react';
 
 export default function ReviewDialog() {
@@ -15,7 +15,7 @@ export default function ReviewDialog() {
   const ref = useRef<HTMLTextAreaElement | null>(null);
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
-  const { user } = useAuth();
+  const { user } = useUser();
 
   useEffect(() => {
     if (isOpen) {

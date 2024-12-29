@@ -3,6 +3,8 @@ import { TOAST_EVENT } from '@/components/ui/toaster';
 type ToastEvent = {
   title?: string;
   description?: string;
+  duration?: number;
+  variant?: 'default' | 'destructive';
 };
 
 const useToast = () => {

@@ -1,4 +1,3 @@
-import { ProtectedRoute } from '@/auth/protected-route';
 import BookIdPage from '@/routes/book/[bookId]/page';
 import DiscoverPage from '@/routes/discover/page';
 import FavoritesPage from '@/routes/favorite/page';
@@ -6,6 +5,7 @@ import RootLayout from '@/routes/layout';
 import LoginPage from '@/routes/login/page';
 import MyListPage from '@/routes/my-list/page';
 import RootPage from '@/routes/page';
+import { ProtectedRoute } from '@/routes/protected-route';
 import SearchPage from '@/routes/search/page';
 import SettingsPage from '@/routes/settings/page';
 import SignUpPage from '@/routes/sign-up/page';

@@ -8,7 +8,8 @@ type ToasterToast = {
   id: string;
   title?: string;
   description?: string;
-  duration: number;
+  duration?: number;
+  variant?: 'default' | 'destructive';
 };
 
 const Toaster = () => {
@@ -19,7 +20,8 @@ const Toaster = () => {
       id: Date.now().toString(),
       title: detail.title,
       description: detail.description,
-      duration: 3000,
+      variant: detail.variant,
+      duration: detail.duration,
     };
 
     setToasts((currentToasts) => [...currentToasts, newToast]);
@@ -46,6 +48,7 @@ const Toaster = () => {
           key={toast.id}
           title={toast.title}
           description={toast.description}
+          variant={toast.variant}
           duration={toast.duration}
           onRemove={() => removeToast(toast.id)}
         />

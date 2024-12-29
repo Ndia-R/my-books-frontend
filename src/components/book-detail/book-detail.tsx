@@ -1,4 +1,3 @@
-import { useAuth } from '@/auth/use-auth';
 import ReviewDialog from '@/components/book-detail/review-dialog';
 import FavoriteButton from '@/components/favorite-button';
 import GenreList from '@/components/genre-list/genre-list';
@@ -6,6 +5,7 @@ import MyListButton from '@/components/my-list-button';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useUser } from '@/hooks/use-user';
 import { formatDate, formatIsbn, priceToString } from '@/lib/util';
 import { Book, Genre } from '@/types/book';
 
@@ -15,7 +15,7 @@ type Props = {
 };
 
 export default function BookDetail({ book, genres }: Props) {
-  const { user } = useAuth();
+  const { user } = useUser();
   const genreList = genres.filter((genre) => book.genreIds.includes(genre.id));
 
   return (

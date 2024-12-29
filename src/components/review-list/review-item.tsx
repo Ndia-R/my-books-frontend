@@ -15,7 +15,11 @@ export default function ReviewItem({ review }: Props) {
       <div className="flex flex-col items-center justify-between gap-y-4 p-4 pb-0 sm:flex-row">
         <div className="flex items-center gap-x-4">
           <Avatar className="size-16">
-            <AvatarImage className="bg-primary" src={user.avatarUrl} alt="avatar-image" />
+            <AvatarImage
+              className="bg-primary/50"
+              src={user.avatarUrl}
+              alt="avatar-image"
+            />
             <AvatarFallback className="font-semibold">
               {user.name.slice(0, 1)}
             </AvatarFallback>

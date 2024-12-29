@@ -1,8 +1,19 @@
-import { fetchJSON, fetchWithAuth } from '@/lib/fetcher';
+import { BOOKS_API_ENDPOINT } from '@/constants/constants';
+import { fetchWithAuth } from '@/lib/auth';
 import { Book, Genre, PaginatedBook } from '@/types/book';
 import { User } from '@/types/user';
 
 export const FETCH_BOOKS_MAX_RESULTS = 20;
+
+export const fetchJSON = async (url: string, options?: RequestInit) => {
+  const res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, options);
+  if (!res.ok) {
+    throw new Error(
+      `Failed to fetch data from ${url}. HTTP error! status: ${res.status}`
+    );
+  }
+  return res.json();
+};
 
 export const getBooksByQuery = async (q?: string, page: number = 0) => {
   if (!q) return undefined;
@@ -45,6 +56,12 @@ export const getCurrentUser = async () => {
   const url = `/me`;
   const user = (await fetchWithAuth(url)) as User;
   return user;
+};
+
+export const checkUsernameExists = async (username: string) => {
+  const url = `/check-username-exists?username=${username}`;
+  const data = await fetchJSON(url);
+  return data.exists;
 };
 
 const convertBookResponse = (paginatedBook: PaginatedBook) => {

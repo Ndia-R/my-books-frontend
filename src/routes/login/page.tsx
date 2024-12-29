@@ -1,31 +1,54 @@
-import { useAuth } from '@/auth/use-auth';
 import Logo from '@/components/layout/logo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
+import { useUser } from '@/hooks/use-user';
+import { login } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/data';
 import { EyeIcon, EyeOffIcon, Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Page() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isShownPassword, setIsShownPassword] = useState(false);
+
   const ref = useRef<HTMLInputElement | null>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { isLoading, login } = useAuth();
+  const { setUser } = useUser();
+  const { toast } = useToast();
 
   useEffect(() => {
     ref.current?.focus();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    await login({ email, password });
+    const form = new FormData(e.currentTarget);
+    const email = (form.get('email') as string) || '';
+    const password = (form.get('password') as string) || '';
+
+    setIsSubmitting(true);
+    const isSuccess = await login({ email, password });
+    if (!isSuccess) {
+      setIsSubmitting(false);
+      toast({
+        title: 'ログインできませんでした',
+        description: 'メールアドレスまたはパスワードが違います',
+        variant: 'destructive',
+        duration: 5000,
+      });
+      return;
+    }
+
+    const currentUser = await getCurrentUser();
+    setUser(currentUser);
+    setIsSubmitting(false);
 
     const pathname = location.state?.from?.pathname || '/';
     const query = location.state?.from?.search || '';
@@ -48,10 +71,9 @@ export default function Page() {
                   ref={ref}
                   className="my-2 rounded-full"
                   id="email"
-                  value={email}
                   name="email"
                   autoComplete="off"
-                  onChange={(e) => setEmail(e.target.value)}
+                  spellCheck="false"
                 />
               </div>
               <div>
@@ -62,10 +84,8 @@ export default function Page() {
                   <Input
                     className="my-2 rounded-full"
                     id="password"
-                    type={isShownPassword ? 'text' : 'password'}
-                    value={password}
                     name="password"
-                    onChange={(e) => setPassword(e.target.value)}
+                    type={isShownPassword ? 'text' : 'password'}
                   />
                   <Button
                     className="absolute right-0 top-0 rounded-full hover:bg-transparent hover:text-foreground"
@@ -85,9 +105,9 @@ export default function Page() {
               <Button
                 className="mt-6 w-full rounded-full"
                 type="submit"
-                disabled={isLoading}
+                disabled={isSubmitting}
               >
-                {isLoading ? <Loader2Icon className="animate-spin" /> : 'ログイン'}
+                {isSubmitting ? <Loader2Icon className="animate-spin" /> : 'ログイン'}
               </Button>
             </form>
 

@@ -1,8 +1,8 @@
-import { useAuth } from '@/auth/use-auth';
 import FavoriteButton from '@/components/favorite-button';
 import MyListButton from '@/components/my-list-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { useUser } from '@/hooks/use-user';
 import { Book } from '@/types/book';
 import { Link } from 'react-router-dom';
 
@@ -11,7 +11,7 @@ type Props = {
 };
 
 export default function BookCard({ book }: Props) {
-  const { user } = useAuth();
+  const { user } = useUser();
   return (
     <>
       <Card className="border-card-foreground/5 bg-card/70">

@@ -1,4 +1,3 @@
-import { useAuth } from '@/auth/use-auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,12 +9,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MENU_LIST } from '@/constants/constants';
+import { useUser } from '@/hooks/use-user';
+import { logout } from '@/lib/auth';
 import { LogOutIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function LoginButton() {
-  const { user, logout } = useAuth();
+  const { user } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -46,7 +47,7 @@ export default function LoginButton() {
             <Button className="rounded-full" variant="ghost" size="icon">
               <Avatar>
                 <AvatarImage
-                  className="bg-muted"
+                  className="bg-primary/50"
                   src={user.avatarUrl}
                   alt="avatar-image"
                 />
@@ -61,7 +62,7 @@ export default function LoginButton() {
               <div className="flex items-center gap-x-2">
                 <Avatar className="size-8">
                   <AvatarImage
-                    className="bg-muted"
+                    className="bg-primary/50"
                     src={user.avatarUrl}
                     alt="avatar-image"
                   />
