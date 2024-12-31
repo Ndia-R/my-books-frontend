@@ -19,14 +19,14 @@ export default function NavList() {
 
   return (
     <div>
-      <div className="hidden md:flex md:items-center md:gap-x-8">
+      <div className="hidden lg:flex lg:items-center lg:gap-x-8">
         <Logo />
         <MenuList />
       </div>
 
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button className="rounded-full md:hidden" variant="ghost" size="icon">
+          <Button className="rounded-full lg:hidden" variant="ghost" size="icon">
             <MenuIcon className="size-5" />
           </Button>
         </SheetTrigger>

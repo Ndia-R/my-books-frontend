@@ -14,12 +14,8 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const initializeUser = async () => {
-      try {
-        const currentUser = await getCurrentUser();
-        setUser(currentUser);
-      } catch {
-        setUser(null);
-      }
+      const currentUser = await getCurrentUser();
+      setUser(currentUser);
     };
 
     initializeUser();

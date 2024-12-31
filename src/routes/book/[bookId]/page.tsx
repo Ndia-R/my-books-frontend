@@ -17,7 +17,7 @@ import {
 
 type LoaderFunctionReturnType = {
   genres: Genre[];
-  book: Promise<Book>;
+  book: Promise<Book | null>;
   reviews: Promise<Review[]>;
 };
 
@@ -34,10 +34,11 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
       rating: 4.5,
       updatedAt: '2024-12-24',
       user: {
-        id: 'abc',
+        id: 111,
         name: 'Julia',
         email: 'xxx@example.jp',
         avatarUrl: `${BOOKS_IMAGE_URL}/avatars/avatar00.png`,
+        roles: [],
       },
     },
     {
@@ -47,10 +48,11 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
       rating: 5.0,
       updatedAt: '2023-01-05',
       user: {
-        id: 'def',
+        id: 111,
         name: '山田 太郎',
         email: 'xxx@example.jp',
         avatarUrl: `${BOOKS_IMAGE_URL}/avatars/avatar03.png`,
+        roles: [],
       },
     },
     {
@@ -60,10 +62,11 @@ const loader = async ({ params }: LoaderFunctionArgs) => {
       rating: 3.5,
       updatedAt: '2022-08-29',
       user: {
-        id: 'xyz',
+        id: 333,
         name: 'Lili',
         email: 'xxx@example.jp',
         avatarUrl: `${BOOKS_IMAGE_URL}/avatars/avatar06.png`,
+        roles: [],
       },
     },
   ];

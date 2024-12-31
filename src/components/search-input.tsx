@@ -3,7 +3,7 @@ import { Search } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function SearchBar() {
+export default function SearchInput() {
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -26,7 +26,7 @@ export default function SearchBar() {
   };
 
   return (
-    <div>
+    <div className="w-44 sm:w-64">
       <form className="relative h-10 w-full" onSubmit={handleSubmit}>
         <Input
           className="rounded-full border-foreground/20 bg-background/20 pl-10 pr-4"

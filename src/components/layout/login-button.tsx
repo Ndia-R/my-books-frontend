@@ -16,7 +16,7 @@ import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function LoginButton() {
-  const { user } = useUser();
+  const { user, setUser } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -30,8 +30,9 @@ export default function LoginButton() {
 
   const handleClickLogout = async () => {
     await logout();
+    setUser(null);
     setIsOpen(false);
-    navigate('/login', { state: { from: location } });
+    navigate('/');
   };
 
   const handleClickItem = (href: string) => {

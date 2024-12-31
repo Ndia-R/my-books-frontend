@@ -2,88 +2,101 @@ import Logo from '@/components/layout/logo';
 import PasswordInput from '@/components/password-input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
-import { login } from '@/lib/auth';
-import { getCurrentUser } from '@/lib/data';
+import { changePassword, getCurrentUser } from '@/lib/data';
 import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const emailRef = useRef<HTMLInputElement | null>(null);
+  const currentPasswordRef = useRef<HTMLInputElement | null>(null);
 
-  const location = useLocation();
   const navigate = useNavigate();
   const { setUser } = useUser();
   const { toast } = useToast();
 
   useEffect(() => {
-    emailRef.current?.focus();
+    currentPasswordRef.current?.focus();
   }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const form = new FormData(e.currentTarget);
-    const email = (form.get('email') as string) || '';
-    const password = (form.get('password') as string) || '';
+    const currentPassword = (form.get('current-password') as string) || '';
+    const newPassword = (form.get('new-password') as string) || '';
+    const confirmNewPassword = (form.get('confirm-new-password') as string) || '';
+
+    console.log(currentPassword, newPassword, confirmNewPassword);
 
     setIsSubmitting(true);
-    const isSuccess = await login({ email, password });
+    const isSuccess = await changePassword({
+      currentPassword,
+      newPassword,
+      confirmNewPassword,
+    });
     if (!isSuccess) {
       setIsSubmitting(false);
       toast({
-        title: 'ログインできませんでした',
-        description: 'メールアドレスまたはパスワードが違います',
+        title: 'パスワード変更できませんでした',
+        description: '入力内容を確認してください',
         variant: 'destructive',
         duration: 5000,
       });
       return;
     }
 
+    toast({ title: 'パスワード変更しました' });
+
     const currentUser = await getCurrentUser();
     setUser(currentUser);
     setIsSubmitting(false);
 
-    const pathname = location.state?.from?.pathname || '/';
-    const query = location.state?.from?.search || '';
-    navigate(pathname + query, { replace: true });
+    navigate('/settings/profile');
   };
 
   return (
     <div className="my-3 flex flex-col items-center justify-items-center gap-y-3 sm:my-16">
       <Logo size="lg" />
-      <p className="font-semibold">ログイン</p>
+      <p className="font-semibold">パスワード変更</p>
       <Card className="w-80 rounded-3xl sm:w-96">
         <CardContent className="p-6 sm:px-10">
           <form className="flex w-full flex-col gap-y-4" onSubmit={handleSubmit}>
             <div>
-              <Label className="text-xs" htmlFor="email">
-                メールアドレス
+              <Label className="text-xs" htmlFor="current-password">
+                現在のパスワード
               </Label>
-              <Input
-                ref={emailRef}
+              <PasswordInput
+                ref={currentPasswordRef}
                 className="my-2 rounded-full"
-                id="email"
-                name="email"
-                autoComplete="off"
-                spellCheck="false"
+                id="current-password"
+                name="current-password"
               />
             </div>
 
             <div>
-              <Label className="text-xs" htmlFor="password">
-                パスワード
+              <Label className="text-xs" htmlFor="new-password">
+                新しいパスワード
               </Label>
               <PasswordInput
                 className="my-2 rounded-full"
-                id="password"
-                name="password"
+                id="new-password"
+                name="new-password"
+              />
+            </div>
+
+            <div>
+              <Label className="text-xs" htmlFor="confirm-new-password">
+                新しいパスワード（確認用）
+              </Label>
+              <PasswordInput
+                className="my-2 rounded-full"
+                id="confirm-new-password"
+                name="confirm-new-password"
               />
             </div>
 
@@ -92,16 +105,9 @@ export default function Page() {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? <Loader2Icon className="animate-spin" /> : 'ログイン'}
+              {isSubmitting ? <Loader2Icon className="animate-spin" /> : '変更'}
             </Button>
           </form>
-
-          <div className="mt-6 flex justify-center gap-x-1 text-xs">
-            <p className="text-muted-foreground">アカウントをお持ちでない方はこちら</p>
-            <Link to={'/signup'}>
-              <p className="text-primary hover:underline">新規登録</p>
-            </Link>
-          </div>
         </CardContent>
       </Card>
     </div>

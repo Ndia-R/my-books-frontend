@@ -5,3 +5,13 @@ export interface User {
   name: string;
   avatarUrl: string;
 }
+
+export interface ChangePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
+export interface CheckUsernameExistsResponse {
+  exists: boolean;
+}

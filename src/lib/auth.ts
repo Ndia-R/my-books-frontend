@@ -1,6 +1,7 @@
 import { BOOKS_API_ENDPOINT } from '@/constants/constants';
 import {
   AccessTokenResponse,
+  CustomError,
   LoginRequest,
   LoginResponse,
   SignupRequest,
@@ -12,13 +13,15 @@ const setAccessToken = (token: string) => localStorage.setItem(ACCESS_TOKEN_KEY,
 const clearAccessToken = () => localStorage.removeItem(ACCESS_TOKEN_KEY);
 
 export const login = async ({ email, password }: LoginRequest) => {
+  const url = '/login';
   const options: RequestInit = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
+    credentials: 'include',
   };
 
-  const res = await fetch(`${BOOKS_API_ENDPOINT}/login`, options);
+  const res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, options);
   if (!res.ok) {
     const data = await res.json();
     console.error(`status:${data.status} message:${data.messages.join()}`);
@@ -31,13 +34,14 @@ export const login = async ({ email, password }: LoginRequest) => {
 };
 
 export const signup = async ({ username, email, password }: SignupRequest) => {
+  const url = '/signup';
   const options: RequestInit = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, email, password }),
   };
 
-  const res = await fetch(`${BOOKS_API_ENDPOINT}/signup`, options);
+  const res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, options);
   if (!res.ok) {
     const data = await res.json();
     console.error(`status:${data.status} message:${data.messages.join()}`);
@@ -49,12 +53,13 @@ export const signup = async ({ username, email, password }: SignupRequest) => {
 };
 
 export const logout = async () => {
+  const url = '/logout';
   const options: RequestInit = {
     method: 'POST',
     credentials: 'include',
   };
 
-  const res = await fetch(`${BOOKS_API_ENDPOINT}/logout`, options);
+  const res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, options);
   if (!res.ok) {
     return false;
   }
@@ -64,9 +69,9 @@ export const logout = async () => {
 };
 
 export const fetchWithAuth = async (url: string, options?: RequestInit) => {
-  let token = getAccessToken();
+  const token = getAccessToken();
   if (!token) {
-    throw new Error('アクセストークンがありません。');
+    throw new Error(`アクセストークンがありません。URL: ${url}`);
   }
 
   let res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
@@ -78,28 +83,31 @@ export const fetchWithAuth = async (url: string, options?: RequestInit) => {
   });
 
   if (res.status === 401) {
-    token = await refreshAccessToken();
-    if (!token) {
+    const newToken = await refreshAccessToken();
+    if (!newToken) {
       clearAccessToken();
-      throw new Error('リフレッシュトークンの有効期限が切れました。');
+      const error: CustomError = new Error(
+        `リフレッシュトークンの有効期限が切れました。URL: ${url}`
+      );
+      error.code = 'REFRESH_TOKEN_EXPIRED';
+      throw error;
     }
-    setAccessToken(token);
+
+    setAccessToken(newToken);
     res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
       ...options,
       headers: {
         ...options?.headers,
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${newToken}`,
       },
     });
   }
 
   if (!res.ok) {
-    throw new Error(
-      `Failed to fetch data from ${url}. HTTP error! status: ${res.status}`
-    );
+    throw new Error(`失敗しました。URL: ${url} ステータス: ${res.status}`);
   }
 
-  // レスポンスが空の場合は、res.json()を呼び出さない
+  // JSONレスポンスがある場合のみデータを返却
   if (
     res.status !== 204 &&
     res.headers.get('content-type')?.includes('application/json')
@@ -107,21 +115,23 @@ export const fetchWithAuth = async (url: string, options?: RequestInit) => {
     return res.json();
   }
 
+  // 空のレスポンスの場合
   return null;
 };
 
 export const refreshAccessToken = async () => {
-  const options: RequestInit = {
-    method: 'POST',
-    credentials: 'include',
-  };
-  const res = await fetch(`${BOOKS_API_ENDPOINT}/refresh-token`, options);
-  if (!res.ok) {
+  try {
+    const options: RequestInit = {
+      method: 'POST',
+      credentials: 'include',
+    };
+    const res = await fetch(`${BOOKS_API_ENDPOINT}/refresh-token`, options);
+    const accessTokenResponse = (await res.json()) as AccessTokenResponse;
+    return accessTokenResponse.accessToken;
+  } catch (e) {
+    console.error(e);
     return null;
   }
-
-  const accessTokenResponse = (await res.json()) as AccessTokenResponse;
-  return accessTokenResponse.accessToken;
 };
 
 export const validateToken = async () => {
@@ -131,7 +141,7 @@ export const validateToken = async () => {
     await fetchWithAuth(url, options);
     return true;
   } catch (e) {
-    console.log(e);
+    if ((e as CustomError).code) return null;
     return false;
   }
 };

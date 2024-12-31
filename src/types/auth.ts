@@ -18,3 +18,7 @@ export interface SignupRequest {
 export interface AccessTokenResponse {
   accessToken: string;
 }
+
+export interface CustomError extends Error {
+  code?: string;
+}

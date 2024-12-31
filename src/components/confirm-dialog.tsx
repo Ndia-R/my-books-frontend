@@ -104,7 +104,11 @@ const ConfirmDialog = () => {
   };
 
   const handleAnimationEnd = (e: React.AnimationEvent) => {
-    if (e.animationName === 'exit') {
+    if (e.animationName === 'enter') {
+      if (isOpen && options.showInput) {
+        refTextarea.current?.focus();
+      }
+    } else if (e.animationName === 'exit') {
       switch (selected) {
         case 'action':
           options.resolve?.({

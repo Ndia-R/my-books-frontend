@@ -16,7 +16,7 @@ import {
 } from 'react-router-dom';
 
 type LoaderFunctionReturnType = {
-  paginatedBook: Promise<PaginatedBook>;
+  paginatedBook: Promise<PaginatedBook | null>;
   genres: Genre[];
   genreIds: number[];
 };

@@ -7,8 +7,10 @@ import MyListPage from '@/routes/my-list/page';
 import RootPage from '@/routes/page';
 import { ProtectedRoute } from '@/routes/protected-route';
 import SearchPage from '@/routes/search/page';
-import SettingsPage from '@/routes/settings/page';
-import SignUpPage from '@/routes/sign-up/page';
+import ChangeEmailPage from '@/routes/settings/change-email/page';
+import ChangePasswordPage from '@/routes/settings/change-password/page';
+import ProfilePage from '@/routes/settings/profile/page';
+import SignupPage from '@/routes/signup/page';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 
 export const router = createBrowserRouter(
@@ -33,8 +35,8 @@ export const router = createBrowserRouter(
           <Route index element={<LoginPage />} />
         </Route>
 
-        <Route path="sign-up">
-          <Route index element={<SignUpPage />} />
+        <Route path="signup">
+          <Route index element={<SignupPage />} />
         </Route>
 
         <Route element={<ProtectedRoute />}>
@@ -47,7 +49,9 @@ export const router = createBrowserRouter(
           </Route>
 
           <Route path="settings">
-            <Route index element={<SettingsPage />} />
+            <Route path="profile" element={<ProfilePage />} />
+            <Route path="change-email" element={<ChangeEmailPage />} />
+            <Route path="change-password" element={<ChangePasswordPage />} />
           </Route>
         </Route>
       </Route>

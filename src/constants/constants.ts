@@ -7,7 +7,7 @@ export const LOGO_TITLE = 'My Books';
 export const MENU_LIST = [
   { href: '/favorites', title: 'お気に入り', icon: HeartIcon },
   { href: '/my-list', title: 'マイリスト', icon: ListIcon },
-  { href: '/settings', title: '設定', icon: SettingsIcon },
+  { href: '/settings/profile', title: '設定', icon: SettingsIcon },
 ];
 
 // API Endpoits
