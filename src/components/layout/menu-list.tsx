@@ -12,7 +12,7 @@ export default function MenuList({ onClick }: Props) {
   const pathname = location.pathname;
 
   return (
-    <ul className="flex flex-col gap-x-0 gap-y-2 md:flex-row">
+    <ul className="flex flex-col gap-x-0 gap-y-2 lg:flex-row">
       {MENU_LIST.map((item) => (
         <li className="w-full" key={item.href}>
           <Button

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/util';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 type SheetSideType = 'top' | 'right' | 'bottom' | 'left';
@@ -117,27 +117,15 @@ const SheetOverlay = ({ className, ...props }: SheetOverlayProps) => {
 
   const { isOpen } = context;
 
-  // 閉じるアニメーションが終わった時にopacity:0にする
-  // data-[state=closed]でopacity:0へのアニメーションはするが、
-  // それが終わるとopacity:1へリセットされてしまい、ちらつくので
-  // これを防ぐためにdisplay:'none'にする
-  const ref = useRef<HTMLDivElement | null>(null);
-  const handleAnimationEnd = (e: React.AnimationEvent) => {
-    if (e.animationName === 'exit' && ref.current) {
-      ref.current.style.display = 'none';
-    }
-  };
-
   return (
     <div
-      ref={ref}
       className={cn(
         'fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
+        'fill-mode-both',
         className
       )}
       data-state={isOpen ? 'open' : 'closed'}
       {...props}
-      onAnimationEnd={handleAnimationEnd}
     ></div>
   );
 };
@@ -216,14 +204,8 @@ const SheetContent = ({
     }
   };
 
-  // 閉じるアニメーションが終わった時にopacity:0にする
-  // data-[state=closed]でopacity:0へのアニメーションはするが、
-  // それが終わるとopacity:1へリセットされてしまい、ちらつくので
-  // これを防ぐためにdisplay:'none'にする
-  const ref = useRef<HTMLDivElement | null>(null);
   const handleAnimationEnd = (e: React.AnimationEvent) => {
-    if (e.animationName === 'exit' && ref.current) {
-      ref.current.style.display = 'none';
+    if (e.animationName === 'exit') {
       setIsVisible(false);
     }
   };
@@ -242,9 +224,9 @@ const SheetContent = ({
         <>
           <SheetOverlay onClick={handlePointerDownOutside} />
           <div
-            ref={ref}
             className={cn(
               'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
+              'fill-mode-both',
               POSITION_LIST[side],
               className
             )}

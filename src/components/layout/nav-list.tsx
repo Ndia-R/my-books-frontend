@@ -12,7 +12,7 @@ export default function NavList() {
   const DEBOUNCED_DELAY = 100;
   const { width } = useWindowSize(DEBOUNCED_DELAY);
 
-  const TABLET_WIDTH = 768;
+  const TABLET_WIDTH = 1024;
   if (isOpen && width >= TABLET_WIDTH) {
     setIsOpen(false);
   }
