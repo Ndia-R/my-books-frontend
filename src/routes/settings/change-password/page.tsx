@@ -27,11 +27,9 @@ export default function Page() {
     e.preventDefault();
 
     const form = new FormData(e.currentTarget);
-    const currentPassword = (form.get('current-password') as string) || '';
-    const newPassword = (form.get('new-password') as string) || '';
-    const confirmNewPassword = (form.get('confirm-new-password') as string) || '';
-
-    console.log(currentPassword, newPassword, confirmNewPassword);
+    const currentPassword = form.get('current-password') as string;
+    const newPassword = form.get('new-password') as string;
+    const confirmNewPassword = form.get('confirm-new-password') as string;
 
     setIsSubmitting(true);
     const isSuccess = await changePassword({
@@ -61,7 +59,7 @@ export default function Page() {
 
   return (
     <div className="my-3 flex flex-col items-center justify-items-center gap-y-3 sm:my-16">
-      <Logo size="lg" />
+      <Logo size="lg" disableLink />
       <p className="font-semibold">パスワード変更</p>
       <Card className="w-80 rounded-3xl sm:w-96">
         <CardContent className="p-6 sm:px-10">

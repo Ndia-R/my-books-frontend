@@ -42,12 +42,14 @@ export const getGenres = async () => {
   }
 };
 
-export const getBooksByGenreId = async (genreIds?: number[], page: number = 0) => {
-  if (!genreIds?.length) return null;
+export const getBooksByGenreId = async (genreIdsQuery?: string, page: number = 0) => {
+  if (!genreIdsQuery) return null;
 
   try {
-    const ids = genreIds.join(',');
-    const url = `/books/discover?genreId=${ids}&page=${page}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
+    // 「|」はそのまま渡すとエラーになるので、URLエンコードする
+    const encodedParams = genreIdsQuery.replace(/\|/g, encodeURIComponent('|'));
+
+    const url = `/books/discover?genreId=${encodedParams}&page=${page}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
     const paginatedBook = (await fetchJSON(url)) as PaginatedBook;
     return convertBookResponse(paginatedBook);
   } catch (e) {
@@ -93,7 +95,7 @@ export const changePassword = async ({
     await fetchWithAuth(url, options);
     return true;
   } catch (e) {
-    console.log(e);
+    console.error(e);
     return false;
   }
 };
@@ -105,7 +107,7 @@ export const checkUsernameExists = async (username: string) => {
     return data.exists;
   } catch (e) {
     console.error(e);
-    return false; // エラーの場合、存在しないとするのはどうかと思うけどいったんfalse
+    return false; // エラーの場合「存在しない」とするのはどうかと思うけどいったんfalse
   }
 };
 

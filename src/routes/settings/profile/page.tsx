@@ -1,3 +1,4 @@
+import Logo from '@/components/layout/logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -31,6 +32,8 @@ export default function Page() {
 
   return (
     <div className="my-3 flex flex-col items-center justify-items-center gap-y-3 sm:my-16">
+      <Logo size="lg" disableLink />
+      <p className="font-semibold">プロフィール</p>
       <Card className="w-80 overflow-hidden rounded-3xl sm:w-96">
         <CardHeader className="h-80 w-full bg-gradient-to-tr from-secondary to-primary">
           <div className="flex flex-col items-center pt-8">
@@ -68,7 +71,7 @@ export default function Page() {
               <CircleUserRoundIcon className="mr-4" />
               <p>アバター画像</p>
               <div className="flex-1"></div>
-              <Button className="rounded-full" variant="outline">
+              <Button className="rounded-full bg-transparent" variant="outline">
                 変更
               </Button>
             </li>
@@ -77,7 +80,7 @@ export default function Page() {
               <p>ユーザー名</p>
               <div className="flex-1"></div>
               <Button
-                className="rounded-full"
+                className="rounded-full bg-transparent"
                 variant="outline"
                 onClick={handleChangeUsername}
               >
@@ -88,7 +91,7 @@ export default function Page() {
               <MailIcon className="mr-4" />
               <p>メールアドレス</p>
               <div className="flex-1"></div>
-              <Button className="rounded-full" variant="outline" asChild>
+              <Button className="rounded-full bg-transparent" variant="outline" asChild>
                 <Link to="/settings/change-email">変更</Link>
               </Button>
             </li>
@@ -96,7 +99,7 @@ export default function Page() {
               <KeyRoundIcon className="mr-4" />
               <p>パスワード</p>
               <div className="flex-1"></div>
-              <Button className="rounded-full" variant="outline" asChild>
+              <Button className="rounded-full bg-transparent" variant="outline" asChild>
                 <Link to="/settings/change-password">変更</Link>
               </Button>
             </li>

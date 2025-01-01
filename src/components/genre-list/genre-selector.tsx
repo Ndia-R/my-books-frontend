@@ -1,11 +1,7 @@
 import { Button } from '@/components/ui/button';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Separator } from '@/components/ui/separator';
 import { cn } from '@/lib/util';
 import { Genre } from '@/types/book';
 import { CheckIcon } from 'lucide-react';
@@ -13,37 +9,76 @@ import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 type Props = {
-  className?: string;
   genres: Genre[];
 };
 
-export default function GenreSelector({ className, genres }: Props) {
+type ConditionType = {
+  id: string;
+  value: string;
+  splitCode: string;
+};
+
+const CONDITIONS: ConditionType[] = [
+  { id: 'and-condition', value: 'AND', splitCode: ',' },
+  { id: 'or-condition', value: 'OR', splitCode: '|' },
+];
+
+const parseGenreIdQuery = (genreIdQuery: string) => {
+  for (const condition of CONDITIONS) {
+    if (genreIdQuery.includes(condition.splitCode)) {
+      return {
+        ids: genreIdQuery.split(condition.splitCode).map((id) => Number(id)),
+        condition,
+      };
+    }
+  }
+  const ids = genreIdQuery ? [Number(genreIdQuery)] : [];
+  return { ids, condition: CONDITIONS[0] };
+};
+
+export default function GenreSelector({ genres }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
 
-  const SELECT_TYPE = ['AND', 'OR'];
-  const [selectType, setSelectType] = useState(SELECT_TYPE[0]);
+  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
+  const [selectedCondition, setSelectedCondition] = useState<ConditionType>(
+    CONDITIONS[0]
+  );
 
-  const isActive = (id: number) => selectedGenres.includes(id.toString());
+  const isActive = (id: number) => selectedGenres.includes(id);
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const urlIds = params.get('genreId') ?? '';
-    const ids = urlIds === '' ? [] : urlIds.split(',');
+    const genreIdQuery = params.get('genreId') ?? '';
+
+    const { ids, condition } = parseGenreIdQuery(genreIdQuery);
 
     setSelectedGenres(ids);
+    if (ids.length > 1) setSelectedCondition(condition);
   }, [location.search]);
 
-  const handleClick = (selectedId: number) => {
-    const ids = isActive(selectedId)
-      ? selectedGenres.filter((id) => id !== selectedId.toString())
-      : [...selectedGenres, selectedId.toString()];
-
+  const handleClickGenre = (genreId: number) => {
+    const ids = isActive(genreId)
+      ? selectedGenres.filter((id) => id !== genreId)
+      : [...selectedGenres, genreId];
     setSelectedGenres(ids);
 
+    const genreIdQuery = ids.join(selectedCondition.splitCode);
+    updateDiscoverUrl(genreIdQuery);
+  };
+
+  const handleValueChange = (value: string) => {
+    const selected =
+      CONDITIONS.find((condition) => condition.value === value) || CONDITIONS[0];
+    setSelectedCondition(selected);
+
+    const genreIdQuery = selectedGenres.join(selected.splitCode);
+    updateDiscoverUrl(genreIdQuery);
+  };
+
+  const updateDiscoverUrl = (genreIdQuery: string) => {
     const params = new URLSearchParams(location.search);
-    params.set('genreId', ids.join(','));
+    params.set('genreId', genreIdQuery);
     params.set('page', '1');
     navigate(`/discover?${params.toString()}`);
   };
@@ -52,24 +87,25 @@ export default function GenreSelector({ className, genres }: Props) {
     <>
       <div className="my-4 flex items-center justify-between">
         <p className="my-2">ジャンル</p>
-        <div className="flex items-center space-x-2">
-          <p className="text-sm text-muted-foreground">選択条件</p>
-          <Select value={selectType} onValueChange={setSelectType}>
-            <SelectTrigger className="w-[100px] border-foreground/20 bg-background/20">
-              <SelectValue placeholder="選択してください" />
-            </SelectTrigger>
-            <SelectContent>
-              {SELECT_TYPE.map((type) => (
-                <SelectItem key={type} value={type}>
-                  {type}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        <RadioGroup
+          className="flex gap-x-4"
+          value={selectedCondition.value}
+          onValueChange={handleValueChange}
+        >
+          {CONDITIONS.map((condition) => (
+            <div className="flex items-center" key={condition.id}>
+              <RadioGroupItem value={condition.value} id={condition.id} />
+              <Label className="cursor-pointer select-none p-2" htmlFor={condition.id}>
+                {condition.value}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
       </div>
 
-      <ul className={cn('flex flex-wrap', className)}>
+      <Separator className="my-4 bg-foreground/10" />
+
+      <ul className="flex flex-wrap">
         {genres.map((genre) => (
           <li key={genre.id}>
             <Button
@@ -79,16 +115,18 @@ export default function GenreSelector({ className, genres }: Props) {
               )}
               variant={isActive(genre.id) ? 'secondary' : 'ghost'}
               size="sm"
-              onClick={() => handleClick(genre.id)}
+              onClick={() => handleClickGenre(genre.id)}
             >
-              {isActive(genre.id) ? (
+              {isActive(genre.id) && (
                 <CheckIcon className="mr-1 size-4" strokeWidth={4} />
-              ) : null}
+              )}
               {genre.name}
             </Button>
           </li>
         ))}
       </ul>
+
+      <Separator className="my-4 bg-foreground/10" />
     </>
   );
 }

@@ -5,12 +5,7 @@ import { getBooksByQuery } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
 import { PaginatedBook } from '@/types/book';
 import { Suspense } from 'react';
-import {
-  Await,
-  LoaderFunctionArgs,
-  ScrollRestoration,
-  useLoaderData,
-} from 'react-router-dom';
+import { Await, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 
 type LoaderFunctionReturnType = {
   paginatedBook: Promise<PaginatedBook | null>;
@@ -51,8 +46,6 @@ export default function Page() {
           </Await>
         </Suspense>
       </div>
-
-      <ScrollRestoration />
     </>
   );
 }

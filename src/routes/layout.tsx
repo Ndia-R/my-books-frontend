@@ -2,7 +2,7 @@ import { ConfirmDialog } from '@/components/confirm-dialog';
 import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import { Toaster } from '@/components/ui/toaster';
-import { Outlet } from 'react-router-dom';
+import { Outlet, ScrollRestoration } from 'react-router-dom';
 
 export default function Layout() {
   return (
@@ -16,6 +16,7 @@ export default function Layout() {
       </div>
       <Toaster />
       <ConfirmDialog />
+      <ScrollRestoration />
     </>
   );
 }

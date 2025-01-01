@@ -8,12 +8,7 @@ import ErrorElement from '@/routes/error-element';
 import { Book, Genre } from '@/types/book';
 import { Review } from '@/types/review';
 import { Suspense } from 'react';
-import {
-  Await,
-  LoaderFunctionArgs,
-  ScrollRestoration,
-  useLoaderData,
-} from 'react-router-dom';
+import { Await, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
 
 type LoaderFunctionReturnType = {
   genres: Genre[];
@@ -98,8 +93,6 @@ export default function Page() {
           </Await>
         </Suspense>
       </div>
-
-      <ScrollRestoration />
     </>
   );
 }

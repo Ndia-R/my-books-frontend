@@ -36,9 +36,9 @@ export default function Page() {
     e.preventDefault();
 
     const form = new FormData(e.currentTarget);
-    const username = (form.get('username') as string) || '';
-    const email = (form.get('email') as string) || '';
-    const password = (form.get('password') as string) || '';
+    const username = form.get('username') as string;
+    const email = form.get('email') as string;
+    const password = form.get('password') as string;
 
     if (!(username && email && password)) {
       if (username === '') setUsernameErrorMessage('ユーザー名は必須です。');
@@ -100,7 +100,7 @@ export default function Page() {
 
   return (
     <div className="my-3 flex flex-col items-center justify-items-center gap-y-3 sm:my-16">
-      <Logo size="lg" />
+      <Logo size="lg" disableLink />
       <p className="font-semibold">アカウントの作成</p>
       <Card className="w-80 rounded-3xl sm:w-96">
         <CardContent className="p-6 sm:px-10">
