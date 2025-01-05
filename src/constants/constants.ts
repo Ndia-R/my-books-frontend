@@ -12,7 +12,9 @@ export const MENU_LIST = [
 
 // API Endpoits
 // export const BOOKS_API_ENDPOINT = 'http://vsv-emerald/my-books/api/v1';
-export const BOOKS_API_ENDPOINT = 'https://localhost/my-books/api/v1';
-
 // export const BOOKS_IMAGE_URL = 'http://vsv-emerald/images';
+// export const AVATER_IMAGE_URL = 'https://vsv-emerald/images/avatars';
+
+export const BOOKS_API_ENDPOINT = 'https://localhost/my-books/api/v1';
 export const BOOKS_IMAGE_URL = 'https://localhost/images';
+export const AVATER_IMAGE_URL = 'https://localhost/images/avatars';

@@ -33,12 +33,12 @@ export const login = async ({ email, password }: LoginRequest) => {
   return true;
 };
 
-export const signup = async ({ username, email, password }: SignupRequest) => {
+export const signup = async ({ name, email, password }: SignupRequest) => {
   const url = '/signup';
   const options: RequestInit = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, email, password }),
+    body: JSON.stringify({ name, email, password }),
   };
 
   const res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, options);
@@ -141,6 +141,7 @@ export const validateToken = async () => {
     await fetchWithAuth(url, options);
     return true;
   } catch (e) {
+    // リフレッシュトークンが無効な場合はnull返却
     if ((e as CustomError).code) return null;
     return false;
   }

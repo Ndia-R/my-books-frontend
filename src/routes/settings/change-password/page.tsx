@@ -40,7 +40,7 @@ export default function Page() {
     if (!isSuccess) {
       setIsSubmitting(false);
       toast({
-        title: 'パスワード変更できませんでした',
+        title: 'パスワードを変更できませんでした',
         description: '入力内容を確認してください',
         variant: 'destructive',
         duration: 5000,
@@ -48,7 +48,7 @@ export default function Page() {
       return;
     }
 
-    toast({ title: 'パスワード変更しました' });
+    toast({ title: 'パスワードを変更しました' });
 
     const currentUser = await getCurrentUser();
     setUser(currentUser);

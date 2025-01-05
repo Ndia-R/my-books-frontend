@@ -6,12 +6,17 @@ export interface User {
   avatarUrl: string;
 }
 
+export interface UpdateUserRequest {
+  name: string;
+  avatarUrl: string;
+}
+
 export interface ChangePasswordRequest {
   currentPassword: string;
   newPassword: string;
   confirmNewPassword: string;
 }
 
-export interface CheckUsernameExistsResponse {
+export interface CheckNameExistsResponse {
   exists: boolean;
 }

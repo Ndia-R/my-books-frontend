@@ -1,12 +1,17 @@
 import { BOOKS_API_ENDPOINT } from '@/constants/constants';
 import { fetchWithAuth } from '@/lib/auth';
 import { Book, Genre, PaginatedBook } from '@/types/book';
-import { ChangePasswordRequest, CheckUsernameExistsResponse, User } from '@/types/user';
+import {
+  ChangePasswordRequest,
+  CheckNameExistsResponse,
+  UpdateUserRequest,
+  User,
+} from '@/types/user';
 
 export const FETCH_BOOKS_MAX_RESULTS = 20;
 
 export const getBooksByQuery = async (q?: string, page: number = 0) => {
-  if (!q) return null;
+  if (!q) return emptyPaginatedBook();
 
   try {
     const url = `/books/search?q=${q}&page=${page}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
@@ -43,7 +48,7 @@ export const getGenres = async () => {
 };
 
 export const getBooksByGenreId = async (genreIdsQuery?: string, page: number = 0) => {
-  if (!genreIdsQuery) return null;
+  if (!genreIdsQuery) return emptyPaginatedBook();
 
   try {
     // 「|」はそのまま渡すとエラーになるので、URLエンコードする
@@ -80,6 +85,22 @@ export const getCurrentUser = async () => {
   }
 };
 
+export const updateCurrentUser = async ({ name, avatarUrl }: UpdateUserRequest) => {
+  try {
+    const url = `/me`;
+    const options: RequestInit = {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, avatarUrl }),
+    };
+    await fetchWithAuth(url, options);
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+};
+
 export const changePassword = async ({
   currentPassword,
   newPassword,
@@ -100,10 +121,10 @@ export const changePassword = async ({
   }
 };
 
-export const checkUsernameExists = async (username: string) => {
+export const checkNameExists = async (name: string) => {
   try {
-    const url = `/check-username-exists?username=${username}`;
-    const data = (await fetchJSON(url)) as CheckUsernameExistsResponse;
+    const url = `/check-name-exists?name=${name}`;
+    const data = (await fetchJSON(url)) as CheckNameExistsResponse;
     return data.exists;
   } catch (e) {
     console.error(e);
@@ -114,9 +135,7 @@ export const checkUsernameExists = async (username: string) => {
 const fetchJSON = async (url: string, options: RequestInit = {}) => {
   const res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, options);
   if (!res.ok) {
-    throw new Error(
-      `Failed to fetch data from ${url}. HTTP error! status: ${res.status}`
-    );
+    throw new Error(`失敗しました。URL: ${url} ステータス: ${res.status}`);
   }
   return res.json();
 };
@@ -133,4 +152,13 @@ const convertBooks = (books: Book[]) => {
 const convertBookResponse = (paginatedBook: PaginatedBook) => {
   paginatedBook.books = convertBooks(paginatedBook.books);
   return paginatedBook;
+};
+
+const emptyPaginatedBook = (): PaginatedBook => {
+  return {
+    page: 0,
+    totalPages: 0,
+    totalItems: 0,
+    books: [],
+  };
 };

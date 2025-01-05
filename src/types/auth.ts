@@ -5,12 +5,12 @@ export type LoginRequest = {
 
 export interface LoginResponse {
   accessToken: string;
-  username: string;
+  name: string;
   roles: string[];
 }
 
 export interface SignupRequest {
-  username: string;
+  name: string;
   email: string;
   password: string;
 }

@@ -3,31 +3,12 @@ import Logo from '@/components/layout/logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useUser } from '@/hooks/use-user';
-import {
-  CircleUserRoundIcon,
-  KeyRoundIcon,
-  MailIcon,
-  UserRoundPenIcon,
-} from 'lucide-react';
+import { KeyRoundIcon, MailIcon, UserRoundIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export default function Page() {
   const { user } = useUser();
-  const { confirmDialog } = useConfirmDialog();
-
-  const handleChangeUsername = async () => {
-    const { isCancel } = await confirmDialog({
-      icon: 'i',
-      title: 'ユーザー名の変更',
-      message: '新しいユーザー名を入力してください。',
-      actionLabel: '変更',
-      inputPlaceholder: '',
-      showInput: true,
-    });
-    if (isCancel) return;
-  };
 
   if (!user) return null;
 
@@ -81,23 +62,11 @@ export default function Page() {
         <CardContent className="relative p-6">
           <ul>
             <li className="flex items-center p-2">
-              <CircleUserRoundIcon className="mr-4" />
-              <p>アバター画像</p>
+              <UserRoundIcon className="mr-4" />
+              <p>ユーザー情報</p>
               <div className="flex-1"></div>
-              <Button className="rounded-full bg-transparent" variant="outline">
-                変更
-              </Button>
-            </li>
-            <li className="flex items-center p-2">
-              <UserRoundPenIcon className="mr-4" />
-              <p>ユーザー名</p>
-              <div className="flex-1"></div>
-              <Button
-                className="rounded-full bg-transparent"
-                variant="outline"
-                onClick={handleChangeUsername}
-              >
-                変更
+              <Button className="rounded-full bg-transparent" variant="outline" asChild>
+                <Link to="/settings/change-user-info">変更</Link>
               </Button>
             </li>
             <li className="flex items-center p-2">

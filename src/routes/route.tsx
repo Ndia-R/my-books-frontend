@@ -9,6 +9,7 @@ import { ProtectedRoute } from '@/routes/protected-route';
 import SearchPage from '@/routes/search/page';
 import ChangeEmailPage from '@/routes/settings/change-email/page';
 import ChangePasswordPage from '@/routes/settings/change-password/page';
+import ChangeUserInfoPage from '@/routes/settings/change-user-info/page';
 import ProfilePage from '@/routes/settings/profile/page';
 import SignupPage from '@/routes/signup/page';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
@@ -50,6 +51,7 @@ export const router = createBrowserRouter(
 
           <Route path="settings">
             <Route path="profile" element={<ProfilePage />} />
+            <Route path="change-user-info" element={<ChangeUserInfoPage />} />
             <Route path="change-email" element={<ChangeEmailPage />} />
             <Route path="change-password" element={<ChangePasswordPage />} />
           </Route>
