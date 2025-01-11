@@ -1,3 +1,4 @@
+import SwipeArea from '@/components/swipe-area';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/util';
@@ -44,7 +45,7 @@ export default function AvatarCarousel({
   const [marginLeft, setMarginLeft] = useState(0);
 
   useEffect(() => {
-    if (defaultSelected && !isVisible) {
+    if (defaultSelected !== undefined && !isVisible) {
       setInnerIndex(defaultSelected);
       setCurrentIndex(defaultSelected);
       setDefaultIndex(defaultSelected);
@@ -53,7 +54,7 @@ export default function AvatarCarousel({
       setTimeout(() => {
         carouselRef.current!.style.transitionProperty = 'transform';
         setIsVisible(true);
-      }, 50);
+      }, 100);
     }
   }, [defaultSelected, isVisible]);
 
@@ -110,7 +111,10 @@ export default function AvatarCarousel({
         <ChevronLeft className="size-4" />
       </Button>
 
-      <div className="w-full overflow-hidden" style={{ width: `${frameWidth}px` }}>
+      <div
+        className="relative w-full select-none overflow-hidden"
+        style={{ width: `${frameWidth}px` }}
+      >
         <ul
           ref={carouselRef}
           className="flex transition-transform duration-200"
@@ -136,9 +140,10 @@ export default function AvatarCarousel({
                   )}
                 >
                   <AvatarImage
+                    className="bg-primary"
                     src={item.avatarUrl}
                     alt="avatar-image"
-                    className="bg-primary"
+                    draggable={false}
                   />
                 </Avatar>
                 {defaultIndex === item.index && (
@@ -155,6 +160,11 @@ export default function AvatarCarousel({
             </li>
           ))}
         </ul>
+        <SwipeArea
+          className="absolute left-0 top-0 h-24 w-full"
+          onSwipeLeft={handleNext}
+          onSwipeRight={handlePrev}
+        />
       </div>
 
       <Button

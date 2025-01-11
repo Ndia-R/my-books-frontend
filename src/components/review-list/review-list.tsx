@@ -8,7 +8,7 @@ type Props = {
 
 export default function ReviewList({ reviews }: Props) {
   return (
-    <ul className="flex flex-col p-6">
+    <ul className="flex flex-col p-3 sm:p-6">
       {reviews.map((review) => (
         <li key={review.id}>
           <Separator className="bg-foreground/10" />

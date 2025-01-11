@@ -1,7 +1,7 @@
 import { CONFIRM_DIALOG_EVENT } from '@/components/confirm-dialog';
 
 // 確認ダイアログの引数
-type ConfirmDialogOptions = {
+export type ConfirmDialogOptions = {
   icon: string; // アイコンの種類（「''」「'i'」「'?'」「'!'」「'c'」）
   title: string; // タイトル
   message?: string; // メッセージ
@@ -16,13 +16,13 @@ type ConfirmDialogOptions = {
 };
 
 // 確認ダイアログの戻り値
-type ConfirmDialogResult = {
+export type ConfirmDialogResult = {
   isAction: boolean;
   isCancel: boolean;
   text: string;
 };
 
-const useConfirmDialog = () => {
+export const useConfirmDialog = () => {
   const confirmDialog = (options: ConfirmDialogOptions): Promise<ConfirmDialogResult> => {
     return new Promise((resolve) => {
       const event = new CustomEvent(CONFIRM_DIALOG_EVENT, {
@@ -33,5 +33,3 @@ const useConfirmDialog = () => {
   };
   return { confirmDialog };
 };
-
-export { useConfirmDialog, type ConfirmDialogOptions, type ConfirmDialogResult };

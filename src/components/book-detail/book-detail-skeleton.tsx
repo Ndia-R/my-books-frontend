@@ -3,7 +3,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function BookDetailSkeleton() {
   return (
     <>
-      <div className="flex flex-col justify-center p-6 pt-10 lg:flex-row">
+      <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">
         <div className="flex flex-col items-center justify-center lg:w-1/2">
           <Skeleton className="h-[360px] w-[280px] rounded bg-muted-foreground/5 object-cover sm:h-[480px] sm:w-[360px]" />
           <div className="my-4 flex items-center gap-x-2">

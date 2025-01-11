@@ -14,21 +14,44 @@ export const sleep = (msec: number) =>
   new Promise((resolve) => setTimeout(resolve, msec));
 
 /**
- * yyyy-MM-dd形式の文字列をyyyy年MM月dd日へ変換
- * @param dateString yyyy-MM-dd形式の文字列
- * @returns yyyy年MM月dd日の文字列
+ * yyyy-MM-ddTHH:mm:ss形式の文字列を変換
+ * @param dateString
+ * @returns yyyy年M月d日の文字列
  */
-export const formatDate = (dateString: string) => {
+export const formatDateJP = (dateString: string) => {
   const date = new Date(dateString);
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
   const day = date.getDate();
 
-  let formattedDate = `${year}年`;
-  if (month) formattedDate += `${month}月`;
-  if (day) formattedDate += `${day}日`;
+  return `${year}年${month}月${day}日`;
+};
 
-  return formattedDate;
+/**
+ * yyyy-MM-ddTHH:mm:ss形式の文字列を変換
+ * @param dateString
+ * @returns yyyy/MM/dd日の文字列
+ */
+export const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const year = date.getFullYear().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+
+  return `${year}/${month}/${day}`;
+};
+
+/**
+ * yyyy-MM-ddTHH:mm:ss形式の文字列を変換
+ * @param dateString
+ * @returns HH:mmの文字列
+ */
+export const formatTime = (dateString: string) => {
+  const date = new Date(dateString);
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+
+  return `${hours}:${minutes}`;
 };
 
 /**

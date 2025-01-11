@@ -4,11 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { AVATER_IMAGE_URL } from '@/constants/constants';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
-import { getCurrentUser, updateCurrentUser } from '@/lib/data';
-import { Loader2Icon } from 'lucide-react';
+import { updateCurrentUser } from '@/lib/action';
+import { checkNameExists, getCurrentUser } from '@/lib/data';
+import { CircleHelpIcon, Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
@@ -29,32 +31,35 @@ const AVATARS = [
 export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const [nameErrorMessage, setNameErrorMessage] = useState('');
+
   const [defaultAvatar, setDefaultAvatar] = useState<number | undefined>(undefined);
   const nameRef = useRef<HTMLInputElement | null>(null);
   const avatarUrlRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { user, setUser } = useUser();
   const { toast } = useToast();
 
   useEffect(() => {
     const initUserInfo = async () => {
       const currentUser = await getCurrentUser();
+      setUser(currentUser);
 
-      if (nameRef && nameRef.current && currentUser) {
+      if (nameRef.current && avatarUrlRef.current && currentUser) {
         nameRef.current.focus();
         nameRef.current.value = currentUser.name || '';
+        avatarUrlRef.current.value = currentUser.avatarUrl;
 
-        const index = AVATARS.findIndex(
-          (avatar) => avatar.avatarUrl === currentUser.avatarUrl
-        );
-        console.log({ index });
+        const index =
+          AVATARS.find((avatar) => avatar.avatarUrl === currentUser.avatarUrl)?.index ||
+          0;
 
         setDefaultAvatar(index);
       }
     };
     initUserInfo();
-  }, []);
+  }, [setUser]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -62,6 +67,16 @@ export default function Page() {
     const form = new FormData(e.currentTarget);
     const name = form.get('name') as string;
     const avatarUrl = form.get('avatar-url') as string;
+
+    if (name === '') {
+      setNameErrorMessage('ユーザー名は必須です。');
+      return;
+    }
+
+    if (user?.name !== name && (await checkNameExists(name))) {
+      setNameErrorMessage('そのユーザー名はすでに使われています。');
+      return;
+    }
 
     setIsSubmitting(true);
     const isSuccess = await updateCurrentUser({
@@ -89,10 +104,9 @@ export default function Page() {
   };
 
   const handleSelectedAvatar = (selectedIndex: number) => {
-    if (avatarUrlRef && avatarUrlRef.current) {
+    if (avatarUrlRef.current) {
       avatarUrlRef.current.value = AVATARS[selectedIndex].avatarUrl;
     }
-    console.log('selected:', selectedIndex);
   };
 
   return (
@@ -114,12 +128,21 @@ export default function Page() {
                 autoComplete="off"
                 spellCheck="false"
               />
+              <p className="h-4 text-xs text-destructive">{nameErrorMessage}</p>
             </div>
 
-            <div>
-              <Label className="text-xs" htmlFor="name">
-                アバター画像
-              </Label>
+            <div className="mb-4">
+              <div className="flex items-center gap-x-1">
+                <Label className="text-xs" htmlFor="name">
+                  アバター画像
+                </Label>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <CircleHelpIcon className="size-4" />
+                  </TooltipTrigger>
+                  <TooltipContent>チェックマークは現在のアバターです</TooltipContent>
+                </Tooltip>
+              </div>
               <div className="flex justify-center">
                 <AvatarCarousel
                   items={AVATARS}
@@ -129,14 +152,16 @@ export default function Page() {
                   onSelected={handleSelectedAvatar}
                 />
               </div>
-              <input ref={avatarUrlRef} className="w-[400px] text-black" type="text" />
+              <input
+                ref={avatarUrlRef}
+                className="w-[400px] text-black"
+                type="text"
+                name="avatar-url"
+                hidden
+              />
             </div>
 
-            <Button
-              className="mt-6 w-full rounded-full"
-              type="submit"
-              disabled={isSubmitting}
-            >
+            <Button className="w-full rounded-full" type="submit" disabled={isSubmitting}>
               {isSubmitting ? <Loader2Icon className="animate-spin" /> : '変更'}
             </Button>
             <Button

@@ -6,7 +6,7 @@ export const LOGO_TITLE = 'My Books';
 // メニュー一覧
 export const MENU_LIST = [
   { href: '/favorites', title: 'お気に入り', icon: HeartIcon },
-  { href: '/my-list', title: 'マイリスト', icon: ListIcon },
+  { href: '/my-lists', title: 'マイリスト', icon: ListIcon },
   { href: '/settings/profile', title: '設定', icon: SettingsIcon },
 ];
 

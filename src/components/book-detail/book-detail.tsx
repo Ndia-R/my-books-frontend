@@ -6,7 +6,7 @@ import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-user';
-import { formatDate, formatIsbn, priceToString } from '@/lib/util';
+import { formatDateJP, formatIsbn, priceToString } from '@/lib/util';
 import { Book, Genre } from '@/types/book';
 
 type Props = {
@@ -20,7 +20,7 @@ export default function BookDetail({ book, genres }: Props) {
 
   return (
     <>
-      <div className="flex flex-col justify-center p-6 pt-10 lg:flex-row">
+      <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">
         <div className="flex flex-col items-center justify-center lg:w-1/2">
           <img
             className="h-[360px] rounded object-cover sm:h-[480px]"
@@ -90,7 +90,7 @@ export default function BookDetail({ book, genres }: Props) {
               </div>
               <div className="flex">
                 <p className="min-w-20">発売日</p>
-                <p>{formatDate(book.publishedDate)}</p>
+                <p className="tracking-wide">{formatDateJP(book.publishedDate)}</p>
               </div>
               <div className="flex">
                 <p className="min-w-20">ページ数</p>
@@ -104,7 +104,7 @@ export default function BookDetail({ book, genres }: Props) {
 
             <div className="flex flex-col items-center justify-end gap-y-4 sm:items-end">
               <Rating rating={4.5} readOnly />
-              <ReviewDialog />
+              <ReviewDialog bookId={book.id} />
             </div>
           </div>
         </div>

@@ -1,4 +1,4 @@
-import CountUp from '@/components/count-up';
+import CountUpNumber from '@/components/count-up-number';
 import Logo from '@/components/layout/logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -36,7 +36,7 @@ export default function Page() {
             <div className="animate-fadeInUp-4 delay-0">
               <div className="w-20 text-center">
                 <p className="text-xl font-bold">
-                  <CountUp end={15} delay={300} />
+                  <CountUpNumber end={15} delay={300} />
                 </p>
                 <p className="text-sm">お気に入り</p>
               </div>
@@ -44,7 +44,7 @@ export default function Page() {
             <div className="animate-fadeInUp-4 delay-100">
               <div className="w-20 text-center">
                 <p className="text-xl font-bold">
-                  <CountUp end={32} delay={400} />
+                  <CountUpNumber end={32} delay={400} />
                 </p>
                 <p className="text-sm">マイリスト</p>
               </div>
@@ -52,7 +52,7 @@ export default function Page() {
             <div className="animate-fadeInUp-4 delay-200">
               <div className="w-20 text-center">
                 <p className="text-xl font-bold">
-                  <CountUp end={112} delay={500} />
+                  <CountUpNumber end={112} delay={500} />
                 </p>
                 <p className="text-sm">レビュー</p>
               </div>

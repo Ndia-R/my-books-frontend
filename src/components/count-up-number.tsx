@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 type Props = {
   className?: string;
@@ -10,16 +10,17 @@ type Props = {
   delay?: number; // カウントアップ開始までの遅延時間（ミリ秒）
 };
 
-export default function CountUp({
+export default function CountUpNumber({
   className,
   start,
   end,
-  minInterval = 1,
+  minInterval = 20,
   maxInterval = 300,
-  normalInterval = 1,
-  delay = 0, // デフォルトは遅延なし
+  normalInterval = 20,
+  delay = 0,
 }: Props) {
-  const initialStart = start ?? Math.max(0, end - 50);
+  const initialStart = start ?? Math.max(0, end - 30);
+
   const [count, setCount] = useState(initialStart);
   const [isDelayComplete, setIsDelayComplete] = useState(delay === 0);
 
@@ -35,11 +36,11 @@ export default function CountUp({
   }, [delay]);
 
   // イージング関数：最後の10カウント用
-  const easeInOut = (progress: number): number => {
+  const easeInOut = useCallback((progress: number): number => {
     return progress < 0.5
       ? 4 * progress ** 3 // 前半は加速 (ease-in)
       : 1 - Math.pow(-3 * progress + 3, 7) / 2; // 後半を非常に緩やかに減速
-  };
+  }, []);
 
   useEffect(() => {
     // 遅延が完了していない場合は何もしない
@@ -65,7 +66,7 @@ export default function CountUp({
     }, currentInterval);
 
     return () => clearTimeout(timeout);
-  }, [count, end, minInterval, maxInterval, normalInterval, isDelayComplete]);
+  }, [count, easeInOut, end, isDelayComplete, maxInterval, minInterval, normalInterval]);
 
   return <span className={className}>{count}</span>;
 }

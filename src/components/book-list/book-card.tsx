@@ -3,6 +3,7 @@ import MyListButton from '@/components/my-list-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-user';
+import { formatDateJP } from '@/lib/util';
 import { Book } from '@/types/book';
 import { Link } from 'react-router-dom';
 
@@ -24,7 +25,9 @@ export default function BookCard({ book }: Props) {
             />
           </Link>
           <div className="mt-1 flex w-full items-center justify-between">
-            <p className="text-xs text-muted-foreground">{book.publishedDate}</p>
+            <p className="text-xs tracking-wide text-muted-foreground">
+              {formatDateJP(book.publishedDate)}
+            </p>
             {user && (
               <div className="flex">
                 <Tooltip>

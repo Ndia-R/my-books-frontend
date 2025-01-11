@@ -4,7 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function ReviewListSkeleton() {
   return (
     <>
-      <ul className="flex flex-col gap-y-6 p-6">
+      <ul className="flex flex-col gap-y-6 p-3 sm:p-6">
         {[...Array<number>(2)].map((_, index) => (
           <li key={index}>
             <Separator className="bg-foreground/10" />

@@ -6,16 +6,23 @@ import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
+import { createReview } from '@/lib/action';
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export default function ReviewDialog() {
+type Props = {
+  bookId: string;
+};
+
+export default function ReviewDialog({ bookId }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(0);
-  const [text, setText] = useState('');
+  const [comment, setComment] = useState('');
   const ref = useRef<HTMLTextAreaElement | null>(null);
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
   const { user } = useUser();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isOpen) {
@@ -25,7 +32,7 @@ export default function ReviewDialog() {
 
   const handleAnimationStart = (e: React.AnimationEvent) => {
     if (e.animationName === 'enter') {
-      setText('');
+      setComment('');
       ref.current?.focus();
     }
   };
@@ -39,12 +46,24 @@ export default function ReviewDialog() {
       });
       if (isCancel) return;
     }
+    if (!user) {
+      await confirmDialog({
+        icon: '!',
+        title: 'ユーザー情報がないため投稿できません',
+        message: '',
+      });
+      return;
+    }
+    await createReview({ comment, rating, bookId, userId: user.id });
     toast({ description: 'レビューを投稿しました' });
     setIsOpen(false);
+
+    // 現在の画面にリダイレクトしてloaderを再実行してデータを更新
+    navigate(0);
   };
 
   const handleCloseDialog = async () => {
-    if (text) {
+    if (comment) {
       const { isCancel } = await confirmDialog({
         icon: '?',
         title: '本当に閉じますか？',
@@ -95,7 +114,7 @@ export default function ReviewDialog() {
             </div>
           </div>
 
-          <Textarea ref={ref} onChange={(e) => setText(e.currentTarget.value)} />
+          <Textarea ref={ref} onChange={(e) => setComment(e.currentTarget.value)} />
 
           <DialogFooter>
             <Button className="rounded-full" variant="ghost" onClick={handleCloseDialog}>
@@ -103,7 +122,7 @@ export default function ReviewDialog() {
             </Button>
             <Button
               className="rounded-full"
-              disabled={text === '' ? true : false}
+              disabled={comment === '' ? true : false}
               onClick={handlePost}
             >
               投稿する

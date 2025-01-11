@@ -5,10 +5,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
-import { changePassword, getCurrentUser } from '@/lib/data';
+import { changePassword } from '@/lib/action';
+import { getCurrentUser } from '@/lib/data';
 import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -104,6 +105,14 @@ export default function Page() {
               disabled={isSubmitting}
             >
               {isSubmitting ? <Loader2Icon className="animate-spin" /> : '変更'}
+            </Button>
+            <Button
+              className="w-full rounded-full bg-transparent"
+              type="button"
+              variant="outline"
+              asChild
+            >
+              <Link to="/settings/profile">キャンセル</Link>
             </Button>
           </form>
         </CardContent>

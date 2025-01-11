@@ -6,6 +6,9 @@
   html {
     font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
   }
+  body {
+    touch-action: pan-y;
+  }
 }
 
 @layer base {

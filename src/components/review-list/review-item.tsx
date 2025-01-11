@@ -1,6 +1,6 @@
 import Rating from '@/components/rating';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { formatDate } from '@/lib/util';
+import { formatDateJP, formatTime } from '@/lib/util';
 import { Review } from '@/types/review';
 
 type Props = {
@@ -26,7 +26,9 @@ export default function ReviewItem({ review }: Props) {
           </Avatar>
           <div>
             <p className="text-lg font-semibold">{user.name}</p>
-            <p className="text-sm text-muted-foreground">{formatDate(updatedAt)}</p>
+            <p className="text-sm tracking-wide text-muted-foreground">
+              {formatDateJP(updatedAt)} {formatTime(updatedAt)}
+            </p>
           </div>
         </div>
         <Rating rating={rating} readOnly />

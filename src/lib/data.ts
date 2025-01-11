@@ -1,12 +1,8 @@
 import { BOOKS_API_ENDPOINT } from '@/constants/constants';
 import { fetchWithAuth } from '@/lib/auth';
 import { Book, Genre, PaginatedBook } from '@/types/book';
-import {
-  ChangePasswordRequest,
-  CheckNameExistsResponse,
-  UpdateUserRequest,
-  User,
-} from '@/types/user';
+import { Review } from '@/types/review';
+import { CheckNameExistsResponse, User } from '@/types/user';
 
 export const FETCH_BOOKS_MAX_RESULTS = 20;
 
@@ -85,42 +81,6 @@ export const getCurrentUser = async () => {
   }
 };
 
-export const updateCurrentUser = async ({ name, avatarUrl }: UpdateUserRequest) => {
-  try {
-    const url = `/me`;
-    const options: RequestInit = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, avatarUrl }),
-    };
-    await fetchWithAuth(url, options);
-    return true;
-  } catch (e) {
-    console.error(e);
-    return false;
-  }
-};
-
-export const changePassword = async ({
-  currentPassword,
-  newPassword,
-  confirmNewPassword,
-}: ChangePasswordRequest) => {
-  try {
-    const url = `/me/password`;
-    const options: RequestInit = {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ currentPassword, newPassword, confirmNewPassword }),
-    };
-    await fetchWithAuth(url, options);
-    return true;
-  } catch (e) {
-    console.error(e);
-    return false;
-  }
-};
-
 export const checkNameExists = async (name: string) => {
   try {
     const url = `/check-name-exists?name=${name}`;
@@ -129,6 +89,19 @@ export const checkNameExists = async (name: string) => {
   } catch (e) {
     console.error(e);
     return false; // エラーの場合「存在しない」とするのはどうかと思うけどいったんfalse
+  }
+};
+
+export const getReviewsByBookId = async (bookId?: string) => {
+  if (!bookId) return null;
+
+  try {
+    const url = `/reviews/book/${bookId}`;
+    const reviews = (await fetchJSON(url)) as Review[];
+    return reviews;
+  } catch (e) {
+    console.error(e);
+    return [];
   }
 };
 
