@@ -18,18 +18,18 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<RootLayout />}>
-        <Route index element={<RootPage />} loader={RootPage.loader} />
+        <Route index element={<RootPage />} />
 
         <Route path="book">
-          <Route path=":bookId" element={<BookIdPage />} loader={BookIdPage.loader} />
+          <Route path=":bookId" element={<BookIdPage />} />
         </Route>
 
         <Route path="search">
-          <Route index element={<SearchPage />} loader={SearchPage.loader} />
+          <Route index element={<SearchPage />} />
         </Route>
 
         <Route path="discover">
-          <Route index element={<DiscoverPage />} loader={DiscoverPage.loader} />
+          <Route index element={<DiscoverPage />} />
         </Route>
 
         <Route path="login">

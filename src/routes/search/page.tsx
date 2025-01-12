@@ -1,30 +1,14 @@
-import BookList from '@/components/book-list/book-list';
+import BookListByQuery from '@/components/book-list/book-list-by-query';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
-import BookPagination from '@/components/book-list/book-pagination';
-import { getBooksByQuery } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
-import { PaginatedBook } from '@/types/book';
 import { Suspense } from 'react';
-import { Await, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
-
-type LoaderFunctionReturnType = {
-  paginatedBook: Promise<PaginatedBook | null>;
-  query: string;
-  page: number;
-};
-
-const loader = ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
-  const query = url.searchParams.get('q') ?? undefined;
-
-  const page = Number(url.searchParams.get('page') ?? '1');
-  const paginatedBook = getBooksByQuery(query, page - 1);
-
-  return { paginatedBook, query, page };
-};
+import { ErrorBoundary } from 'react-error-boundary';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Page() {
-  const { paginatedBook, query } = useLoaderData() as LoaderFunctionReturnType;
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('q') || '';
+  const page = Number(searchParams.get('page') || '1');
 
   return (
     <>
@@ -33,21 +17,11 @@ export default function Page() {
         <span className="text-sm text-muted-foreground">の検索結果</span>
       </p>
 
-      <div className="flex flex-col gap-y-4 pb-4">
+      <ErrorBoundary fallback={<ErrorElement />}>
         <Suspense fallback={<BookListSkeleton />}>
-          <Await resolve={paginatedBook} errorElement={<ErrorElement />}>
-            {(paginatedBook: PaginatedBook) => (
-              <>
-                <BookPagination totalPages={paginatedBook.totalPages} />
-                <BookList books={paginatedBook.books} />
-                <BookPagination totalPages={paginatedBook.totalPages} />
-              </>
-            )}
-          </Await>
+          <BookListByQuery query={query} page={page} />
         </Suspense>
-      </div>
+      </ErrorBoundary>
     </>
   );
 }
-
-Page.loader = loader;

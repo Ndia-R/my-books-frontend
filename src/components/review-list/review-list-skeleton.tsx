@@ -4,6 +4,9 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function ReviewListSkeleton() {
   return (
     <>
+      <div className="flex items-center justify-end px-3 sm:px-6">
+        <Skeleton className="h-10 w-32 rounded-full bg-muted-foreground/5" />
+      </div>
       <ul className="flex flex-col gap-y-6 p-3 sm:p-6">
         {[...Array<number>(2)].map((_, index) => (
           <li key={index}>

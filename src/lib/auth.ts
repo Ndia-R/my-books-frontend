@@ -68,7 +68,10 @@ export const logout = async () => {
   return true;
 };
 
-export const fetchWithAuth = async (url: string, options?: RequestInit) => {
+export const fetchWithAuth = async <T>(
+  url: string,
+  options?: RequestInit
+): Promise<T | null> => {
   const token = getAccessToken();
   if (!token) {
     throw new Error(`アクセストークンがありません。URL: ${url}`);

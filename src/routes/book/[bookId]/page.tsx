@@ -2,47 +2,28 @@ import BookDetail from '@/components/book-detail/book-detail';
 import BookDetailSkeleton from '@/components/book-detail/book-detail-skeleton';
 import ReviewList from '@/components/review-list/review-list';
 import ReviewListSkeleton from '@/components/review-list/review-list-skeleton';
-import { getBookById, getGenres, getReviewsByBookId } from '@/lib/data';
 import ErrorElement from '@/routes/error-element';
-import { Book, Genre } from '@/types/book';
-import { Review } from '@/types/review';
 import { Suspense } from 'react';
-import { Await, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
-
-type LoaderFunctionReturnType = {
-  genres: Genre[];
-  book: Promise<Book | null>;
-  reviews: Promise<Review[]>;
-};
-
-const loader = async ({ params }: LoaderFunctionArgs) => {
-  const genres = await getGenres();
-  const book = getBookById(params.bookId);
-  const reviews = getReviewsByBookId(params.bookId);
-
-  return { book, genres, reviews };
-};
+import { ErrorBoundary } from 'react-error-boundary';
+import { useParams } from 'react-router-dom';
 
 export default function Page() {
-  const { book, genres, reviews } = useLoaderData() as LoaderFunctionReturnType;
+  const params = useParams();
+  const bookId = params.bookId || '';
 
   return (
     <>
-      <Suspense fallback={<BookDetailSkeleton />}>
-        <Await resolve={book} errorElement={<ErrorElement />}>
-          {(book) => <BookDetail book={book} genres={genres} />}
-        </Await>
-      </Suspense>
-
-      <div className="mx-auto w-full lg:w-3/4">
-        <Suspense fallback={<ReviewListSkeleton />}>
-          <Await resolve={reviews} errorElement={<ErrorElement />}>
-            {(reviews) => <ReviewList reviews={reviews} />}
-          </Await>
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={<BookDetailSkeleton />}>
+          <BookDetail bookId={bookId} />
         </Suspense>
-      </div>
+      </ErrorBoundary>
+
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={<ReviewListSkeleton />}>
+          <ReviewList bookId={bookId} />
+        </Suspense>
+      </ErrorBoundary>
     </>
   );
 }
-
-Page.loader = loader;

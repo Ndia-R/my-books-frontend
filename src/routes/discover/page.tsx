@@ -1,51 +1,30 @@
-import BookList from '@/components/book-list/book-list';
+import BookListByGenreId from '@/components/book-list/book-list-by-genre-id';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
-import BookPagination from '@/components/book-list/book-pagination';
 import GenreSelector from '@/components/genre-list/genre-selector';
-import { getBooksByGenreId, getGenres } from '@/lib/data';
+import GenreSelectorSkeleton from '@/components/genre-list/genre-selector-skeleton';
 import ErrorElement from '@/routes/error-element';
-import { Genre, PaginatedBook } from '@/types/book';
 import { Suspense } from 'react';
-import { Await, LoaderFunctionArgs, useLoaderData } from 'react-router-dom';
-
-type LoaderFunctionReturnType = {
-  paginatedBook: Promise<PaginatedBook | null>;
-  genres: Genre[];
-};
-
-const loader = async ({ request }: LoaderFunctionArgs) => {
-  const url = new URL(request.url);
-  const genreIdsQuery = url.searchParams.get('genreId') ?? '';
-  const page = Number(url.searchParams.get('page') ?? '1');
-
-  const paginatedBook = getBooksByGenreId(genreIdsQuery, page - 1);
-  const genres = await getGenres();
-
-  return { paginatedBook, genres };
-};
+import { ErrorBoundary } from 'react-error-boundary';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Page() {
-  const { paginatedBook, genres } = useLoaderData() as LoaderFunctionReturnType;
+  const [searchParams] = useSearchParams();
+  const genreId = searchParams.get('genreId') || '';
+  const page = Number(searchParams.get('page') || '1');
 
   return (
     <>
-      <GenreSelector genres={genres} />
-
-      <div className="flex flex-col gap-y-4 pb-4">
-        <Suspense fallback={<BookListSkeleton />}>
-          <Await resolve={paginatedBook} errorElement={<ErrorElement />}>
-            {(paginatedBook: PaginatedBook) => (
-              <>
-                <BookPagination totalPages={paginatedBook.totalPages} />
-                <BookList books={paginatedBook.books} />
-                <BookPagination totalPages={paginatedBook.totalPages} />
-              </>
-            )}
-          </Await>
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={<GenreSelectorSkeleton />}>
+          <GenreSelector />
         </Suspense>
-      </div>
+      </ErrorBoundary>
+
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={<BookListSkeleton />}>
+          <BookListByGenreId genreId={genreId} page={page} />
+        </Suspense>
+      </ErrorBoundary>
     </>
   );
 }
-
-Page.loader = loader;
