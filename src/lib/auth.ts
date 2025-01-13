@@ -1,6 +1,6 @@
 import { BOOKS_API_ENDPOINT } from '@/constants/constants';
 import {
-  AccessTokenResponse,
+  AccessToken,
   CustomError,
   LoginRequest,
   LoginResponse,
@@ -129,8 +129,8 @@ export const refreshAccessToken = async () => {
       credentials: 'include',
     };
     const res = await fetch(`${BOOKS_API_ENDPOINT}/refresh-token`, options);
-    const accessTokenResponse = (await res.json()) as AccessTokenResponse;
-    return accessTokenResponse.accessToken;
+    const AccessToken = (await res.json()) as AccessToken;
+    return AccessToken.accessToken;
   } catch (e) {
     console.error(e);
     return null;

@@ -15,7 +15,7 @@ export interface SignupRequest {
   password: string;
 }
 
-export interface AccessTokenResponse {
+export interface AccessToken {
   accessToken: string;
 }
 

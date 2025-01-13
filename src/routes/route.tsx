@@ -1,6 +1,6 @@
 import BookIdPage from '@/routes/book/[bookId]/page';
 import DiscoverPage from '@/routes/discover/page';
-import FavoritesPage from '@/routes/favorite/page';
+import FavoritesPage from '@/routes/favorites/page';
 import RootLayout from '@/routes/layout';
 import LoginPage from '@/routes/login/page';
 import MyListsPage from '@/routes/my-lists/page';

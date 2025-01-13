@@ -10,7 +10,7 @@ export interface Review {
   book: Book;
 }
 
-export interface CreateReviewRequest {
+export interface CreateReview {
   comment: string;
   rating: number;
   bookId: string;

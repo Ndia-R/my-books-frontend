@@ -1,12 +1,8 @@
 import { fetchWithAuth } from '@/lib/auth';
-import { CreateReviewRequest } from '@/types/review';
-import {
-  ChangeEmailRequest,
-  ChangePasswordRequest,
-  UpdateUserRequest,
-} from '@/types/user';
+import { CreateReview } from '@/types/review';
+import { ChangeEmail, ChangePassword, UpdateCurrentUser } from '@/types/user';
 
-export const updateCurrentUser = async (requestBody: UpdateUserRequest) => {
+export const updateCurrentUser = async (requestBody: UpdateCurrentUser) => {
   try {
     const url = `/me`;
     const options: RequestInit = {
@@ -22,7 +18,7 @@ export const updateCurrentUser = async (requestBody: UpdateUserRequest) => {
   }
 };
 
-export const changePassword = async (requestBody: ChangePasswordRequest) => {
+export const changePassword = async (requestBody: ChangePassword) => {
   try {
     const url = `/me/password`;
     const options: RequestInit = {
@@ -38,7 +34,7 @@ export const changePassword = async (requestBody: ChangePasswordRequest) => {
   }
 };
 
-export const changeEmail = async (requestBody: ChangeEmailRequest) => {
+export const changeEmail = async (requestBody: ChangeEmail) => {
   try {
     const url = `/me/email`;
     const options: RequestInit = {
@@ -54,7 +50,7 @@ export const changeEmail = async (requestBody: ChangeEmailRequest) => {
   }
 };
 
-export const createReview = async (reqestBody: CreateReviewRequest) => {
+export const createReview = async (reqestBody: CreateReview) => {
   try {
     const url = `/reviews`;
     const options: RequestInit = {

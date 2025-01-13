@@ -6,28 +6,39 @@ export interface User {
   avatarUrl: string;
 }
 
+export interface ProfileCounts {
+  favoriteCount: number;
+  myListCount: number;
+  reviewCount: number;
+}
+
+export interface UserDetails {
+  user: User;
+  profieleCounts: ProfileCounts;
+}
+
 export interface SimpleUserInfo {
   id: number;
   name: string;
   avatarUrl: string;
 }
 
-export interface UpdateUserRequest {
+export interface UpdateCurrentUser {
   name: string;
   avatarUrl: string;
 }
 
-export interface ChangePasswordRequest {
+export interface ChangePassword {
   currentPassword: string;
   newPassword: string;
   confirmNewPassword: string;
 }
 
-export interface ChangeEmailRequest {
+export interface ChangeEmail {
   email: string;
   password: string;
 }
 
-export interface CheckNameExistsResponse {
+export interface CheckNameExists {
   exists: boolean;
 }
