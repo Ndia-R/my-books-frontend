@@ -1,5 +1,5 @@
 import { cn } from '@/lib/util';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 type SheetSideType = 'top' | 'right' | 'bottom' | 'left';
@@ -159,10 +159,39 @@ const SheetContent = ({
   if (!context) throw new Error('SheetContent must be used within Sheet');
 
   const { isOpen, closeSheet } = context;
-
   const [isVisible, setIsVisible] = useState(false);
+  const sheetRef = useRef<HTMLDivElement>(null);
 
   const handleWheel = useCallback((e: WheelEvent) => {
+    const isInsideDialog =
+      e.target instanceof Node && sheetRef.current?.contains(e.target);
+
+    if (!isInsideDialog) {
+      e.preventDefault();
+      return;
+    }
+
+    let target = e.target as HTMLElement;
+    while (target && target !== sheetRef.current) {
+      const { overflowY } = window.getComputedStyle(target);
+      const isScrollable = overflowY === 'auto' || overflowY === 'scroll';
+      const hasScrollableContent = target.scrollHeight > target.clientHeight;
+
+      if (isScrollable && hasScrollableContent) {
+        const scrollTop = target.scrollTop;
+        const scrollHeight = target.scrollHeight;
+        const clientHeight = target.clientHeight;
+
+        if (scrollTop === 0 && e.deltaY < 0) {
+          e.preventDefault();
+        } else if (scrollTop + clientHeight >= scrollHeight && e.deltaY > 0) {
+          e.preventDefault();
+        }
+        return;
+      }
+      target = target.parentElement as HTMLElement;
+    }
+
     e.preventDefault();
   }, []);
 
@@ -224,6 +253,7 @@ const SheetContent = ({
         <>
           <SheetOverlay onClick={handlePointerDownOutside} />
           <div
+            ref={sheetRef}
             className={cn(
               'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
               'fill-mode-both',

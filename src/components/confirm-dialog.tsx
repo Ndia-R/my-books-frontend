@@ -75,16 +75,14 @@ const ConfirmDialog = () => {
 
   // アニメーションフラグ（閉じれないことを伝えるためにぶるっとする）
   const [isPersistentAnimation, setIsPersistentAnimation] = useState(false);
-  const handleTransitionEnd = (e: React.TransitionEvent<HTMLDivElement>) => {
-    if (e.propertyName === 'transform') {
-      setIsPersistentAnimation(false);
-    }
-  };
 
   // ダイアログを閉じる時のイベント
   const handleCloseDialog = () => {
     if (options.persistent) {
       setIsPersistentAnimation(true);
+      setTimeout(() => {
+        setIsPersistentAnimation(false);
+      }, 50);
       return;
     }
     handleClickCancel();
@@ -136,7 +134,6 @@ const ConfirmDialog = () => {
             'w-[360px] sm:w-[400px] transition-transform ease-in-out [transition-duration:25ms]',
             isPersistentAnimation && 'scale-[1.02] transform'
           )}
-          onTransitionEnd={handleTransitionEnd}
           onEscapeKeyDown={handleCloseDialog}
           onPointerDownOutside={handleCloseDialog}
           onAnimationEnd={handleAnimationEnd}

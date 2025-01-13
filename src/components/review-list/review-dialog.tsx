@@ -8,13 +8,13 @@ import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { createReview } from '@/lib/action';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 type Props = {
   bookId: string;
+  refresh: () => void;
 };
 
-export default function ReviewDialog({ bookId }: Props) {
+export default function ReviewDialog({ bookId, refresh }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -22,7 +22,6 @@ export default function ReviewDialog({ bookId }: Props) {
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
   const { user } = useUser();
-  const navigate = useNavigate();
 
   useEffect(() => {
     if (isOpen) {
@@ -43,6 +42,7 @@ export default function ReviewDialog({ bookId }: Props) {
         icon: '?',
         title: 'このまま投稿しますか？',
         message: '星の数が「0」のままです。',
+        actionLabel: '投稿する',
       });
       if (isCancel) return;
     }
@@ -58,8 +58,7 @@ export default function ReviewDialog({ bookId }: Props) {
     toast({ description: 'レビューを投稿しました' });
     setIsOpen(false);
 
-    // 現在の画面にリダイレクトしてloaderを再実行してデータを更新
-    navigate(0);
+    refresh();
   };
 
   const handleCloseDialog = async () => {
@@ -68,6 +67,7 @@ export default function ReviewDialog({ bookId }: Props) {
         icon: '?',
         title: '本当に閉じますか？',
         message: 'コメントはまだ投稿していません。',
+        actionLabel: '閉じる',
         persistent: true,
       });
       if (isCancel) return;
@@ -114,7 +114,11 @@ export default function ReviewDialog({ bookId }: Props) {
             </div>
           </div>
 
-          <Textarea ref={ref} onChange={(e) => setComment(e.currentTarget.value)} />
+          <Textarea
+            ref={ref}
+            spellCheck={false}
+            onChange={(e) => setComment(e.currentTarget.value)}
+          />
 
           <DialogFooter>
             <Button className="rounded-full" variant="ghost" onClick={handleCloseDialog}>

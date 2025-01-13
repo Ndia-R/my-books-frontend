@@ -15,7 +15,7 @@ type Props = {
 export default function ReviewList({ bookId }: Props) {
   const fetcher = useCallback(() => getReviewsByBookId(bookId), [bookId]);
 
-  const { data: reviews } = useFetchData({ fetcher });
+  const { data: reviews, refresh } = useFetchData({ fetcher });
 
   return (
     <Await resolve={reviews}>
@@ -25,7 +25,7 @@ export default function ReviewList({ bookId }: Props) {
           <div className="mx-auto w-full lg:w-3/4">
             <div className="flex items-center justify-end gap-x-4 px-3 sm:px-6">
               <p>レビュー {reviews.length} 件</p>
-              <ReviewDialog bookId={bookId} />
+              <ReviewDialog bookId={bookId} refresh={refresh} />
             </div>
 
             <ul className="flex flex-col p-3 sm:p-6">

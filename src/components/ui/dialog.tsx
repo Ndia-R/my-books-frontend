@@ -1,5 +1,5 @@
 import { cn } from '@/lib/util';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom';
 
 interface DialogContextType {
@@ -145,10 +145,39 @@ const DialogContent = ({
   if (!context) throw new Error('DialogContent must be used within Dialog');
 
   const { isOpen, closeDialog } = context;
-
   const [isVisible, setIsVisible] = useState(false);
+  const dialogRef = useRef<HTMLDivElement>(null);
 
   const handleWheel = useCallback((e: WheelEvent) => {
+    const isInsideDialog =
+      e.target instanceof Node && dialogRef.current?.contains(e.target);
+
+    if (!isInsideDialog) {
+      e.preventDefault();
+      return;
+    }
+
+    let target = e.target as HTMLElement;
+    while (target && target !== dialogRef.current) {
+      const { overflowY } = window.getComputedStyle(target);
+      const isScrollable = overflowY === 'auto' || overflowY === 'scroll';
+      const hasScrollableContent = target.scrollHeight > target.clientHeight;
+
+      if (isScrollable && hasScrollableContent) {
+        const scrollTop = target.scrollTop;
+        const scrollHeight = target.scrollHeight;
+        const clientHeight = target.clientHeight;
+
+        if (scrollTop === 0 && e.deltaY < 0) {
+          e.preventDefault();
+        } else if (scrollTop + clientHeight >= scrollHeight && e.deltaY > 0) {
+          e.preventDefault();
+        }
+        return;
+      }
+      target = target.parentElement as HTMLElement;
+    }
+
     e.preventDefault();
   }, []);
 
@@ -210,6 +239,7 @@ const DialogContent = ({
         <>
           <DialogOverlay onClick={handlePointerDownOutside} />
           <div
+            ref={dialogRef}
             className={cn(
               'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] data-[state=open]:slide-in-from-left-1/2 data-[state=open]:slide-in-from-top-[48%] sm:rounded-lg',
               'fill-mode-both',
