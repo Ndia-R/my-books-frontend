@@ -1,39 +1,30 @@
 import { getCurrentUser } from '@/lib/data';
-import { ProfileCounts, User, UserDetails } from '@/types/user';
+import { User } from '@/types';
 import { createContext, useEffect, useState } from 'react';
 
 type UserContextType = {
-  user: User | undefined;
-  profileCounts: ProfileCounts | undefined;
-  setUser: (user: UserDetails | null) => void;
+  user: User | null;
+  setUser: (user: User | null) => void;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
+  const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
     const initializeUser = async () => {
-      if (!userDetails) {
+      if (!user) {
         const currentUser = await getCurrentUser();
-        setUserDetails(currentUser);
+        setUser(currentUser);
       }
     };
 
     initializeUser();
-  }, []);
+  }, [user]);
 
   return (
-    <UserContext.Provider
-      value={{
-        user: userDetails?.user,
-        profileCounts: userDetails?.profieleCounts,
-        setUser: setUserDetails,
-      }}
-    >
-      {children}
-    </UserContext.Provider>
+    <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>
   );
 };
 

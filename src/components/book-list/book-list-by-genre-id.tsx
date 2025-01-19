@@ -3,8 +3,7 @@ import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import BookPagination from '@/components/book-list/book-pagination';
 import { useFetchData } from '@/hooks/use-fetch-data';
 import { getBooksByGenreId } from '@/lib/data';
-import { PaginatedBook } from '@/types/book';
-import { useCallback } from 'react';
+import { PaginatedBook } from '@/types';
 import { Await } from 'react-router-dom';
 
 type Props = {
@@ -13,12 +12,10 @@ type Props = {
 };
 
 export default function BookListByGenreId({ genreId, page }: Props) {
-  const fetcher = useCallback(
-    () => getBooksByGenreId(genreId, page - 1),
-    [genreId, page]
-  );
-
-  const { data: paginatedBook } = useFetchData({ fetcher });
+  const { data: paginatedBook } = useFetchData({
+    queryKey: [genreId, page],
+    queryFn: () => getBooksByGenreId(genreId, page - 1),
+  });
 
   return (
     <Await resolve={paginatedBook}>

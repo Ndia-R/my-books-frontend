@@ -1,6 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
-import { FETCH_BOOKS_MAX_RESULTS } from '@/lib/data';
+import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
 
 type Props = {
   paginationOff?: boolean;

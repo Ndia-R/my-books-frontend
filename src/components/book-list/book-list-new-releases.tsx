@@ -2,14 +2,14 @@ import BookList from '@/components/book-list/book-list';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import { useFetchData } from '@/hooks/use-fetch-data';
 import { getNewReleases } from '@/lib/data';
-import { Book } from '@/types/book';
-import { useCallback } from 'react';
+import { Book } from '@/types';
 import { Await } from 'react-router-dom';
 
 export default function BookListNewReleases() {
-  const fetcher = useCallback(() => getNewReleases(), []);
-
-  const { data: books } = useFetchData({ fetcher });
+  const { data: books } = useFetchData({
+    queryKey: [],
+    queryFn: () => getNewReleases(),
+  });
 
   return (
     <Await resolve={books}>

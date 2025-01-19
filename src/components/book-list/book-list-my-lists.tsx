@@ -2,19 +2,18 @@ import BookList from '@/components/book-list/book-list';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import BookPagination from '@/components/book-list/book-pagination';
 import { useFetchData } from '@/hooks/use-fetch-data';
-import { getBooksByQuery } from '@/lib/data';
+import { getMyLists } from '@/lib/data';
 import { PaginatedBook } from '@/types';
 import { Await } from 'react-router-dom';
 
 type Props = {
-  query: string;
   page: number;
 };
 
-export default function BookListByQuery({ query, page }: Props) {
+export default function BookListMyLists({ page }: Props) {
   const { data: paginatedBook } = useFetchData({
-    queryKey: [query, page],
-    queryFn: () => getBooksByQuery(query, page - 1),
+    queryKey: [page],
+    queryFn: () => getMyLists(page - 1),
   });
 
   return (

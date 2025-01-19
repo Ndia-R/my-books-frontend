@@ -5,7 +5,7 @@ import {
   LoginRequest,
   LoginResponse,
   SignupRequest,
-} from '@/types/auth';
+} from '@/types';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const getAccessToken = () => localStorage.getItem(ACCESS_TOKEN_KEY);

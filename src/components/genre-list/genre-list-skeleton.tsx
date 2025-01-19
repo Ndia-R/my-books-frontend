@@ -6,7 +6,7 @@ export default function GenreListSkeleton() {
       <ul className="flex flex-wrap gap-x-2">
         {[...Array<number>(2)].map((_, index) => (
           <li key={index}>
-            <Skeleton className="h-10 w-24 rounded-full bg-muted-foreground/5" />
+            <Skeleton className="h-9 w-24 rounded-full bg-muted-foreground/5" />
           </li>
         ))}
       </ul>

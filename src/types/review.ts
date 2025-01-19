@@ -1,18 +1,27 @@
-import { Book } from '@/types/book';
-import { SimpleUserInfo } from '@/types/user';
+import { SimpleUserInfo } from '@/types';
+
+export interface ReviewId {
+  userId: number;
+  bookId: string;
+}
 
 export interface Review {
-  id: number;
+  reviewId: ReviewId;
   comment: string;
   rating: number;
   updatedAt: string;
   user: SimpleUserInfo;
-  book: Book;
 }
 
-export interface CreateReview {
+export interface ReviewRequest {
+  bookId: string;
   comment: string;
   rating: number;
-  bookId: string;
-  userId: number;
+}
+
+export interface PaginatedReview {
+  page: number;
+  totalPages: number;
+  totalItems: number;
+  reviews: Review[];
 }

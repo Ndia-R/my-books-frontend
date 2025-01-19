@@ -1,10 +1,13 @@
-import CountUpNumber from '@/components/count-up-number';
 import Logo from '@/components/layout/logo';
+import ProfileCounts from '@/components/profile-counts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { useUser } from '@/hooks/use-user';
+import ErrorElement from '@/routes/error-element';
 import { KeyRoundIcon, MailIcon, UserRoundIcon } from 'lucide-react';
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Link } from 'react-router-dom';
 
 export default function Page() {
@@ -16,6 +19,7 @@ export default function Page() {
     <div className="my-3 flex flex-col items-center justify-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
       <p className="font-semibold">プロフィール</p>
+
       <Card className="w-80 overflow-hidden rounded-3xl sm:w-96">
         <CardHeader className="h-80 w-full bg-gradient-to-tr from-secondary to-primary">
           <div className="flex flex-col items-center pt-8">
@@ -32,33 +36,14 @@ export default function Page() {
             <p className="text-xl font-semibold">{user.name}</p>
             <p className="text-sm">{user.email}</p>
           </div>
-          <div className="flex justify-between pt-8">
-            <div className="animate-fadeInUp-4 delay-0">
-              <div className="w-20 text-center">
-                <p className="text-xl font-bold">
-                  <CountUpNumber end={23} delay={300} />
-                </p>
-                <p className="text-sm">お気に入り</p>
-              </div>
-            </div>
-            <div className="animate-fadeInUp-4 delay-100">
-              <div className="w-20 text-center">
-                <p className="text-xl font-bold">
-                  <CountUpNumber end={53} delay={400} />
-                </p>
-                <p className="text-sm">マイリスト</p>
-              </div>
-            </div>
-            <div className="animate-fadeInUp-4 delay-200">
-              <div className="w-20 text-center">
-                <p className="text-xl font-bold">
-                  <CountUpNumber end={243} delay={500} />
-                </p>
-                <p className="text-sm">レビュー</p>
-              </div>
-            </div>
-          </div>
+
+          <ErrorBoundary fallback={<ErrorElement />}>
+            <Suspense fallback={null}>
+              <ProfileCounts />
+            </Suspense>
+          </ErrorBoundary>
         </CardHeader>
+
         <CardContent className="relative p-6">
           <ul>
             <li className="flex items-center p-2">

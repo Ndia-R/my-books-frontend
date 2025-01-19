@@ -6,9 +6,9 @@ import { Separator } from '@/components/ui/separator';
 import { useFetchData } from '@/hooks/use-fetch-data';
 import { getGenres } from '@/lib/data';
 import { cn } from '@/lib/util';
-import { Genre } from '@/types/book';
+import { Genre } from '@/types';
 import { CheckIcon } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Await, useLocation, useNavigate } from 'react-router-dom';
 
 type ConditionType = {
@@ -36,9 +36,10 @@ const parseGenreIdQuery = (genreIdQuery: string) => {
 };
 
 export default function GenreSelector() {
-  const fetcher = useCallback(() => getGenres(), []);
-
-  const { data: genres } = useFetchData({ fetcher });
+  const { data: genres } = useFetchData({
+    queryKey: [],
+    queryFn: () => getGenres(),
+  });
 
   const location = useLocation();
   const navigate = useNavigate();

@@ -4,7 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-user';
 import { formatDateJP } from '@/lib/util';
-import { Book } from '@/types/book';
+import { Book } from '@/types';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -39,7 +39,7 @@ export default function BookCard({ book }: Props) {
 
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <FavoriteButton size="sm" book={book} />
+                    <FavoriteButton size="sm" bookId={book.id} />
                   </TooltipTrigger>
                   <TooltipContent>お気に入りに追加</TooltipContent>
                 </Tooltip>

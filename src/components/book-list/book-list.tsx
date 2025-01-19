@@ -1,6 +1,6 @@
 import BookCard from '@/components/book-list/book-card';
 import BookListEmpty from '@/components/book-list/book-list-empty';
-import { Book } from '@/types/book';
+import { Book } from '@/types';
 
 type Props = {
   books: Book[];

@@ -6,12 +6,17 @@ export default function BookDetailSkeleton() {
       <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">
         <div className="flex flex-col items-center justify-center lg:w-1/2">
           <Skeleton className="h-[360px] w-[280px] rounded bg-muted-foreground/5 object-cover sm:h-[480px] sm:w-[360px]" />
-          <div className="my-4 flex items-center gap-x-2">
-            <Skeleton className="h-11 w-32 rounded-full bg-muted-foreground/5" />
-            <Skeleton className="size-8 rounded-full bg-muted-foreground/5" />
+          <div className="mt-2 flex flex-col items-center sm:w-[440px]">
+            <div className="flex items-center gap-x-2">
+              <Skeleton className="my-1 h-8 w-48 rounded-full bg-muted-foreground/5" />
+            </div>
+            <div className="flex justify-center gap-x-2">
+              <Skeleton className="size-8 rounded-full bg-muted-foreground/5" />
+              <Skeleton className="size-8 rounded-full bg-muted-foreground/5" />
+            </div>
           </div>
-          <div className="flex items-center gap-x-2">
-            <Skeleton className="my-2 h-8 w-48 rounded-full bg-muted-foreground/5" />
+          <div className="my-4 flex items-center">
+            <Skeleton className="h-11 w-48 rounded-full bg-muted-foreground/5" />
           </div>
         </div>
 
@@ -28,7 +33,7 @@ export default function BookDetailSkeleton() {
             <Skeleton className="h-9 w-24 rounded-full bg-muted-foreground/5" />
           </div>
 
-          <div className="my-6">
+          <div className="my-6 md:my-10">
             <Skeleton className="my-2 h-6 w-full rounded-full bg-muted-foreground/5" />
             <Skeleton className="my-2 h-6 w-full rounded-full bg-muted-foreground/5" />
             <Skeleton className="my-2 h-6 w-full rounded-full bg-muted-foreground/5" />

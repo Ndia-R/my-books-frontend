@@ -1,6 +1,5 @@
 import { fetchWithAuth } from '@/lib/auth';
-import { CreateReview } from '@/types/review';
-import { ChangeEmail, ChangePassword, UpdateCurrentUser } from '@/types/user';
+import { ChangeEmail, ChangePassword, UpdateCurrentUser } from '@/types';
 
 export const updateCurrentUser = async (requestBody: UpdateCurrentUser) => {
   try {
@@ -41,22 +40,6 @@ export const changeEmail = async (requestBody: ChangeEmail) => {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
-    };
-    await fetchWithAuth(url, options);
-    return true;
-  } catch (e) {
-    console.error(e);
-    return false;
-  }
-};
-
-export const createReview = async (reqestBody: CreateReview) => {
-  try {
-    const url = `/reviews`;
-    const options: RequestInit = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(reqestBody),
     };
     await fetchWithAuth(url, options);
     return true;

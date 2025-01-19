@@ -3,8 +3,7 @@ import { Button } from '@/components/ui/button';
 import { useFetchData } from '@/hooks/use-fetch-data';
 import { getGenres } from '@/lib/data';
 import { cn } from '@/lib/util';
-import { Genre } from '@/types/book';
-import { useCallback } from 'react';
+import { Genre } from '@/types';
 import { Await, Link } from 'react-router-dom';
 
 type Props = {
@@ -18,9 +17,10 @@ export default function GenreList({
   filterList = [],
   variant = 'default',
 }: Props) {
-  const fetcher = useCallback(() => getGenres(), []);
-
-  const { data: genres } = useFetchData({ fetcher });
+  const { data: genres } = useFetchData({
+    queryKey: [],
+    queryFn: () => getGenres(),
+  });
 
   return (
     <Await resolve={genres}>

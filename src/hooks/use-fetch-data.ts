@@ -1,22 +1,22 @@
-import { useEffect, useState, useTransition } from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+
+import { useEffect, useState } from 'react';
 
 type Props = {
-  fetcher: (prop?: unknown) => Promise<unknown>;
+  queryKey: unknown[];
+  queryFn: () => Promise<unknown>;
 };
 
-export const useFetchData = ({ fetcher }: Props) => {
+export const useFetchData = ({ queryKey, queryFn }: Props) => {
   const [data, setData] = useState<Promise<unknown>>();
-  const [, startTransition] = useTransition();
 
   useEffect(() => {
-    setData(fetcher());
-  }, [fetcher]);
+    setData(queryFn());
+  }, [...queryKey]);
 
-  const refresh = () => {
-    startTransition(() => {
-      setData(fetcher());
-    });
+  const refetch = () => {
+    setData(queryFn());
   };
 
-  return { data, refresh };
+  return { data, refetch };
 };

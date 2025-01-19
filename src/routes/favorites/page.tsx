@@ -1,4 +1,4 @@
-import BookListByQuery from '@/components/book-list/book-list-by-query';
+import BookListFavorites from '@/components/book-list/book-list-favorites';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
@@ -11,7 +11,7 @@ export default function Page() {
 
       <ErrorBoundary fallback={<ErrorElement />}>
         <Suspense fallback={<BookListSkeleton />}>
-          <BookListByQuery query={'ライオン'} page={1} />
+          <BookListFavorites page={1} />
         </Suspense>
       </ErrorBoundary>
     </>
