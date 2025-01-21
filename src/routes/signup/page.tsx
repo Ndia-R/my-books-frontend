@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { signup } from '@/lib/auth';
-import { checkNameExists, getCurrentUser } from '@/lib/data';
+import { checkUsernameExists, getCurrentUser } from '@/lib/data';
 import { cn } from '@/lib/util';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -72,7 +72,7 @@ export default function Page() {
 
     if (!nameRef.current?.value) return;
 
-    if (await checkNameExists(nameRef.current.value)) {
+    if (await checkUsernameExists(nameRef.current.value)) {
       setNameErrorMessage('そのユーザー名はすでに使われています。');
     }
   };

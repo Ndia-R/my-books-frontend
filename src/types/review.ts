@@ -9,6 +9,7 @@ export interface Review {
   reviewId: ReviewId;
   comment: string;
   rating: number;
+  createdAt: string;
   updatedAt: string;
   user: SimpleUserInfo;
 }
@@ -24,4 +25,8 @@ export interface PaginatedReview {
   totalPages: number;
   totalItems: number;
   reviews: Review[];
+}
+
+export interface CheckMyReviewExists {
+  exists: boolean;
 }

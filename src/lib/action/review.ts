@@ -1,4 +1,4 @@
-import { fetchWithAuth } from '@/lib/auth';
+import { fetchActionWithAuth } from '@/lib/auth';
 import { ReviewRequest } from '@/types';
 
 export const createReview = async (reqestBody: ReviewRequest) => {
@@ -9,7 +9,7 @@ export const createReview = async (reqestBody: ReviewRequest) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(reqestBody),
     };
-    await fetchWithAuth(url, options);
+    await fetchActionWithAuth(url, options);
     return true;
   } catch (e) {
     console.error(e);
@@ -25,7 +25,7 @@ export const updateReview = async (reqestBody: ReviewRequest) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(reqestBody),
     };
-    await fetchWithAuth(url, options);
+    await fetchActionWithAuth(url, options);
     return true;
   } catch (e) {
     console.error(e);
@@ -37,7 +37,7 @@ export const deleteReview = async (bookId: string) => {
   try {
     const url = `/reviews/${bookId}`;
     const options: RequestInit = { method: 'DELETE' };
-    await fetchWithAuth(url, options);
+    await fetchActionWithAuth(url, options);
     return true;
   } catch (e) {
     console.error(e);

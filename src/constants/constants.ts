@@ -20,4 +20,4 @@ export const BOOKS_IMAGE_URL = 'https://localhost/images';
 export const AVATER_IMAGE_URL = 'https://localhost/images/avatars';
 
 export const FETCH_BOOKS_MAX_RESULTS = 20;
-export const FETCH_REVIEWS_MAX_RESULTS = 3;
+export const FETCH_REVIEWS_MAX_RESULTS = 5;

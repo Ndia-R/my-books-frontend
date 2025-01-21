@@ -3,6 +3,7 @@ import ReviewUpdateDialog from '@/components/review-list/review-update-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
+import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { deleteReview } from '@/lib/action';
 import { formatDateJP, formatTime } from '@/lib/util';
@@ -18,6 +19,7 @@ type Props = {
 
 export default function ReviewItem({ review, bookId, refetch }: Props) {
   const { user } = useUser();
+  const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
   const [isPending, startTransition] = useTransition();
 
@@ -26,7 +28,7 @@ export default function ReviewItem({ review, bookId, refetch }: Props) {
       icon: '!',
       title: '削除しますか？',
       message: '削除すると元に戻りません。',
-      actionLabel: '削除',
+      actionLabel: '削除する',
     });
     if (isCancel) return;
 
@@ -34,13 +36,14 @@ export default function ReviewItem({ review, bookId, refetch }: Props) {
 
     startTransition(() => {
       refetch();
+      toast({ description: 'レビューを削除しました' });
     });
   };
 
   return (
     <div className="p-4">
       <div className="flex flex-col items-center justify-between sm:flex-row">
-        <div className="flex items-center gap-x-4">
+        <div className="flex w-full items-center gap-x-4">
           <Avatar className="size-16">
             <AvatarImage
               className="bg-primary/50"
@@ -54,15 +57,15 @@ export default function ReviewItem({ review, bookId, refetch }: Props) {
           <div>
             <p className="-mb-1 text-lg font-semibold">{review.user.name}</p>
             <div className="flex items-center">
-              <p className="text-sm leading-8 tracking-wide text-muted-foreground">
+              <p className="text-sm leading-8 tracking-wide text-muted-foreground whitespace-nowrap">
                 {formatDateJP(review.updatedAt)} {formatTime(review.updatedAt)}
               </p>
               <div className="ml-2 flex w-16">
                 {user?.id === review.user.id && (
                   <>
                     <ReviewUpdateDialog
-                      review={review}
                       bookId={bookId}
+                      review={review}
                       refetch={refetch}
                     />
                     <Button

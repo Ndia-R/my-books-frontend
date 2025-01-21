@@ -12,10 +12,11 @@ import React, { useEffect, useRef, useState, useTransition } from 'react';
 
 type Props = {
   bookId: string;
+  reviewExists: boolean;
   refetch: () => void;
 };
 
-export default function ReviewCreateDialog({ bookId, refetch }: Props) {
+export default function ReviewCreateDialog({ bookId, reviewExists, refetch }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -23,9 +24,9 @@ export default function ReviewCreateDialog({ bookId, refetch }: Props) {
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
   const { toast } = useToast();
-  const { confirmDialog } = useConfirmDialog();
   const { user } = useUser();
   const [isPending, startTransition] = useTransition();
+  const { confirmDialog } = useConfirmDialog();
 
   useEffect(() => {
     if (isOpen) {
@@ -63,11 +64,11 @@ export default function ReviewCreateDialog({ bookId, refetch }: Props) {
       return;
     }
 
-    toast({ description: 'レビューを投稿しました' });
     setIsOpen(false);
 
     startTransition(() => {
       refetch();
+      toast({ description: 'レビューを投稿しました' });
     });
   };
 
@@ -92,10 +93,16 @@ export default function ReviewCreateDialog({ bookId, refetch }: Props) {
           <Button
             className="w-44 rounded-full bg-transparent"
             variant="outline"
-            disabled={isPending}
+            disabled={reviewExists}
             onClick={() => user && setIsOpen(true)}
           >
-            {isPending ? <Loader2Icon className="animate-spin" /> : 'レビューを書く'}
+            {isPending ? (
+              <Loader2Icon className="size-4 animate-spin" />
+            ) : reviewExists ? (
+              'レビュー済み'
+            ) : (
+              'レビューする'
+            )}
           </Button>
         </TooltipTrigger>
         {!user && (
@@ -105,7 +112,7 @@ export default function ReviewCreateDialog({ bookId, refetch }: Props) {
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent
-          className="w-1/2 min-w-[360px] max-w-[600px] p-4 md:p-6"
+          className="w-3/4 min-w-[360px] max-w-[600px] p-4 sm:p-6"
           onEscapeKeyDown={handleCloseDialog}
           onPointerDownOutside={handleCloseDialog}
           onAnimationStart={handleAnimationStart}
@@ -113,14 +120,14 @@ export default function ReviewCreateDialog({ bookId, refetch }: Props) {
           <div className="flex items-start justify-between">
             <div>
               <p className="font-semibold leading-10">レビュー</p>
-              <p className="text-xs text-muted-foreground md:text-sm">
+              <p className="text-xs text-muted-foreground sm:text-sm">
                 素敵な感想を伝えましょう！
               </p>
             </div>
             <div>
               <Rating rating={rating} onChange={setRating} />
-              <p className="text-center text-xs text-muted-foreground md:text-sm">
-                {rating === 0 ? '星をクリックして決定' : ''}
+              <p className="text-center text-xs text-muted-foreground sm:text-sm">
+                星をクリックして決定
               </p>
             </div>
           </div>

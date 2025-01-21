@@ -1,6 +1,6 @@
 import BookListNewReleases from '@/components/book-list/book-list-new-releases';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
-import GenreList from '@/components/genre-list/genre-list';
+import GenreListArea from '@/components/genre-list/genre-list-area';
 import GenreListSkeleton from '@/components/genre-list/genre-list-skeleton';
 import Hero from '@/components/layout/hero';
 import ErrorElement from '@/routes/error-element';
@@ -18,14 +18,14 @@ export default function Page() {
         <div className="my-4">
           <ErrorBoundary fallback={<ErrorElement />}>
             <Suspense fallback={<GenreListSkeleton />}>
-              <GenreList variant="ghost" />
+              <GenreListArea />
             </Suspense>
           </ErrorBoundary>
         </div>
       </div>
 
       <div className="flex flex-col">
-        <p className="font-bold text-primary mb-4">ニューリリース</p>
+        <p className="mb-4 font-bold text-primary">ニューリリース</p>
         <ErrorBoundary fallback={<ErrorElement />}>
           <Suspense fallback={<BookListSkeleton paginationOff />}>
             <BookListNewReleases />

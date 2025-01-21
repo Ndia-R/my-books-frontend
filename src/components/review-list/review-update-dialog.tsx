@@ -11,12 +11,12 @@ import { Loader2Icon, SquarePenIcon } from 'lucide-react';
 import React, { useEffect, useRef, useState, useTransition } from 'react';
 
 type Props = {
-  review: Review;
   bookId: string;
+  review: Review;
   refetch: () => void;
 };
 
-export default function ReviewUpdateDialog({ review, bookId, refetch }: Props) {
+export default function ReviewUpdateDialog({ bookId, review, refetch }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -87,7 +87,7 @@ export default function ReviewUpdateDialog({ review, bookId, refetch }: Props) {
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent
-          className="w-1/2 min-w-[360px] max-w-[600px] p-4 md:p-6"
+          className="w-3/4 min-w-[360px] max-w-[600px] p-4 sm:p-6"
           onEscapeKeyDown={handleCloseDialog}
           onPointerDownOutside={handleCloseDialog}
           onAnimationStart={handleAnimationStart}
@@ -95,14 +95,14 @@ export default function ReviewUpdateDialog({ review, bookId, refetch }: Props) {
           <div className="flex items-start justify-between">
             <div>
               <p className="font-semibold leading-10">レビュー</p>
-              <p className="text-xs text-muted-foreground md:text-sm">
+              <p className="text-xs text-muted-foreground sm:text-sm">
                 素敵な感想を伝えましょう！
               </p>
             </div>
             <div>
               <Rating rating={rating} onChange={setRating} />
-              <p className="text-center text-xs text-muted-foreground md:text-sm">
-                {rating === 0 ? '星をクリックして決定' : ''}
+              <p className="text-center text-xs text-muted-foreground sm:text-sm">
+                星をクリックして決定
               </p>
             </div>
           </div>

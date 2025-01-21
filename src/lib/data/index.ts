@@ -7,7 +7,7 @@ export * from './my-list';
 export * from './review';
 export * from './user';
 
-export const fetchJSON = async <T>(
+export const fetchJson = async <T>(
   url: string,
   options: RequestInit = {}
 ): Promise<T> => {

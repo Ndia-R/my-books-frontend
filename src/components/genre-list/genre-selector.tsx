@@ -1,4 +1,3 @@
-import GenreSelectorSkeleton from '@/components/genre-list/genre-selector-skeleton';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -9,7 +8,7 @@ import { cn } from '@/lib/util';
 import { Genre } from '@/types';
 import { CheckIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { Await, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type ConditionType = {
   id: string;
@@ -36,8 +35,8 @@ const parseGenreIdQuery = (genreIdQuery: string) => {
 };
 
 export default function GenreSelector() {
-  const { data: genres } = useFetchData({
-    queryKey: [],
+  const { data: genres } = useFetchData<Genre[]>({
+    queryKey: ['GenreSelector'],
     queryFn: () => getGenres(),
   });
 
@@ -88,59 +87,49 @@ export default function GenreSelector() {
   };
 
   return (
-    <Await resolve={genres}>
-      {(genres: Genre[]) => {
-        if (!genres) return <GenreSelectorSkeleton />;
-        return (
-          <>
-            <div className="my-4 flex items-center justify-between">
-              <p className="my-2">ジャンル</p>
-              <RadioGroup
-                className="flex gap-x-4"
-                value={selectedCondition.value}
-                onValueChange={handleValueChange}
-              >
-                {CONDITIONS.map((condition) => (
-                  <div className="flex items-center" key={condition.id}>
-                    <RadioGroupItem value={condition.value} id={condition.id} />
-                    <Label
-                      className="cursor-pointer select-none p-2"
-                      htmlFor={condition.id}
-                    >
-                      {condition.value}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
+    <>
+      <div className="my-4 flex items-center justify-between">
+        <p className="my-2">ジャンル</p>
+        <RadioGroup
+          className="flex gap-x-4"
+          value={selectedCondition.value}
+          onValueChange={handleValueChange}
+        >
+          {CONDITIONS.map((condition) => (
+            <div className="flex items-center" key={condition.id}>
+              <RadioGroupItem value={condition.value} id={condition.id} />
+              <Label className="cursor-pointer select-none p-2" htmlFor={condition.id}>
+                {condition.value}
+              </Label>
             </div>
+          ))}
+        </RadioGroup>
+      </div>
 
-            <Separator className="my-4 bg-foreground/10" />
+      <Separator className="my-4 bg-foreground/10" />
 
-            <ul className="flex flex-wrap">
-              {genres.map((genre) => (
-                <li key={genre.id}>
-                  <Button
-                    className={cn(
-                      'rounded-full m-1 text-muted-foreground text-xs sm:text-sm',
-                      isActive(genre.id) && 'text-foreground'
-                    )}
-                    variant={isActive(genre.id) ? 'secondary' : 'ghost'}
-                    size="sm"
-                    onClick={() => handleClickGenre(genre.id)}
-                  >
-                    {isActive(genre.id) && (
-                      <CheckIcon className="mr-1 size-4" strokeWidth={4} />
-                    )}
-                    {genre.name}
-                  </Button>
-                </li>
-              ))}
-            </ul>
+      <ul className="flex flex-wrap">
+        {genres.map((genre) => (
+          <li key={genre.id}>
+            <Button
+              className={cn(
+                'rounded-full m-1 text-muted-foreground text-xs sm:text-sm',
+                isActive(genre.id) && 'text-foreground'
+              )}
+              variant={isActive(genre.id) ? 'secondary' : 'ghost'}
+              size="sm"
+              onClick={() => handleClickGenre(genre.id)}
+            >
+              {isActive(genre.id) && (
+                <CheckIcon className="mr-1 size-4" strokeWidth={4} />
+              )}
+              {genre.name}
+            </Button>
+          </li>
+        ))}
+      </ul>
 
-            <Separator className="my-4 bg-foreground/10" />
-          </>
-        );
-      }}
-    </Await>
+      <Separator className="my-4 bg-foreground/10" />
+    </>
   );
 }

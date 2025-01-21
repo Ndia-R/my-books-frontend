@@ -23,6 +23,7 @@ export default function CountUpNumber({
 
   const [count, setCount] = useState(initialStart);
   const [isDelayComplete, setIsDelayComplete] = useState(delay === 0);
+  const [countUpFinished, setCountUpFinished] = useState(false);
 
   // 遅延処理
   useEffect(() => {
@@ -63,10 +64,15 @@ export default function CountUpNumber({
 
     const timeout = setTimeout(() => {
       setCount((prev) => prev + 1);
+
+      // カウントアップアニメーションが完了したらフラグ変更
+      if (count + 1 >= end) {
+        setCountUpFinished(true);
+      }
     }, currentInterval);
 
     return () => clearTimeout(timeout);
   }, [count, easeInOut, end, isDelayComplete, maxInterval, minInterval, normalInterval]);
 
-  return <span className={className}>{count}</span>;
+  return <span className={className}>{countUpFinished ? end : count}</span>;
 }

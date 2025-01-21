@@ -1,4 +1,4 @@
-import { fetchWithAuth } from '@/lib/auth';
+import { fetchActionWithAuth } from '@/lib/auth';
 import { ChangeEmail, ChangePassword, UpdateCurrentUser } from '@/types';
 
 export const updateCurrentUser = async (requestBody: UpdateCurrentUser) => {
@@ -9,7 +9,7 @@ export const updateCurrentUser = async (requestBody: UpdateCurrentUser) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
     };
-    await fetchWithAuth(url, options);
+    await fetchActionWithAuth(url, options);
     return true;
   } catch (e) {
     console.error(e);
@@ -25,7 +25,7 @@ export const changePassword = async (requestBody: ChangePassword) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
     };
-    await fetchWithAuth(url, options);
+    await fetchActionWithAuth(url, options);
     return true;
   } catch (e) {
     console.error(e);
@@ -41,7 +41,7 @@ export const changeEmail = async (requestBody: ChangeEmail) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(requestBody),
     };
-    await fetchWithAuth(url, options);
+    await fetchActionWithAuth(url, options);
     return true;
   } catch (e) {
     console.error(e);

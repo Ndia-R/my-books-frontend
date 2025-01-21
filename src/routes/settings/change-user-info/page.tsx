@@ -9,7 +9,7 @@ import { AVATER_IMAGE_URL } from '@/constants/constants';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { updateCurrentUser } from '@/lib/action';
-import { checkNameExists, getCurrentUser } from '@/lib/data';
+import { checkUsernameExists, getCurrentUser } from '@/lib/data';
 import { CircleHelpIcon, Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -73,7 +73,7 @@ export default function Page() {
       return;
     }
 
-    if (user?.name !== name && (await checkNameExists(name))) {
+    if (user?.name !== name && (await checkUsernameExists(name))) {
       setNameErrorMessage('そのユーザー名はすでに使われています。');
       return;
     }

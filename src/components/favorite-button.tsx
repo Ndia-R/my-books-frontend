@@ -1,8 +1,9 @@
+import CountUpNumber from '@/components/count-up-number';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-user';
 import { addFavorite, removeFavorite } from '@/lib/action';
-import { getFavoriteState } from '@/lib/data';
+import { getFavoriteCount, getFavoriteState } from '@/lib/data';
 import { cn } from '@/lib/util';
 import { HeartIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -19,30 +20,42 @@ const ICON_SIZE = {
 };
 
 type Props = {
-  className?: string;
-  size?: 'sm' | 'md' | 'lg';
   bookId: string;
+  size?: 'sm' | 'md' | 'lg';
+  withCount?: boolean;
 };
 
-export default function FavoriteButton({ className, size = 'md', bookId }: Props) {
+export default function FavoriteButton({
+  bookId,
+  size = 'md',
+  withCount = false,
+}: Props) {
   const { user } = useUser();
   const [isFavorite, setIsFavorite] = useState(false);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     const init = async () => {
-      const favoriteState = await getFavoriteState(bookId);
-      if (favoriteState) {
-        setIsFavorite(favoriteState?.isFavorite);
-      }
+      const favoriteCount = await getFavoriteCount(bookId);
+      setCount(favoriteCount);
+
+      if (!user) return;
+
+      const isFavorite = await getFavoriteState(bookId);
+      setIsFavorite(isFavorite);
     };
     init();
-  }, []);
+  }, [bookId, user]);
 
   const handleClick = async () => {
+    if (!user) return;
+
     if (isFavorite) {
+      setCount(count - 1);
       setIsFavorite(false);
       await removeFavorite(bookId);
     } else {
+      setCount(count + 1);
       setIsFavorite(true);
       await addFavorite(bookId);
     }
@@ -52,25 +65,23 @@ export default function FavoriteButton({ className, size = 'md', bookId }: Props
     <>
       <Tooltip>
         <TooltipTrigger asChild>
-          <div className={className}>
-            <Button
-              className={cn(
-                'rounded-full text-muted-foreground',
-                BUTTON_SIZE[size],
-                isFavorite && 'text-primary bg-transparent'
-              )}
-              variant="ghost"
-              size="icon"
-              onClick={user ? handleClick : undefined}
-            >
-              <HeartIcon
-                className={ICON_SIZE[size]}
-                style={{
-                  fill: isFavorite ? 'hsl(var(--primary))' : '',
-                }}
-              />
-            </Button>
-          </div>
+          <Button
+            className={cn(
+              'rounded-full text-muted-foreground',
+              BUTTON_SIZE[size],
+              isFavorite && 'text-primary bg-transparent'
+            )}
+            variant="ghost"
+            size="icon"
+            onClick={handleClick}
+          >
+            <HeartIcon
+              className={ICON_SIZE[size]}
+              style={{
+                fill: isFavorite ? 'hsl(var(--primary))' : '',
+              }}
+            />
+          </Button>
         </TooltipTrigger>
         {user ? (
           <TooltipContent>
@@ -82,6 +93,12 @@ export default function FavoriteButton({ className, size = 'md', bookId }: Props
           </TooltipContent>
         )}
       </Tooltip>
+
+      {withCount && (
+        <p className="flex min-w-6 text-sm text-muted-foreground">
+          <CountUpNumber end={count} />
+        </p>
+      )}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { fetchWithAuth } from '@/lib/auth';
+import { fetchActionWithAuth } from '@/lib/auth';
 
 export const addFavorite = async (bookId: string) => {
   try {
@@ -8,7 +8,7 @@ export const addFavorite = async (bookId: string) => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ bookId }),
     };
-    await fetchWithAuth(url, options);
+    await fetchActionWithAuth(url, options);
     return true;
   } catch (e) {
     console.error(e);
@@ -20,7 +20,7 @@ export const removeFavorite = async (bookId: string) => {
   try {
     const url = `/favorites/${bookId}`;
     const options: RequestInit = { method: 'DELETE' };
-    await fetchWithAuth(url, options);
+    await fetchActionWithAuth(url, options);
     return true;
   } catch (e) {
     console.error(e);

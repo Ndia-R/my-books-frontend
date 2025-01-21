@@ -39,6 +39,6 @@ export interface ChangeEmail {
   password: string;
 }
 
-export interface CheckNameExists {
+export interface CheckUsernameExists {
   exists: boolean;
 }

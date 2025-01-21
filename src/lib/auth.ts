@@ -68,10 +68,10 @@ export const logout = async () => {
   return true;
 };
 
-export const fetchWithAuth = async <T>(
+export const fetchJsonWithAuth = async <T>(
   url: string,
   options?: RequestInit
-): Promise<T | null> => {
+): Promise<T> => {
   const token = getAccessToken();
   if (!token) {
     throw new Error(`アクセストークンがありません。URL: ${url}`);
@@ -109,16 +109,47 @@ export const fetchWithAuth = async <T>(
   if (!res.ok) {
     throw new Error(`失敗しました。URL: ${url} ステータス: ${res.status}`);
   }
+  return res.json();
+};
 
-  // JSONレスポンスがある場合のみデータを返却
-  if (
-    res.status !== 204 &&
-    res.headers.get('content-type')?.includes('application/json')
-  ) {
-    return res.json();
+export const fetchActionWithAuth = async (url: string, options?: RequestInit) => {
+  const token = getAccessToken();
+  if (!token) {
+    throw new Error(`アクセストークンがありません。URL: ${url}`);
   }
 
-  // 空のレスポンスの場合
+  let res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
+    ...options,
+    headers: {
+      ...options?.headers,
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  if (res.status === 401) {
+    const newToken = await refreshAccessToken();
+    if (!newToken) {
+      clearAccessToken();
+      const error: CustomError = new Error(
+        `リフレッシュトークンの有効期限が切れました。URL: ${url}`
+      );
+      error.code = 'REFRESH_TOKEN_EXPIRED';
+      throw error;
+    }
+
+    setAccessToken(newToken);
+    res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
+      ...options,
+      headers: {
+        ...options?.headers,
+        Authorization: `Bearer ${newToken}`,
+      },
+    });
+  }
+
+  if (!res.ok) {
+    throw new Error(`失敗しました。URL: ${url} ステータス: ${res.status}`);
+  }
   return null;
 };
 
@@ -141,7 +172,7 @@ export const validateToken = async () => {
   try {
     const url = `/validate-token`;
     const options = { method: 'POST' };
-    await fetchWithAuth(url, options);
+    await fetchActionWithAuth(url, options);
     return true;
   } catch (e) {
     // リフレッシュトークンが無効な場合はnull返却
