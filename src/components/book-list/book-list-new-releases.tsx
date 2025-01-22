@@ -1,11 +1,10 @@
 import BookList from '@/components/book-list/book-list';
-import { useFetchData } from '@/hooks/use-fetch-data';
 import { getNewReleases } from '@/lib/data';
-import { Book } from '@/types';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function BookListNewReleases() {
-  const { data: books } = useFetchData<Book[]>({
-    queryKey: ['BookListNewReleases'],
+  const { data: books } = useSuspenseQuery({
+    queryKey: ['getNewReleases'],
     queryFn: () => getNewReleases(),
   });
 

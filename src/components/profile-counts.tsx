@@ -1,11 +1,10 @@
 import CountUpNumber from '@/components/count-up-number';
-import { useFetchData } from '@/hooks/use-fetch-data';
 import { getProfileCounts } from '@/lib/data';
-import { type ProfileCounts } from '@/types';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function ProfileCounts() {
-  const { data: profileCounts } = useFetchData<ProfileCounts>({
-    queryKey: ['ProfileCounts'],
+  const { data: profileCounts } = useSuspenseQuery({
+    queryKey: ['getProfileCounts'],
     queryFn: () => getProfileCounts(),
   });
 

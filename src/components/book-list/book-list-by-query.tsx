@@ -1,8 +1,7 @@
 import BookList from '@/components/book-list/book-list';
 import BookPagination from '@/components/book-list/book-pagination';
-import { useFetchData } from '@/hooks/use-fetch-data';
 import { getBooksByQuery } from '@/lib/data';
-import { PaginatedBook } from '@/types';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
   query: string;
@@ -10,8 +9,8 @@ type Props = {
 };
 
 export default function BookListByQuery({ query, page }: Props) {
-  const { data: paginatedBook } = useFetchData<PaginatedBook>({
-    queryKey: ['BookListByQuery', query, page],
+  const { data: paginatedBook } = useSuspenseQuery({
+    queryKey: ['getBooksByQuery', query, page],
     queryFn: () => getBooksByQuery(query, page - 1),
   });
 

@@ -1,16 +1,15 @@
 import BookList from '@/components/book-list/book-list';
 import BookPagination from '@/components/book-list/book-pagination';
-import { useFetchData } from '@/hooks/use-fetch-data';
 import { getFavorites } from '@/lib/data';
-import { PaginatedBook } from '@/types';
+import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
   page: number;
 };
 
 export default function BookListFavorites({ page }: Props) {
-  const { data: paginatedBook } = useFetchData<PaginatedBook>({
-    queryKey: ['BookListFavorites', page],
+  const { data: paginatedBook } = useSuspenseQuery({
+    queryKey: ['getFavorites', page],
     queryFn: () => getFavorites(page - 1),
   });
 

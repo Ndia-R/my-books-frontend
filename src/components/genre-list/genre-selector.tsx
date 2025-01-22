@@ -2,10 +2,9 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { useFetchData } from '@/hooks/use-fetch-data';
 import { getGenres } from '@/lib/data';
 import { cn } from '@/lib/util';
-import { Genre } from '@/types';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { CheckIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -35,8 +34,8 @@ const parseGenreIdQuery = (genreIdQuery: string) => {
 };
 
 export default function GenreSelector() {
-  const { data: genres } = useFetchData<Genre[]>({
-    queryKey: ['GenreSelector'],
+  const { data: genres } = useSuspenseQuery({
+    queryKey: ['getGenres'],
     queryFn: () => getGenres(),
   });
 

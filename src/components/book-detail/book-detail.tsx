@@ -4,25 +4,30 @@ import MyListButton from '@/components/my-list-button';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useFetchData } from '@/hooks/use-fetch-data';
 import { useUser } from '@/hooks/use-user';
 import { getBookDetailById, getGenres } from '@/lib/data';
 import { formatDateJP, formatIsbn, priceToString } from '@/lib/util';
-import { Genre, type BookDetail } from '@/types';
+import { useSuspenseQueries } from '@tanstack/react-query';
 
 type Props = {
   bookId: string;
 };
 
 export default function BookDetail({ bookId }: Props) {
-  const { data } = useFetchData<[BookDetail, Genre[]]>({
-    queryKey: ['BookDetail', bookId],
-    queryFn: () => Promise.all([getBookDetailById(bookId), getGenres()]),
+  const [{ data: bookDetail }, { data: genres }] = useSuspenseQueries({
+    queries: [
+      {
+        queryKey: ['getBookDetailById', bookId],
+        queryFn: () => getBookDetailById(bookId),
+      },
+      {
+        queryKey: ['getGenres'],
+        queryFn: () => getGenres(),
+      },
+    ],
   });
 
   const { user } = useUser();
-
-  const [bookDetail, genres] = data;
 
   return (
     <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">

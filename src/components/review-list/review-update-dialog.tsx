@@ -6,17 +6,18 @@ import { Tooltip, TooltipTrigger } from '@/components/ui/tooltip';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { updateReview } from '@/lib/action';
-import { Review } from '@/types';
-import { Loader2Icon, SquarePenIcon } from 'lucide-react';
-import React, { useEffect, useRef, useState, useTransition } from 'react';
+import { Review, ReviewRequest } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { SquarePenIcon } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
   bookId: string;
   review: Review;
-  refetch: () => void;
+  queryKey: unknown[];
 };
 
-export default function ReviewUpdateDialog({ bookId, review, refetch }: Props) {
+export default function ReviewUpdateDialog({ bookId, review, queryKey }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -25,7 +26,14 @@ export default function ReviewUpdateDialog({ bookId, review, refetch }: Props) {
 
   const { toast } = useToast();
   const { user } = useUser();
-  const [isPending, startTransition] = useTransition();
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (reqestBody: ReviewRequest) => updateReview(reqestBody),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -41,24 +49,24 @@ export default function ReviewUpdateDialog({ bookId, review, refetch }: Props) {
   };
 
   const handlePost = async () => {
-    const isSuccess = await updateReview({ bookId, comment, rating });
-    if (!isSuccess) {
-      toast({
-        title: 'レビュー投稿に失敗しました',
-        description: '管理者へ連絡してください',
-        variant: 'destructive',
-        duration: 5000,
-      });
-      setIsOpen(false);
-      return;
-    }
-
-    toast({ description: 'レビューを投稿しました' });
-    setIsOpen(false);
-
-    startTransition(() => {
-      refetch();
-    });
+    mutation.mutate(
+      { comment, rating, bookId },
+      {
+        onSuccess: () => {
+          toast({ description: 'レビューを投稿しました' });
+          setIsOpen(false);
+        },
+        onError: () => {
+          toast({
+            title: 'レビュー投稿に失敗しました',
+            description: '管理者へ連絡してください',
+            variant: 'destructive',
+            duration: 5000,
+          });
+          setIsOpen(false);
+        },
+      }
+    );
   };
 
   const handleCloseDialog = async () => {
@@ -73,14 +81,9 @@ export default function ReviewUpdateDialog({ bookId, review, refetch }: Props) {
             className="size-8 rounded-full text-muted-foreground"
             variant="ghost"
             size="icon"
-            disabled={isPending}
             onClick={() => user && setIsOpen(true)}
           >
-            {isPending ? (
-              <Loader2Icon className="size-4 animate-spin" />
-            ) : (
-              <SquarePenIcon className="size-4" />
-            )}
+            <SquarePenIcon className="size-4" />
           </Button>
         </TooltipTrigger>
       </Tooltip>

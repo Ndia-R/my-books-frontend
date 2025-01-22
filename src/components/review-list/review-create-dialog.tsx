@@ -7,16 +7,17 @@ import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { createReview } from '@/lib/action';
-import { Loader2Icon } from 'lucide-react';
-import React, { useEffect, useRef, useState, useTransition } from 'react';
+import { ReviewRequest } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
   bookId: string;
   reviewExists: boolean;
-  refetch: () => void;
+  queryKey: unknown[];
 };
 
-export default function ReviewCreateDialog({ bookId, reviewExists, refetch }: Props) {
+export default function ReviewCreateDialog({ bookId, reviewExists, queryKey }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
@@ -25,8 +26,15 @@ export default function ReviewCreateDialog({ bookId, reviewExists, refetch }: Pr
 
   const { toast } = useToast();
   const { user } = useUser();
-  const [isPending, startTransition] = useTransition();
   const { confirmDialog } = useConfirmDialog();
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (reqestBody: ReviewRequest) => createReview(reqestBody),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -52,24 +60,24 @@ export default function ReviewCreateDialog({ bookId, reviewExists, refetch }: Pr
       if (isCancel) return;
     }
 
-    const isSuccess = await createReview({ comment, rating, bookId });
-    if (!isSuccess) {
-      toast({
-        title: 'レビュー投稿に失敗しました',
-        description: '管理者へ連絡してください',
-        variant: 'destructive',
-        duration: 5000,
-      });
-      setIsOpen(false);
-      return;
-    }
-
-    setIsOpen(false);
-
-    startTransition(() => {
-      refetch();
-      toast({ description: 'レビューを投稿しました' });
-    });
+    mutation.mutate(
+      { comment, rating, bookId },
+      {
+        onSuccess: () => {
+          toast({ description: 'レビューを投稿しました' });
+          setIsOpen(false);
+        },
+        onError: () => {
+          toast({
+            title: 'レビュー投稿に失敗しました',
+            description: '管理者へ連絡してください',
+            variant: 'destructive',
+            duration: 5000,
+          });
+          setIsOpen(false);
+        },
+      }
+    );
   };
 
   const handleCloseDialog = async () => {
@@ -96,13 +104,7 @@ export default function ReviewCreateDialog({ bookId, reviewExists, refetch }: Pr
             disabled={reviewExists}
             onClick={() => user && setIsOpen(true)}
           >
-            {isPending ? (
-              <Loader2Icon className="size-4 animate-spin" />
-            ) : reviewExists ? (
-              'レビュー済み'
-            ) : (
-              'レビューする'
-            )}
+            {reviewExists ? 'レビュー済み' : 'レビューする'}
           </Button>
         </TooltipTrigger>
         {!user && (

@@ -8,20 +8,27 @@ import { useUser } from '@/hooks/use-user';
 import { deleteReview } from '@/lib/action';
 import { formatDateJP, formatTime } from '@/lib/util';
 import { Review } from '@/types';
-import { Loader2Icon, Trash2Icon } from 'lucide-react';
-import { useTransition } from 'react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Trash2Icon } from 'lucide-react';
 
 type Props = {
   review: Review;
   bookId: string;
-  refetch: () => void;
+  queryKey: unknown[];
 };
 
-export default function ReviewItem({ review, bookId, refetch }: Props) {
+export default function ReviewItem({ review, bookId, queryKey }: Props) {
   const { user } = useUser();
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
-  const [isPending, startTransition] = useTransition();
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (bookId: string) => deleteReview(bookId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 
   const handleClickDelete = async () => {
     const { isCancel } = await confirmDialog({
@@ -32,11 +39,10 @@ export default function ReviewItem({ review, bookId, refetch }: Props) {
     });
     if (isCancel) return;
 
-    await deleteReview(bookId);
-
-    startTransition(() => {
-      refetch();
-      toast({ description: 'レビューを削除しました' });
+    mutation.mutate(bookId, {
+      onSuccess: () => {
+        toast({ description: 'レビューを削除しました' });
+      },
     });
   };
 
@@ -66,20 +72,15 @@ export default function ReviewItem({ review, bookId, refetch }: Props) {
                     <ReviewUpdateDialog
                       bookId={bookId}
                       review={review}
-                      refetch={refetch}
+                      queryKey={queryKey}
                     />
                     <Button
                       className="size-8 rounded-full text-muted-foreground"
                       variant="ghost"
                       size="icon"
-                      disabled={isPending}
                       onClick={handleClickDelete}
                     >
-                      {isPending ? (
-                        <Loader2Icon className="size-4 animate-spin" />
-                      ) : (
-                        <Trash2Icon className="size-4" />
-                      )}
+                      <Trash2Icon className="size-4" />
                     </Button>
                   </>
                 )}
