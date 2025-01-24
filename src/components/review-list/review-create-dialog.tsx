@@ -29,7 +29,7 @@ export default function ReviewCreateDialog({ bookId, reviewExists, queryKey }: P
   const { confirmDialog } = useConfirmDialog();
 
   const queryClient = useQueryClient();
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (reqestBody: ReviewRequest) => createReview(reqestBody),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -60,7 +60,7 @@ export default function ReviewCreateDialog({ bookId, reviewExists, queryKey }: P
       if (isCancel) return;
     }
 
-    mutation.mutate(
+    mutate(
       { comment, rating, bookId },
       {
         onSuccess: () => {

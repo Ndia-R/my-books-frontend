@@ -28,7 +28,7 @@ export default function ReviewUpdateDialog({ bookId, review, queryKey }: Props) 
   const { user } = useUser();
 
   const queryClient = useQueryClient();
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (reqestBody: ReviewRequest) => updateReview(reqestBody),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -49,7 +49,7 @@ export default function ReviewUpdateDialog({ bookId, review, queryKey }: Props) 
   };
 
   const handlePost = async () => {
-    mutation.mutate(
+    mutate(
       { comment, rating, bookId },
       {
         onSuccess: () => {

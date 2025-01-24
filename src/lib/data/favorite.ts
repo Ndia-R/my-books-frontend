@@ -1,7 +1,7 @@
 import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
 import { fetchJsonWithAuth } from '@/lib/auth';
 import { fetchJson } from '@/lib/data';
-import { FavoriteCount, FavoriteState, PaginatedBook } from '@/types';
+import { FavoriteInfo, PaginatedBook } from '@/types';
 
 export const getFavorites = async (page: number = 0) => {
   try {
@@ -13,27 +13,22 @@ export const getFavorites = async (page: number = 0) => {
   }
 };
 
-export const getFavoriteState = async (bookId: string) => {
-  if (!bookId) return false;
-
+export const getFavoriteInfo = async (bookId: string) => {
   try {
-    const url = `/favorites/state/${bookId}`;
-    const favoriteState = await fetchJsonWithAuth<FavoriteState>(url);
-    if (!favoriteState) return false;
-    return favoriteState.isFavorite;
+    const url = `/favorites/${bookId}/info`;
+    const favoriteInfo = await fetchJson<FavoriteInfo>(url);
+    return favoriteInfo;
   } catch {
     throw new Error('お気に入り情報の読み込みが失敗しました。');
   }
 };
 
-export const getFavoriteCount = async (bookId: string) => {
-  if (!bookId) return 0;
-
+export const getFavoriteInfoWithAuth = async (bookId: string) => {
   try {
-    const url = `/favorites/count/${bookId}`;
-    const favoriteCount = await fetchJson<FavoriteCount>(url);
-    return favoriteCount.count;
+    const url = `/favorites/${bookId}/info`;
+    const favoriteInfo = await fetchJsonWithAuth<FavoriteInfo>(url);
+    return favoriteInfo;
   } catch {
-    throw new Error('お気に入りカウントの読み込みが失敗しました。');
+    throw new Error('お気に入り情報の読み込みが失敗しました。');
   }
 };

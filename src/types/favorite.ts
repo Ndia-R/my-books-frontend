@@ -1,7 +1,5 @@
-export interface FavoriteState {
+export interface FavoriteInfo {
+  bookId: string;
   isFavorite: boolean;
-}
-
-export interface FavoriteCount {
-  count: number;
+  favoriteCount: number;
 }

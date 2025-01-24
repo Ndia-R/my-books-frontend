@@ -23,7 +23,7 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
   const { confirmDialog } = useConfirmDialog();
 
   const queryClient = useQueryClient();
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (bookId: string) => deleteReview(bookId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -39,7 +39,7 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
     });
     if (isCancel) return;
 
-    mutation.mutate(bookId, {
+    mutate(bookId, {
       onSuccess: () => {
         toast({ description: 'レビューを削除しました' });
       },

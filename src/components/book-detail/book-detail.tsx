@@ -61,9 +61,7 @@ export default function BookDetail({ bookId }: Props) {
                 {bookDetail.myListCount}
               </p>
             </div>
-            <div className="flex items-center gap-x-1">
-              <FavoriteButton bookId={bookId} withCount />
-            </div>
+            <FavoriteButton bookId={bookId} animation={true} />
           </div>
         </div>
 

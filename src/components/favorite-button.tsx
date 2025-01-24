@@ -3,73 +3,82 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-user';
 import { addFavorite, removeFavorite } from '@/lib/action';
-import { getFavoriteCount, getFavoriteState } from '@/lib/data';
+import { getFavoriteInfo, getFavoriteInfoWithAuth } from '@/lib/data';
 import { cn } from '@/lib/util';
+import { FavoriteInfo } from '@/types';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
 
-const BUTTON_SIZE = {
-  sm: 'size-6',
-  md: 'size-8',
-  lg: '',
-};
-const ICON_SIZE = {
-  sm: 'size-3',
-  md: 'size-4',
-  lg: '',
-};
+const BUTTON_SIZE = { sm: 'size-6', md: 'size-8' };
+const ICON_SIZE = { sm: 'size-3', md: 'size-4' };
+const TEXT_SIZE = { sm: 'text-xs', md: 'text-sm' };
 
 type Props = {
   bookId: string;
-  size?: 'sm' | 'md' | 'lg';
-  withCount?: boolean;
+  size?: 'sm' | 'md';
+  animation?: boolean;
 };
 
 export default function FavoriteButton({
   bookId,
   size = 'md',
-  withCount = false,
+  animation = false,
 }: Props) {
   const { user } = useUser();
-  const [isFavorite, setIsFavorite] = useState(false);
-  const [count, setCount] = useState(0);
+  const queryClient = useQueryClient();
 
-  useEffect(() => {
-    const init = async () => {
-      const favoriteCount = await getFavoriteCount(bookId);
-      setCount(favoriteCount);
+  const queryKey = ['getFavoriteInfo', bookId];
+  const { data: favoriteInfo } = useQuery({
+    queryKey,
+    queryFn: () => (user ? getFavoriteInfoWithAuth(bookId) : getFavoriteInfo(bookId)),
+  });
 
-      if (!user) return;
+  const { mutate, variables, isPending } = useMutation({
+    mutationFn: async (newFavoriteInfo: FavoriteInfo) => {
+      if (newFavoriteInfo.isFavorite) {
+        await addFavorite(bookId);
+      } else {
+        await removeFavorite(bookId);
+      }
+    },
+    onMutate: async (newFavoriteInfo: FavoriteInfo) => {
+      await queryClient.cancelQueries({ queryKey });
+      const previousFavoriteInfo = queryClient.getQueryData(queryKey);
+      queryClient.setQueryData(queryKey, newFavoriteInfo);
+      return { previousFavoriteInfo };
+    },
+    onSettled: (_newFavoriteInfo, error, _variables, context) => {
+      if (error) {
+        queryClient.setQueryData(queryKey, context?.previousFavoriteInfo);
+      }
+      queryClient.invalidateQueries({ queryKey });
+    },
+  });
 
-      const isFavorite = await getFavoriteState(bookId);
-      setIsFavorite(isFavorite);
+  const handleClick = () => {
+    if (!user || !favoriteInfo) return;
+
+    const newFavoriteInfo: FavoriteInfo = {
+      ...favoriteInfo,
+      isFavorite: !favoriteInfo.isFavorite,
+      favoriteCount: favoriteInfo.isFavorite
+        ? favoriteInfo.favoriteCount - 1
+        : favoriteInfo.favoriteCount + 1,
     };
-    init();
-  }, [bookId, user]);
-
-  const handleClick = async () => {
-    if (!user) return;
-
-    if (isFavorite) {
-      setCount(count - 1);
-      setIsFavorite(false);
-      await removeFavorite(bookId);
-    } else {
-      setCount(count + 1);
-      setIsFavorite(true);
-      await addFavorite(bookId);
-    }
+    mutate(newFavoriteInfo);
   };
 
+  const optimisticData = isPending ? variables : favoriteInfo;
+
   return (
-    <>
+    <div className="flex items-center gap-x-0">
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
             className={cn(
               'rounded-full text-muted-foreground',
               BUTTON_SIZE[size],
-              isFavorite && 'text-primary bg-transparent'
+              optimisticData?.isFavorite && 'text-primary bg-transparent'
             )}
             variant="ghost"
             size="icon"
@@ -78,14 +87,14 @@ export default function FavoriteButton({
             <HeartIcon
               className={ICON_SIZE[size]}
               style={{
-                fill: isFavorite ? 'hsl(var(--primary))' : '',
+                fill: optimisticData?.isFavorite ? 'hsl(var(--primary))' : '',
               }}
             />
           </Button>
         </TooltipTrigger>
         {user ? (
           <TooltipContent>
-            {isFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
+            {optimisticData?.isFavorite ? 'お気に入りから削除' : 'お気に入りに追加'}
           </TooltipContent>
         ) : (
           <TooltipContent>
@@ -94,11 +103,13 @@ export default function FavoriteButton({
         )}
       </Tooltip>
 
-      {withCount && (
-        <p className="flex min-w-6 text-sm text-muted-foreground">
-          <CountUpNumber end={count} />
-        </p>
-      )}
-    </>
+      <p className={cn('flex min-w-6 text-muted-foreground', TEXT_SIZE[size])}>
+        {animation ? (
+          <CountUpNumber end={optimisticData?.favoriteCount || 0} />
+        ) : (
+          optimisticData?.favoriteCount
+        )}
+      </p>
+    </div>
   );
 }
