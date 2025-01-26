@@ -46,7 +46,10 @@ export default function CountUpNumber({
   useEffect(() => {
     // 遅延が完了していない場合は何もしない
     if (!isDelayComplete) return;
-    if (count >= end) return; // カウント終了
+    if (count >= end) {
+      setCountUpFinished(true);
+      return; // カウント終了
+    }
 
     const isFinalPhase = count >= end - 10; // 最後の10カウントかどうかを判定
 

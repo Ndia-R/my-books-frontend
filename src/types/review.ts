@@ -30,3 +30,9 @@ export interface PaginatedReview {
 export interface CheckMyReviewExists {
   exists: boolean;
 }
+
+export interface ReviewRatingInfo {
+  bookId: string;
+  rating: number;
+  reviewCount: number;
+}

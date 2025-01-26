@@ -32,6 +32,7 @@ export default function ReviewUpdateDialog({ bookId, review, queryKey }: Props) 
     mutationFn: (reqestBody: ReviewRequest) => updateReview(reqestBody),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: ['getReviewRatingInfo', bookId] });
     },
   });
 

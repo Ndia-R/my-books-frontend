@@ -71,7 +71,7 @@ export default function FavoriteButton({
   const optimisticData = isPending ? variables : favoriteInfo;
 
   return (
-    <div className="flex items-center gap-x-0">
+    <div className="flex items-center">
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
@@ -103,7 +103,12 @@ export default function FavoriteButton({
         )}
       </Tooltip>
 
-      <p className={cn('flex min-w-6 text-muted-foreground', TEXT_SIZE[size])}>
+      <p
+        className={cn(
+          'flex min-w-4 text-muted-foreground justify-center',
+          TEXT_SIZE[size]
+        )}
+      >
         {animation ? (
           <CountUpNumber end={optimisticData?.favoriteCount || 0} />
         ) : (

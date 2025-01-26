@@ -2,7 +2,7 @@ import { Pagination } from '@/components/pagination';
 import ReviewCreateDialog from '@/components/review-list/review-create-dialog';
 import ReviewItem from '@/components/review-list/review-item';
 import { Separator } from '@/components/ui/separator';
-import { checkMyReviewExists, getReviews } from '@/lib/data';
+import { checkMyReviewExists, getReviewsById } from '@/lib/data';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -19,7 +19,7 @@ export default function ReviewList({ bookId }: Props) {
   } = useSuspenseQuery({
     queryKey,
     queryFn: () =>
-      Promise.all([getReviews(bookId, page - 1), checkMyReviewExists(bookId)]),
+      Promise.all([getReviewsById(bookId, page - 1), checkMyReviewExists(bookId)]),
   });
 
   return (

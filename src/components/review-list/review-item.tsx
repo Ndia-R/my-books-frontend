@@ -27,6 +27,7 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
     mutationFn: (bookId: string) => deleteReview(bookId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: ['getReviewRatingInfo', bookId] });
     },
   });
 

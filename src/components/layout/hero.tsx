@@ -16,23 +16,23 @@ export default function Hero() {
     <div className="relative mb-8 flex h-[460px] w-full items-center gap-3 sm:mb-0 sm:gap-4 lg:h-[500px]">
       <div className="z-10 flex w-3/4 flex-col justify-between lg:w-3/5">
         <div>
-          <div className="animate-fadeInUp-4">
+          <div className="slide-in-from-bottom-10 delay-0 duration-500 animate-in fade-in-0 fill-mode-both">
             <h1 className="w-fit text-5xl font-bold sm:text-6xl xl:text-7xl">{TITLE}</h1>
           </div>
-          <div className="animate-fadeInUp-4 delay-150">
+          <div className="slide-in-from-bottom-10 delay-150 duration-500 animate-in fade-in-0 fill-mode-both">
             <p className="my-6 w-full break-words text-sm text-muted-foreground">
               {MESSAGE}
             </p>
           </div>
         </div>
-        <div className="animate-fadeInUp-6 delay-300">
+        <div className="slide-in-from-bottom-10 delay-300 duration-500 animate-in fade-in-0 fill-mode-both">
           <div className="flex h-full max-w-96 items-center">
             <SearchInput />
           </div>
         </div>
       </div>
       <div className="absolute right-0 top-10 w-[400px] opacity-25 sm:right-5 sm:w-[400px] lg:w-[450px] lg:opacity-100">
-        <div className="animate-fadeInLeft-6 delay-300">
+        <div className="slide-in-from-right-10 delay-500 duration-500 animate-in fade-in-0 fill-mode-both">
           <img src={imgUrl} alt="main-visual-image" />
         </div>
       </div>

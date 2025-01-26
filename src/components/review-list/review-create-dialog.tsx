@@ -33,6 +33,7 @@ export default function ReviewCreateDialog({ bookId, reviewExists, queryKey }: P
     mutationFn: (reqestBody: ReviewRequest) => createReview(reqestBody),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: ['getReviewRatingInfo', bookId] });
     },
   });
 

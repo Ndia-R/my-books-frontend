@@ -1,9 +1,19 @@
 import { FETCH_REVIEWS_MAX_RESULTS } from '@/constants/constants';
 import { fetchJsonWithAuth } from '@/lib/auth';
 import { fetchJson } from '@/lib/data';
-import { CheckMyReviewExists, PaginatedReview } from '@/types';
+import { CheckMyReviewExists, PaginatedReview, ReviewRatingInfo } from '@/types';
 
-export const getReviews = async (bookId: string, page: number = 0) => {
+export const getReviewRatingInfo = async (bookId: string) => {
+  try {
+    const url = `/reviews/${bookId}/rating-info`;
+    const reviewRatingInfo = await fetchJson<ReviewRatingInfo>(url);
+    return reviewRatingInfo;
+  } catch {
+    throw new Error('レビュー情報の読み込みが失敗しました。');
+  }
+};
+
+export const getReviewsById = async (bookId: string, page: number = 0) => {
   try {
     const url = `/reviews/${bookId}?&page=${page}&maxResults=${FETCH_REVIEWS_MAX_RESULTS}`;
     const paginatedReview = await fetchJson<PaginatedReview>(url);
