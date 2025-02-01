@@ -27,7 +27,7 @@ export default function BookCard({ book }: Props) {
           >
             <p className="line-clamp-2 text-center">{book.title}</p>
           </Link>
-          <div className="mt-1 flex w-full items-center flex-col gap-y-1">
+          <div className="mt-1 flex w-full flex-col items-center gap-y-1">
             <p className="text-xs tracking-wide text-muted-foreground">
               {formatDateJP(book.publishedDate)}
             </p>

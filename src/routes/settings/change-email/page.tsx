@@ -85,7 +85,7 @@ export default function Page() {
   };
 
   return (
-    <div className="my-3 flex flex-col items-center justify-items-center gap-y-3 sm:my-16">
+    <div className="my-3 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
       <p className="font-semibold">メールアドレス変更</p>
       <Card className="w-80 rounded-3xl sm:w-96">

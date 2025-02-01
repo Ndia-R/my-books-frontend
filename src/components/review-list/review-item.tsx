@@ -66,7 +66,7 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
           <div>
             <p className="-mb-1 text-lg font-semibold">{review.user.name}</p>
             <div className="flex items-center">
-              <p className="text-sm leading-8 tracking-wide text-muted-foreground whitespace-nowrap">
+              <p className="whitespace-nowrap text-sm leading-8 tracking-wide text-muted-foreground">
                 {formatDateJP(review.updatedAt)} {formatTime(review.updatedAt)}
               </p>
               <div className="ml-2 flex w-16">

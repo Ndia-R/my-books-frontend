@@ -35,14 +35,14 @@ export default function BookDetail({ bookId }: Props) {
   return (
     <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">
       <div className="flex flex-col items-center justify-center lg:w-1/2">
-        <div className="slide-in-from-top-10 delay-0 duration-500 animate-in fade-in-0 fill-mode-both">
+        <div className="delay-0 duration-500 animate-in fade-in-0 slide-in-from-top-10 fill-mode-both">
           <img
             className="h-[360px] rounded object-cover sm:h-[480px]"
             src={book.imageUrl}
             alt={book.title}
           />
         </div>
-        <div className="slide-in-from-bottom-10 delay-150 duration-500 animate-in fade-in-0">
+        <div className="delay-150 duration-500 animate-in fade-in-0 slide-in-from-bottom-10">
           <div className="mt-2 flex flex-col items-center sm:w-[440px]">
             <div className="flex justify-center gap-x-10">
               <ReviewCommentButton bookId={bookId} animation={true} />
@@ -54,7 +54,7 @@ export default function BookDetail({ bookId }: Props) {
             </div>
           </div>
         </div>
-        <div className="slide-in-from-bottom-10 delay-300 duration-500 animate-in fade-in-0 fill-mode-both">
+        <div className="delay-300 duration-500 animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both">
           <div className="my-4 flex items-center">
             <Button className="w-48 rounded-full" size="lg" asChild>
               <Link to={`/book/${bookId}/read/1`}>読む</Link>
@@ -64,7 +64,7 @@ export default function BookDetail({ bookId }: Props) {
       </div>
 
       <div className="p-4 lg:w-1/2">
-        <div className="slide-in-from-right-10 delay-150 duration-500 animate-in fade-in-0 fill-mode-both">
+        <div className="delay-150 duration-500 animate-in fade-in-0 slide-in-from-right-10 fill-mode-both">
           <p className="text-3xl font-bold sm:text-4xl">{book.title}</p>
 
           <div className="my-4 flex w-full flex-wrap items-center justify-end gap-x-3">
@@ -76,7 +76,7 @@ export default function BookDetail({ bookId }: Props) {
             ))}
           </div>
         </div>
-        <div className="slide-in-from-right-10 delay-300 duration-500 animate-in fade-in-0 fill-mode-both">
+        <div className="delay-300 duration-500 animate-in fade-in-0 slide-in-from-right-10 fill-mode-both">
           <GenreList
             className="gap-2"
             genres={genres}

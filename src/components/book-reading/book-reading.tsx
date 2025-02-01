@@ -21,11 +21,11 @@ export default function BookReading({ bookId, pageNumber }: Props) {
   return (
     <div className="relative">
       <div
-        className="fixed top-0 left-0 max-w-7xl bg-fixed w-full h-screen opacity-10 bg-cover bg-center"
+        className="fixed left-0 top-0 h-screen w-full max-w-7xl bg-cover bg-fixed bg-center opacity-10"
         style={{ backgroundImage: `URL(${book.imageUrl})` }}
       ></div>
       <p>{book.title}</p>
-      <div className="flex-col flex gap-y-4 p-10">
+      <div className="flex flex-col gap-y-4 p-10">
         <p>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis saepe
           consectetur molestiae autem dolore eveniet vel, similique id error velit neque
