@@ -1,4 +1,5 @@
-import BookIdPage from '@/routes/book/[bookId]/page';
+import BookDetailPage from '@/routes/book/[bookId]/page';
+import BookReadingPage from '@/routes/book/[bookId]/read/[pageNumber]/page';
 import DiscoverPage from '@/routes/discover/page';
 import FavoritesPage from '@/routes/favorites/page';
 import RootLayout from '@/routes/layout';
@@ -21,7 +22,8 @@ export const router = createBrowserRouter(
         <Route index element={<RootPage />} />
 
         <Route path="book">
-          <Route path=":bookId" element={<BookIdPage />} />
+          <Route path=":bookId" element={<BookDetailPage />} />
+          <Route path=":bookId/read/:pageNumber" element={<BookReadingPage />} />
         </Route>
 
         <Route path="search">

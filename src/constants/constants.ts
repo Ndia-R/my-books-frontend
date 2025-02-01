@@ -17,7 +17,9 @@ export const MENU_LIST = [
 
 export const BOOKS_API_ENDPOINT = 'https://localhost/my-books/api/v1';
 export const BOOKS_IMAGE_URL = 'https://localhost/images';
+
 export const AVATER_IMAGE_URL = 'https://localhost/images/avatars';
+export const AVATER_IMAGE_MAX_COIUNT = 41;
 
 export const FETCH_BOOKS_MAX_RESULTS = 20;
 export const FETCH_REVIEWS_MAX_RESULTS = 5;

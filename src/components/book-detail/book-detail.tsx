@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { getBookById, getGenres, getReviewRatingInfo } from '@/lib/data';
 import { formatDateJP, formatIsbn, priceToString } from '@/lib/util';
 import { useSuspenseQueries } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 
 type Props = {
   bookId: string;
@@ -41,7 +42,7 @@ export default function BookDetail({ bookId }: Props) {
             alt={book.title}
           />
         </div>
-        <div className="slide-in-from-bottom-10 delay-150 duration-500 animate-in fade-in-0 fill-mode-both">
+        <div className="slide-in-from-bottom-10 delay-150 duration-500 animate-in fade-in-0">
           <div className="mt-2 flex flex-col items-center sm:w-[440px]">
             <div className="flex justify-center gap-x-10">
               <ReviewCommentButton bookId={bookId} animation={true} />
@@ -55,8 +56,8 @@ export default function BookDetail({ bookId }: Props) {
         </div>
         <div className="slide-in-from-bottom-10 delay-300 duration-500 animate-in fade-in-0 fill-mode-both">
           <div className="my-4 flex items-center">
-            <Button className="w-48 rounded-full" size="lg">
-              読む
+            <Button className="w-48 rounded-full" size="lg" asChild>
+              <Link to={`/book/${bookId}/read/1`}>読む</Link>
             </Button>
           </div>
         </div>

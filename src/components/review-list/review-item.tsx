@@ -9,7 +9,8 @@ import { deleteReview } from '@/lib/action';
 import { formatDateJP, formatTime } from '@/lib/util';
 import { Review } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { Trash2Icon } from 'lucide-react';
+import { SquarePenIcon, Trash2Icon } from 'lucide-react';
+import { useState } from 'react';
 
 type Props = {
   review: Review;
@@ -18,6 +19,7 @@ type Props = {
 };
 
 export default function ReviewItem({ review, bookId, queryKey }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
@@ -70,10 +72,20 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
               <div className="ml-2 flex w-16">
                 {user?.id === review.user.id && (
                   <>
+                    <Button
+                      className="size-8 rounded-full text-muted-foreground"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => user && setIsOpen(true)}
+                    >
+                      <SquarePenIcon className="size-4" />
+                    </Button>
                     <ReviewUpdateDialog
                       bookId={bookId}
                       review={review}
                       queryKey={queryKey}
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
                     />
                     <Button
                       className="size-8 rounded-full text-muted-foreground"
