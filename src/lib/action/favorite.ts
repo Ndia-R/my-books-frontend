@@ -1,8 +1,8 @@
 import { fetchActionWithAuth } from '@/lib/auth';
 
-export const addFavorite = async (bookId: string) => {
+export const createFavorite = async (bookId: string) => {
   try {
-    const url = `/favorites`;
+    const url = `/me/favorites`;
     const options: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -16,9 +16,9 @@ export const addFavorite = async (bookId: string) => {
   }
 };
 
-export const removeFavorite = async (bookId: string) => {
+export const deleteFavorite = async (bookId: string) => {
   try {
-    const url = `/favorites/${bookId}`;
+    const url = `/me/favorites/${bookId}`;
     const options: RequestInit = { method: 'DELETE' };
     await fetchActionWithAuth(url, options);
     return true;

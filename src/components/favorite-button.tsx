@@ -2,11 +2,11 @@ import CountUpNumber from '@/components/count-up-number';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-user';
-import { addFavorite, removeFavorite } from '@/lib/action';
-import { getFavoriteInfo, getFavoriteInfoWithAuth } from '@/lib/data';
+import { createFavorite, deleteFavorite } from '@/lib/action';
+import { getFavoriteByBookId, getFavoriteCount } from '@/lib/data';
 import { cn } from '@/lib/util';
-import { FavoriteInfo } from '@/types';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Favorite } from '@/types';
+import { useMutation, useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 
 const BUTTON_SIZE = { sm: 'size-6', md: 'size-8' };
@@ -27,21 +27,28 @@ export default function FavoriteButton({
   const { user } = useUser();
   const queryClient = useQueryClient();
 
-  const queryKey = ['getFavoriteInfo', bookId];
-  const { data: favoriteInfo } = useQuery({
-    queryKey,
-    queryFn: () => (user ? getFavoriteInfoWithAuth(bookId) : getFavoriteInfo(bookId)),
+  const [{ data: favorite }, { data: favoriteCount }] = useSuspenseQueries({
+    queries: [
+      {
+        queryKey: ['getFavoriteByBookId', bookId],
+        queryFn: user ? () => getFavoriteByBookId(bookId) : () => Promise<null>,
+      },
+      {
+        queryKey: ['getFavoriteCount', bookId],
+        queryFn: () => getFavoriteCount(bookId),
+      },
+    ],
   });
 
   const { mutate, variables, isPending } = useMutation({
-    mutationFn: async (newFavoriteInfo: FavoriteInfo) => {
-      if (newFavoriteInfo.isFavorite) {
-        await addFavorite(bookId);
+    mutationFn: async (newFavorite: Favorite) => {
+      if (newFavorite) {
+        await createFavorite(bookId);
       } else {
-        await removeFavorite(bookId);
+        await deleteFavorite(bookId);
       }
     },
-    onMutate: async (newFavoriteInfo: FavoriteInfo) => {
+    onMutate: async (newFavoriteInfo: Favorite) => {
       await queryClient.cancelQueries({ queryKey });
       const previousFavoriteInfo = queryClient.getQueryData(queryKey);
       queryClient.setQueryData(queryKey, newFavoriteInfo);
@@ -56,7 +63,7 @@ export default function FavoriteButton({
   });
 
   const handleClick = () => {
-    if (!user || !favoriteInfo) return;
+    if (!user) return;
 
     const newFavoriteInfo: FavoriteInfo = {
       ...favoriteInfo,

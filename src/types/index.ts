@@ -1,5 +1,7 @@
 export * from './auth';
 export * from './book';
+export * from './book-chapter';
+export * from './book-page';
 export * from './favorite';
 export * from './genre';
 export * from './my-list';

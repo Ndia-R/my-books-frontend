@@ -1,5 +1,20 @@
-export interface FavoriteInfo {
+import { Book } from '@/types/book';
+
+export interface Favorite {
+  userId: number;
   bookId: string;
-  isFavorite: boolean;
+  updatedAt: string;
+  book: Book;
+}
+
+export interface FavoritePage {
+  page: number;
+  totalPages: number;
+  totalItems: number;
+  favorites: Favorite[];
+}
+
+export interface FavoriteCount {
+  bookId: string;
   favoriteCount: number;
 }

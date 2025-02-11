@@ -1,38 +1,34 @@
-import { getBookById } from '@/lib/data';
+import { getBookById, getBookContentPage, getBookTableOfContents } from '@/lib/data';
 import { useSuspenseQueries } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
 
 type Props = {
   bookId: string;
+  chapterNumber: number;
   pageNumber: number;
 };
 
-export default function BookReading({ bookId, pageNumber }: Props) {
-  const [{ data: book }] = useSuspenseQueries({
-    queries: [
-      {
-        queryKey: ['getBookById', bookId],
-        queryFn: () => getBookById(bookId),
-      },
-    ],
-  });
+export default function BookReading({ bookId, chapterNumber, pageNumber }: Props) {
+  const [{ data: book }, { data: bookTableOfContents }, { data: bookContentPage }] =
+    useSuspenseQueries({
+      queries: [
+        {
+          queryKey: ['getBookById', bookId],
+          queryFn: () => getBookById(bookId),
+        },
+        {
+          queryKey: ['getBookTableOfContents', bookId],
+          queryFn: () => getBookTableOfContents(bookId),
+        },
+        {
+          queryKey: ['getBookContentPage', bookId, chapterNumber, pageNumber],
+          queryFn: () => getBookContentPage(bookId, chapterNumber, pageNumber),
+        },
+      ],
+    });
 
   console.log(pageNumber);
-
-  const chapter1 = `若きワニのルカは、幼いころからこの舞踏会の伝説を聞かされて育った。しかし、実際にその場に足を踏み入れた者は少なく、語られる話のほとんどは夢物語のようだった。だが今年、ルカは正式な招待状を受け取ることになる。招待状は、湖の畔にひっそりと佇む青い蓮の葉の上に置かれていた。銀の文字で「月の舞踏会へようこそ」と記された紙は、ほのかに光を放ち、ルカの心を激しく揺さぶった。彼は信じられない思いでそれを手に取り、じっと眺めた。なぜ自分が選ばれたのか、考えても答えは出なかったが、胸の奥に湧き上がる興奮を抑えることはできなかった。その夜、ルカは星空の下で静かに湖を見つめた。湖面には月が映り、ゆらゆらと揺れていた。その光景が、まるでこれから訪れる運命を象徴しているかのように感じられた。`;
-
-  const [text, setText] = useState(chapter1);
-
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  useEffect(() => {
-    const textarea = textareaRef.current;
-    if (textarea) {
-      // リセットして縮小できるようにする
-      textarea.style.height = 'auto';
-      // scrollHeightに基づいて新しい高さを設定
-      textarea.style.height = `${textarea.scrollHeight}px`;
-    }
-  }, []);
+  console.log(bookTableOfContents);
+  console.log(bookContentPage);
 
   return (
     <div className="relative">
@@ -45,46 +41,7 @@ export default function BookReading({ bookId, pageNumber }: Props) {
       </div>
       <div className="flex flex-col gap-y-4 px-4 py-8 drop-shadow-lg [text-shadow:1px_1px_1px_hsl(var(--background))/20] sm:px-20">
         <p className="text-3xl font-bold">{book.title}</p>
-        <p>
-          月が湖面に銀の道を描く夜、静寂の森の奥深くで、ワニたちの秘密の舞踏会が開かれる。年に一度、満月の夜にだけ現れるこの神秘の宴は、選ばれた者だけが参加を許される。
-        </p>
-
-        <p>第一章：湖畔の招待状</p>
-        <textarea
-          ref={textareaRef}
-          className="bg-transparent"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-        <p className="whitespace-pre-wrap">{text}</p>
-        <p>
-          若きワニのルカは、幼いころからこの舞踏会の伝説を聞かされて育った。しかし、実際にその場に足を踏み入れた者は少なく、語られる話のほとんどは夢物語のようだった。だが今年、ルカは正式な招待状を受け取ることになる。招待状は、湖の畔にひっそりと佇む青い蓮の葉の上に置かれていた。銀の文字で「月の舞踏会へようこそ」と記された紙は、ほのかに光を放ち、ルカの心を激しく揺さぶった。彼は信じられない思いでそれを手に取り、じっと眺めた。なぜ自分が選ばれたのか、考えても答えは出なかったが、胸の奥に湧き上がる興奮を抑えることはできなかった。その夜、ルカは星空の下で静かに湖を見つめた。湖面には月が映り、ゆらゆらと揺れていた。その光景が、まるでこれから訪れる運命を象徴しているかのように感じられた。
-        </p>
-
-        <p>第二章：運命の出会い</p>
-        <p>
-          舞踏会の夜、ルカは湖のほとりへと向かった。そこには既に多くのワニたちが集まっていた。彼らはみな、月光を浴びて淡く輝く鱗を持ち、まるで神秘的な生き物のようだった。その中で、ひときわ美しく輝くワニがいた。彼女の名はセレナ。透き通るような銀色の鱗を持ち、その瞳は夜空の星を映したように輝いていた。「今夜は特別な夜よ」セレナは微笑みながらルカに手を差し出した。その瞬間、ルカの鼓動は高鳴り、二人は月の下で優雅に舞い始めた。彼の動きはぎこちなかったが、セレナが優しくリードしてくれた。他のワニたちもそれぞれのパートナーと踊り、湖全体がまるで幻想の世界へと変わっていく。ルカはこの夜が永遠に続けばいいと思った。
-        </p>
-
-        <p>第三章：舞踏会の奇跡</p>
-        <p>
-          ワニたちのダンスは、水面を揺らす優雅な波紋となり、月の光がそれに呼応するかのように輝きを増した。音もなく進むダンスの中で、ルカはセレナに心を奪われていく。「ここでは、時間が止まるの」セレナの言葉どおり、この夜の間だけ、ワニたちは自由に心を通わせることができる。しかし、夜明けとともに舞踏会は終わり、それぞれの生活へと戻らなければならなかった。ルカはその言葉の意味を考えながら、彼女の手をぎゅっと握った。セレナの温もりが、彼の胸の中に深く刻まれていく。彼女の微笑みが、この場所の魔法そのものであるかのように感じられた。
-        </p>
-
-        <p>第四章：消えゆく光</p>
-        <p>
-          夜が更けるにつれ、月はゆっくりと傾き始めた。そして、舞踏会が終わる時が近づいてくる。ルカはセレナの手を取り、離したくないという思いがこみ上げる。「朝が来ても、僕たちはまた会えるの？」セレナは少し寂しそうに微笑み、「この夜を信じて」と囁くと、ゆっくりと湖の奥へ消えていった。ルカはその場に立ち尽くし、心が張り裂けそうだった。彼女が去ったあとの湖面には、静かに波紋が広がるばかりだった。彼はその場を離れることができず、ただ彼女の影を探し続けた。
-        </p>
-
-        <p>第五章：新たな誓い</p>
-        <p>
-          舞踏会が終わったあとも、ルカの心はセレナへの想いで満ちていた。毎晩、湖のほとりで彼女を待ったが、セレナの姿はなかった。しかしある夜、湖面に映る月が、彼に囁くように輝いた。「また満月の夜に」。ルカはその言葉を胸に刻み、次の舞踏会の夜を待つことを誓った。彼は日々、湖畔を訪れ、セレナとの思い出をかみしめながら、次の再会を夢見た。時には寂しさに耐えきれなくなることもあったが、彼女の最後の言葉を思い出し、心を奮い立たせた。
-        </p>
-
-        <p>エピローグ：月の下の約束</p>
-        <p>
-          満月の夜、湖畔に立つルカの前に、銀色の輝きをまとったセレナが現れる。二人は再び手を取り合い、舞踏会の夜を共にする。それは、永遠に続く恋の舞踏だった。ルカは彼女の手を取り、二度と離さないと誓った。湖の水面に映る二人の姿は、月の光に包まれ、まるで一つの魂が寄り添っているかのようだった。そして彼らは、時の流れを超えて、この美しい舞踏を続けるのだった。
-        </p>
+        <p className="whitespace-pre-wrap">{bookContentPage.content}</p>
       </div>
     </div>
   );
