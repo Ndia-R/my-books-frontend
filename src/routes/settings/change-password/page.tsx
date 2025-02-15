@@ -4,9 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { useUser } from '@/hooks/use-user';
 import { changePassword } from '@/lib/action';
-import { getCurrentUser } from '@/lib/data';
 import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -17,7 +15,6 @@ export default function Page() {
   const currentPasswordRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { setUser } = useUser();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -50,9 +47,6 @@ export default function Page() {
     }
 
     toast({ title: 'パスワードを変更しました' });
-
-    const currentUser = await getCurrentUser();
-    setUser(currentUser);
     setIsSubmitting(false);
 
     navigate('/settings/profile');

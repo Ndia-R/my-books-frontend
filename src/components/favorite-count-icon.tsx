@@ -3,10 +3,10 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-user';
 import { createFavorite, deleteFavorite } from '@/lib/action';
-import { getFavoriteByBookId, getFavoriteCount } from '@/lib/data';
+import { getFavoriteInfo } from '@/lib/data';
 import { cn } from '@/lib/util';
-import { Favorite } from '@/types';
-import { useMutation, useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
+import { FavoriteInfo, FavoriteRequest } from '@/types';
+import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 
 const BUTTON_SIZE = { sm: 'size-6', md: 'size-8' };
@@ -16,39 +16,33 @@ const TEXT_SIZE = { sm: 'text-xs', md: 'text-sm' };
 type Props = {
   bookId: string;
   size?: 'sm' | 'md';
-  animation?: boolean;
+  countUpAnimation?: boolean;
 };
 
-export default function FavoriteButton({
+export default function FavoriteCountIcon({
   bookId,
   size = 'md',
-  animation = false,
+  countUpAnimation = false,
 }: Props) {
   const { user } = useUser();
   const queryClient = useQueryClient();
 
-  const [{ data: favorite }, { data: favoriteCount }] = useSuspenseQueries({
-    queries: [
-      {
-        queryKey: ['getFavoriteByBookId', bookId],
-        queryFn: user ? () => getFavoriteByBookId(bookId) : () => Promise<null>,
-      },
-      {
-        queryKey: ['getFavoriteCount', bookId],
-        queryFn: () => getFavoriteCount(bookId),
-      },
-    ],
+  const queryKey = ['getFavoriteInfo', bookId, user?.id];
+  const { data: favoriteInfo } = useSuspenseQuery({
+    queryKey,
+    queryFn: () => getFavoriteInfo(bookId, user?.id),
   });
 
   const { mutate, variables, isPending } = useMutation({
-    mutationFn: async (newFavorite: Favorite) => {
-      if (newFavorite) {
-        await createFavorite(bookId);
+    mutationFn: async (newFavorite: FavoriteInfo) => {
+      if (newFavorite.isFavorite) {
+        const requestBody: FavoriteRequest = { bookId };
+        await createFavorite(requestBody);
       } else {
         await deleteFavorite(bookId);
       }
     },
-    onMutate: async (newFavoriteInfo: Favorite) => {
+    onMutate: async (newFavoriteInfo: FavoriteInfo) => {
       await queryClient.cancelQueries({ queryKey });
       const previousFavoriteInfo = queryClient.getQueryData(queryKey);
       queryClient.setQueryData(queryKey, newFavoriteInfo);
@@ -66,7 +60,6 @@ export default function FavoriteButton({
     if (!user) return;
 
     const newFavoriteInfo: FavoriteInfo = {
-      ...favoriteInfo,
       isFavorite: !favoriteInfo.isFavorite,
       favoriteCount: favoriteInfo.isFavorite
         ? favoriteInfo.favoriteCount - 1
@@ -116,7 +109,7 @@ export default function FavoriteButton({
           TEXT_SIZE[size]
         )}
       >
-        {animation ? (
+        {countUpAnimation ? (
           <CountUpNumber end={optimisticData?.favoriteCount || 0} />
         ) : (
           optimisticData?.favoriteCount

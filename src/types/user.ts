@@ -8,7 +8,7 @@ export interface User {
 
 export interface ProfileCounts {
   favoriteCount: number;
-  myListCount: number;
+  bookmarkCount: number;
   reviewCount: number;
 }
 

@@ -9,7 +9,7 @@ import { AVATER_IMAGE_MAX_COIUNT, AVATER_IMAGE_URL } from '@/constants/constants
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { updateCurrentUser } from '@/lib/action';
-import { checkUsernameExists, getCurrentUser } from '@/lib/data';
+import { checkUsernameExists } from '@/lib/data';
 import { CircleHelpIcon, Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -29,28 +29,24 @@ export default function Page() {
   const avatarUrlRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { user, setUser } = useUser();
+  const { user, fetchUser } = useUser();
   const { toast } = useToast();
 
   useEffect(() => {
     const initUserInfo = async () => {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
-
-      if (nameRef.current && avatarUrlRef.current && currentUser) {
+      if (nameRef.current && avatarUrlRef.current && user) {
         nameRef.current.focus();
-        nameRef.current.value = currentUser.name || '';
-        avatarUrlRef.current.value = currentUser.avatarUrl;
+        nameRef.current.value = user.name || '';
+        avatarUrlRef.current.value = user.avatarUrl;
 
         const index =
-          AVATARS.find((avatar) => avatar.avatarUrl === currentUser.avatarUrl)?.index ||
-          0;
+          AVATARS.find((avatar) => avatar.avatarUrl === user.avatarUrl)?.index || 0;
 
         setDefaultAvatar(index);
       }
     };
     initUserInfo();
-  }, [setUser]);
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -87,8 +83,7 @@ export default function Page() {
 
     toast({ title: 'ユーザー情報を変更しました' });
 
-    const currentUser = await getCurrentUser();
-    setUser(currentUser);
+    await fetchUser();
     setIsSubmitting(false);
 
     navigate('/settings/profile');

@@ -59,7 +59,7 @@ export const formatTime = (dateString: string) => {
  * @param price 価格
  * @returns カンマ区切り数字文字列
  */
-export const priceToString = (price: number) => {
+export const formatPrice = (price: number) => {
   return price === 0 ? '-' : `${Number(price).toLocaleString()}円`;
 };
 

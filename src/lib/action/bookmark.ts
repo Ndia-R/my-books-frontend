@@ -1,9 +1,9 @@
 import { fetchActionWithAuth } from '@/lib/auth';
-import { ReviewRequest } from '@/types';
+import { BookmarkRequest } from '@/types';
 
-export const createReview = async (bookId: string, reqestBody: ReviewRequest) => {
+export const createBookmark = async (reqestBody: BookmarkRequest) => {
   try {
-    const url = `/books/${bookId}/reviews`;
+    const url = `/me/bookmarks`;
     const options: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -17,9 +17,9 @@ export const createReview = async (bookId: string, reqestBody: ReviewRequest) =>
   }
 };
 
-export const updateReview = async (bookId: string, reqestBody: ReviewRequest) => {
+export const updateBookmark = async (reqestBody: BookmarkRequest) => {
   try {
-    const url = `/books/${bookId}/reviews`;
+    const url = `/me/bookmarks`;
     const options: RequestInit = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -33,9 +33,9 @@ export const updateReview = async (bookId: string, reqestBody: ReviewRequest) =>
   }
 };
 
-export const deleteReview = async (bookId: string) => {
+export const deleteBookmark = async (bookId: string) => {
   try {
-    const url = `/books/${bookId}/reviews`;
+    const url = `/me/bookmarks/${bookId}`;
     const options: RequestInit = { method: 'DELETE' };
     await fetchActionWithAuth(url, options);
     return true;

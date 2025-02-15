@@ -1,10 +1,9 @@
+import BookContentPagePage from '@/routes/book/[bookId]/chapters/[chapterNumber]/pages/[pageNumber]/page';
 import BookDetailPage from '@/routes/book/[bookId]/page';
-import BookReadingPage from '@/routes/book/[bookId]/read/[pageNumber]/page';
 import DiscoverPage from '@/routes/discover/page';
 import FavoritesPage from '@/routes/favorites/page';
 import RootLayout from '@/routes/layout';
 import LoginPage from '@/routes/login/page';
-import MyListsPage from '@/routes/my-lists/page';
 import RootPage from '@/routes/page';
 import { ProtectedRoute } from '@/routes/protected-route';
 import SearchPage from '@/routes/search/page';
@@ -23,7 +22,10 @@ export const router = createBrowserRouter(
 
         <Route path="book">
           <Route path=":bookId" element={<BookDetailPage />} />
-          <Route path=":bookId/read/:pageNumber" element={<BookReadingPage />} />
+          <Route
+            path=":bookId/chapters/:chapterNumber/pages/:pageNumber"
+            element={<BookContentPagePage />}
+          />
         </Route>
 
         <Route path="search">
@@ -45,10 +47,6 @@ export const router = createBrowserRouter(
         <Route element={<ProtectedRoute />}>
           <Route path="favorites">
             <Route index element={<FavoritesPage />} />
-          </Route>
-
-          <Route path="my-lists">
-            <Route index element={<MyListsPage />} />
           </Route>
 
           <Route path="settings">

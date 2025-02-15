@@ -1,6 +1,6 @@
 import BookList from '@/components/book-list/book-list';
 import BookPagination from '@/components/book-list/book-pagination';
-import { getBooksByQuery } from '@/lib/data';
+import { getBookPageByQuery } from '@/lib/data';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
@@ -10,8 +10,8 @@ type Props = {
 
 export default function BookListByQuery({ query, page }: Props) {
   const { data: paginatedBook } = useSuspenseQuery({
-    queryKey: ['getBooksByQuery', query, page],
-    queryFn: () => getBooksByQuery(query, page - 1),
+    queryKey: ['getBookPageByQuery', query, page],
+    queryFn: () => getBookPageByQuery(query, page - 1),
   });
 
   return (

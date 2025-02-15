@@ -1,11 +1,10 @@
-import FavoriteButton from '@/components/favorite-button';
+import FavoriteCountIcon from '@/components/favorite-count-icon';
 import GenreList from '@/components/genre-list/genre-list';
-import MyListButton from '@/components/my-list-button';
 import Rating from '@/components/rating';
-import ReviewCommentButton from '@/components/review-comment-count';
+import ReviewCountIcon from '@/components/review-count-icon';
 import { Button } from '@/components/ui/button';
-import { getBookById, getGenres, getReviewRatingInfo } from '@/lib/data';
-import { formatDateJP, formatIsbn, priceToString } from '@/lib/util';
+import { getBookById, getGenres, getReviewSummary } from '@/lib/data';
+import { formatDateJP, formatIsbn, formatPrice } from '@/lib/util';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
@@ -22,8 +21,8 @@ export default function BookDetail({ bookId }: Props) {
           queryFn: () => getBookById(bookId),
         },
         {
-          queryKey: ['getReviewRatingInfo', bookId],
-          queryFn: () => getReviewRatingInfo(bookId),
+          queryKey: ['getReviewSummary', bookId],
+          queryFn: () => getReviewSummary(bookId),
         },
         {
           queryKey: ['getGenres'],
@@ -45,19 +44,18 @@ export default function BookDetail({ bookId }: Props) {
         <div className="delay-150 duration-500 animate-in fade-in-0 slide-in-from-bottom-10">
           <div className="mt-2 flex flex-col items-center sm:w-[440px]">
             <div className="flex justify-center gap-x-10">
-              <ReviewCommentButton bookId={bookId} animation={true} />
-              <MyListButton bookId={bookId} animation={true} />
-              <FavoriteButton bookId={bookId} animation={true} />
+              <ReviewCountIcon bookId={bookId} countUpAnimation={true} />
+              <FavoriteCountIcon bookId={bookId} countUpAnimation={true} />
             </div>
             <div className="flex items-center gap-x-2">
-              <Rating rating={reviewRatingInfo.rating} readOnly />
+              <Rating rating={reviewRatingInfo.averageRating} readOnly />
             </div>
           </div>
         </div>
         <div className="delay-300 duration-500 animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both">
           <div className="my-4 flex items-center">
             <Button className="w-48 rounded-full" size="lg" asChild>
-              <Link to={`/book/${bookId}/read/1`}>読む</Link>
+              <Link to={`/book/${bookId}/chapters/0/pages/1`}>読む</Link>
             </Button>
           </div>
         </div>
@@ -106,7 +104,7 @@ export default function BookDetail({ bookId }: Props) {
               </div>
               <div className="flex">
                 <p className="min-w-20">価格</p>
-                <p>{priceToString(book.price)}</p>
+                <p>{formatPrice(book.price)}</p>
               </div>
             </div>
           </div>

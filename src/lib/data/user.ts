@@ -8,7 +8,7 @@ export const getCurrentUser = async () => {
     const user = await fetchJsonWithAuth<User>(url);
     return user;
   } catch {
-    throw new Error('ユーザー情報の読み込みが失敗しました。');
+    return null;
   }
 };
 
@@ -17,8 +17,8 @@ export const getProfileCounts = async () => {
     const url = `/me/profile-counts`;
     const profieleCounts = await fetchJsonWithAuth<ProfileCounts>(url);
     return profieleCounts;
-  } catch {
-    throw new Error('ユーザーのプロフィール情報の読み込みが失敗しました。');
+  } catch (err) {
+    throw new Error('ユーザーのプロフィール情報の読み込みが失敗しました。' + err);
   }
 };
 

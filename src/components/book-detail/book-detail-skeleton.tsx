@@ -10,7 +10,6 @@ export default function BookDetailSkeleton() {
             <div className="my-1 flex justify-center gap-x-10">
               <Skeleton className="size-8 rounded-full bg-muted-foreground/5" />
               <Skeleton className="size-8 rounded-full bg-muted-foreground/5" />
-              <Skeleton className="size-8 rounded-full bg-muted-foreground/5" />
             </div>
             <div className="flex items-center gap-x-2">
               <Skeleton className="mt-2 h-6 w-48 rounded-full bg-muted-foreground/5" />

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-user';
-import { checkMyReviewExists, getReviewsById } from '@/lib/data';
+import { checkMyReviewExists, getReviewPage } from '@/lib/data';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -18,13 +18,16 @@ export default function ReviewList({ bookId }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
 
-  const queryKey = ['ReviewList', 'checkMyReviewExists', bookId, page];
+  const queryKey = ['ReviewList', 'checkMyReviewExists', bookId, page, user?.id];
   const {
     data: [paginatedReview, reviewExists],
   } = useSuspenseQuery({
     queryKey,
     queryFn: () =>
-      Promise.all([getReviewsById(bookId, page - 1), checkMyReviewExists(bookId)]),
+      Promise.all([
+        getReviewPage(bookId, page - 1),
+        checkMyReviewExists(bookId, user?.id),
+      ]),
   });
 
   return (
@@ -58,7 +61,7 @@ export default function ReviewList({ bookId }: Props) {
 
       <ul className="flex flex-col p-3 sm:p-6">
         {paginatedReview.reviews.map((review) => (
-          <li key={review.reviewId.userId}>
+          <li key={review.userId}>
             <Separator className="bg-foreground/10" />
             <ReviewItem review={review} bookId={bookId} queryKey={queryKey} />
           </li>

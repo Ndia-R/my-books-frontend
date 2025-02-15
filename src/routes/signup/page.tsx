@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { signup } from '@/lib/auth';
-import { checkUsernameExists, getCurrentUser } from '@/lib/data';
+import { checkUsernameExists } from '@/lib/data';
 import { cn } from '@/lib/util';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -25,7 +25,7 @@ export default function Page() {
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { fetchUser } = useUser();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -60,8 +60,7 @@ export default function Page() {
       return;
     }
 
-    const currentUser = await getCurrentUser();
-    setUser(currentUser);
+    await fetchUser();
     setIsSubmitting(false);
 
     navigate('/');

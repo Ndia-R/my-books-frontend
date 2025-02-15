@@ -14,7 +14,11 @@ export interface FavoritePage {
   favorites: Favorite[];
 }
 
-export interface FavoriteCount {
-  bookId: string;
+export interface FavoriteInfo {
+  isFavorite: boolean;
   favoriteCount: number;
+}
+
+export interface FavoriteRequest {
+  bookId: string;
 }

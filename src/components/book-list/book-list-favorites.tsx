@@ -1,6 +1,6 @@
 import BookList from '@/components/book-list/book-list';
 import BookPagination from '@/components/book-list/book-pagination';
-import { getFavorites } from '@/lib/data';
+import { getFavoritePage } from '@/lib/data';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
@@ -8,16 +8,16 @@ type Props = {
 };
 
 export default function BookListFavorites({ page }: Props) {
-  const { data: paginatedBook } = useSuspenseQuery({
-    queryKey: ['getFavorites', page],
-    queryFn: () => getFavorites(page - 1),
+  const { data: bookPage } = useSuspenseQuery({
+    queryKey: ['getFavoritePage', page],
+    queryFn: () => getFavoritePage(page - 1),
   });
 
   return (
     <div className="flex flex-col gap-y-4 pb-4">
-      <BookPagination totalPages={paginatedBook.totalPages} />
-      <BookList books={paginatedBook.books} />
-      <BookPagination totalPages={paginatedBook.totalPages} />
+      <BookPagination totalPages={bookPage.totalPages} />
+      <BookList books={bookPage.favorites.map((favorite) => favorite.book)} />
+      <BookPagination totalPages={bookPage.totalPages} />
     </div>
   );
 }

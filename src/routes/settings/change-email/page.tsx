@@ -8,7 +8,6 @@ import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { changeEmail } from '@/lib/action';
-import { logout } from '@/lib/auth';
 import { cn } from '@/lib/util';
 import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -23,7 +22,7 @@ export default function Page() {
   const emailRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { user, setUser } = useUser();
+  const { user, logout } = useUser();
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
 
@@ -64,10 +63,9 @@ export default function Page() {
       return;
     }
 
-    toast({ title: 'メールアドレスを変更し、ログアウトしました' });
+    toast({ title: 'メールアドレスを変更し、ログアウトしました', duration: 5000 });
 
     await logout();
-    setUser(null);
     setIsSubmitting(false);
 
     navigate('/login');
@@ -123,7 +121,7 @@ export default function Page() {
 
             <div>
               <Label className="text-xs" htmlFor="password">
-                パスワード
+                現在のパスワード
               </Label>
               <PasswordInput
                 className={cn(

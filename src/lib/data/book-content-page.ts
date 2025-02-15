@@ -10,7 +10,7 @@ export const getBookContentPage = async (
     const url = `/books/${bookId}/chapters/${chapterNumber}/pages/${pageNumber}`;
     const bookContentPage = await fetchJsonWithAuth<BookContentPage>(url);
     return bookContentPage;
-  } catch {
-    throw new Error('ページ情報の読み込みが失敗しました。');
+  } catch (err) {
+    throw new Error('書籍のページ情報の読み込みが失敗しました。' + err);
   }
 };

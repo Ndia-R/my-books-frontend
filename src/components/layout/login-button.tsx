@@ -10,13 +10,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { MENU_LIST } from '@/constants/constants';
 import { useUser } from '@/hooks/use-user';
-import { logout } from '@/lib/auth';
 import { LogOutIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function LoginButton() {
-  const { user, setUser } = useUser();
+  const { user, logout } = useUser();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -30,7 +29,6 @@ export default function LoginButton() {
 
   const handleClickLogout = async () => {
     await logout();
-    setUser(null);
     setIsOpen(false);
     navigate('/');
   };

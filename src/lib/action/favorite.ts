@@ -1,12 +1,13 @@
 import { fetchActionWithAuth } from '@/lib/auth';
+import { FavoriteRequest } from '@/types';
 
-export const createFavorite = async (bookId: string) => {
+export const createFavorite = async (reqestBody: FavoriteRequest) => {
   try {
     const url = `/me/favorites`;
     const options: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ bookId }),
+      body: JSON.stringify(reqestBody),
     };
     await fetchActionWithAuth(url, options);
     return true;

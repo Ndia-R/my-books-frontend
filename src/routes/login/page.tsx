@@ -7,7 +7,6 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { useUser } from '@/hooks/use-user';
 import { login } from '@/lib/auth';
-import { getCurrentUser } from '@/lib/data';
 import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -19,7 +18,7 @@ export default function Page() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { setUser } = useUser();
+  const { fetchUser } = useUser();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -46,8 +45,7 @@ export default function Page() {
       return;
     }
 
-    const currentUser = await getCurrentUser();
-    setUser(currentUser);
+    await fetchUser();
     setIsSubmitting(false);
 
     const pathname = location.state?.from?.pathname || '/';

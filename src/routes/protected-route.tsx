@@ -6,7 +6,7 @@ import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 export const ProtectedRoute = () => {
   const location = useLocation();
-  const { setUser } = useUser();
+  const { logout } = useUser();
   const { confirmDialog } = useConfirmDialog();
 
   const [isAuthenticated, setIsAuthenticated] = useState<null | boolean>(null);
@@ -28,12 +28,12 @@ export const ProtectedRoute = () => {
       if (isValid) {
         setIsAuthenticated(true);
       } else {
-        setUser(null);
+        logout();
         setIsAuthenticated(false);
       }
     };
     checkAuthentication();
-  }, [setUser, location, confirmDialog]);
+  }, [logout, location, confirmDialog]);
 
   if (isAuthenticated === null) {
     return null;

@@ -1,12 +1,8 @@
 import { SimpleUserInfo } from '@/types';
 
-export interface ReviewId {
+export interface Review {
   userId: number;
   bookId: string;
-}
-
-export interface Review {
-  reviewId: ReviewId;
   comment: string;
   rating: number;
   createdAt: string;
@@ -14,25 +10,20 @@ export interface Review {
   user: SimpleUserInfo;
 }
 
-export interface ReviewRequest {
-  bookId: string;
-  comment: string;
-  rating: number;
-}
-
-export interface PaginatedReview {
+export interface ReviewPage {
   page: number;
   totalPages: number;
   totalItems: number;
   reviews: Review[];
 }
 
-export interface CheckMyReviewExists {
-  exists: boolean;
+export interface ReviewSummary {
+  bookId: string;
+  reviewCount: number;
+  averageRating: number;
 }
 
-export interface ReviewRatingInfo {
-  bookId: string;
+export interface ReviewRequest {
+  comment: string;
   rating: number;
-  reviewCount: number;
 }

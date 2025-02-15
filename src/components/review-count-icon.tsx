@@ -1,5 +1,5 @@
 import CountUpNumber from '@/components/count-up-number';
-import { getReviewRatingInfo } from '@/lib/data';
+import { getReviewSummary } from '@/lib/data';
 import { cn } from '@/lib/util';
 import { useQuery } from '@tanstack/react-query';
 import { MessageSquareIcon } from 'lucide-react';
@@ -11,18 +11,18 @@ const TEXT_SIZE = { sm: 'text-xs', md: 'text-sm' };
 type Props = {
   bookId: string;
   size?: 'sm' | 'md';
-  animation?: boolean;
+  countUpAnimation?: boolean;
 };
 
-export default function ReviewCommentCount({
+export default function ReviewCountIcon({
   bookId,
   size = 'md',
-  animation = false,
+  countUpAnimation = false,
 }: Props) {
-  const queryKey = ['getReviewRatingInfo', bookId];
+  const queryKey = ['getReviewSummary', bookId];
   const { data: reviewRatingInfo } = useQuery({
     queryKey,
-    queryFn: () => getReviewRatingInfo(bookId),
+    queryFn: () => getReviewSummary(bookId),
   });
 
   return (
@@ -42,7 +42,7 @@ export default function ReviewCommentCount({
           TEXT_SIZE[size]
         )}
       >
-        {animation ? (
+        {countUpAnimation ? (
           <CountUpNumber end={reviewRatingInfo?.reviewCount || 0} />
         ) : (
           reviewRatingInfo?.reviewCount

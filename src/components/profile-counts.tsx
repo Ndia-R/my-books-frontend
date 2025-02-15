@@ -21,7 +21,7 @@ export default function ProfileCounts() {
       <div className="delay-100 duration-500 animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both">
         <div className="w-20 text-center">
           <p className="text-xl font-bold">
-            <CountUpNumber end={profileCounts.myListCount} delay={400} />
+            <CountUpNumber end={profileCounts.bookmarkCount} delay={400} />
           </p>
           <p className="text-sm">マイリスト</p>
         </div>

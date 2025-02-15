@@ -1,6 +1,6 @@
 import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
 import { fetchJson } from '@/lib/data';
-import { Book, PaginatedBook } from '@/types';
+import { Book, BookPage } from '@/types';
 
 export const getBookById = async (bookId: string) => {
   try {
@@ -12,32 +12,32 @@ export const getBookById = async (bookId: string) => {
   }
 };
 
-export const getBooksByQuery = async (q: string, page: number = 0) => {
+export const getBookPageByQuery = async (q: string, page: number = 0) => {
   try {
     const url = `/books/search?q=${q}&page=${page}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
-    const paginatedBook = await fetchJson<PaginatedBook>(url);
-    return paginatedBook;
+    const bookPage = await fetchJson<BookPage>(url);
+    return bookPage;
   } catch {
     throw new Error('書籍検索が失敗しました。');
   }
 };
 
-export const getBooksByGenreId = async (genreIdsQuery: string, page: number = 0) => {
+export const getBookPageByGenreId = async (genreIdsQuery: string, page: number = 0) => {
   try {
     // 「|」はそのまま渡すとエラーになるので、URLエンコードする
     const encodedParams = genreIdsQuery.replace(/\|/g, encodeURIComponent('|'));
 
     const url = `/books/discover?genreId=${encodedParams}&page=${page}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
-    const paginatedBook = await fetchJson<PaginatedBook>(url);
-    return paginatedBook;
+    const bookPage = await fetchJson<BookPage>(url);
+    return bookPage;
   } catch {
     throw new Error('ジャンル検索が失敗しました。');
   }
 };
 
-export const getNewReleases = async () => {
+export const getNewBooks = async () => {
   try {
-    const url = `/books/new-releases`;
+    const url = `/books/new-books`;
     const books = await fetchJson<Book[]>(url);
     return books;
   } catch {

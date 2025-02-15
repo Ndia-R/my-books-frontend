@@ -1,5 +1,5 @@
-import FavoriteButton from '@/components/favorite-button';
-import ReviewCommentCount from '@/components/review-comment-count';
+import FavoriteCountIcon from '@/components/favorite-count-icon';
+import ReviewCountIcon from '@/components/review-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatDateJP } from '@/lib/util';
 import { Book } from '@/types';
@@ -32,8 +32,8 @@ export default function BookCard({ book }: Props) {
               {formatDateJP(book.publishedDate)}
             </p>
             <div className="flex justify-around gap-x-4">
-              <ReviewCommentCount size="sm" bookId={book.id} />
-              <FavoriteButton size="sm" bookId={book.id} />
+              <ReviewCountIcon size="sm" bookId={book.id} />
+              <FavoriteCountIcon size="sm" bookId={book.id} />
             </div>
           </div>
         </CardContent>

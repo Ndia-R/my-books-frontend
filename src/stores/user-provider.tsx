@@ -1,10 +1,12 @@
+import { logout as logoutUser } from '@/lib/auth';
 import { getCurrentUser } from '@/lib/data';
 import { User } from '@/types';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from 'react';
 
 type UserContextType = {
   user: User | null;
-  setUser: (user: User | null) => void;
+  fetchUser: () => Promise<void>;
+  logout: () => Promise<void>;
 };
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -12,19 +14,24 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    const initializeUser = async () => {
-      if (!user) {
-        const currentUser = await getCurrentUser();
-        setUser(currentUser);
-      }
-    };
+  const fetchUser = useCallback(async () => {
+    const currentUser = await getCurrentUser();
+    setUser(currentUser);
+  }, []);
 
-    initializeUser();
-  }, [user]);
+  const logout = useCallback(async () => {
+    await logoutUser();
+    setUser(null);
+  }, []);
+
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>{children}</UserContext.Provider>
+    <UserContext.Provider value={{ user, fetchUser, logout }}>
+      {children}
+    </UserContext.Provider>
   );
 };
 
