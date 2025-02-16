@@ -1,4 +1,3 @@
-import BookContentPagePage from '@/routes/book/[bookId]/chapters/[chapterNumber]/pages/[pageNumber]/page';
 import BookDetailPage from '@/routes/book/[bookId]/page';
 import DiscoverPage from '@/routes/discover/page';
 import FavoritesPage from '@/routes/favorites/page';
@@ -6,6 +5,8 @@ import RootLayout from '@/routes/layout';
 import LoginPage from '@/routes/login/page';
 import RootPage from '@/routes/page';
 import { ProtectedRoute } from '@/routes/protected-route';
+import BookReadPage from '@/routes/read/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
+import BookReadTableOfContentsPage from '@/routes/read/[bookId]/table-of-contents/page';
 import SearchPage from '@/routes/search/page';
 import ChangeEmailPage from '@/routes/settings/change-email/page';
 import ChangePasswordPage from '@/routes/settings/change-password/page';
@@ -20,12 +21,13 @@ export const router = createBrowserRouter(
       <Route path="/" element={<RootLayout />}>
         <Route index element={<RootPage />} />
 
-        <Route path="book">
-          <Route path=":bookId" element={<BookDetailPage />} />
-          <Route
-            path=":bookId/chapters/:chapterNumber/pages/:pageNumber"
-            element={<BookContentPagePage />}
-          />
+        <Route path="book/:bookId" element={<BookDetailPage />} />
+
+        <Route path="read/:bookId">
+          <Route path="chapter/:chapterNumber">
+            <Route path="page/:pageNumber" element={<BookReadPage />} />
+          </Route>
+          <Route path="table-of-contents" element={<BookReadTableOfContentsPage />} />
         </Route>
 
         <Route path="search">

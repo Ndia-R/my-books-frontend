@@ -1,4 +1,3 @@
-import CountUpNumber from '@/components/count-up-number';
 import { getReviewSummary } from '@/lib/data';
 import { cn } from '@/lib/util';
 import { useQuery } from '@tanstack/react-query';
@@ -11,14 +10,9 @@ const TEXT_SIZE = { sm: 'text-xs', md: 'text-sm' };
 type Props = {
   bookId: string;
   size?: 'sm' | 'md';
-  countUpAnimation?: boolean;
 };
 
-export default function ReviewCountIcon({
-  bookId,
-  size = 'md',
-  countUpAnimation = false,
-}: Props) {
+export default function ReviewCountIcon({ bookId, size = 'md' }: Props) {
   const queryKey = ['getReviewSummary', bookId];
   const { data: reviewRatingInfo } = useQuery({
     queryKey,
@@ -42,11 +36,7 @@ export default function ReviewCountIcon({
           TEXT_SIZE[size]
         )}
       >
-        {countUpAnimation ? (
-          <CountUpNumber end={reviewRatingInfo?.reviewCount || 0} />
-        ) : (
-          reviewRatingInfo?.reviewCount
-        )}
+        {reviewRatingInfo?.reviewCount}
       </p>
     </div>
   );

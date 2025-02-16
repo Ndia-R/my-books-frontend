@@ -7,7 +7,7 @@ type Props = {
   pageNumber: number;
 };
 
-export default function BookReading({ bookId, chapterNumber, pageNumber }: Props) {
+export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
   const [{ data: book }, { data: bookTableOfContents }, { data: bookContentPage }] =
     useSuspenseQueries({
       queries: [
@@ -26,23 +26,24 @@ export default function BookReading({ bookId, chapterNumber, pageNumber }: Props
       ],
     });
 
-  console.log(pageNumber);
-  console.log(bookTableOfContents);
-  console.log(bookContentPage);
+  const pageTitle = `（${pageNumber}/${bookTableOfContents.chapters.find((chapter) => chapter.chapterNumber === chapterNumber)?.pageNumbers.length}）`;
 
   return (
-    <div className="relative">
+    <>
       <div className="fixed left-0 top-0 -z-10 flex h-screen w-full justify-center">
         <img
-          className="w-full max-w-7xl object-cover opacity-30"
+          className="w-full max-w-7xl object-cover opacity-5"
           src={book.imageUrl}
           alt="bg-image"
         />
       </div>
-      <div className="flex flex-col gap-y-4 px-4 py-8 drop-shadow-lg [text-shadow:1px_1px_1px_hsl(var(--background))/20] sm:px-20">
-        <p className="text-3xl font-bold">{book.title}</p>
+      <div className="flex flex-col gap-y-12 px-4 py-12 sm:px-20">
+        <p className="text-xl font-bold sm:text-2xl">
+          {bookContentPage.chapterTitle}
+          <span className="text-sm text-muted-foreground sm:text-base">{pageTitle}</span>
+        </p>
         <p className="whitespace-pre-wrap">{bookContentPage.content}</p>
       </div>
-    </div>
+    </>
   );
 }

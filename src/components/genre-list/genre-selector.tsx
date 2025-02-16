@@ -16,21 +16,23 @@ type ConditionType = {
 };
 
 const CONDITIONS: ConditionType[] = [
+  { id: 'single-condition', value: 'SINGLE', splitCode: 'none' },
   { id: 'and-condition', value: 'AND', splitCode: ',' },
   { id: 'or-condition', value: 'OR', splitCode: '|' },
 ];
 
 const parseGenreIdQuery = (genreIdQuery: string) => {
-  for (const condition of CONDITIONS) {
-    if (genreIdQuery.includes(condition.splitCode)) {
-      return {
-        ids: genreIdQuery.split(condition.splitCode).map((id) => Number(id)),
-        condition,
-      };
-    }
-  }
-  const ids = genreIdQuery ? [Number(genreIdQuery)] : [];
-  return { ids, condition: CONDITIONS[0] };
+  const condition =
+    CONDITIONS.find((c) => genreIdQuery.includes(c.splitCode)) || CONDITIONS[0];
+
+  const ids = genreIdQuery
+    ? genreIdQuery
+        .split(condition.splitCode)
+        .map((id) => Number(id))
+        .filter((id) => !isNaN(id))
+    : [];
+
+  return { ids, condition };
 };
 
 export default function GenreSelector() {
@@ -60,26 +62,37 @@ export default function GenreSelector() {
   }, [location.search]);
 
   const handleClickGenre = (genreId: number) => {
-    const ids = isActive(genreId)
-      ? selectedGenres.filter((id) => id !== genreId)
-      : [...selectedGenres, genreId];
-    setSelectedGenres(ids);
+    let newSelectedGenres: number[];
 
-    const genreIdQuery = ids.join(selectedCondition.splitCode);
-    updateDiscoverUrl(genreIdQuery);
+    if (selectedCondition.id === 'single-condition') {
+      newSelectedGenres = [genreId];
+    } else if (isActive(genreId)) {
+      newSelectedGenres =
+        selectedGenres.length > 1
+          ? selectedGenres.filter((id) => id !== genreId)
+          : selectedGenres;
+    } else {
+      newSelectedGenres = [...selectedGenres, genreId].sort((a, b) => a - b);
+    }
+
+    setSelectedGenres(newSelectedGenres);
+    updateDiscoverUrl(newSelectedGenres.join(selectedCondition.splitCode));
   };
 
   const handleValueChange = (value: string) => {
     const selected =
-      CONDITIONS.find((condition) => condition.value === value) || CONDITIONS[0];
+      CONDITIONS.find((condition) => condition.value === value) ?? CONDITIONS[0];
     setSelectedCondition(selected);
 
-    const genreIdQuery = selectedGenres.join(selected.splitCode);
+    const genreIdQuery =
+      value === 'SINGLE'
+        ? (selectedGenres[0]?.toString() ?? '')
+        : selectedGenres.join(selected.splitCode);
     updateDiscoverUrl(genreIdQuery);
   };
 
   const updateDiscoverUrl = (genreIdQuery: string) => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams();
     params.set('genreId', genreIdQuery);
     params.set('page', '1');
     navigate(`/discover?${params.toString()}`);
@@ -108,24 +121,25 @@ export default function GenreSelector() {
       <Separator className="my-4 bg-foreground/10" />
 
       <ul className="flex flex-wrap">
-        {genres.map((genre) => (
-          <li key={genre.id}>
-            <Button
-              className={cn(
-                'rounded-full m-1 text-muted-foreground text-xs sm:text-sm',
-                isActive(genre.id) && 'text-foreground'
-              )}
-              variant={isActive(genre.id) ? 'secondary' : 'ghost'}
-              size="sm"
-              onClick={() => handleClickGenre(genre.id)}
-            >
-              {isActive(genre.id) && (
-                <CheckIcon className="mr-1 size-4" strokeWidth={4} />
-              )}
-              {genre.name}
-            </Button>
-          </li>
-        ))}
+        {genres.map((genre) => {
+          const active = isActive(genre.id);
+          return (
+            <li key={genre.id}>
+              <Button
+                className={cn(
+                  'rounded-full m-1 text-muted-foreground text-xs sm:text-sm',
+                  active && 'text-foreground'
+                )}
+                variant={active ? 'secondary' : 'ghost'}
+                size="sm"
+                onClick={() => handleClickGenre(genre.id)}
+              >
+                {active && <CheckIcon className="mr-1 size-4" strokeWidth={4} />}
+                {genre.name}
+              </Button>
+            </li>
+          );
+        })}
       </ul>
 
       <Separator className="my-4 bg-foreground/10" />

@@ -1,4 +1,3 @@
-import CountUpNumber from '@/components/count-up-number';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useUser } from '@/hooks/use-user';
@@ -16,14 +15,9 @@ const TEXT_SIZE = { sm: 'text-xs', md: 'text-sm' };
 type Props = {
   bookId: string;
   size?: 'sm' | 'md';
-  countUpAnimation?: boolean;
 };
 
-export default function FavoriteCountIcon({
-  bookId,
-  size = 'md',
-  countUpAnimation = false,
-}: Props) {
+export default function FavoriteCountIcon({ bookId, size = 'md' }: Props) {
   const { user } = useUser();
   const queryClient = useQueryClient();
 
@@ -109,11 +103,7 @@ export default function FavoriteCountIcon({
           TEXT_SIZE[size]
         )}
       >
-        {countUpAnimation ? (
-          <CountUpNumber end={optimisticData?.favoriteCount || 0} />
-        ) : (
-          optimisticData?.favoriteCount
-        )}
+        {optimisticData?.favoriteCount}
       </p>
     </div>
   );
