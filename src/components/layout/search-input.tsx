@@ -22,7 +22,7 @@ export default function SearchInput() {
     const params = new URLSearchParams();
     params.set('q', query);
     params.set('page', '1');
-    navigate(`/search?${params.toString()}`);
+    navigate(`/search?${params.toString()}`, { replace: true });
   };
 
   return (

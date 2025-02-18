@@ -1,8 +1,11 @@
 import { FETCH_REVIEWS_MAX_RESULTS } from '@/constants/constants';
 import { fetchJson } from '@/lib/data';
+import { sleep } from '@/lib/util';
 import { Review, ReviewPage, ReviewSummary } from '@/types';
 
 export const getReviewPage = async (bookId: string, page: number = 0) => {
+  await sleep(2000);
+
   try {
     const url = `/books/${bookId}/reviews?&page=${page}&maxResults=${FETCH_REVIEWS_MAX_RESULTS}`;
     const reviewPage = await fetchJson<ReviewPage>(url);
@@ -13,6 +16,8 @@ export const getReviewPage = async (bookId: string, page: number = 0) => {
 };
 
 export const getReviewSummary = async (bookId: string) => {
+  await sleep(2000);
+
   try {
     const url = `/books/${bookId}/reviews/summary`;
     const reviewSummary = await fetchJson<ReviewSummary>(url);

@@ -1,4 +1,4 @@
-import SwipeArea from '@/components/swipe-area';
+import SwipeArea from '@/components/settings/swipe-area';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/util';

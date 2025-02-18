@@ -1,11 +1,11 @@
 import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
 import { fetchJson } from '@/lib/data';
-import { Book, BookPage } from '@/types';
+import { Book, BookDetails, BookPage } from '@/types';
 
-export const getBookById = async (bookId: string) => {
+export const getBookDetailsById = async (bookId: string) => {
   try {
     const url = `/books/${bookId}`;
-    const book = await fetchJson<Book>(url);
+    const book = await fetchJson<BookDetails>(url);
     return book;
   } catch {
     throw new Error('書籍情報の読み込みが失敗しました。');

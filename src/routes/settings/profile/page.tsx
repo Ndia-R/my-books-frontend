@@ -1,5 +1,5 @@
 import Logo from '@/components/layout/logo';
-import ProfileCounts from '@/components/profile-counts';
+import ProfileCounts from '@/components/settings/profile-counts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';

@@ -1,4 +1,4 @@
-import { HeartIcon, ListIcon, SettingsIcon } from 'lucide-react';
+import { BookmarkIcon, HeartIcon, SettingsIcon } from 'lucide-react';
 
 // ロゴ
 export const LOGO_TITLE = 'My Books';
@@ -6,7 +6,7 @@ export const LOGO_TITLE = 'My Books';
 // メニュー一覧
 export const MENU_LIST = [
   { href: '/favorites', title: 'お気に入り', icon: HeartIcon },
-  { href: '/my-lists', title: 'マイリスト', icon: ListIcon },
+  { href: '/bookmarks', title: 'ブックマーク', icon: BookmarkIcon },
   { href: '/settings/profile', title: '設定', icon: SettingsIcon },
 ];
 

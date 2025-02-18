@@ -1,101 +1,67 @@
-import { Button } from '@/components/ui/button';
+import GenreListSelector from '@/components/genre-list/genre-list-selector';
+import GenreListSkeleton from '@/components/genre-list/genre-list-skeleton';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
-import { getGenres } from '@/lib/data';
-import { cn } from '@/lib/util';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { CheckIcon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import ErrorElement from '@/routes/error-element';
+import { Suspense, useState } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 type ConditionType = {
-  id: string;
   value: string;
   splitCode: string;
 };
 
 const CONDITIONS: ConditionType[] = [
-  { id: 'single-condition', value: 'SINGLE', splitCode: 'none' },
-  { id: 'and-condition', value: 'AND', splitCode: ',' },
-  { id: 'or-condition', value: 'OR', splitCode: '|' },
+  { value: 'OR', splitCode: '|' },
+  { value: 'AND', splitCode: ',' },
 ];
 
-const parseGenreIdQuery = (genreIdQuery: string) => {
-  const condition =
-    CONDITIONS.find((c) => genreIdQuery.includes(c.splitCode)) || CONDITIONS[0];
-
-  const ids = genreIdQuery
-    ? genreIdQuery
-        .split(condition.splitCode)
-        .map((id) => Number(id))
-        .filter((id) => !isNaN(id))
-    : [];
-
-  return { ids, condition };
-};
-
 export default function GenreSelector() {
-  const { data: genres } = useSuspenseQuery({
-    queryKey: ['getGenres'],
-    queryFn: () => getGenres(),
-  });
-
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [selectedGenres, setSelectedGenres] = useState<number[]>([]);
-  const [selectedCondition, setSelectedCondition] = useState<ConditionType>(
-    CONDITIONS[0]
-  );
+  const params = new URLSearchParams(location.search);
+  const genreIdQuery = params.get('genreId') ?? '';
 
-  const isActive = (id: number) => selectedGenres.includes(id);
+  const initCondition =
+    CONDITIONS.find((conditon) => genreIdQuery.includes(conditon.splitCode)) ||
+    CONDITIONS[0];
 
-  useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const genreIdQuery = params.get('genreId') ?? '';
+  const splitCodes = CONDITIONS.map((conditon) => conditon.splitCode).join();
+  const regex = new RegExp(`[${splitCodes}]`);
+  const initGenreIds = genreIdQuery.split(regex).map((genreId) => Number(genreId));
 
-    const { ids, condition } = parseGenreIdQuery(genreIdQuery);
-
-    setSelectedGenres(ids);
-    if (ids.length > 1) setSelectedCondition(condition);
-  }, [location.search]);
+  const [selectedCondition, setSelectedCondition] = useState(initCondition);
+  const [selectedGenreIds, setSelectedGenreIds] = useState(initGenreIds);
 
   const handleClickGenre = (genreId: number) => {
-    let newSelectedGenres: number[];
+    let newGenreIds = selectedGenreIds.includes(genreId)
+      ? selectedGenreIds.filter((id) => id !== genreId)
+      : [...selectedGenreIds, genreId].sort((a, b) => a - b);
 
-    if (selectedCondition.id === 'single-condition') {
-      newSelectedGenres = [genreId];
-    } else if (isActive(genreId)) {
-      newSelectedGenres =
-        selectedGenres.length > 1
-          ? selectedGenres.filter((id) => id !== genreId)
-          : selectedGenres;
-    } else {
-      newSelectedGenres = [...selectedGenres, genreId].sort((a, b) => a - b);
+    if (newGenreIds.length === 0) {
+      newGenreIds = [genreId];
     }
 
-    setSelectedGenres(newSelectedGenres);
-    updateDiscoverUrl(newSelectedGenres.join(selectedCondition.splitCode));
+    setSelectedGenreIds(newGenreIds);
+    updateDiscoverUrl(newGenreIds.join(selectedCondition.splitCode));
   };
 
-  const handleValueChange = (value: string) => {
-    const selected =
+  const handleChangeCondition = (value: string) => {
+    const newCondition =
       CONDITIONS.find((condition) => condition.value === value) ?? CONDITIONS[0];
-    setSelectedCondition(selected);
 
-    const genreIdQuery =
-      value === 'SINGLE'
-        ? (selectedGenres[0]?.toString() ?? '')
-        : selectedGenres.join(selected.splitCode);
-    updateDiscoverUrl(genreIdQuery);
+    setSelectedCondition(newCondition);
+    updateDiscoverUrl(selectedGenreIds.join(newCondition.splitCode));
   };
 
   const updateDiscoverUrl = (genreIdQuery: string) => {
     const params = new URLSearchParams();
     params.set('genreId', genreIdQuery);
     params.set('page', '1');
-    navigate(`/discover?${params.toString()}`);
+    navigate(`/discover?${params.toString()}`, { replace: true });
   };
 
   return (
@@ -105,12 +71,12 @@ export default function GenreSelector() {
         <RadioGroup
           className="flex gap-x-4"
           value={selectedCondition.value}
-          onValueChange={handleValueChange}
+          onValueChange={handleChangeCondition}
         >
           {CONDITIONS.map((condition) => (
-            <div className="flex items-center" key={condition.id}>
-              <RadioGroupItem value={condition.value} id={condition.id} />
-              <Label className="cursor-pointer select-none p-2" htmlFor={condition.id}>
+            <div className="flex items-center" key={condition.value}>
+              <RadioGroupItem value={condition.value} id={condition.value} />
+              <Label className="cursor-pointer select-none p-2" htmlFor={condition.value}>
                 {condition.value}
               </Label>
             </div>
@@ -120,27 +86,11 @@ export default function GenreSelector() {
 
       <Separator className="my-4 bg-foreground/10" />
 
-      <ul className="flex flex-wrap">
-        {genres.map((genre) => {
-          const active = isActive(genre.id);
-          return (
-            <li key={genre.id}>
-              <Button
-                className={cn(
-                  'rounded-full m-1 text-muted-foreground text-xs sm:text-sm',
-                  active && 'text-foreground'
-                )}
-                variant={active ? 'secondary' : 'ghost'}
-                size="sm"
-                onClick={() => handleClickGenre(genre.id)}
-              >
-                {active && <CheckIcon className="mr-1 size-4" strokeWidth={4} />}
-                {genre.name}
-              </Button>
-            </li>
-          );
-        })}
-      </ul>
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={<GenreListSkeleton />}>
+          <GenreListSelector activeIds={selectedGenreIds} onClick={handleClickGenre} />
+        </Suspense>
+      </ErrorBoundary>
 
       <Separator className="my-4 bg-foreground/10" />
     </>

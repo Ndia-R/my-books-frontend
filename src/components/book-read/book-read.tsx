@@ -1,5 +1,10 @@
-import { getBookById, getBookContentPage, getBookTableOfContents } from '@/lib/data';
+import {
+  getBookContentPage,
+  getBookDetailsById,
+  getBookTableOfContents,
+} from '@/lib/data';
 import { useSuspenseQueries } from '@tanstack/react-query';
+import { BookmarkIcon } from 'lucide-react';
 
 type Props = {
   bookId: string;
@@ -12,8 +17,8 @@ export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
     useSuspenseQueries({
       queries: [
         {
-          queryKey: ['getBookById', bookId],
-          queryFn: () => getBookById(bookId),
+          queryKey: ['getBookDetailsById', bookId],
+          queryFn: () => getBookDetailsById(bookId),
         },
         {
           queryKey: ['getBookTableOfContents', bookId],
@@ -38,10 +43,15 @@ export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
         />
       </div>
       <div className="flex flex-col gap-y-12 px-4 py-12 sm:px-20">
-        <p className="text-xl font-bold sm:text-2xl">
-          {bookContentPage.chapterTitle}
-          <span className="text-sm text-muted-foreground sm:text-base">{pageTitle}</span>
-        </p>
+        <div className="flex items-center gap-x-2">
+          <p className="text-xl font-bold sm:text-2xl">
+            {bookContentPage.chapterTitle}
+            <span className="text-sm text-muted-foreground sm:text-base">
+              {pageTitle}
+            </span>
+          </p>
+          <BookmarkIcon className="size-4" />
+        </div>
         <p className="whitespace-pre-wrap">{bookContentPage.content}</p>
       </div>
     </>

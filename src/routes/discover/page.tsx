@@ -1,7 +1,6 @@
 import BookListByGenreId from '@/components/book-list/book-list-by-genre-id';
 import BookListSkeleton from '@/components/book-list/book-list-skeleton';
 import GenreSelector from '@/components/genre-list/genre-selector';
-import GenreSelectorSkeleton from '@/components/genre-list/genre-selector-skeleton';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -14,11 +13,7 @@ export default function Page() {
 
   return (
     <>
-      <ErrorBoundary fallback={<ErrorElement />}>
-        <Suspense fallback={<GenreSelectorSkeleton />}>
-          <GenreSelector />
-        </Suspense>
-      </ErrorBoundary>
+      <GenreSelector />
 
       <ErrorBoundary fallback={<ErrorElement />}>
         <Suspense fallback={<BookListSkeleton />}>

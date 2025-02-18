@@ -4,26 +4,16 @@ import { Genre } from '@/types';
 import { Link } from 'react-router-dom';
 
 type Props = {
-  className?: string;
   genres: Genre[];
+  className?: string;
   filterList?: number[];
   variant?: 'default' | 'outline' | 'secondary' | 'ghost';
 };
 
-export default function GenreList({
-  className,
-  genres,
-  filterList = [],
-  variant = 'default',
-}: Props) {
-  const filteredGenres =
-    filterList.length === 0
-      ? genres
-      : genres.filter((genre) => filterList.includes(genre.id));
-
+export default function GenreList({ genres, className, variant = 'default' }: Props) {
   return (
     <ul className={cn('flex flex-wrap', className)}>
-      {filteredGenres.map((genre) => (
+      {genres.map((genre) => (
         <li key={genre.id}>
           <Button
             className={cn('rounded-full', variant === 'outline' && 'bg-transparent')}

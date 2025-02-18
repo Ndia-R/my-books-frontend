@@ -11,7 +11,7 @@ export default function ProfileCounts() {
   return (
     <div className="flex justify-between pt-8">
       <div className="delay-0 duration-500 animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both">
-        <div className="w-20 text-center">
+        <div className="w-24 text-center">
           <p className="text-xl font-bold">
             <CountUpNumber end={profileCounts.favoriteCount} delay={300} />
           </p>
@@ -19,15 +19,15 @@ export default function ProfileCounts() {
         </div>
       </div>
       <div className="delay-100 duration-500 animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both">
-        <div className="w-20 text-center">
+        <div className="w-24 text-center">
           <p className="text-xl font-bold">
             <CountUpNumber end={profileCounts.bookmarkCount} delay={400} />
           </p>
-          <p className="text-sm">マイリスト</p>
+          <p className="text-sm">ブックマーク</p>
         </div>
       </div>
       <div className="delay-200 duration-500 animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both">
-        <div className="w-20 text-center">
+        <div className="w-24 text-center">
           <p className="text-xl font-bold">
             <CountUpNumber end={profileCounts.reviewCount} delay={500} />
           </p>

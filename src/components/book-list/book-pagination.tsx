@@ -22,7 +22,7 @@ export default function BookPagination({ totalPages }: Props) {
     setPage(page);
     const params = new URLSearchParams(location.search);
     params.set('page', page.toString());
-    navigate(`${location.pathname}?${params.toString()}`);
+    navigate(`${location.pathname}?${params.toString()}`, { replace: true });
   };
 
   return (

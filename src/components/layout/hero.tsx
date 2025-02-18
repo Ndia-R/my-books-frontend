@@ -1,5 +1,5 @@
 import imgUrl from '@/assets/main-visual.png';
-import SearchInput from '@/components/search-input';
+import SearchInput from '@/components/layout/search-input';
 
 export default function Hero() {
   const TITLE = (

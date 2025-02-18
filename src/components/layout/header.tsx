@@ -1,7 +1,7 @@
 import LoginButton from '@/components/layout/login-button';
 import NavList from '@/components/layout/nav-list';
+import SearchInput from '@/components/layout/search-input';
 import ThemeToggleButton from '@/components/layout/theme-toggle-button';
-import SearchInput from '@/components/search-input';
 import { cn } from '@/lib/util';
 
 type Props = {

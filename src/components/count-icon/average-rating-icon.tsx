@@ -1,24 +1,16 @@
-import { getReviewSummary } from '@/lib/data';
 import { cn } from '@/lib/util';
-import { useQuery } from '@tanstack/react-query';
-import { MessageSquareIcon } from 'lucide-react';
+import { StarIcon } from 'lucide-react';
 
 const BUTTON_SIZE = { sm: 'size-6', md: 'size-8' };
 const ICON_SIZE = { sm: 'size-3', md: 'size-4' };
 const TEXT_SIZE = { sm: 'text-xs', md: 'text-sm' };
 
 type Props = {
-  bookId: string;
+  averageRating: number;
   size?: 'sm' | 'md';
 };
 
-export default function ReviewCountIcon({ bookId, size = 'md' }: Props) {
-  const queryKey = ['getReviewSummary', bookId];
-  const { data: reviewRatingInfo } = useQuery({
-    queryKey,
-    queryFn: () => getReviewSummary(bookId),
-  });
-
+export default function AverageRatingIcon({ averageRating, size = 'md' }: Props) {
   return (
     <div className="flex items-center">
       <div
@@ -27,7 +19,7 @@ export default function ReviewCountIcon({ bookId, size = 'md' }: Props) {
           BUTTON_SIZE[size]
         )}
       >
-        <MessageSquareIcon className={ICON_SIZE[size]} />
+        <StarIcon className={ICON_SIZE[size]} />
       </div>
 
       <p
@@ -36,7 +28,7 @@ export default function ReviewCountIcon({ bookId, size = 'md' }: Props) {
           TEXT_SIZE[size]
         )}
       >
-        {reviewRatingInfo?.reviewCount}
+        {averageRating.toFixed(1)}
       </p>
     </div>
   );

@@ -1,5 +1,6 @@
-import FavoriteCountIcon from '@/components/favorite-count-icon';
-import ReviewCountIcon from '@/components/review-count-icon';
+import AverageRatingIcon from '@/components/count-icon/average-rating-icon';
+import FavoriteCountIcon from '@/components/count-icon/favorite-count-icon';
+import ReviewCountIcon from '@/components/count-icon/review-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatDateJP } from '@/lib/util';
 import { Book } from '@/types';
@@ -32,8 +33,9 @@ export default function BookCard({ book }: Props) {
               {formatDateJP(book.publishedDate)}
             </p>
             <div className="flex justify-around gap-x-4">
-              <ReviewCountIcon size="sm" bookId={book.id} />
               <FavoriteCountIcon size="sm" bookId={book.id} />
+              <ReviewCountIcon size="sm" reviewCount={book.reviewCount} />
+              <AverageRatingIcon size="sm" averageRating={book.averageRating} />
             </div>
           </div>
         </CardContent>

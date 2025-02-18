@@ -1,5 +1,5 @@
-import AvatarCarousel from '@/components/avatar-carousel';
 import Logo from '@/components/layout/logo';
+import AvatarCarousel from '@/components/settings/avatar-carousel';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

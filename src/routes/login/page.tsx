@@ -1,5 +1,5 @@
 import Logo from '@/components/layout/logo';
-import PasswordInput from '@/components/password-input';
+import PasswordInput from '@/components/settings/password-input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

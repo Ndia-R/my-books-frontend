@@ -1,11 +1,13 @@
-import FavoriteCountIcon from '@/components/favorite-count-icon';
+import CountIconSkeleton from '@/components/count-icon/count-icon-skeleton';
+import FavoriteCountIcon from '@/components/count-icon/favorite-count-icon';
+import ReviewCountIcon from '@/components/count-icon/review-count-icon';
 import GenreList from '@/components/genre-list/genre-list';
 import Rating from '@/components/rating';
-import ReviewCountIcon from '@/components/review-count-icon';
 import { Button } from '@/components/ui/button';
-import { getBookById, getGenres, getReviewSummary } from '@/lib/data';
+import { getBookDetailsById, getReviewSummary } from '@/lib/data';
 import { formatDateJP, formatIsbn, formatPrice } from '@/lib/util';
 import { useSuspenseQueries } from '@tanstack/react-query';
+import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -13,23 +15,18 @@ type Props = {
 };
 
 export default function BookDetail({ bookId }: Props) {
-  const [{ data: book }, { data: reviewRatingInfo }, { data: genres }] =
-    useSuspenseQueries({
-      queries: [
-        {
-          queryKey: ['getBookById', bookId],
-          queryFn: () => getBookById(bookId),
-        },
-        {
-          queryKey: ['getReviewSummary', bookId],
-          queryFn: () => getReviewSummary(bookId),
-        },
-        {
-          queryKey: ['getGenres'],
-          queryFn: () => getGenres(),
-        },
-      ],
-    });
+  const [{ data: book }, { data: reviewRatingInfo }] = useSuspenseQueries({
+    queries: [
+      {
+        queryKey: ['getBookDetailsById', bookId],
+        queryFn: () => getBookDetailsById(bookId),
+      },
+      {
+        queryKey: ['getReviewSummary', bookId],
+        queryFn: () => getReviewSummary(bookId),
+      },
+    ],
+  });
 
   return (
     <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">
@@ -43,8 +40,10 @@ export default function BookDetail({ bookId }: Props) {
         </Link>
         <div className="mt-2 flex flex-col items-center justify-around sm:w-[440px] sm:flex-row">
           <div className="flex justify-center gap-x-2">
-            <ReviewCountIcon bookId={bookId} />
-            <FavoriteCountIcon bookId={bookId} />
+            <Suspense fallback={<CountIconSkeleton />}>
+              <FavoriteCountIcon bookId={bookId} />
+            </Suspense>
+            <ReviewCountIcon reviewCount={book.reviewCount} />
           </div>
           <Rating rating={reviewRatingInfo.averageRating} readOnly />
         </div>
@@ -66,12 +65,7 @@ export default function BookDetail({ bookId }: Props) {
             </p>
           ))}
         </div>
-        <GenreList
-          className="gap-2"
-          genres={genres}
-          filterList={book.genreIds}
-          variant="outline"
-        />
+        <GenreList className="gap-2" genres={book.genres} variant="outline" />
 
         <div className="my-6 md:my-10">{book.description}</div>
 

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { getBookById, getBookTableOfContents } from '@/lib/data';
+import { getBookDetailsById, getBookTableOfContents } from '@/lib/data';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
@@ -11,8 +11,8 @@ export default function BookTableOfContents({ bookId }: Props) {
   const [{ data: book }, { data: bookTableOfContents }] = useSuspenseQueries({
     queries: [
       {
-        queryKey: ['getBookById', bookId],
-        queryFn: () => getBookById(bookId),
+        queryKey: ['getBookDetailsById', bookId],
+        queryFn: () => getBookDetailsById(bookId),
       },
       {
         queryKey: ['getBookTableOfContents', bookId],
@@ -35,7 +35,7 @@ export default function BookTableOfContents({ bookId }: Props) {
         <div className="flex w-full flex-col items-center gap-y-4 sm:items-start">
           <p className="text-3xl font-bold sm:text-5xl">{book.title}</p>
           <Button className="w-44 rounded-full bg-transparent" variant="outline" asChild>
-            <Link to={`/read/${bookId}/table-of-contents`}>読む</Link>
+            <Link to={`/read/${bookId}/table-of-contents`}>最初から読む</Link>
           </Button>
         </div>
         <ul className="flex w-full flex-col items-center gap-y-8 text-base sm:items-start sm:text-xl">

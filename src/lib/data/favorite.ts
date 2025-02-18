@@ -1,6 +1,7 @@
 import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
 import { fetchJsonWithAuth } from '@/lib/auth';
 import { fetchJson } from '@/lib/data';
+import { sleep } from '@/lib/util';
 import { Favorite, FavoriteInfo, FavoritePage } from '@/types';
 
 export const getFavoritePage = async (page: number = 0) => {
@@ -24,6 +25,7 @@ export const getFavoriteById = async (bookId: string) => {
 };
 
 export const getFavoriteInfo = async (bookId: string, userId: number | undefined) => {
+  await sleep(2000);
   try {
     const query = userId ? `?userId=${userId}` : '';
     const url = `/books/${bookId}/favorites${query}`;
