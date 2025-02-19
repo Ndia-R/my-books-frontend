@@ -18,16 +18,13 @@ export default function ReviewList({ bookId }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
 
-  const queryKey = ['ReviewList', 'checkMyReviewExists', bookId, page, user?.id];
+  const queryKey = ['ReviewList', 'checkMyReviewExists', bookId, page];
   const {
     data: [paginatedReview, reviewExists],
   } = useSuspenseQuery({
     queryKey,
     queryFn: () =>
-      Promise.all([
-        getReviewPage(bookId, page - 1),
-        checkMyReviewExists(bookId, user?.id),
-      ]),
+      Promise.all([getReviewPage(bookId, page - 1), checkMyReviewExists(bookId)]),
   });
 
   return (

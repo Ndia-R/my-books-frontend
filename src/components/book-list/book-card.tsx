@@ -32,7 +32,7 @@ export default function BookCard({ book }: Props) {
             <p className="text-xs tracking-wide text-muted-foreground">
               {formatDateJP(book.publishedDate)}
             </p>
-            <div className="flex justify-around gap-x-4">
+            <div className="flex justify-around gap-x-2 sm:gap-x-4">
               <FavoriteCountIcon size="sm" bookId={book.id} />
               <ReviewCountIcon size="sm" reviewCount={book.reviewCount} />
               <AverageRatingIcon size="sm" averageRating={book.averageRating} />

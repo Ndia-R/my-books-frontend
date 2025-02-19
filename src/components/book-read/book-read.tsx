@@ -49,8 +49,8 @@ export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
             <span className="text-sm text-muted-foreground sm:text-base">
               {pageTitle}
             </span>
+            <BookmarkIcon className="inline size-4" />
           </p>
-          <BookmarkIcon className="size-4" />
         </div>
         <p className="whitespace-pre-wrap">{bookContentPage.content}</p>
       </div>

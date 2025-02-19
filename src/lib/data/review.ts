@@ -1,4 +1,5 @@
 import { FETCH_REVIEWS_MAX_RESULTS } from '@/constants/constants';
+import { fetchJsonWithAuth } from '@/lib/auth';
 import { fetchJson } from '@/lib/data';
 import { sleep } from '@/lib/util';
 import { Review, ReviewPage, ReviewSummary } from '@/types';
@@ -27,12 +28,10 @@ export const getReviewSummary = async (bookId: string) => {
   }
 };
 
-export const checkMyReviewExists = async (bookId: string, userId: number | undefined) => {
-  if (!userId) return false;
-
+export const checkMyReviewExists = async (bookId: string) => {
   try {
-    const url = `/books/${bookId}/reviews/${userId}`;
-    await fetchJson<Review>(url);
+    const url = `/reviews/${bookId}`;
+    await fetchJsonWithAuth<Review>(url);
     return true;
   } catch {
     return false;

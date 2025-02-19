@@ -26,10 +26,10 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
-    mutationFn: (bookId: string) => deleteReview(bookId),
+    mutationFn: (id: number) => deleteReview(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
-      queryClient.invalidateQueries({ queryKey: ['getReviewSummary', bookId] });
+      queryClient.invalidateQueries({ queryKey: ['getBookDetailsById', bookId] });
     },
   });
 
@@ -42,7 +42,7 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
     });
     if (isCancel) return;
 
-    mutate(bookId, {
+    mutate(review.id, {
       onSuccess: () => {
         toast({ description: 'レビューを削除しました' });
       },
@@ -56,21 +56,21 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
           <Avatar className="size-16">
             <AvatarImage
               className="bg-primary/50"
-              src={review.user.avatarUrl}
+              src={review.avatarUrl}
               alt="avatar-image"
             />
             <AvatarFallback className="font-semibold">
-              {review.user.name.slice(0, 1)}
+              {review.name.slice(0, 1)}
             </AvatarFallback>
           </Avatar>
           <div>
-            <p className="-mb-1 text-lg font-semibold">{review.user.name}</p>
+            <p className="-mb-1 text-lg font-semibold">{review.name}</p>
             <div className="flex items-center">
               <p className="whitespace-nowrap text-sm leading-8 tracking-wide text-muted-foreground">
                 {formatDateJP(review.updatedAt)} {formatTime(review.updatedAt)}
               </p>
               <div className="ml-2 flex w-16">
-                {user?.id === review.user.id && (
+                {user?.id === review.userId && (
                   <>
                     <Button
                       className="size-8 rounded-full text-muted-foreground"

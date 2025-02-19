@@ -1,13 +1,16 @@
-import { SimpleUserInfo } from '@/types';
+import { Book } from '@/types';
 
 export interface Review {
+  id: number;
   userId: number;
   bookId: string;
+  name: string;
+  avatarUrl: string;
   comment: string;
   rating: number;
   createdAt: string;
   updatedAt: string;
-  user: SimpleUserInfo;
+  book: Book;
 }
 
 export interface ReviewPage {
@@ -24,6 +27,7 @@ export interface ReviewSummary {
 }
 
 export interface ReviewRequest {
+  bookId: string;
   comment: string;
   rating: number;
 }

@@ -4,9 +4,9 @@ import ReviewCountIcon from '@/components/count-icon/review-count-icon';
 import GenreList from '@/components/genre-list/genre-list';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
-import { getBookDetailsById, getReviewSummary } from '@/lib/data';
+import { getBookDetailsById } from '@/lib/data';
 import { formatDateJP, formatIsbn, formatPrice } from '@/lib/util';
-import { useSuspenseQueries } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -15,17 +15,9 @@ type Props = {
 };
 
 export default function BookDetail({ bookId }: Props) {
-  const [{ data: book }, { data: reviewRatingInfo }] = useSuspenseQueries({
-    queries: [
-      {
-        queryKey: ['getBookDetailsById', bookId],
-        queryFn: () => getBookDetailsById(bookId),
-      },
-      {
-        queryKey: ['getReviewSummary', bookId],
-        queryFn: () => getReviewSummary(bookId),
-      },
-    ],
+  const { data: book } = useSuspenseQuery({
+    queryKey: ['getBookDetailsById', bookId],
+    queryFn: () => getBookDetailsById(bookId),
   });
 
   return (
@@ -45,7 +37,7 @@ export default function BookDetail({ bookId }: Props) {
             </Suspense>
             <ReviewCountIcon reviewCount={book.reviewCount} />
           </div>
-          <Rating rating={reviewRatingInfo.averageRating} readOnly />
+          <Rating rating={book.averageRating} readOnly />
         </div>
         <div className="my-4 flex items-center">
           <Button className="w-44 rounded-full bg-transparent" variant="outline" asChild>

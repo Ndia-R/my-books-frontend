@@ -3,7 +3,7 @@ import { BookmarkRequest } from '@/types';
 
 export const createBookmark = async (reqestBody: BookmarkRequest) => {
   try {
-    const url = `/me/bookmarks`;
+    const url = `/bookmarks`;
     const options: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -17,9 +17,9 @@ export const createBookmark = async (reqestBody: BookmarkRequest) => {
   }
 };
 
-export const updateBookmark = async (reqestBody: BookmarkRequest) => {
+export const updateBookmark = async (id: number, reqestBody: BookmarkRequest) => {
   try {
-    const url = `/me/bookmarks`;
+    const url = `/bookmarks/${id}`;
     const options: RequestInit = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -33,9 +33,9 @@ export const updateBookmark = async (reqestBody: BookmarkRequest) => {
   }
 };
 
-export const deleteBookmark = async (bookId: string) => {
+export const deleteBookmark = async (id: number) => {
   try {
-    const url = `/me/bookmarks/${bookId}`;
+    const url = `/bookmarks/${id}`;
     const options: RequestInit = { method: 'DELETE' };
     await fetchActionWithAuth(url, options);
     return true;

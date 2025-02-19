@@ -32,10 +32,10 @@ export default function ReviewCreateDialog({
 
   const queryClient = useQueryClient();
   const { mutate } = useMutation({
-    mutationFn: (reqestBody: ReviewRequest) => createReview(bookId, reqestBody),
+    mutationFn: (reqestBody: ReviewRequest) => createReview(reqestBody),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
-      queryClient.invalidateQueries({ queryKey: ['getReviewSummary', bookId] });
+      queryClient.invalidateQueries({ queryKey: ['getBookDetailsById', bookId] });
     },
   });
 
@@ -63,7 +63,7 @@ export default function ReviewCreateDialog({
       if (isCancel) return;
     }
 
-    const requestBody: ReviewRequest = { comment, rating };
+    const requestBody: ReviewRequest = { bookId, comment, rating };
     mutate(requestBody, {
       onSuccess: () => {
         toast({ description: 'レビューを投稿しました' });

@@ -3,7 +3,7 @@ import { FavoriteRequest } from '@/types';
 
 export const createFavorite = async (reqestBody: FavoriteRequest) => {
   try {
-    const url = `/me/favorites`;
+    const url = `/favorites`;
     const options: RequestInit = {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -19,7 +19,7 @@ export const createFavorite = async (reqestBody: FavoriteRequest) => {
 
 export const deleteFavorite = async (bookId: string) => {
   try {
-    const url = `/me/favorites/${bookId}`;
+    const url = `/favorites/${bookId}`;
     const options: RequestInit = { method: 'DELETE' };
     await fetchActionWithAuth(url, options);
     return true;
