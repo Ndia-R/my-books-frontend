@@ -70,24 +70,20 @@ export const logout = async () => {
 
 export const fetchJsonWithAuth = async <T>(
   url: string,
-  options?: RequestInit
+  options: RequestInit = {}
 ): Promise<T> => {
-  const token = getAccessToken();
-  if (!token) {
-    throw new Error(`アクセストークンがありません。URL: ${url}`);
-  }
-
+  const accessToken = getAccessToken();
   let res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
     ...options,
     headers: {
-      ...options?.headers,
-      Authorization: `Bearer ${token}`,
+      ...options.headers,
+      Authorization: `Bearer ${accessToken}`,
     },
   });
 
   if (res.status === 401) {
-    const newToken = await refreshAccessToken();
-    if (!newToken) {
+    const newAccessToken = await refreshAccessToken();
+    if (!newAccessToken) {
       clearAccessToken();
       const error: CustomError = new Error(
         `リフレッシュトークンの有効期限が切れました。URL: ${url}`
@@ -96,12 +92,12 @@ export const fetchJsonWithAuth = async <T>(
       throw error;
     }
 
-    setAccessToken(newToken);
+    setAccessToken(newAccessToken);
     res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
       ...options,
       headers: {
-        ...options?.headers,
-        Authorization: `Bearer ${newToken}`,
+        ...options.headers,
+        Authorization: `Bearer ${newAccessToken}`,
       },
     });
   }
@@ -114,10 +110,6 @@ export const fetchJsonWithAuth = async <T>(
 
 export const fetchActionWithAuth = async (url: string, options?: RequestInit) => {
   const token = getAccessToken();
-  if (!token) {
-    throw new Error(`アクセストークンがありません。URL: ${url}`);
-  }
-
   let res = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
     ...options,
     headers: {

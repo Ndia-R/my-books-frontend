@@ -2,9 +2,9 @@ import Rating from '@/components/rating';
 import ReviewUpdateDialog from '@/components/review-list/review-update-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { useAuth } from '@/hooks/context/use-auth';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { useUser } from '@/hooks/use-user';
 import { deleteReview } from '@/lib/action';
 import { formatDateJP, formatTime } from '@/lib/util';
 import { Review } from '@/types';
@@ -20,7 +20,7 @@ type Props = {
 
 export default function ReviewItem({ review, bookId, queryKey }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useUser();
+  const { user } = useAuth();
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
 

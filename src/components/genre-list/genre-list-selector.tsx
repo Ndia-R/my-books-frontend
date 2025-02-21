@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { getGenres } from '@/lib/data';
+import { useApiGenre } from '@/hooks/api/use-api-genre';
 import { cn } from '@/lib/util';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { CheckIcon } from 'lucide-react';
@@ -10,6 +10,8 @@ type Props = {
 };
 
 export default function GenreListSelector({ activeIds, onClick }: Props) {
+  const { getGenres } = useApiGenre();
+
   const { data: genres } = useSuspenseQuery({
     queryKey: ['getGenres'],
     queryFn: () => getGenres(),

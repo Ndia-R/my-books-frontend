@@ -1,8 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useUser } from '@/hooks/use-user';
+import { useApiFavorite } from '@/hooks/api/use-api-favorite';
+import { useAuth } from '@/hooks/context/use-auth';
 import { createFavorite, deleteFavorite } from '@/lib/action';
-import { getFavoriteInfo } from '@/lib/data';
 import { cn } from '@/lib/util';
 import { FavoriteInfo, FavoriteRequest } from '@/types';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
@@ -18,7 +18,9 @@ type Props = {
 };
 
 export default function FavoriteCountIcon({ bookId, size = 'md' }: Props) {
-  const { user } = useUser();
+  const { user } = useAuth();
+  const { getFavoriteInfo } = useApiFavorite();
+
   const queryClient = useQueryClient();
 
   const queryKey = ['getFavoriteInfo', bookId, user?.id];

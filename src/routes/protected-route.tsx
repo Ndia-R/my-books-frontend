@@ -1,12 +1,13 @@
+import { useApiToken } from '@/hooks/api/use-api-token';
+import { useAuth } from '@/hooks/context/use-auth';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
-import { useUser } from '@/hooks/use-user';
-import { validateToken } from '@/lib/auth';
 import { useEffect, useState } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 export const ProtectedRoute = () => {
   const location = useLocation();
-  const { logout } = useUser();
+  const { logout } = useAuth();
+  const { validateToken } = useApiToken();
   const { confirmDialog } = useConfirmDialog();
 
   const [isAuthenticated, setIsAuthenticated] = useState<null | boolean>(null);
@@ -14,7 +15,13 @@ export const ProtectedRoute = () => {
   useEffect(() => {
     const checkAuthentication = async () => {
       const isValid = await validateToken();
-      if (isValid === null) {
+      console.log(isValid);
+
+      if (isValid) {
+        setIsAuthenticated(true);
+      } else {
+        logout();
+        setIsAuthenticated(false);
         await confirmDialog({
           icon: 'i',
           title: 'ログアウトしました',
@@ -25,15 +32,9 @@ export const ProtectedRoute = () => {
           persistent: true,
         });
       }
-      if (isValid) {
-        setIsAuthenticated(true);
-      } else {
-        logout();
-        setIsAuthenticated(false);
-      }
     };
     checkAuthentication();
-  }, [logout, location, confirmDialog]);
+  }, [logout, location, confirmDialog, validateToken]);
 
   if (isAuthenticated === null) {
     return null;

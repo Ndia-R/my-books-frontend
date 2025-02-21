@@ -1,11 +1,11 @@
-import { Pagination } from '@/components/pagination';
+import Pagination from '@/components/pagination';
 import ReviewCreateDialog from '@/components/review-list/review-create-dialog';
 import ReviewItem from '@/components/review-list/review-item';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useUser } from '@/hooks/use-user';
-import { checkMyReviewExists, getReviewPage } from '@/lib/data';
+import { useApiRevew } from '@/hooks/api/use-api-review';
+import { useAuth } from '@/hooks/context/use-auth';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 
@@ -16,7 +16,9 @@ type Props = {
 export default function ReviewList({ bookId }: Props) {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useUser();
+
+  const { user } = useAuth();
+  const { getReviewPage, checkMyReviewExists } = useApiRevew();
 
   const queryKey = ['ReviewList', 'checkMyReviewExists', bookId, page];
   const {
@@ -24,7 +26,10 @@ export default function ReviewList({ bookId }: Props) {
   } = useSuspenseQuery({
     queryKey,
     queryFn: () =>
-      Promise.all([getReviewPage(bookId, page - 1), checkMyReviewExists(bookId)]),
+      Promise.all([
+        getReviewPage(bookId, page - 1),
+        user ? checkMyReviewExists(bookId) : false,
+      ]),
   });
 
   return (

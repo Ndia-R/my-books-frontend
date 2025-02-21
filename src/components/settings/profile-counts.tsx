@@ -1,8 +1,10 @@
 import CountUpNumber from '@/components/count-up-number';
-import { getProfileCounts } from '@/lib/data';
+import { useApiUser } from '@/hooks/api/use-api-user';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function ProfileCounts() {
+  const { getProfileCounts } = useApiUser();
+
   const { data: profileCounts } = useSuspenseQuery({
     queryKey: ['getProfileCounts'],
     queryFn: () => getProfileCounts(),

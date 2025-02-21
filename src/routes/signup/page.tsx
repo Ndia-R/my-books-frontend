@@ -4,10 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useApiUser } from '@/hooks/api/use-api-user';
+import { useAuth } from '@/hooks/context/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { useUser } from '@/hooks/use-user';
-import { signup } from '@/lib/auth';
-import { checkUsernameExists } from '@/lib/data';
 import { cn } from '@/lib/util';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -25,7 +24,8 @@ export default function Page() {
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { fetchUser } = useUser();
+  const { signup, setUser } = useAuth();
+  const { getCurrentUser, checkUsernameExists } = useApiUser();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function Page() {
       return;
     }
 
-    await fetchUser();
+    setUser(await getCurrentUser());
     setIsSubmitting(false);
 
     navigate('/');

@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button';
-import { getBookDetailsById, getBookTableOfContents } from '@/lib/data';
+import { useApiBook } from '@/hooks/api/use-api-book';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +8,8 @@ type Props = {
 };
 
 export default function BookTableOfContents({ bookId }: Props) {
+  const { getBookDetailsById, getBookTableOfContents } = useApiBook();
+
   const [{ data: book }, { data: bookTableOfContents }] = useSuspenseQueries({
     queries: [
       {

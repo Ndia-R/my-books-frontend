@@ -1,0 +1,79 @@
+import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
+import { useApi } from '@/hooks/api/use-api';
+import { Bookmark, BookmarkPage, BookmarkRequest } from '@/types';
+
+export const useApiBookmark = () => {
+  const { fetcherWithAuth, mutationWithAuth } = useApi();
+
+  const getBookmarkByBookId = async (bookId: string) => {
+    try {
+      const url = `/bookmarks/${bookId}`;
+      const bookmarks = await fetcherWithAuth<Bookmark[]>(url);
+      return bookmarks;
+    } catch {
+      throw new Error('ブックマークの読み込みが失敗しました。');
+    }
+  };
+
+  const getBookmarkPage = async (page: number = 0) => {
+    try {
+      const url = `/bookmarks?&page=${page}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
+      const bookmarkPage = await fetcherWithAuth<BookmarkPage>(url);
+      return bookmarkPage;
+    } catch {
+      throw new Error('ブックマーク一覧の読み込みが失敗しました。');
+    }
+  };
+
+  const createBookmark = async (reqestBody: BookmarkRequest) => {
+    try {
+      const url = `/bookmarks`;
+      const options: RequestInit = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reqestBody),
+      };
+      await mutationWithAuth(url, options);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  };
+
+  const updateBookmark = async (id: number, reqestBody: BookmarkRequest) => {
+    try {
+      const url = `/bookmarks/${id}`;
+      const options: RequestInit = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(reqestBody),
+      };
+      await mutationWithAuth(url, options);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  };
+
+  const deleteBookmark = async (id: number) => {
+    try {
+      const url = `/bookmarks/${id}`;
+      const options: RequestInit = { method: 'DELETE' };
+      await mutationWithAuth(url, options);
+      return true;
+    } catch (e) {
+      console.error(e);
+      return false;
+    }
+  };
+
+  return {
+    getBookmarkByBookId,
+    getBookmarkPage,
+    createBookmark,
+    updateBookmark,
+    deleteBookmark,
+  };
+};

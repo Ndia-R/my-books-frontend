@@ -3,8 +3,8 @@ import PasswordInput from '@/components/settings/password-input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import { useApiUser } from '@/hooks/api/use-api-user';
 import { useToast } from '@/hooks/use-toast';
-import { changePassword } from '@/lib/action';
 import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -15,6 +15,7 @@ export default function Page() {
   const currentPasswordRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
+  const { changePassword } = useApiUser();
   const { toast } = useToast();
 
   useEffect(() => {

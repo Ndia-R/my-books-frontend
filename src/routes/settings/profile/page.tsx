@@ -3,7 +3,7 @@ import ProfileCounts from '@/components/settings/profile-counts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { useUser } from '@/hooks/use-user';
+import { useAuth } from '@/hooks/context/use-auth';
 import ErrorElement from '@/routes/error-element';
 import { KeyRoundIcon, MailIcon, UserRoundIcon } from 'lucide-react';
 import { Suspense } from 'react';
@@ -11,7 +11,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import { Link } from 'react-router-dom';
 
 export default function Page() {
-  const { user } = useUser();
+  const { user } = useAuth();
 
   if (!user) return null;
 

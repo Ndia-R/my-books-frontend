@@ -4,9 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAuth } from '@/hooks/context/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { useUser } from '@/hooks/use-user';
-import { login } from '@/lib/auth';
 import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -18,7 +17,7 @@ export default function Page() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { fetchUser } = useUser();
+  const { login } = useAuth();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -45,7 +44,6 @@ export default function Page() {
       return;
     }
 
-    await fetchUser();
     setIsSubmitting(false);
 
     const pathname = location.state?.from?.pathname || '/';

@@ -4,7 +4,7 @@ import ReviewCountIcon from '@/components/count-icon/review-count-icon';
 import GenreList from '@/components/genre-list/genre-list';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
-import { getBookDetailsById } from '@/lib/data';
+import { useApiBook } from '@/hooks/api/use-api-book';
 import { formatDateJP, formatIsbn, formatPrice } from '@/lib/util';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Suspense } from 'react';
@@ -15,6 +15,8 @@ type Props = {
 };
 
 export default function BookDetail({ bookId }: Props) {
+  const { getBookDetailsById } = useApiBook();
+
   const { data: book } = useSuspenseQuery({
     queryKey: ['getBookDetailsById', bookId],
     queryFn: () => getBookDetailsById(bookId),

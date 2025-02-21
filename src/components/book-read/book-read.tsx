@@ -1,8 +1,4 @@
-import {
-  getBookContentPage,
-  getBookDetailsById,
-  getBookTableOfContents,
-} from '@/lib/data';
+import { useApiBook } from '@/hooks/api/use-api-book';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { BookmarkIcon } from 'lucide-react';
 
@@ -13,6 +9,8 @@ type Props = {
 };
 
 export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
+  const { getBookDetailsById, getBookTableOfContents, getBookContentPage } = useApiBook();
+
   const [{ data: book }, { data: bookTableOfContents }, { data: bookContentPage }] =
     useSuspenseQueries({
       queries: [
@@ -31,7 +29,10 @@ export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
       ],
     });
 
-  const pageTitle = `（${pageNumber}/${bookTableOfContents.chapters.find((chapter) => chapter.chapterNumber === chapterNumber)?.pageNumbers.length}）`;
+  const totalPage = bookTableOfContents.chapters.find(
+    (chapter) => chapter.chapterNumber === chapterNumber
+  )?.pageNumbers.length;
+  const pageTitle = `（${pageNumber}/${totalPage}）`;
 
   return (
     <>

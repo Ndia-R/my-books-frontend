@@ -6,10 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { AVATER_IMAGE_MAX_COIUNT, AVATER_IMAGE_URL } from '@/constants/constants';
+import { useApiUser } from '@/hooks/api/use-api-user';
+import { useAuth } from '@/hooks/context/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { useUser } from '@/hooks/use-user';
-import { updateCurrentUser } from '@/lib/action';
-import { checkUsernameExists } from '@/lib/data';
 import { CircleHelpIcon, Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -29,7 +28,8 @@ export default function Page() {
   const avatarUrlRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { user, fetchUser } = useUser();
+  const { user, setUser } = useAuth();
+  const { getCurrentUser, checkUsernameExists, updateCurrentUser } = useApiUser();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -83,7 +83,7 @@ export default function Page() {
 
     toast({ title: 'ユーザー情報を変更しました' });
 
-    await fetchUser();
+    setUser(await getCurrentUser());
     setIsSubmitting(false);
 
     navigate('/settings/profile');

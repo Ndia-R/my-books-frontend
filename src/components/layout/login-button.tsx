@@ -9,13 +9,13 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MENU_LIST } from '@/constants/constants';
-import { useUser } from '@/hooks/use-user';
+import { useAuth } from '@/hooks/context/use-auth';
 import { LogOutIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 export default function LoginButton() {
-  const { user, logout } = useUser();
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
