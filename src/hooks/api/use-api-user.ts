@@ -2,22 +2,21 @@ import { useApi } from '@/hooks/api/use-api';
 import {
   ChangeEmail,
   ChangePassword,
-  CheckUsernameExists,
   ProfileCounts,
   UpdateCurrentUser,
   User,
 } from '@/types';
 
 export const useApiUser = () => {
-  const { fetcher, fetcherWithAuth, mutationWithAuth } = useApi();
+  const { fetcherWithAuth, mutationWithAuth } = useApi();
 
   const getCurrentUser = async () => {
     try {
       const url = `/me`;
       const user = await fetcherWithAuth<User>(url);
       return user;
-    } catch {
-      return null;
+    } catch (error) {
+      throw new Error('ユーザー情報の読み込みが失敗しました。' + error);
     }
   };
 
@@ -26,19 +25,8 @@ export const useApiUser = () => {
       const url = `/me/profile-counts`;
       const profieleCounts = await fetcherWithAuth<ProfileCounts>(url);
       return profieleCounts;
-    } catch (err) {
-      throw new Error('ユーザーのプロフィール情報の読み込みが失敗しました。' + err);
-    }
-  };
-
-  const checkUsernameExists = async (name: string) => {
-    try {
-      const url = `/users/exists?name=${name}`;
-      const data = await fetcher<CheckUsernameExists>(url);
-      if (!data) return false;
-      return data.exists;
-    } catch {
-      return false; // エラーの場合「存在しない」とするのはどうかと思うけどいったんfalse
+    } catch (error) {
+      throw new Error('ユーザーのプロフィール情報の読み込みが失敗しました。' + error);
     }
   };
 
@@ -51,10 +39,8 @@ export const useApiUser = () => {
         body: JSON.stringify(requestBody),
       };
       await mutationWithAuth(url, options);
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
+    } catch (error) {
+      throw new Error('ユーザー情報の更新に失敗しました。' + error);
     }
   };
 
@@ -67,10 +53,8 @@ export const useApiUser = () => {
         body: JSON.stringify(requestBody),
       };
       await mutationWithAuth(url, options);
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
+    } catch (error) {
+      throw new Error('パスワードの更新に失敗しました。' + error);
     }
   };
 
@@ -83,17 +67,14 @@ export const useApiUser = () => {
         body: JSON.stringify(requestBody),
       };
       await mutationWithAuth(url, options);
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
+    } catch (error) {
+      throw new Error('メールアドレスの更新に失敗しました。' + error);
     }
   };
 
   return {
     getCurrentUser,
     getProfileCounts,
-    checkUsernameExists,
     updateCurrentUser,
     changePassword,
     changeEmail,

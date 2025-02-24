@@ -12,12 +12,11 @@ export default function BookListFavorites({ page }: Props) {
 
   const { data: bookPage } = useSuspenseQuery({
     queryKey: ['getFavoritePage', page],
-    queryFn: () => getFavoritePage(page - 1),
+    queryFn: () => getFavoritePage(page),
   });
 
   return (
     <div className="flex flex-col gap-y-4 pb-4">
-      <BookPagination totalPages={bookPage.totalPages} />
       <BookList books={bookPage.favorites.map((favorite) => favorite.book)} />
       <BookPagination totalPages={bookPage.totalPages} />
     </div>

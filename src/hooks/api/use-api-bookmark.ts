@@ -10,18 +10,19 @@ export const useApiBookmark = () => {
       const url = `/bookmarks/${bookId}`;
       const bookmarks = await fetcherWithAuth<Bookmark[]>(url);
       return bookmarks;
-    } catch {
-      throw new Error('ブックマークの読み込みが失敗しました。');
+    } catch (error) {
+      throw new Error('ブックマークの読み込みが失敗しました。' + error);
     }
   };
 
   const getBookmarkPage = async (page: number = 0) => {
     try {
-      const url = `/bookmarks?&page=${page}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
+      const basePage = page - 1 < 0 ? 0 : page - 1;
+      const url = `/bookmarks?&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
       const bookmarkPage = await fetcherWithAuth<BookmarkPage>(url);
       return bookmarkPage;
-    } catch {
-      throw new Error('ブックマーク一覧の読み込みが失敗しました。');
+    } catch (error) {
+      throw new Error('ブックマーク一覧の読み込みが失敗しました。' + error);
     }
   };
 
@@ -34,10 +35,8 @@ export const useApiBookmark = () => {
         body: JSON.stringify(reqestBody),
       };
       await mutationWithAuth(url, options);
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
+    } catch (error) {
+      throw new Error('ブックマークの作成に失敗しました。' + error);
     }
   };
 
@@ -50,10 +49,8 @@ export const useApiBookmark = () => {
         body: JSON.stringify(reqestBody),
       };
       await mutationWithAuth(url, options);
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
+    } catch (error) {
+      throw new Error('ブックマークの更新に失敗しました。' + error);
     }
   };
 
@@ -62,10 +59,8 @@ export const useApiBookmark = () => {
       const url = `/bookmarks/${id}`;
       const options: RequestInit = { method: 'DELETE' };
       await mutationWithAuth(url, options);
-      return true;
-    } catch (e) {
-      console.error(e);
-      return false;
+    } catch (error) {
+      throw new Error('ブックマークの削除に失敗しました。' + error);
     }
   };
 

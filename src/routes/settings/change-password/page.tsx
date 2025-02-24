@@ -5,18 +5,22 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useApiUser } from '@/hooks/api/use-api-user';
 import { useToast } from '@/hooks/use-toast';
+import { ChangePassword } from '@/types';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Page() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const currentPasswordRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
   const { changePassword } = useApiUser();
   const { toast } = useToast();
+
+  const updateMutation = useMutation({
+    mutationFn: (requestBody: ChangePassword) => changePassword(requestBody),
+  });
 
   useEffect(() => {
     currentPasswordRef.current?.focus();
@@ -30,27 +34,25 @@ export default function Page() {
     const newPassword = form.get('new-password') as string;
     const confirmNewPassword = form.get('confirm-new-password') as string;
 
-    setIsSubmitting(true);
-    const isSuccess = await changePassword({
+    const requestBody: ChangePassword = {
       currentPassword,
       newPassword,
       confirmNewPassword,
+    };
+    updateMutation.mutate(requestBody, {
+      onSuccess: () => {
+        toast({ title: 'パスワードを変更しました' });
+        navigate('/settings/profile');
+      },
+      onError: () => {
+        toast({
+          title: 'パスワードを変更できませんでした',
+          description: '入力内容を確認してください。',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      },
     });
-    if (!isSuccess) {
-      setIsSubmitting(false);
-      toast({
-        title: 'パスワードを変更できませんでした',
-        description: '入力内容を確認してください',
-        variant: 'destructive',
-        duration: 5000,
-      });
-      return;
-    }
-
-    toast({ title: 'パスワードを変更しました' });
-    setIsSubmitting(false);
-
-    navigate('/settings/profile');
   };
 
   return (
@@ -97,9 +99,13 @@ export default function Page() {
             <Button
               className="mt-6 w-full rounded-full"
               type="submit"
-              disabled={isSubmitting}
+              disabled={updateMutation.isPending}
             >
-              {isSubmitting ? <Loader2Icon className="animate-spin" /> : '変更'}
+              {updateMutation.isPending ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                '変更'
+              )}
             </Button>
             <Button
               className="w-full rounded-full bg-transparent"

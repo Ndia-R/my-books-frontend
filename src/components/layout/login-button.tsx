@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { MENU_LIST } from '@/constants/constants';
-import { useAuth } from '@/hooks/context/use-auth';
+import { useAuth } from '@/hooks/use-auth';
 import { LogOutIcon } from 'lucide-react';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';

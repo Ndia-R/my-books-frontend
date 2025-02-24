@@ -5,17 +5,17 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useApiUser } from '@/hooks/api/use-api-user';
-import { useAuth } from '@/hooks/context/use-auth';
+import { useAuth } from '@/hooks/use-auth';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/util';
+import { ChangeEmail } from '@/types';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Page() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [emailErrorMessage, setEmailErrorMessage] = useState('');
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
@@ -26,6 +26,10 @@ export default function Page() {
   const { changeEmail } = useApiUser();
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
+
+  const updateMutation = useMutation({
+    mutationFn: (requestBody: ChangeEmail) => changeEmail(requestBody),
+  });
 
   useEffect(() => {
     emailRef.current?.focus();
@@ -51,25 +55,22 @@ export default function Page() {
     });
     if (isCancel) return;
 
-    setIsSubmitting(true);
-    const isSuccess = await changeEmail({ email, password });
-    if (!isSuccess) {
-      setIsSubmitting(false);
-      toast({
-        title: 'メールアドレスを変更できませんでした',
-        description: '入力内容を確認してください',
-        variant: 'destructive',
-        duration: 5000,
-      });
-      return;
-    }
-
-    toast({ title: 'メールアドレスを変更し、ログアウトしました', duration: 5000 });
-
-    await logout();
-    setIsSubmitting(false);
-
-    navigate('/login');
+    const requestBody: ChangeEmail = { email, password };
+    updateMutation.mutate(requestBody, {
+      onSuccess: async () => {
+        toast({ title: 'メールアドレスを変更し、ログアウトしました', duration: 5000 });
+        await logout();
+        navigate('/login');
+      },
+      onError: () => {
+        toast({
+          title: 'メールアドレスを変更できませんでした',
+          description: '入力内容を確認してください。',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      },
+    });
   };
 
   const handleCheckEmail = () => {
@@ -140,9 +141,13 @@ export default function Page() {
             <Button
               className="mt-6 w-full rounded-full"
               type="submit"
-              disabled={isSubmitting}
+              disabled={updateMutation.isPending}
             >
-              {isSubmitting ? <Loader2Icon className="animate-spin" /> : '変更'}
+              {updateMutation.isPending ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                '変更'
+              )}
             </Button>
             <Button
               className="w-full rounded-full bg-transparent"

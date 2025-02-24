@@ -12,10 +12,12 @@ export default function Page() {
 
   return (
     <>
-      <p className="my-2">
-        {`「 ${query} 」`}
-        <span className="text-sm text-muted-foreground">の検索結果</span>
-      </p>
+      <div className="my-4 flex h-10 items-center">
+        <p>
+          {`「 ${query} 」`}
+          <span className="text-sm text-muted-foreground">の検索結果</span>
+        </p>
+      </div>
 
       <ErrorBoundary fallback={<ErrorElement />}>
         <Suspense fallback={<BookListSkeleton />}>

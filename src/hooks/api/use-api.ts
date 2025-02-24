@@ -1,5 +1,6 @@
 import { BOOKS_API_ENDPOINT } from '@/constants/constants';
-import { useAuth } from '@/hooks/context/use-auth';
+import { useAuth } from '@/hooks/use-auth';
+import { ErrorResponse } from '@/types';
 
 export const useApi = () => {
   const { accessToken, refreshAccessToken } = useAuth();
@@ -7,9 +8,8 @@ export const useApi = () => {
   const fetcher = async <T>(url: string, options: RequestInit = {}) => {
     const response = await fetch(`${BOOKS_API_ENDPOINT}${url}`, options);
     if (!response.ok) {
-      throw new Error(`失敗しました。URL: ${url} ステータス: ${response.status}`);
+      throw new Error(await generateErrorMessage(url, response));
     }
-
     return response.json() as Promise<T>;
   };
 
@@ -23,27 +23,21 @@ export const useApi = () => {
     });
 
     if (response.status === 401) {
-      await refreshAccessToken();
+      const newAccessToken = await refreshAccessToken();
       response = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
         ...options,
         headers: {
           ...options.headers,
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${newAccessToken}`,
         },
       });
     }
+
     if (!response.ok) {
-      throw new Error(`失敗しました。URL: ${url} ステータス: ${response.status}`);
+      throw new Error(await generateErrorMessage(url, response));
     }
 
     return response.json() as Promise<T>;
-  };
-
-  const mutation = async (url: string, options: RequestInit = {}) => {
-    const response = await fetch(`${BOOKS_API_ENDPOINT}${url}`, options);
-    if (!response.ok) {
-      throw new Error(`失敗しました。URL: ${url} ステータス: ${response.status}`);
-    }
   };
 
   const mutationWithAuth = async (url: string, options: RequestInit = {}) => {
@@ -56,19 +50,31 @@ export const useApi = () => {
     });
 
     if (response.status === 401) {
-      await refreshAccessToken();
+      const newAccessToken = await refreshAccessToken();
       response = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
         ...options,
         headers: {
           ...options.headers,
-          Authorization: `Bearer ${accessToken}`,
+          Authorization: `Bearer ${newAccessToken}`,
         },
       });
     }
+
     if (!response.ok) {
-      throw new Error(`失敗しました。URL: ${url} ステータス: ${response.status}`);
+      throw new Error(await generateErrorMessage(url, response));
     }
   };
 
-  return { fetcher, fetcherWithAuth, mutation, mutationWithAuth };
+  const generateErrorMessage = async (url: string, response: Response) => {
+    let errorMessage = `[URL] ${url}`;
+    try {
+      const errorResponse = (await response.json()) as ErrorResponse;
+      errorMessage += ` [MESSAGE] ${errorResponse.message} [STATUS] ${response.status}(${errorResponse.status})`;
+    } catch {
+      // JSON でない場合は無視
+    }
+    return errorMessage;
+  };
+
+  return { fetcher, fetcherWithAuth, mutationWithAuth };
 };

@@ -27,7 +27,7 @@ export default function Page() {
       <div className="flex flex-col">
         <p className="mb-4 font-bold text-primary">ニューリリース</p>
         <ErrorBoundary fallback={<ErrorElement />}>
-          <Suspense fallback={<BookListSkeleton paginationOff />}>
+          <Suspense fallback={<BookListSkeleton />}>
             <BookListNewReleases />
           </Suspense>
         </ErrorBoundary>

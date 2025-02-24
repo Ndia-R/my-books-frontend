@@ -4,21 +4,25 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useAuth } from '@/hooks/context/use-auth';
+import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
+import { LoginRequest } from '@/types';
+import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Page() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const emailRef = useRef<HTMLInputElement | null>(null);
 
   const location = useLocation();
   const navigate = useNavigate();
   const { login } = useAuth();
   const { toast } = useToast();
+
+  const loginMutation = useMutation({
+    mutationFn: (requestBody: LoginRequest) => login(requestBody),
+  });
 
   useEffect(() => {
     emailRef.current?.focus();
@@ -31,24 +35,22 @@ export default function Page() {
     const email = form.get('email') as string;
     const password = form.get('password') as string;
 
-    setIsSubmitting(true);
-    const isSuccess = await login({ email, password });
-    if (!isSuccess) {
-      setIsSubmitting(false);
-      toast({
-        title: 'ログインできませんでした',
-        description: 'メールアドレスまたはパスワードが違います',
-        variant: 'destructive',
-        duration: 5000,
-      });
-      return;
-    }
-
-    setIsSubmitting(false);
-
-    const pathname = location.state?.from?.pathname || '/';
-    const query = location.state?.from?.search || '';
-    navigate(pathname + query, { replace: true });
+    const requestBody: LoginRequest = { email, password };
+    loginMutation.mutate(requestBody, {
+      onSuccess: () => {
+        const pathname = location.state?.from?.pathname || '/';
+        const query = location.state?.from?.search || '';
+        navigate(pathname + query, { replace: true });
+      },
+      onError: () => {
+        toast({
+          title: 'ログインできませんでした',
+          description: 'メールアドレスまたはパスワードが違います。',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      },
+    });
   };
 
   return (
@@ -86,9 +88,13 @@ export default function Page() {
             <Button
               className="mt-6 w-full rounded-full"
               type="submit"
-              disabled={isSubmitting}
+              disabled={loginMutation.isPending}
             >
-              {isSubmitting ? <Loader2Icon className="animate-spin" /> : 'ログイン'}
+              {loginMutation.isPending ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                'ログイン'
+              )}
             </Button>
           </form>
 

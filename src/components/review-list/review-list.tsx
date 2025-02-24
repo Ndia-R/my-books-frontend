@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useApiRevew } from '@/hooks/api/use-api-review';
-import { useAuth } from '@/hooks/context/use-auth';
+import { useAuth } from '@/hooks/use-auth';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   bookId: string;
@@ -16,21 +16,26 @@ type Props = {
 export default function ReviewList({ bookId }: Props) {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
+  const [reviewExists, setReviewExists] = useState(false);
 
   const { user } = useAuth();
   const { getReviewPage, checkMyReviewExists } = useApiRevew();
 
-  const queryKey = ['ReviewList', 'checkMyReviewExists', bookId, page];
-  const {
-    data: [paginatedReview, reviewExists],
-  } = useSuspenseQuery({
+  const queryKey = ['ReviewList', bookId, page];
+  const { data: paginatedReview } = useSuspenseQuery({
     queryKey,
-    queryFn: () =>
-      Promise.all([
-        getReviewPage(bookId, page - 1),
-        user ? checkMyReviewExists(bookId) : false,
-      ]),
+    queryFn: () => getReviewPage(bookId, page),
   });
+
+  useEffect(() => {
+    const init = async () => {
+      if (user) {
+        const exists = await checkMyReviewExists(bookId);
+        setReviewExists(exists);
+      }
+    };
+    init();
+  }, [bookId, checkMyReviewExists, user]);
 
   return (
     <div className="mx-auto w-full lg:w-3/4">

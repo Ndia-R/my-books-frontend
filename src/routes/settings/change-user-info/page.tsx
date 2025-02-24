@@ -4,48 +4,39 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { AVATER_IMAGE_MAX_COIUNT, AVATER_IMAGE_URL } from '@/constants/constants';
 import { useApiUser } from '@/hooks/api/use-api-user';
-import { useAuth } from '@/hooks/context/use-auth';
+import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
-import { CircleHelpIcon, Loader2Icon } from 'lucide-react';
+import { UpdateCurrentUser } from '@/types';
+import { useMutation } from '@tanstack/react-query';
+import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-const AVATARS = Array.from({ length: AVATER_IMAGE_MAX_COIUNT }, (_, index) => ({
-  index,
-  avatarUrl: `${AVATER_IMAGE_URL}/avatar${String(index).padStart(2, '0')}.png`,
-}));
-
 export default function Page() {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
   const [nameErrorMessage, setNameErrorMessage] = useState('');
 
-  const [defaultAvatar, setDefaultAvatar] = useState<number | undefined>(undefined);
   const nameRef = useRef<HTMLInputElement | null>(null);
-  const avatarUrlRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
   const { user, setUser } = useAuth();
-  const { getCurrentUser, checkUsernameExists, updateCurrentUser } = useApiUser();
+  const { updateCurrentUser } = useApiUser();
   const { toast } = useToast();
 
+  const [avatarUrl, setAvaterUrl] = useState(user?.avatarUrl || '');
+
+  const updateMutation = useMutation({
+    mutationFn: (requestBody: UpdateCurrentUser) => updateCurrentUser(requestBody),
+  });
+
   useEffect(() => {
-    const initUserInfo = async () => {
-      if (nameRef.current && avatarUrlRef.current && user) {
+    const init = async () => {
+      if (nameRef.current && user) {
         nameRef.current.focus();
         nameRef.current.value = user.name || '';
-        avatarUrlRef.current.value = user.avatarUrl;
-
-        const index =
-          AVATARS.find((avatar) => avatar.avatarUrl === user.avatarUrl)?.index || 0;
-
-        setDefaultAvatar(index);
       }
     };
-    initUserInfo();
+    init();
   }, [user]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -53,46 +44,36 @@ export default function Page() {
 
     const form = new FormData(e.currentTarget);
     const name = form.get('name') as string;
-    const avatarUrl = form.get('avatar-url') as string;
 
     if (name === '') {
       setNameErrorMessage('ユーザー名は必須です。');
       return;
     }
 
-    if (user?.name !== name && (await checkUsernameExists(name))) {
-      setNameErrorMessage('そのユーザー名はすでに使われています。');
-      return;
-    }
+    // if (user?.name !== name && (await checkUsernameExists(name))) {
+    //   setNameErrorMessage('そのユーザー名はすでに使われています。');
+    //   return;
+    // }
 
-    setIsSubmitting(true);
-    const isSuccess = await updateCurrentUser({
-      name,
-      avatarUrl,
+    const requestBody: UpdateCurrentUser = { name, avatarUrl };
+    updateMutation.mutate(requestBody, {
+      onSuccess: () => {
+        const newUser = user ? { ...user, name, avatarUrl } : null;
+        setUser(newUser);
+        toast({ title: 'ユーザー情報を変更しました' });
+        navigate('/settings/profile');
+      },
+      onError: (error) => {
+        console.log(error);
+
+        toast({
+          title: 'ユーザー情報を変更できませんでした',
+          description: '入力内容を確認してください。',
+          variant: 'destructive',
+          duration: 5000,
+        });
+      },
     });
-    if (!isSuccess) {
-      setIsSubmitting(false);
-      toast({
-        title: 'ユーザー情報を変更できませんでした',
-        description: '入力内容を確認してください',
-        variant: 'destructive',
-        duration: 5000,
-      });
-      return;
-    }
-
-    toast({ title: 'ユーザー情報を変更しました' });
-
-    setUser(await getCurrentUser());
-    setIsSubmitting(false);
-
-    navigate('/settings/profile');
-  };
-
-  const handleSelectedAvatar = (selectedIndex: number) => {
-    if (avatarUrlRef.current) {
-      avatarUrlRef.current.value = AVATARS[selectedIndex].avatarUrl;
-    }
   };
 
   return (
@@ -118,37 +99,22 @@ export default function Page() {
             </div>
 
             <div className="mb-4">
-              <div className="flex items-center gap-x-1">
-                <Label className="text-xs" htmlFor="name">
-                  アバター画像
-                </Label>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <CircleHelpIcon className="size-4" />
-                  </TooltipTrigger>
-                  <TooltipContent>チェックマークは現在のアバターです</TooltipContent>
-                </Tooltip>
-              </div>
-              <div className="flex justify-center">
-                <AvatarCarousel
-                  items={AVATARS}
-                  itemWidth={80}
-                  frameWidth={220}
-                  defaultSelected={defaultAvatar}
-                  onSelected={handleSelectedAvatar}
-                />
-              </div>
-              <input
-                ref={avatarUrlRef}
-                className="w-[400px] text-black"
-                type="text"
-                name="avatar-url"
-                hidden
-              />
+              <Label className="text-xs" htmlFor="name">
+                アバター画像
+              </Label>
+              <AvatarCarousel value={avatarUrl} onChange={setAvaterUrl} />
             </div>
 
-            <Button className="w-full rounded-full" type="submit" disabled={isSubmitting}>
-              {isSubmitting ? <Loader2Icon className="animate-spin" /> : '変更'}
+            <Button
+              className="w-full rounded-full"
+              type="submit"
+              disabled={updateMutation.isPending}
+            >
+              {updateMutation.isPending ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                '変更'
+              )}
             </Button>
             <Button
               className="w-full rounded-full bg-transparent"

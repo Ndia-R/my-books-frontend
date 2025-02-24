@@ -11,16 +11,15 @@ type Props = {
 export default function BookListByQuery({ query, page }: Props) {
   const { getBookPageByQuery } = useApiBook();
 
-  const { data: paginatedBook } = useSuspenseQuery({
+  const { data: bookPage } = useSuspenseQuery({
     queryKey: ['getBookPageByQuery', query, page],
-    queryFn: () => getBookPageByQuery(query, page - 1),
+    queryFn: () => getBookPageByQuery(query, page),
   });
 
   return (
     <div className="flex flex-col gap-y-4 pb-4">
-      <BookPagination totalPages={paginatedBook.totalPages} />
-      <BookList books={paginatedBook.books} />
-      <BookPagination totalPages={paginatedBook.totalPages} />
+      <BookList books={bookPage.books} />
+      <BookPagination totalPages={bookPage.totalPages} />
     </div>
   );
 }

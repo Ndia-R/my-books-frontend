@@ -2,8 +2,8 @@ import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { useApiRevew } from '@/hooks/api/use-api-review';
 import { useToast } from '@/hooks/use-toast';
-import { updateReview } from '@/lib/action';
 import { Review, ReviewRequest } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
@@ -28,10 +28,11 @@ export default function ReviewUpdateDialog({
 
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
+  const { updateReview } = useApiRevew();
   const { toast } = useToast();
 
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const updateMutation = useMutation({
     mutationFn: ({ id, requestBody }: { id: number; requestBody: ReviewRequest }) =>
       updateReview(id, requestBody),
     onSuccess: () => {
@@ -55,17 +56,17 @@ export default function ReviewUpdateDialog({
 
   const handlePost = async () => {
     const requestBody: ReviewRequest = { bookId, comment, rating };
-    mutate(
+    updateMutation.mutate(
       { id: review.id, requestBody },
       {
         onSuccess: () => {
-          toast({ description: 'レビューを投稿しました' });
+          toast({ title: 'レビューを投稿しました' });
           setIsOpen(false);
         },
         onError: () => {
           toast({
             title: 'レビュー投稿に失敗しました',
-            description: '管理者へ連絡してください',
+            description: '管理者へ連絡してください。',
             variant: 'destructive',
             duration: 5000,
           });

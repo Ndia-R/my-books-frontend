@@ -2,10 +2,10 @@ import Rating from '@/components/rating';
 import ReviewUpdateDialog from '@/components/review-list/review-update-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useAuth } from '@/hooks/context/use-auth';
+import { useApiRevew } from '@/hooks/api/use-api-review';
+import { useAuth } from '@/hooks/use-auth';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { deleteReview } from '@/lib/action';
 import { formatDateJP, formatTime } from '@/lib/util';
 import { Review } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -21,11 +21,12 @@ type Props = {
 export default function ReviewItem({ review, bookId, queryKey }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
+  const { deleteReview } = useApiRevew();
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
 
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteReview(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -42,9 +43,9 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
     });
     if (isCancel) return;
 
-    mutate(review.id, {
+    deleteMutation.mutate(review.id, {
       onSuccess: () => {
-        toast({ description: 'レビューを削除しました' });
+        toast({ title: 'レビューを削除しました' });
       },
     });
   };

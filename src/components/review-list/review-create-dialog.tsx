@@ -2,9 +2,9 @@ import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { useApiRevew } from '@/hooks/api/use-api-review';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { createReview } from '@/lib/action';
 import { ReviewRequest } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useRef, useState } from 'react';
@@ -27,11 +27,12 @@ export default function ReviewCreateDialog({
 
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
+  const { createReview } = useApiRevew();
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
 
   const queryClient = useQueryClient();
-  const { mutate } = useMutation({
+  const createMutation = useMutation({
     mutationFn: (reqestBody: ReviewRequest) => createReview(reqestBody),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey });
@@ -64,15 +65,15 @@ export default function ReviewCreateDialog({
     }
 
     const requestBody: ReviewRequest = { bookId, comment, rating };
-    mutate(requestBody, {
+    createMutation.mutate(requestBody, {
       onSuccess: () => {
-        toast({ description: 'レビューを投稿しました' });
+        toast({ title: 'レビューを投稿しました' });
         setIsOpen(false);
       },
       onError: () => {
         toast({
           title: 'レビュー投稿に失敗しました',
-          description: '管理者へ連絡してください',
+          description: '管理者へ連絡してください。',
           variant: 'destructive',
           duration: 5000,
         });

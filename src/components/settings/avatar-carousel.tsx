@@ -1,106 +1,97 @@
 import SwipeArea from '@/components/settings/swipe-area';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { AVATER_IMAGE_MAX_COIUNT, AVATER_IMAGE_URL } from '@/constants/constants';
 import { cn } from '@/lib/util';
-import { CheckIcon, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 
-type AvatarSelectType = {
-  index: number;
-  avatarUrl: string;
-};
+const AVATARS = Array.from({ length: AVATER_IMAGE_MAX_COIUNT }, (_, index) => ({
+  index,
+  avatarUrl: `${AVATER_IMAGE_URL}/avatar${String(index).padStart(2, '0')}.png`,
+}));
 
 type Props = {
-  items: AvatarSelectType[];
-  defaultSelected: number | undefined;
-  onSelected: (index: number) => void;
+  value: string;
+  onChange: (avatarUrl: string) => void;
   itemWidth?: number;
-  paddingItem?: number;
   frameWidth?: number;
+  paddingItem?: number;
 };
 
 export default function AvatarCarousel({
-  items,
-  defaultSelected,
-  onSelected,
-  itemWidth = 100,
+  value,
+  onChange,
+  itemWidth = 80,
+  frameWidth = 220,
   paddingItem = 2,
-  frameWidth = 400,
 }: Props) {
+  // 配列の最初と最後の切れ目部分にアイテムを追加しておく
+  // 循環参照するときの見た目の調整のため
   const extendedItems = [
-    ...items.slice(-paddingItem),
-    ...items,
-    ...items.slice(0, paddingItem),
+    ...AVATARS.slice(-paddingItem),
+    ...AVATARS,
+    ...AVATARS.slice(0, paddingItem),
   ];
 
-  const carouselRef = useRef<HTMLUListElement>(null);
+  // カルーセルの位置調整用
+  const marginLeft = Math.floor(frameWidth / 2) - Math.floor(itemWidth / 2);
 
-  const [isVisible, setIsVisible] = useState(false);
-
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [innerIndex, setInnerIndex] = useState(0);
-  const [defaultIndex, setDefaultIndex] = useState(0);
+  // インデックス番号でカルーセルを制御
+  // innerIndexは内部的なインデックスとして使用（スクロールアニメーション用）
+  const defaultIndex =
+    AVATARS.find((avater) => avater.avatarUrl === value)?.index || AVATARS[0].index;
+  const [currentIndex, setCurrentIndex] = useState(defaultIndex);
+  const [innerIndex, setInnerIndex] = useState(defaultIndex);
 
   const [isScrolling, setIsScrolling] = useState(false);
-  const [marginLeft, setMarginLeft] = useState(0);
+  const carouselRef = useRef<HTMLUListElement>(null);
 
+  // 初期値がない（空文字）の場合は０番のアバターをデフォルトとする
   useEffect(() => {
-    if (defaultSelected !== undefined && !isVisible) {
-      setInnerIndex(defaultSelected);
-      setCurrentIndex(defaultSelected);
-      setDefaultIndex(defaultSelected);
-
-      carouselRef.current!.style.transitionProperty = 'none';
-      setTimeout(() => {
-        carouselRef.current!.style.transitionProperty = 'transform';
-        setIsVisible(true);
-      }, 100);
+    if (value === '') {
+      onChange(AVATARS[0].avatarUrl);
     }
-  }, [defaultSelected, isVisible]);
-
-  useEffect(() => {
-    setMarginLeft(Math.floor(frameWidth / 2) - Math.floor(itemWidth / 2));
-  }, [frameWidth, itemWidth]);
+  }, [onChange, value]);
 
   const handlePrev = () => {
     if (isScrolling) return;
     setIsScrolling(true);
     setInnerIndex(innerIndex - 1);
-    setCurrentIndex((currentIndex - 1 + items.length) % items.length);
-    onSelected?.((currentIndex - 1 + items.length) % items.length);
+
+    const prevIndex = (currentIndex - 1 + AVATARS.length) % AVATARS.length;
+    setCurrentIndex(prevIndex);
+    onChange(AVATARS[prevIndex].avatarUrl);
   };
 
   const handleNext = () => {
     if (isScrolling) return;
     setIsScrolling(true);
     setInnerIndex(innerIndex + 1);
-    setCurrentIndex((currentIndex + 1) % items.length);
-    onSelected?.((currentIndex + 1) % items.length);
+
+    const nextIndex = (currentIndex + 1) % AVATARS.length;
+    setCurrentIndex(nextIndex);
+    onChange(AVATARS[nextIndex].avatarUrl);
   };
 
   const handleTransitonEnd = () => {
-    if (innerIndex >= 0 && innerIndex < items.length) {
-      setIsScrolling(false);
-      return;
+    setIsScrolling(false);
+    setInnerIndex(currentIndex);
+
+    // 循環スクロールのために、先頭から終端などに座標を変化させるとスクロールの
+    // ちらつきが発生してしまうので、切れ目の変化ではアニメーションをいったんOffにする
+    if (currentIndex === 0 || currentIndex === AVATARS.length - 1) {
+      setIsScrolling(true);
+      carouselRef.current!.style.transitionProperty = 'none';
+      setTimeout(() => {
+        carouselRef.current!.style.transitionProperty = 'transform';
+        setIsScrolling(false);
+      }, 75);
     }
-
-    const index = innerIndex > items.length - 1 ? 0 : items.length - 1;
-    setInnerIndex(index);
-
-    carouselRef.current!.style.transitionProperty = 'none';
-    setTimeout(() => {
-      carouselRef.current!.style.transitionProperty = 'transform';
-      setIsScrolling(false);
-    }, 50);
   };
 
   return (
-    <div
-      className={cn(
-        'flex items-center transition-all duration-75 opacity-0',
-        isVisible && 'opacity-100'
-      )}
-    >
+    <div className="flex items-center">
       <Button
         className="rounded-full"
         type="button"
@@ -146,16 +137,6 @@ export default function AvatarCarousel({
                     draggable={false}
                   />
                 </Avatar>
-                {defaultIndex === item.index && (
-                  <div
-                    className={cn(
-                      'absolute bottom-4 right-0 rounded-full bg-primary text-primary-foreground p-1 transition-all duration-200',
-                      currentIndex === item.index && 'bottom-0 -right-4'
-                    )}
-                  >
-                    <CheckIcon className="size-4" />
-                  </div>
-                )}
               </div>
             </li>
           ))}
