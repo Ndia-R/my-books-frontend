@@ -23,7 +23,6 @@ export default function BookTableOfContents({ bookId }: Props) {
     ],
   });
 
-  console.log(bookTableOfContents);
   return (
     <>
       <div className="fixed left-0 top-0 -z-10 flex h-screen w-full justify-center">
@@ -37,7 +36,7 @@ export default function BookTableOfContents({ bookId }: Props) {
         <div className="flex w-full flex-col items-center gap-y-4 sm:items-start">
           <p className="text-3xl font-bold sm:text-5xl">{book.title}</p>
           <Button className="w-44 rounded-full bg-transparent" variant="outline" asChild>
-            <Link to={`/read/${bookId}/table-of-contents`}>最初から読む</Link>
+            <Link to={`/read/${bookId}/chapter/1/page/1`}>最初から読む</Link>
           </Button>
         </div>
         <ul className="flex w-full flex-col items-center gap-y-8 text-base sm:items-start sm:text-xl">
@@ -45,7 +44,7 @@ export default function BookTableOfContents({ bookId }: Props) {
             <li key={chapter.chapterNumber}>
               <p className="text-center text-xs text-muted-foreground/50 sm:text-left sm:text-sm">{`chapter ${index + 1}`}</p>
               <Link
-                className="hover:text-primary"
+                className="font-semibold hover:text-primary"
                 to={`/read/${bookId}/chapter/${chapter.chapterNumber}/page/1`}
               >
                 {chapter.chapterTitle}

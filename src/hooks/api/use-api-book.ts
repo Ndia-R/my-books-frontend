@@ -73,7 +73,7 @@ export const useApiBook = () => {
     pageNumber: number
   ) => {
     try {
-      const url = `/books/${bookId}/chapters/${chapterNumber}/pages/${pageNumber}`;
+      const url = `/read/books/${bookId}/chapters/${chapterNumber}/pages/${pageNumber}`;
       const bookContentPage = await fetcherWithAuth<BookContentPage>(url);
       return bookContentPage;
     } catch (error) {

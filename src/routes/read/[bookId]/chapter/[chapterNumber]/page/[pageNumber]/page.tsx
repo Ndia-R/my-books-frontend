@@ -10,11 +10,9 @@ export default function Page() {
   const chapterNumber = Number(params.chapterNumber) || 0;
   const pageNumber = Number(params.pageNumber) || 1;
 
-  console.log(bookId, chapterNumber, pageNumber);
-
   return (
     <ErrorBoundary fallback={<ErrorElement />}>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={null}>
         <BookRead bookId={bookId} chapterNumber={chapterNumber} pageNumber={pageNumber} />
       </Suspense>
     </ErrorBoundary>

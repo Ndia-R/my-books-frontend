@@ -1,4 +1,5 @@
 import BookTableOfContents from '@/components/book-read/book-table-of-contents';
+import BookTableOfContentsSkeleton from '@/components/book-read/book-table-of-contents-skeleton';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -10,7 +11,7 @@ export default function Page() {
 
   return (
     <ErrorBoundary fallback={<ErrorElement />}>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<BookTableOfContentsSkeleton />}>
         <BookTableOfContents bookId={bookId} />
       </Suspense>
     </ErrorBoundary>
