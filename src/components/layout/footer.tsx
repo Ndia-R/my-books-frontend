@@ -8,8 +8,6 @@ type Props = {
 };
 
 export default function Footer({ className }: Props) {
-  const COPYRIGHT = '© 2024 Xxxxx, Inc.';
-
   return (
     <footer className={cn('bg-card', className)}>
       <div className="mx-auto max-w-7xl px-3 sm:px-6">
@@ -28,7 +26,7 @@ export default function Footer({ className }: Props) {
               <FacebookIcon className="size-5" />
             </Button>
           </div>
-          <p className="grid h-7 place-items-center text-sm">{COPYRIGHT}</p>
+          <p className="grid h-7 place-items-center text-sm">© 2025 Xxxxx, Inc.</p>
           <div className="flex justify-center sm:justify-end">
             <Logo size="sm" />
           </div>

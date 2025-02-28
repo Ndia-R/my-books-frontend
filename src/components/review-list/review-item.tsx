@@ -15,10 +15,10 @@ import { useState } from 'react';
 type Props = {
   review: Review;
   bookId: string;
-  queryKey: unknown[];
+  page: number;
 };
 
-export default function ReviewItem({ review, bookId, queryKey }: Props) {
+export default function ReviewItem({ review, bookId, page }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useAuth();
   const { deleteReview } = useApiRevew();
@@ -29,8 +29,12 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteReview(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: ['getReviewPage', bookId, page] });
       queryClient.invalidateQueries({ queryKey: ['getBookDetailsById', bookId] });
+      queryClient.invalidateQueries({ queryKey: ['checkSelfReviewExists', bookId] });
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
 
@@ -83,8 +87,8 @@ export default function ReviewItem({ review, bookId, queryKey }: Props) {
                     </Button>
                     <ReviewUpdateDialog
                       bookId={bookId}
+                      page={page}
                       review={review}
-                      queryKey={queryKey}
                       isOpen={isOpen}
                       setIsOpen={setIsOpen}
                     />

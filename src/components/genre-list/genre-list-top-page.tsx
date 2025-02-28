@@ -9,9 +9,6 @@ export default function GenreListTopPage() {
     queryKey: ['getGenres'],
     queryFn: () => getGenres(),
   });
-  return (
-    <>
-      <GenreList genres={genres} variant="ghost" />
-    </>
-  );
+
+  return <GenreList genres={genres} variant="ghost" />;
 }

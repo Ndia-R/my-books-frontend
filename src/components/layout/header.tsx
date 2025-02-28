@@ -1,7 +1,7 @@
-import LoginButton from '@/components/layout/login-button';
 import NavList from '@/components/layout/nav-list';
 import SearchInput from '@/components/layout/search-input';
 import ThemeToggleButton from '@/components/layout/theme-toggle-button';
+import UserIconButton from '@/components/layout/user-icon-button';
 import { cn } from '@/lib/util';
 
 type Props = {
@@ -19,7 +19,7 @@ export default function Header({ className }: Props) {
             <NavList />
             <span className="flex-1"></span>
             <SearchInput />
-            <LoginButton />
+            <UserIconButton />
             <ThemeToggleButton />
           </div>
         </div>

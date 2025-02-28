@@ -18,7 +18,7 @@ export default function NavList() {
   }
 
   return (
-    <div>
+    <>
       <div className="hidden lg:flex lg:items-center lg:gap-x-8">
         <Logo />
         <MenuList />
@@ -37,6 +37,6 @@ export default function NavList() {
           <MenuList onClick={() => setIsOpen(false)} />
         </SheetContent>
       </Sheet>
-    </div>
+    </>
   );
 }

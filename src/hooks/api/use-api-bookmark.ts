@@ -17,7 +17,7 @@ export const useApiBookmark = () => {
 
   const getBookmarkPage = async (page: number = 0) => {
     try {
-      const basePage = page - 1 < 0 ? 0 : page - 1;
+      const basePage = page > 0 ? page - 1 : 0;
       const url = `/bookmarks?&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
       const bookmarkPage = await fetcherWithAuth<BookmarkPage>(url);
       return bookmarkPage;

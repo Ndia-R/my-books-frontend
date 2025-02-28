@@ -14,19 +14,20 @@ export default function Logo({ size = 'md', disableLink = false }: Props) {
     lg: 'text-5xl',
   };
 
-  const LOGO = (
-    <h1
-      className={cn(
-        "whitespace-nowrap font-['Alfa_Slab_One'] tracking-tighter text-primary px-4 py-2 select-none",
-        disableLink && 'cursor-default',
-        SIZE[size]
-      )}
-    >
-      {LOGO_TITLE}
+  return (
+    <h1>
+      <Link
+        to="/"
+        className={cn(
+          "select-none whitespace-nowrap font-['Alfa_Slab_One'] tracking-tighter text-primary",
+          'px-4 py-2 ',
+          disableLink && 'cursor-default pointer-events-none',
+          SIZE[size]
+        )}
+        aria-disabled={disableLink}
+      >
+        {LOGO_TITLE}
+      </Link>
     </h1>
   );
-
-  if (disableLink) return LOGO;
-
-  return <Link to="/">{LOGO}</Link>;
 }

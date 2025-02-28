@@ -1,15 +1,12 @@
+import BookmarkButton from '@/components/count-icon/bookmark-button';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useApiBook } from '@/hooks/api/use-api-book';
+import { useApiBookmark } from '@/hooks/api/use-api-bookmark';
 import { cn } from '@/lib/util';
-import { BookTableOfContents } from '@/types';
+import { Bookmark, BookTableOfContents } from '@/types';
 import { useSuspenseQueries } from '@tanstack/react-query';
-import {
-  BookmarkIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  TableOfContentsIcon,
-} from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, TableOfContentsIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -18,16 +15,13 @@ type Props = {
   pageNumber: number;
 };
 
-export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
-  const { getBookDetailsById, getBookTableOfContents, getBookContentPage } = useApiBook();
+export default function BookReadContent({ bookId, chapterNumber, pageNumber }: Props) {
+  const { getBookTableOfContents, getBookContentPage } = useApiBook();
+  const { getBookmarkByBookId } = useApiBookmark();
 
-  const [{ data: book }, { data: bookTableOfContents }, { data: bookContentPage }] =
+  const [{ data: bookTableOfContents }, { data: bookContentPage }, { data: bookmark }] =
     useSuspenseQueries({
       queries: [
-        {
-          queryKey: ['getBookDetailsById', bookId],
-          queryFn: () => getBookDetailsById(bookId),
-        },
         {
           queryKey: ['getBookTableOfContents', bookId],
           queryFn: () => getBookTableOfContents(bookId),
@@ -35,6 +29,17 @@ export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
         {
           queryKey: ['getBookContentPage', bookId, chapterNumber, pageNumber],
           queryFn: () => getBookContentPage(bookId, chapterNumber, pageNumber),
+        },
+        {
+          queryKey: ['getBookmarkByBookId', bookId],
+          queryFn: () => getBookmarkByBookId(bookId),
+          select: (bookmarks: Bookmark[]) =>
+            bookmarks.find(
+              (bookmark) =>
+                bookmark.bookId === bookId &&
+                bookmark.chapterNumber === chapterNumber &&
+                bookmark.pageNumber === pageNumber
+            ),
         },
       ],
     });
@@ -129,16 +134,10 @@ export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
   const prevPageLink = `/read/${bookId}/chapter/${prevChapter}/page/${prevPage}`;
 
   return (
-    <>
-      <div className="fixed left-0 top-0 -z-10 flex h-screen w-full justify-center">
-        <img
-          className="w-full max-w-7xl object-cover opacity-5"
-          src={book.imageUrl}
-          alt="bg-image"
-        />
-      </div>
+    <div className="delay-0 duration-200 animate-in fade-in-0">
       <div className="flex flex-col gap-y-12 px-4 pb-6 pt-12 sm:px-20">
-        <div className="flex items-center gap-x-2">
+        <div className="flex flex-col items-start justify-center gap-x-2">
+          <p className="mb-2 text-xs text-muted-foreground/70 sm:text-sm">{`chapter ${bookContentPage.chapterNumber}`}</p>
           <div className="text-xl font-bold sm:text-2xl">
             {bookContentPage.chapterTitle}
             <span className="text-sm text-muted-foreground sm:text-base">
@@ -154,8 +153,8 @@ export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
                     asChild
                   >
                     <Link
-                      className="flex items-center gap-x-2"
                       to={`/read/${bookId}/table-of-contents`}
+                      className="flex items-center gap-x-2"
                     >
                       <TableOfContentsIcon className="size-4" />
                     </Link>
@@ -167,11 +166,20 @@ export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
             <div className="inline-block">
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button className="size-8 rounded-full" variant="ghost" size="icon">
-                    <BookmarkIcon className="size-4" />
-                  </Button>
+                  <BookmarkButton
+                    bookmark={bookmark}
+                    bookId={bookId}
+                    chapterNumber={chapterNumber}
+                    pageNumber={pageNumber}
+                  />
                 </TooltipTrigger>
-                <TooltipContent>このページをブックマークする</TooltipContent>
+                <TooltipContent>
+                  {bookmark
+                    ? bookmark.note
+                      ? `メモ「${bookmark.note}」`
+                      : 'ブックマークからから削除'
+                    : 'ブックマークに追加'}
+                </TooltipContent>
               </Tooltip>
             </div>
           </div>
@@ -206,6 +214,6 @@ export default function BookRead({ bookId, chapterNumber, pageNumber }: Props) {
           </Link>
         </Button>
       </div>
-    </>
+    </div>
   );
 }

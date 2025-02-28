@@ -40,67 +40,65 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
   };
 
   return (
-    <>
-      <div className="flex h-10 items-center text-foreground">
-        <p
-          className={cn(
-            'w-8',
-            currentRating !== dispRating
-              ? 'text-muted-foreground/50'
-              : 'text-muted-foreground',
-            !readOnly && 'cursor-pointer'
+    <div className="flex h-10 items-center text-foreground">
+      <p
+        className={cn(
+          'w-8',
+          currentRating !== dispRating
+            ? 'text-muted-foreground/50'
+            : 'text-muted-foreground',
+          !readOnly && 'cursor-pointer'
+        )}
+        onClick={() => handleMouseClick(0)}
+        onMouseEnter={() => handleMouseEnter(0)}
+        onMouseLeave={() => handleMouseLeave()}
+      >
+        {dispRating.toFixed(1)}
+      </p>
+
+      <div className="relative">
+        <div className="flex">
+          {[...Array<number>(max)].map((_, index) => (
+            <StarIcon
+              key={index}
+              style={{ fill: 'hsl(var(--foreground) / 0.1)' }}
+              strokeWidth={0}
+            />
+          ))}
+        </div>
+
+        <div className="absolute left-0 top-0 flex">
+          {[...Array<number>(Math.floor(dispRating))].map((_, index) => (
+            <StarIcon
+              key={index}
+              style={{ fill: 'hsl(var(--primary))' }}
+              strokeWidth={0}
+            />
+          ))}
+          {!Number.isInteger(dispRating) && (
+            <StarHalfIcon style={{ fill: 'hsl(var(--primary))' }} strokeWidth={0} />
           )}
-          onClick={() => handleMouseClick(0)}
-          onMouseEnter={() => handleMouseEnter(0)}
-          onMouseLeave={() => handleMouseLeave()}
-        >
-          {dispRating.toFixed(1)}
-        </p>
+        </div>
 
-        <div className="relative">
-          <div className="flex">
-            {[...Array<number>(max)].map((_, index) => (
-              <StarIcon
-                key={index}
-                style={{ fill: 'hsl(var(--foreground) / 0.1)' }}
-                strokeWidth={0}
+        <div className="absolute left-0 top-0 flex">
+          {[...Array<number>(max)].map((_, index) => (
+            <div className="flex" key={index}>
+              <div
+                className={cn('w-3 h-6 bg-transparent', !readOnly && 'cursor-pointer')}
+                onClick={() => handleMouseClick(index + 1 - 0.5)}
+                onMouseEnter={() => handleMouseEnter(index + 1 - 0.5)}
+                onMouseLeave={() => handleMouseLeave()}
               />
-            ))}
-          </div>
-
-          <div className="absolute left-0 top-0 flex">
-            {[...Array<number>(Math.floor(dispRating))].map((_, index) => (
-              <StarIcon
-                key={index}
-                style={{ fill: 'hsl(var(--primary))' }}
-                strokeWidth={0}
+              <div
+                className={cn('w-3 h-6 bg-transparent', !readOnly && 'cursor-pointer')}
+                onClick={() => handleMouseClick(index + 1)}
+                onMouseEnter={() => handleMouseEnter(index + 1)}
+                onMouseLeave={() => handleMouseLeave()}
               />
-            ))}
-            {!Number.isInteger(dispRating) && (
-              <StarHalfIcon style={{ fill: 'hsl(var(--primary))' }} strokeWidth={0} />
-            )}
-          </div>
-
-          <div className="absolute left-0 top-0 flex">
-            {[...Array<number>(max)].map((_, index) => (
-              <div className="flex" key={index}>
-                <div
-                  className={cn('w-3 h-6 bg-transparent', !readOnly && 'cursor-pointer')}
-                  onClick={() => handleMouseClick(index + 1 - 0.5)}
-                  onMouseEnter={() => handleMouseEnter(index + 1 - 0.5)}
-                  onMouseLeave={() => handleMouseLeave()}
-                />
-                <div
-                  className={cn('w-3 h-6 bg-transparent', !readOnly && 'cursor-pointer')}
-                  onClick={() => handleMouseClick(index + 1)}
-                  onMouseEnter={() => handleMouseEnter(index + 1)}
-                  onMouseLeave={() => handleMouseLeave()}
-                />
-              </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
-    </>
+    </div>
   );
 }

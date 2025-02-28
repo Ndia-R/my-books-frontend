@@ -1,5 +1,5 @@
+import BookReadBackground from '@/components/book-read/book-read-background';
 import BookTableOfContents from '@/components/book-read/book-table-of-contents';
-import BookTableOfContentsSkeleton from '@/components/book-read/book-table-of-contents-skeleton';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -10,10 +10,18 @@ export default function Page() {
   const bookId = params.bookId || '';
 
   return (
-    <ErrorBoundary fallback={<ErrorElement />}>
-      <Suspense fallback={<BookTableOfContentsSkeleton />}>
-        <BookTableOfContents bookId={bookId} />
-      </Suspense>
-    </ErrorBoundary>
+    <>
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={null}>
+          <BookReadBackground bookId={bookId} />
+        </Suspense>
+      </ErrorBoundary>
+
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={null}>
+          <BookTableOfContents bookId={bookId} />
+        </Suspense>
+      </ErrorBoundary>
+    </>
   );
 }

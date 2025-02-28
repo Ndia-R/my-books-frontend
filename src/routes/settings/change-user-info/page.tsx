@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useApiUser } from '@/hooks/api/use-api-user';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/util';
 import { UpdateCurrentUser } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
@@ -19,24 +20,25 @@ export default function Page() {
   const nameRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { user, setUser } = useAuth();
   const { updateCurrentUser } = useApiUser();
   const { toast } = useToast();
+
+  const { user, setUser } = useAuth();
 
   const [avatarUrl, setAvaterUrl] = useState(user?.avatarUrl || '');
 
   const updateMutation = useMutation({
     mutationFn: (requestBody: UpdateCurrentUser) => updateCurrentUser(requestBody),
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   useEffect(() => {
-    const init = async () => {
-      if (nameRef.current && user) {
-        nameRef.current.focus();
-        nameRef.current.value = user.name || '';
-      }
-    };
-    init();
+    if (nameRef.current && user) {
+      nameRef.current.focus();
+      nameRef.current.value = user.name || '';
+    }
   }, [user]);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -45,27 +47,23 @@ export default function Page() {
     const form = new FormData(e.currentTarget);
     const name = form.get('name') as string;
 
-    if (name === '') {
-      setNameErrorMessage('ユーザー名は必須です。');
+    const isNameValid = validateName();
+
+    if (!isNameValid) {
       return;
     }
-
-    // if (user?.name !== name && (await checkUsernameExists(name))) {
-    //   setNameErrorMessage('そのユーザー名はすでに使われています。');
-    //   return;
-    // }
 
     const requestBody: UpdateCurrentUser = { name, avatarUrl };
     updateMutation.mutate(requestBody, {
       onSuccess: () => {
+        // 名前とアバターURLだけなので楽観的に更新しておく
         const newUser = user ? { ...user, name, avatarUrl } : null;
         setUser(newUser);
+
         toast({ title: 'ユーザー情報を変更しました' });
         navigate('/settings/profile');
       },
-      onError: (error) => {
-        console.log(error);
-
+      onError: () => {
         toast({
           title: 'ユーザー情報を変更できませんでした',
           description: '入力内容を確認してください。',
@@ -76,8 +74,20 @@ export default function Page() {
     });
   };
 
+  const validateName = () => {
+    const name = nameRef.current?.value as string;
+    setNameErrorMessage('');
+
+    if (name === '') {
+      setNameErrorMessage('ユーザー名は必須です。');
+      return false;
+    }
+
+    return true;
+  };
+
   return (
-    <div className="my-3 flex flex-col place-items-center gap-y-3 sm:my-16">
+    <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
       <p className="font-semibold">ユーザー情報の編集</p>
       <Card className="w-80 rounded-3xl sm:w-96">
@@ -89,16 +99,21 @@ export default function Page() {
               </Label>
               <Input
                 ref={nameRef}
-                className="my-2 rounded-full"
+                className={cn(
+                  'my-2 rounded-full',
+                  nameErrorMessage && 'border-destructive'
+                )}
                 id="name"
                 name="name"
                 autoComplete="off"
                 spellCheck="false"
               />
-              <p className="h-4 text-xs text-destructive">{nameErrorMessage}</p>
+              {nameErrorMessage && (
+                <p className="text-xs text-destructive">{nameErrorMessage}</p>
+              )}
             </div>
 
-            <div className="mb-4">
+            <div>
               <Label className="text-xs" htmlFor="name">
                 アバター画像
               </Label>
@@ -116,6 +131,7 @@ export default function Page() {
                 '変更'
               )}
             </Button>
+
             <Button
               className="w-full rounded-full bg-transparent"
               type="button"

@@ -13,7 +13,7 @@ export default function Page() {
       <Hero />
 
       <div className="flex flex-col">
-        <p className="font-bold text-primary">ジャンルから探す</p>
+        <p className="font-bold text-primary">ジャンル</p>
 
         <div className="my-4">
           <ErrorBoundary fallback={<ErrorElement />}>

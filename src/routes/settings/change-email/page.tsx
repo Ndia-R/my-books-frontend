@@ -20,15 +20,23 @@ export default function Page() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState('');
 
   const emailRef = useRef<HTMLInputElement | null>(null);
+  const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { user, logout } = useAuth();
   const { changeEmail } = useApiUser();
   const { toast } = useToast();
+
+  const { user, logout } = useAuth();
   const { confirmDialog } = useConfirmDialog();
 
   const updateMutation = useMutation({
     mutationFn: (requestBody: ChangeEmail) => changeEmail(requestBody),
+    onSuccess: async () => {
+      await logout();
+    },
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   useEffect(() => {
@@ -42,9 +50,10 @@ export default function Page() {
     const email = form.get('email') as string;
     const password = form.get('password') as string;
 
-    if (!(email && password)) {
-      if (email === '') setEmailErrorMessage('メールアドレスは必須です。');
-      if (password === '') setPasswordErrorMessage('パスワードは必須です。');
+    const isEmailValid = validateEmail();
+    const isPasswordValid = validatePassword();
+
+    if (!isEmailValid || !isPasswordValid) {
       return;
     }
 
@@ -59,7 +68,6 @@ export default function Page() {
     updateMutation.mutate(requestBody, {
       onSuccess: async () => {
         toast({ title: 'メールアドレスを変更し、ログアウトしました', duration: 5000 });
-        await logout();
         navigate('/login');
       },
       onError: () => {
@@ -73,19 +81,38 @@ export default function Page() {
     });
   };
 
-  const handleCheckEmail = () => {
+  const validateEmail = () => {
+    const email = emailRef.current?.value as string;
     setEmailErrorMessage('');
 
-    if (!emailRef.current?.value) return;
+    if (email === '') {
+      setEmailErrorMessage('メールアドレスは必須です。');
+      return false;
+    }
 
     const emailRegex = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(emailRef.current.value)) {
+    if (!emailRegex.test(email)) {
       setEmailErrorMessage('無効なメールアドレスです。');
+      return false;
     }
+
+    return true;
+  };
+
+  const validatePassword = () => {
+    const password = passwordRef.current?.value as string;
+    setPasswordErrorMessage('');
+
+    if (password === '') {
+      setPasswordErrorMessage('パスワードは必須です。');
+      return false;
+    }
+
+    return true;
   };
 
   return (
-    <div className="my-3 flex flex-col place-items-center gap-y-3 sm:my-16">
+    <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
       <p className="font-semibold">メールアドレス変更</p>
       <Card className="w-80 rounded-3xl sm:w-96">
@@ -114,7 +141,6 @@ export default function Page() {
                 name="email"
                 autoComplete="off"
                 spellCheck="false"
-                onBlur={handleCheckEmail}
               />
               {emailErrorMessage && (
                 <p className="text-xs text-destructive">{emailErrorMessage}</p>
@@ -126,6 +152,7 @@ export default function Page() {
                 現在のパスワード
               </Label>
               <PasswordInput
+                ref={passwordRef}
                 className={cn(
                   'my-2 rounded-full',
                   passwordErrorMessage && 'border-destructive'
@@ -149,6 +176,7 @@ export default function Page() {
                 '変更'
               )}
             </Button>
+
             <Button
               className="w-full rounded-full bg-transparent"
               type="button"

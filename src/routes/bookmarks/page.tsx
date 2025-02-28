@@ -1,5 +1,4 @@
-import BookListFavorites from '@/components/book-list/book-list-favorites';
-import BookListSkeleton from '@/components/book-list/book-list-skeleton';
+import BookmarkList from '@/components/bookmark/bookmark-list';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,12 +11,11 @@ export default function Page() {
   return (
     <>
       <div className="m-4 flex h-10 items-center">
-        <p>お気に入り</p>
+        <p>ブックマーク</p>
       </div>
-
       <ErrorBoundary fallback={<ErrorElement />}>
-        <Suspense fallback={<BookListSkeleton />}>
-          <BookListFavorites page={page} />
+        <Suspense fallback={<div>Loading...</div>}>
+          <BookmarkList page={page} />
         </Suspense>
       </ErrorBoundary>
     </>

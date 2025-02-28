@@ -56,6 +56,6 @@ export default function SwipeArea({
       className={className}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
-    ></div>
+    />
   );
 }

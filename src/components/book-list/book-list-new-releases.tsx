@@ -5,14 +5,14 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 export default function BookListNewReleases() {
   const { getNewBooks } = useApiBook();
 
-  const { data: books } = useSuspenseQuery({
+  const { data: bookPage } = useSuspenseQuery({
     queryKey: ['getNewBooks'],
     queryFn: () => getNewBooks(),
   });
 
   return (
     <div className="pb-4">
-      <BookList books={books} />
+      <BookList books={bookPage.books} />
     </div>
   );
 }

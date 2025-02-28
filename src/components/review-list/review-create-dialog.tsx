@@ -11,17 +11,12 @@ import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
   bookId: string;
-  queryKey: unknown[];
+  page: number;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 };
 
-export default function ReviewCreateDialog({
-  bookId,
-  queryKey,
-  isOpen,
-  setIsOpen,
-}: Props) {
+export default function ReviewCreateDialog({ bookId, page, isOpen, setIsOpen }: Props) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
@@ -35,8 +30,12 @@ export default function ReviewCreateDialog({
   const createMutation = useMutation({
     mutationFn: (reqestBody: ReviewRequest) => createReview(reqestBody),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: ['getReviewPage', bookId, page] });
       queryClient.invalidateQueries({ queryKey: ['getBookDetailsById', bookId] });
+      queryClient.invalidateQueries({ queryKey: ['checkSelfReviewExists', bookId] });
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
 

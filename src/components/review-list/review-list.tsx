@@ -6,8 +6,8 @@ import { Separator } from '@/components/ui/separator';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useApiRevew } from '@/hooks/api/use-api-review';
 import { useAuth } from '@/hooks/use-auth';
-import { useSuspenseQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useState } from 'react';
 
 type Props = {
   bookId: string;
@@ -16,40 +16,37 @@ type Props = {
 export default function ReviewList({ bookId }: Props) {
   const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
-  const [reviewExists, setReviewExists] = useState(false);
 
   const { user } = useAuth();
-  const { getReviewPage, checkMyReviewExists } = useApiRevew();
+  const { getReviewPage, checkSelfReviewExists } = useApiRevew();
 
-  const queryKey = ['ReviewList', bookId, page];
-  const { data: paginatedReview } = useSuspenseQuery({
-    queryKey,
+  const { data: reviewPage } = useSuspenseQuery({
+    queryKey: ['getReviewPage', bookId, page],
     queryFn: () => getReviewPage(bookId, page),
   });
 
-  useEffect(() => {
-    const init = async () => {
-      if (user) {
-        const exists = await checkMyReviewExists(bookId);
-        setReviewExists(exists);
-      }
-    };
-    init();
-  }, [bookId, checkMyReviewExists, user]);
+  // enabledオプションを使って、ログインしていない場合は
+  // queryFnを呼び出さない（この指定はuseSuspenseQueryでは出来ない模様）
+  const { data: reviewExists = false } = useQuery({
+    queryKey: ['checkSelfReviewExists', bookId],
+    queryFn: () => checkSelfReviewExists(bookId),
+    enabled: !!user,
+    retry: false,
+  });
 
   return (
     <div className="mx-auto w-full lg:w-3/4">
       <div className="flex flex-col-reverse items-center justify-end gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
-        <p>レビュー {paginatedReview.totalItems} 件</p>
+        <p>レビュー {reviewPage.totalItems} 件</p>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
               className="w-44 rounded-full bg-transparent"
               variant="outline"
-              disabled={reviewExists}
+              disabled={user ? reviewExists : true}
               onClick={() => user && setIsOpen(true)}
             >
-              {reviewExists ? 'レビュー済み' : 'レビューする'}
+              {user && reviewExists ? 'レビュー済み' : 'レビューする'}
             </Button>
           </TooltipTrigger>
           {!user && (
@@ -60,28 +57,24 @@ export default function ReviewList({ bookId }: Props) {
         </Tooltip>
         <ReviewCreateDialog
           bookId={bookId}
-          queryKey={queryKey}
+          page={page}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
         />
       </div>
 
       <ul className="flex flex-col p-3 sm:p-6">
-        {paginatedReview.reviews.map((review) => (
+        {reviewPage.reviews.map((review) => (
           <li key={review.userId}>
             <Separator className="bg-foreground/10" />
-            <ReviewItem review={review} bookId={bookId} queryKey={queryKey} />
+            <ReviewItem review={review} bookId={bookId} page={page} />
           </li>
         ))}
       </ul>
 
       <div className="mb-4 flex justify-center">
-        {paginatedReview.totalPages > 1 && (
-          <Pagination
-            total={paginatedReview.totalPages}
-            page={page}
-            onChangePage={setPage}
-          />
+        {reviewPage.totalPages > 1 && (
+          <Pagination total={reviewPage.totalPages} page={page} onChangePage={setPage} />
         )}
       </div>
     </div>

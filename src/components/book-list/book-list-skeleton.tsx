@@ -5,6 +5,7 @@ import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
 export default function BookListSkeleton() {
   return (
     <div className="flex flex-col gap-y-4 pb-4">
+      <div className="h-6" />
       <ul className="grid grid-cols-2 justify-items-center gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 lg:grid-cols-5">
         {[...Array<number>(FETCH_BOOKS_MAX_RESULTS)].map((_, index) => (
           <li key={index}>

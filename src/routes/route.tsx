@@ -1,4 +1,5 @@
 import BookDetailPage from '@/routes/book/[bookId]/page';
+import BookmarksPage from '@/routes/bookmarks/page';
 import DiscoverPage from '@/routes/discover/page';
 import FavoritesPage from '@/routes/favorites/page';
 import RootLayout from '@/routes/layout';
@@ -24,9 +25,6 @@ export const router = createBrowserRouter(
         <Route path="book/:bookId" element={<BookDetailPage />} />
 
         <Route path="read/:bookId">
-          <Route path="chapter/:chapterNumber">
-            <Route path="page/:pageNumber" element={<BookReadPage />} />
-          </Route>
           <Route path="table-of-contents" element={<BookReadTableOfContentsPage />} />
         </Route>
 
@@ -46,9 +44,14 @@ export const router = createBrowserRouter(
           <Route index element={<SignupPage />} />
         </Route>
 
+        {/* 以下、認証が必要な画面 */}
         <Route element={<ProtectedRoute />}>
           <Route path="favorites">
             <Route index element={<FavoritesPage />} />
+          </Route>
+
+          <Route path="bookmarks">
+            <Route index element={<BookmarksPage />} />
           </Route>
 
           <Route path="settings">
@@ -56,6 +59,12 @@ export const router = createBrowserRouter(
             <Route path="change-user-info" element={<ChangeUserInfoPage />} />
             <Route path="change-email" element={<ChangeEmailPage />} />
             <Route path="change-password" element={<ChangePasswordPage />} />
+          </Route>
+
+          <Route path="read/:bookId">
+            <Route path="chapter/:chapterNumber">
+              <Route path="page/:pageNumber" element={<BookReadPage />} />
+            </Route>
           </Route>
         </Route>
       </Route>

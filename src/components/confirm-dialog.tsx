@@ -127,60 +127,56 @@ const ConfirmDialog = () => {
   };
 
   return (
-    <>
-      <Dialog open={isOpen}>
-        <DialogContent
-          className={cn(
-            'w-[360px] sm:w-[400px] transition-transform ease-in-out [transition-duration:25ms]',
-            isPersistentAnimation && 'scale-[1.02] transform'
+    <Dialog open={isOpen}>
+      <DialogContent
+        className={cn(
+          'w-[360px] sm:w-[400px] transition-transform ease-in-out [transition-duration:25ms]',
+          isPersistentAnimation && 'scale-[1.02] transform'
+        )}
+        onEscapeKeyDown={handleCloseDialog}
+        onPointerDownOutside={handleCloseDialog}
+        onAnimationEnd={handleAnimationEnd}
+      >
+        <DialogHeader>
+          <DialogTitle className="my-2 flex items-center">
+            <Icon className={cn('mr-3 min-w-fit', iconTypes[options.icon].color)} />
+            <p className=" leading-6">{options.title}</p>
+          </DialogTitle>
+          {options.message && (
+            <DialogDescription className="pt-2 text-left">
+              {options.message}
+            </DialogDescription>
           )}
-          onEscapeKeyDown={handleCloseDialog}
-          onPointerDownOutside={handleCloseDialog}
-          onAnimationEnd={handleAnimationEnd}
-        >
-          <DialogHeader>
-            <DialogTitle className="my-2 flex items-center">
-              <Icon className={cn('mr-3 min-w-fit', iconTypes[options.icon].color)} />
-              <p className=" leading-6">{options.title}</p>
-            </DialogTitle>
-            {options.message && (
-              <DialogDescription className="pt-2">{options.message}</DialogDescription>
-            )}
-          </DialogHeader>
+        </DialogHeader>
 
-          {options.showInput && (
-            <div className="mb-4 grid w-full items-center gap-1.5">
-              <p className="text-xs">{options.inputLabel}</p>
-              <Textarea
-                ref={refTextarea}
-                className="min-h-[16px] resize-none"
-                placeholder={options.inputPlaceholder}
-                rows={options.inputRows}
-              />
-            </div>
-          )}
+        {options.showInput && (
+          <div className="mb-4 grid w-full items-center gap-1.5">
+            <p className="text-xs">{options.inputLabel}</p>
+            <Textarea
+              ref={refTextarea}
+              className="min-h-[16px] resize-none"
+              placeholder={options.inputPlaceholder}
+              rows={options.inputRows}
+            />
+          </div>
+        )}
 
-          <DialogFooter className="flex justify-end">
-            {!options.actionOnly && (
-              <Button
-                className="rounded-full"
-                variant="ghost"
-                onClick={handleClickCancel}
-              >
-                キャンセル
-              </Button>
-            )}
-            <Button
-              className={cn('rounded-full', options.actionLabel === 'OK' && 'sm:w-20')}
-              variant={iconTypes[options.icon].variant || 'default'}
-              onClick={handleClickAction}
-            >
-              {options.actionLabel}
+        <DialogFooter className="flex justify-end">
+          {!options.actionOnly && (
+            <Button className="rounded-full" variant="ghost" onClick={handleClickCancel}>
+              キャンセル
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </>
+          )}
+          <Button
+            className={cn('rounded-full', options.actionLabel === 'OK' && 'sm:w-20')}
+            variant={iconTypes[options.icon].variant || 'default'}
+            onClick={handleClickAction}
+          >
+            {options.actionLabel}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 };
 

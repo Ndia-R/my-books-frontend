@@ -7,9 +7,13 @@ export const ProtectedRoute = () => {
 
   if (isLoading) return null;
 
-  return accessToken ? (
-    <Outlet />
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
+  return (
+    <>
+      {accessToken ? (
+        <Outlet />
+      ) : (
+        <Navigate to="/login" state={{ from: location }} replace />
+      )}
+    </>
   );
 };

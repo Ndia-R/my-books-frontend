@@ -31,3 +31,7 @@ export interface ReviewRequest {
   comment: string;
   rating: number;
 }
+
+export interface SelfReviewExists {
+  exists: boolean;
+}

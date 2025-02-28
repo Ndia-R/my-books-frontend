@@ -1,12 +1,6 @@
 import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
 import { useApi } from '@/hooks/api/use-api';
-import {
-  Book,
-  BookContentPage,
-  BookDetails,
-  BookPage,
-  BookTableOfContents,
-} from '@/types';
+import { BookContentPage, BookDetails, BookPage, BookTableOfContents } from '@/types';
 
 export const useApiBook = () => {
   const { fetcher, fetcherWithAuth } = useApi();
@@ -21,10 +15,10 @@ export const useApiBook = () => {
     }
   };
 
-  const getBookPageByQuery = async (q: string, page: number = 0) => {
+  const getBookPageByQuery = async (query: string, page: number = 0) => {
     try {
-      const basePage = page - 1 < 0 ? 0 : page - 1;
-      const url = `/books/search?q=${q}&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
+      const basePage = page > 0 ? page - 1 : 0;
+      const url = `/books/search?q=${query}&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
       const bookPage = await fetcher<BookPage>(url);
       return bookPage;
     } catch (error) {
@@ -32,14 +26,14 @@ export const useApiBook = () => {
     }
   };
 
-  const getBookPageByGenreId = async (genreIdsQuery: string, page: number = 0) => {
+  const getBookPageByGenreId = async (
+    genreIdsQuery: string,
+    conditionQuery: string,
+    page: number = 0
+  ) => {
     try {
-      const basePage = page - 1 < 0 ? 0 : page - 1;
-
-      // 「|」はそのまま渡すとエラーになるので、URLエンコードする
-      const encodedParams = genreIdsQuery.replace(/\|/g, encodeURIComponent('|'));
-
-      const url = `/books/discover?genreId=${encodedParams}&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
+      const basePage = page > 0 ? page - 1 : 0;
+      const url = `/books/discover?genreIds=${genreIdsQuery}&condition=${conditionQuery}&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
       const bookPage = await fetcher<BookPage>(url);
       return bookPage;
     } catch (error) {
@@ -50,8 +44,8 @@ export const useApiBook = () => {
   const getNewBooks = async () => {
     try {
       const url = `/books/new-books`;
-      const books = await fetcher<Book[]>(url);
-      return books;
+      const bookPage = await fetcher<BookPage>(url);
+      return bookPage;
     } catch (error) {
       throw new Error('ニューリリース一覧の読み込みが失敗しました。' + error);
     }

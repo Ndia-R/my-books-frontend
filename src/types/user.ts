@@ -31,14 +31,10 @@ export interface UpdateCurrentUser {
 export interface ChangePassword {
   currentPassword: string;
   newPassword: string;
-  confirmNewPassword: string;
+  confirmPassword: string;
 }
 
 export interface ChangeEmail {
   email: string;
   password: string;
-}
-
-export interface CheckUsernameExists {
-  exists: boolean;
 }

@@ -21,7 +21,9 @@ export default function GenreList({ genres, className, variant = 'default' }: Pr
             size="sm"
             asChild
           >
-            <Link to={`/discover?genreId=${genre.id}`}>{genre.name}</Link>
+            <Link to={`/discover?genreIds=${genre.id}&condition=SINGLE`}>
+              {genre.name}
+            </Link>
           </Button>
         </li>
       ))}

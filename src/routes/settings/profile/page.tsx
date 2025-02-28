@@ -16,7 +16,7 @@ export default function Page() {
   if (!user) return null;
 
   return (
-    <div className="my-3 flex flex-col place-items-center gap-y-3 sm:my-16">
+    <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
       <p className="font-semibold">プロフィール</p>
 

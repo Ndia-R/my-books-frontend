@@ -10,16 +10,16 @@ import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
   bookId: string;
+  page: number;
   review: Review;
-  queryKey: unknown[];
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 };
 
 export default function ReviewUpdateDialog({
   bookId,
+  page,
   review,
-  queryKey,
   isOpen,
   setIsOpen,
 }: Props) {
@@ -36,8 +36,11 @@ export default function ReviewUpdateDialog({
     mutationFn: ({ id, requestBody }: { id: number; requestBody: ReviewRequest }) =>
       updateReview(id, requestBody),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey: ['getReviewPage', bookId, page] });
       queryClient.invalidateQueries({ queryKey: ['getBookDetailsById', bookId] });
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
 

@@ -22,8 +22,8 @@ type Props = {
 export default function AvatarCarousel({
   value,
   onChange,
-  itemWidth = 80,
-  frameWidth = 220,
+  itemWidth = 70,
+  frameWidth = 192,
   paddingItem = 2,
 }: Props) {
   // 配列の最初と最後の切れ目部分にアイテムを追加しておく
@@ -91,7 +91,7 @@ export default function AvatarCarousel({
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center justify-center">
       <Button
         className="rounded-full"
         type="button"
@@ -125,7 +125,7 @@ export default function AvatarCarousel({
                 <Avatar
                   className={cn(
                     'transition-all duration-200',
-                    'size-14 opacity-25 scale-100',
+                    'size-12 opacity-25 scale-100',
                     currentIndex === item.index &&
                       'opacity-100 scale-150 outline-1 outline-offset-1 outline outline-primary'
                   )}

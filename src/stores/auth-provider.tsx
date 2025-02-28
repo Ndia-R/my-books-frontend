@@ -17,8 +17,8 @@ const AuthContext = createContext<ContextType | undefined>(undefined);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   const login = async ({ email, password }: LoginRequest) => {
     try {
@@ -32,13 +32,14 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const response = await fetch(url, options);
       if (!response.ok) {
-        throw new Error(`[STATUS] ${response.status} [URL] ${url}`);
+        const data = (await response.json()) as ErrorResponse;
+        throw new Error(
+          `[STATUS] ${response.status} [MESSAGE] ${data.message} [URL] ${url}`
+        );
       }
 
       const data = (await response.json()) as AccessToken;
       setAccessToken(data.accessToken);
-      const user = await fetchUser(data.accessToken);
-      setUser(user);
     } catch (error) {
       setAccessToken(null);
       setUser(null);
@@ -66,8 +67,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const data = (await response.json()) as AccessToken;
       setAccessToken(data.accessToken);
-      const user = await fetchUser(data.accessToken);
-      setUser(user);
     } catch (error) {
       setAccessToken(null);
       setUser(null);
@@ -80,21 +79,37 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const url = `${BOOKS_API_ENDPOINT}/logout`;
       const options: RequestInit = {
         method: 'POST',
+        credentials: 'include',
       };
 
       const response = await fetch(url, options);
       if (!response.ok) {
-        throw new Error(`[STATUS] ${response.status} [URL] ${url}`);
+        const data = (await response.json()) as ErrorResponse;
+        throw new Error(
+          `[STATUS] ${response.status} [MESSAGE] ${data.message} [URL] ${url}`
+        );
       }
 
       setAccessToken(null);
       setUser(null);
     } catch (error) {
+      setAccessToken(null);
+      setUser(null);
       throw new Error('ログアウトに失敗しました。' + error);
     }
   };
 
   const refreshAccessToken = async () => {
+    const accessToken = await fetchAccessToken();
+    setAccessToken(accessToken);
+    if (!accessToken) {
+      alert('セッションが切れたため、自動ログアウトしました。');
+      setUser(null);
+    }
+    return accessToken;
+  };
+
+  const fetchAccessToken = async () => {
     try {
       const url = `${BOOKS_API_ENDPOINT}/refresh-token`;
       const options: RequestInit = {
@@ -108,41 +123,18 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
 
       const data = (await response.json()) as AccessToken;
-      setAccessToken(data.accessToken);
       return data.accessToken;
-    } catch (error) {
-      console.error('Token refresh failed:', error);
-      setUser(null);
-      setAccessToken(null);
+    } catch {
       return null;
     }
   };
 
-  const fetchUser = async (accessToken: string) => {
-    const url = `${BOOKS_API_ENDPOINT}/me`;
-    const options: RequestInit = {
-      headers: { Authorization: `Bearer ${accessToken}` },
-    };
-
-    const response = await fetch(url, options);
-    if (!response.ok) {
-      throw new Error(`[STATUS] ${response.status} [URL] ${url}`);
-    }
-
-    const user = (await response.json()) as User;
-    return user;
-  };
-
   useEffect(() => {
+    // リロードするとアクセストークンがメモリから消えてしまうので
+    // 初期読み込み時にリフレッシュトークンを使って再取得する
     const init = async () => {
-      const newAccessToken = await refreshAccessToken();
-
-      if (newAccessToken) {
-        const user = await fetchUser(newAccessToken);
-        setUser(user);
-      } else {
-        logout();
-      }
+      const accessToken = await fetchAccessToken();
+      setAccessToken(accessToken);
       setIsLoading(false);
     };
     init();

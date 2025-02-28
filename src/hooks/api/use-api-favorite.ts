@@ -17,7 +17,7 @@ export const useApiFavorite = () => {
 
   const getFavoritePage = async (page: number = 0) => {
     try {
-      const basePage = page - 1 < 0 ? 0 : page - 1;
+      const basePage = page > 0 ? page - 1 : 0;
       const url = `/favorites?&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
       const favoritePage = await fetcherWithAuth<FavoritePage>(url);
       return favoritePage;

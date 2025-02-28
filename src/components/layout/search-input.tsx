@@ -31,7 +31,7 @@ export default function SearchInput() {
         <Input
           className="rounded-full border-foreground/20 bg-background/20 pl-10 pr-4"
           type="search"
-          placeholder="検索"
+          placeholder="タイトルで検索"
           name="query"
           autoComplete="off"
           spellCheck="false"

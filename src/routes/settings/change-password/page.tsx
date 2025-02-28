@@ -4,22 +4,35 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useApiUser } from '@/hooks/api/use-api-user';
+import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/util';
 import { ChangePassword } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Page() {
+  const [currentPasswordErrorMessage, setCurrentPasswordErrorMessage] = useState('');
+  const [newPasswordErrorMessage, setNewPasswordErrorMessage] = useState('');
+  const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState('');
+
   const currentPasswordRef = useRef<HTMLInputElement | null>(null);
+  const newPasswordRef = useRef<HTMLInputElement | null>(null);
+  const confirmPasswordRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
   const { changePassword } = useApiUser();
   const { toast } = useToast();
 
+  const { confirmDialog } = useConfirmDialog();
+
   const updateMutation = useMutation({
     mutationFn: (requestBody: ChangePassword) => changePassword(requestBody),
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   useEffect(() => {
@@ -32,12 +45,27 @@ export default function Page() {
     const form = new FormData(e.currentTarget);
     const currentPassword = form.get('current-password') as string;
     const newPassword = form.get('new-password') as string;
-    const confirmNewPassword = form.get('confirm-new-password') as string;
+    const confirmPassword = form.get('confirm-password') as string;
+
+    const isCurrentPasswrdValid = validateCurrentPassword();
+    const isNewPasswrdValid = validateNewPassword();
+    const isConfirmPasswrdValid = validateConfirmPassword();
+
+    if (!isCurrentPasswrdValid || !isNewPasswrdValid || !isConfirmPasswrdValid) {
+      return;
+    }
+
+    const { isCancel } = await confirmDialog({
+      icon: '?',
+      title: '本当に変更しますか？',
+      message: 'パスワードを変更します。',
+    });
+    if (isCancel) return;
 
     const requestBody: ChangePassword = {
       currentPassword,
       newPassword,
-      confirmNewPassword,
+      confirmPassword,
     };
     updateMutation.mutate(requestBody, {
       onSuccess: () => {
@@ -55,8 +83,52 @@ export default function Page() {
     });
   };
 
+  const validateCurrentPassword = () => {
+    setCurrentPasswordErrorMessage('');
+    const password = currentPasswordRef.current?.value as string;
+
+    if (password === '') {
+      setCurrentPasswordErrorMessage('パスワードは必須です。');
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateNewPassword = () => {
+    setNewPasswordErrorMessage('');
+    const password = newPasswordRef.current?.value as string;
+
+    if (password === '') {
+      setNewPasswordErrorMessage('パスワードは必須です。');
+      return false;
+    }
+
+    if (password.length < 4) {
+      setNewPasswordErrorMessage('パスワードは4文字以上で設定してください。');
+      return false;
+    }
+
+    return true;
+  };
+
+  const validateConfirmPassword = () => {
+    setConfirmPasswordErrorMessage('');
+    const newPassword = newPasswordRef.current?.value as string;
+    const confirmPassword = confirmPasswordRef.current?.value as string;
+
+    if (newPassword !== confirmPassword) {
+      setConfirmPasswordErrorMessage(
+        '新しいパスワードと確認用パスワードが一致していません。'
+      );
+      return false;
+    }
+
+    return true;
+  };
+
   return (
-    <div className="my-3 flex flex-col place-items-center gap-y-3 sm:my-16">
+    <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
       <p className="font-semibold">パスワード変更</p>
       <Card className="w-80 rounded-3xl sm:w-96">
@@ -68,10 +140,16 @@ export default function Page() {
               </Label>
               <PasswordInput
                 ref={currentPasswordRef}
-                className="my-2 rounded-full"
+                className={cn(
+                  'my-2 rounded-full',
+                  currentPasswordErrorMessage && 'border-destructive'
+                )}
                 id="current-password"
                 name="current-password"
               />
+              {currentPasswordErrorMessage && (
+                <p className="text-xs text-destructive">{currentPasswordErrorMessage}</p>
+              )}
             </div>
 
             <div>
@@ -79,21 +157,35 @@ export default function Page() {
                 新しいパスワード
               </Label>
               <PasswordInput
-                className="my-2 rounded-full"
+                ref={newPasswordRef}
+                className={cn(
+                  'my-2 rounded-full',
+                  newPasswordErrorMessage && 'border-destructive'
+                )}
                 id="new-password"
                 name="new-password"
               />
+              {newPasswordErrorMessage && (
+                <p className="text-xs text-destructive">{newPasswordErrorMessage}</p>
+              )}
             </div>
 
             <div>
-              <Label className="text-xs" htmlFor="confirm-new-password">
+              <Label className="text-xs" htmlFor="confirm-password">
                 新しいパスワード（確認用）
               </Label>
               <PasswordInput
-                className="my-2 rounded-full"
-                id="confirm-new-password"
-                name="confirm-new-password"
+                ref={confirmPasswordRef}
+                className={cn(
+                  'my-2 rounded-full',
+                  confirmPasswordErrorMessage && 'border-destructive'
+                )}
+                id="confirm-password"
+                name="confirm-password"
               />
+              {confirmPasswordErrorMessage && (
+                <p className="text-xs text-destructive">{confirmPasswordErrorMessage}</p>
+              )}
             </div>
 
             <Button
@@ -107,6 +199,7 @@ export default function Page() {
                 '変更'
               )}
             </Button>
+
             <Button
               className="w-full rounded-full bg-transparent"
               type="button"

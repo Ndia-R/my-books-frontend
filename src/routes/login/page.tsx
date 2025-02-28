@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useApiUser } from '@/hooks/api/use-api-user';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { LoginRequest } from '@/types';
@@ -17,11 +18,19 @@ export default function Page() {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login, setUser } = useAuth();
+  const { getCurrentUser } = useApiUser();
   const { toast } = useToast();
 
   const loginMutation = useMutation({
     mutationFn: (requestBody: LoginRequest) => login(requestBody),
+    onSuccess: async () => {
+      const user = await getCurrentUser();
+      setUser(user);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   useEffect(() => {
@@ -54,7 +63,7 @@ export default function Page() {
   };
 
   return (
-    <div className="my-3 flex flex-col place-items-center gap-y-3 sm:my-16">
+    <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
       <p className="font-semibold">ログイン</p>
       <Card className="w-80 rounded-3xl sm:w-96">
@@ -100,8 +109,8 @@ export default function Page() {
 
           <div className="mt-6 flex justify-center gap-x-1 text-xs">
             <p className="text-muted-foreground">アカウントをお持ちでない方はこちら</p>
-            <Link to={'/signup'}>
-              <p className="text-primary hover:underline">新規登録</p>
+            <Link to={'/signup'} className="text-primary hover:underline">
+              新規登録
             </Link>
           </div>
         </CardContent>

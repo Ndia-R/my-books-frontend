@@ -1,13 +1,13 @@
 import { FETCH_REVIEWS_MAX_RESULTS } from '@/constants/constants';
 import { useApi } from '@/hooks/api/use-api';
-import { Review, ReviewPage, ReviewRequest, ReviewSummary } from '@/types';
+import { ReviewPage, ReviewRequest, ReviewSummary, SelfReviewExists } from '@/types';
 
 export const useApiRevew = () => {
   const { fetcher, fetcherWithAuth, mutationWithAuth } = useApi();
 
   const getReviewPage = async (bookId: string, page: number = 0) => {
     try {
-      const basePage = page - 1 < 0 ? 0 : page - 1;
+      const basePage = page > 0 ? page - 1 : 0;
       const url = `/books/${bookId}/reviews?&page=${basePage}&maxResults=${FETCH_REVIEWS_MAX_RESULTS}`;
       const reviewPage = await fetcher<ReviewPage>(url);
       return reviewPage;
@@ -26,13 +26,13 @@ export const useApiRevew = () => {
     }
   };
 
-  const checkMyReviewExists = async (bookId: string) => {
+  const checkSelfReviewExists = async (bookId: string) => {
     try {
-      const url = `/reviews/${bookId}`;
-      await fetcherWithAuth<Review>(url);
-      return true;
-    } catch {
-      return false;
+      const url = `/reviews/self-review-exists/${bookId}`;
+      const data = await fetcherWithAuth<SelfReviewExists>(url);
+      return data.exists;
+    } catch (error) {
+      throw new Error('レビューの存在チェックに失敗しました。' + error);
     }
   };
 
@@ -79,7 +79,7 @@ export const useApiRevew = () => {
   return {
     getReviewPage,
     getReviewSummary,
-    checkMyReviewExists,
+    checkSelfReviewExists,
     createReview,
     updateReview,
     deleteReview,
