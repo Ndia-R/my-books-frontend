@@ -1,4 +1,4 @@
-import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
+import { FETCH_BOOKMARKS_MAX_RESULTS } from '@/constants/constants';
 import { useApi } from '@/hooks/api/use-api';
 import { Bookmark, BookmarkPage, BookmarkRequest } from '@/types';
 
@@ -18,7 +18,7 @@ export const useApiBookmark = () => {
   const getBookmarkPage = async (page: number = 0) => {
     try {
       const basePage = page > 0 ? page - 1 : 0;
-      const url = `/bookmarks?&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
+      const url = `/bookmarks?&page=${basePage}&maxResults=${FETCH_BOOKMARKS_MAX_RESULTS}`;
       const bookmarkPage = await fetcherWithAuth<BookmarkPage>(url);
       return bookmarkPage;
     } catch (error) {

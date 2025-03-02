@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom';
 export default function Page() {
   const params = useParams();
   const bookId = params.bookId || '';
-  const chapterNumber = Number(params.chapterNumber) || 0;
+  const chapterNumber = Number(params.chapterNumber) || 1;
   const pageNumber = Number(params.pageNumber) || 1;
 
   return (

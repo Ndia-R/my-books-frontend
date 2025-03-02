@@ -1,4 +1,7 @@
-import { FETCH_REVIEWS_MAX_RESULTS } from '@/constants/constants';
+import {
+  FETCH_MY_REVIEWS_MAX_RESULTS,
+  FETCH_REVIEWS_MAX_RESULTS,
+} from '@/constants/constants';
 import { useApi } from '@/hooks/api/use-api';
 import { ReviewPage, ReviewRequest, ReviewSummary, SelfReviewExists } from '@/types';
 
@@ -8,7 +11,7 @@ export const useApiRevew = () => {
   const getReviewPage = async (bookId: string, page: number = 0) => {
     try {
       const basePage = page > 0 ? page - 1 : 0;
-      const url = `/books/${bookId}/reviews?&page=${basePage}&maxResults=${FETCH_REVIEWS_MAX_RESULTS}`;
+      const url = `/books/${bookId}/reviews?&page=${basePage}&maxResults=${FETCH_MY_REVIEWS_MAX_RESULTS}`;
       const reviewPage = await fetcher<ReviewPage>(url);
       return reviewPage;
     } catch (error) {
@@ -33,6 +36,17 @@ export const useApiRevew = () => {
       return data.exists;
     } catch (error) {
       throw new Error('レビューの存在チェックに失敗しました。' + error);
+    }
+  };
+
+  const getReviewPageByUser = async (page: number = 0) => {
+    try {
+      const basePage = page > 0 ? page - 1 : 0;
+      const url = `/reviews?&page=${basePage}&maxResults=${FETCH_REVIEWS_MAX_RESULTS}`;
+      const reviewPage = await fetcherWithAuth<ReviewPage>(url);
+      return reviewPage;
+    } catch (error) {
+      throw new Error('マイレビュー一覧の読み込みが失敗しました。' + error);
     }
   };
 
@@ -80,6 +94,7 @@ export const useApiRevew = () => {
     getReviewPage,
     getReviewSummary,
     checkSelfReviewExists,
+    getReviewPageByUser,
     createReview,
     updateReview,
     deleteReview,

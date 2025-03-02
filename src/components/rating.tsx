@@ -75,7 +75,7 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
               strokeWidth={0}
             />
           ))}
-          {!Number.isInteger(dispRating) && (
+          {dispRating % 1 >= 0.5 && (
             <StarHalfIcon style={{ fill: 'hsl(var(--primary))' }} strokeWidth={0} />
           )}
         </div>

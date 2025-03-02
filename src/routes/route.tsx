@@ -4,6 +4,7 @@ import DiscoverPage from '@/routes/discover/page';
 import FavoritesPage from '@/routes/favorites/page';
 import RootLayout from '@/routes/layout';
 import LoginPage from '@/routes/login/page';
+import MyReviewsPage from '@/routes/my-reviews/page';
 import RootPage from '@/routes/page';
 import { ProtectedRoute } from '@/routes/protected-route';
 import BookReadPage from '@/routes/read/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
@@ -48,6 +49,10 @@ export const router = createBrowserRouter(
         <Route element={<ProtectedRoute />}>
           <Route path="favorites">
             <Route index element={<FavoritesPage />} />
+          </Route>
+
+          <Route path="my-reviews">
+            <Route index element={<MyReviewsPage />} />
           </Route>
 
           <Route path="bookmarks">

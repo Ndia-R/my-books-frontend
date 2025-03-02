@@ -1,7 +1,7 @@
-import BookListNewReleases from '@/components/book-list/book-list-new-releases';
-import BookListSkeleton from '@/components/book-list/book-list-skeleton';
-import GenreListSkeleton from '@/components/genre-list/genre-list-skeleton';
-import GenreListTopPage from '@/components/genre-list/genre-list-top-page';
+import BooksNewReleases from '@/components/books/books-new-releases';
+import BooksSkeleton from '@/components/books/books-skeleton';
+import GenresSkeleton from '@/components/genres/genres-skeleton';
+import GenresTopPage from '@/components/genres/genres-top-page';
 import Hero from '@/components/layout/hero';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
@@ -17,8 +17,8 @@ export default function Page() {
 
         <div className="my-4">
           <ErrorBoundary fallback={<ErrorElement />}>
-            <Suspense fallback={<GenreListSkeleton />}>
-              <GenreListTopPage />
+            <Suspense fallback={<GenresSkeleton />}>
+              <GenresTopPage />
             </Suspense>
           </ErrorBoundary>
         </div>
@@ -27,8 +27,8 @@ export default function Page() {
       <div className="flex flex-col">
         <p className="mb-4 font-bold text-primary">ニューリリース</p>
         <ErrorBoundary fallback={<ErrorElement />}>
-          <Suspense fallback={<BookListSkeleton />}>
-            <BookListNewReleases />
+          <Suspense fallback={<BooksSkeleton />}>
+            <BooksNewReleases />
           </Suspense>
         </ErrorBoundary>
       </div>

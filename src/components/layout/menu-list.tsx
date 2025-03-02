@@ -18,7 +18,7 @@ export default function MenuList({ onClick }: Props) {
           <Button
             className={cn(
               'rounded-full w-full hover:bg-transparent hover:text-foreground/50',
-              pathname === item.href && 'text-primary'
+              pathname !== '/' && item.href.includes(pathname) && 'text-primary'
             )}
             variant="ghost"
             asChild

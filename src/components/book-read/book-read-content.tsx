@@ -1,4 +1,4 @@
-import BookmarkButton from '@/components/count-icon/bookmark-button';
+import BookmarkButton from '@/components/book-read/bookmark-button';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useApiBook } from '@/hooks/api/use-api-book';
@@ -190,7 +190,7 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
         <Button
           className={cn(
             'flex items-center gap-x-2 rounded-full hover:bg-transparent',
-            isFirstPage ? 'pointer-events-none opacity-30' : ''
+            isFirstPage && 'pointer-events-none opacity-30'
           )}
           variant="ghost"
           asChild
@@ -203,7 +203,7 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
         <Button
           className={cn(
             'flex items-center gap-x-2 rounded-full hover:bg-transparent',
-            isLastPage ? 'pointer-events-none opacity-30' : ''
+            isLastPage && 'pointer-events-none opacity-30'
           )}
           variant="ghost"
           asChild

@@ -1,11 +1,23 @@
-import { BookmarkIcon, HeartIcon, SettingsIcon } from 'lucide-react';
+import {
+  BookCopyIcon,
+  BookmarkIcon,
+  HeartIcon,
+  MessageSquareIcon,
+  SettingsIcon,
+} from 'lucide-react';
 
 // ロゴ
 export const LOGO_TITLE = 'My Books';
 
 // メニュー一覧
 export const MENU_LIST = [
+  {
+    href: '/discover?genreIds=1&condition=SINGLE',
+    title: 'ジャンル',
+    icon: BookCopyIcon,
+  },
   { href: '/favorites', title: 'お気に入り', icon: HeartIcon },
+  { href: '/my-reviews', title: 'マイレビュー', icon: MessageSquareIcon },
   { href: '/bookmarks', title: 'ブックマーク', icon: BookmarkIcon },
   { href: '/settings/profile', title: '設定', icon: SettingsIcon },
 ];
@@ -23,3 +35,6 @@ export const AVATER_IMAGE_MAX_COIUNT = 41;
 
 export const FETCH_BOOKS_MAX_RESULTS = 20;
 export const FETCH_REVIEWS_MAX_RESULTS = 5;
+
+export const FETCH_MY_REVIEWS_MAX_RESULTS = 5;
+export const FETCH_BOOKMARKS_MAX_RESULTS = 5;

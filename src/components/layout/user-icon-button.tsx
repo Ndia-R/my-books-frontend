@@ -12,6 +12,7 @@ import { MENU_LIST } from '@/constants/constants';
 import { useApiUser } from '@/hooks/api/use-api-user';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/util';
 import { useMutation } from '@tanstack/react-query';
 import { LogOutIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -22,6 +23,7 @@ export default function UserIconButton() {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const pathname = location.pathname;
 
   const { accessToken, user, setUser, logout } = useAuth();
   const { getCurrentUser } = useApiUser();
@@ -108,8 +110,11 @@ export default function UserIconButton() {
         <DropdownMenuSeparator />
         {MENU_LIST.map((item) => (
           <DropdownMenuItem
-            onClick={() => handleClickMenuItem(item.href)}
+            className={cn(
+              pathname !== '/' && item.href.includes(pathname) && 'text-primary'
+            )}
             key={item.href}
+            onClick={() => handleClickMenuItem(item.href)}
           >
             <item.icon className="mr-1" />
             {item.title}

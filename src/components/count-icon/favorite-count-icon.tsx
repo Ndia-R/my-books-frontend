@@ -4,7 +4,7 @@ import { useApiFavorite } from '@/hooks/api/use-api-favorite';
 import { useAuth } from '@/hooks/use-auth';
 import { cn } from '@/lib/util';
 import { FavoriteInfo, FavoriteRequest } from '@/types';
-import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 
 const BUTTON_SIZE = { sm: 'size-6', md: 'size-8' };
@@ -23,12 +23,16 @@ export default function FavoriteCountIcon({ bookId, size = 'md' }: Props) {
   const queryClient = useQueryClient();
 
   const queryKey = ['getFavoriteInfo', bookId, user?.id];
-  const { data: favoriteInfo } = useSuspenseQuery({
+  const { data: favoriteInfo = { isFavorite: false, favoriteCount: 0 } } = useQuery({
     queryKey,
     queryFn: () => getFavoriteInfo(bookId, user?.id),
   });
 
-  const { mutate, variables, isPending } = useMutation({
+  const {
+    mutate: toggleMutation,
+    variables,
+    isPending,
+  } = useMutation({
     mutationFn: async (newFavorite: FavoriteInfo) => {
       if (newFavorite.isFavorite) {
         const requestBody: FavoriteRequest = { bookId };
@@ -60,7 +64,7 @@ export default function FavoriteCountIcon({ bookId, size = 'md' }: Props) {
         ? favoriteInfo.favoriteCount - 1
         : favoriteInfo.favoriteCount + 1,
     };
-    mutate(newFavoriteInfo);
+    toggleMutation(newFavoriteInfo);
   };
 
   const optimisticData = isPending ? variables : favoriteInfo;

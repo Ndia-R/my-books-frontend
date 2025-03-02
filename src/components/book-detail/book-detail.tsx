@@ -1,13 +1,11 @@
-import CountIconSkeleton from '@/components/count-icon/count-icon-skeleton';
 import FavoriteCountIcon from '@/components/count-icon/favorite-count-icon';
 import ReviewCountIcon from '@/components/count-icon/review-count-icon';
-import GenreList from '@/components/genre-list/genre-list';
+import GenreList from '@/components/genres/genre-list';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { useApiBook } from '@/hooks/api/use-api-book';
 import { formatDateJP, formatIsbn, formatPrice } from '@/lib/util';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Suspense } from 'react';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -34,9 +32,7 @@ export default function BookDetail({ bookId }: Props) {
         </Link>
         <div className="mt-2 flex flex-col items-center justify-around sm:w-[440px] sm:flex-row">
           <div className="flex justify-center gap-x-2">
-            <Suspense fallback={<CountIconSkeleton />}>
-              <FavoriteCountIcon bookId={bookId} />
-            </Suspense>
+            <FavoriteCountIcon bookId={bookId} />
             <ReviewCountIcon reviewCount={book.reviewCount} />
           </div>
           <Rating rating={book.averageRating} readOnly />
