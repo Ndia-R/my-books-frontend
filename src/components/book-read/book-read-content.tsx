@@ -3,8 +3,13 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useApiBook } from '@/hooks/api/use-api-book';
 import { useApiBookmark } from '@/hooks/api/use-api-bookmark';
+import {
+  getCurrentPageText,
+  getPageLink,
+  getPagePosition,
+} from '@/lib/book-read-content';
 import { cn } from '@/lib/util';
-import { Bookmark, BookTableOfContents } from '@/types';
+import { Bookmark } from '@/types';
 import { useSuspenseQueries } from '@tanstack/react-query';
 import { ChevronLeftIcon, ChevronRightIcon, TableOfContentsIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -44,94 +49,31 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
       ],
     });
 
-  const chapterIndex = bookTableOfContents.chapters.findIndex(
-    (chapter) => chapter.chapterNumber === chapterNumber
+  const currentPageText = getCurrentPageText(
+    bookTableOfContents,
+    chapterNumber,
+    pageNumber
   );
-  const totalPage = bookTableOfContents.chapters[chapterIndex]?.pageNumbers.length ?? 1;
-  const pageTitle = `（${pageNumber}/${totalPage}）`;
 
-  const isFirstPage = chapterNumber === 1 && pageNumber === 1;
-  const isLastPage =
-    chapterNumber === bookTableOfContents.chapters.length &&
-    pageNumber ===
-      bookTableOfContents.chapters.find(
-        (chapter) => chapter.chapterNumber === chapterNumber
-      )?.pageNumbers.length;
+  const { isFirstPage, isLastPage } = getPagePosition(
+    bookTableOfContents,
+    chapterNumber,
+    pageNumber
+  );
 
-  /**
-   * 指定方向（次 or 前）のページ情報を取得する関数
-   */
-  const getPageInfo = (
-    bookTableOfContents: BookTableOfContents,
-    chapterNumber: number,
-    pageNumber: number,
-    direction: 'next' | 'prev'
-  ) => {
-    const chapterIndex = bookTableOfContents.chapters.findIndex(
-      (chapter) => chapter.chapterNumber === chapterNumber
-    );
-
-    if (chapterIndex === -1) return { chapterNumber, pageNumber };
-
-    const totalPages =
-      bookTableOfContents.chapters[chapterIndex]?.pageNumbers.length ?? 1;
-    const isMovingForward = direction === 'next';
-
-    const isLastPage = pageNumber >= totalPages;
-    const isFirstPage = pageNumber <= 1;
-    const isLastChapter = chapterIndex >= bookTableOfContents.chapters.length - 1;
-    const isFirstChapter = chapterIndex <= 0;
-
-    let newChapterNumber = chapterNumber;
-    let newPageNumber = pageNumber;
-
-    if (isMovingForward) {
-      if (isLastPage) {
-        // 最終章の最後のページなら、それ以上進めない
-        if (isLastChapter) {
-          newPageNumber = totalPages; // 現在の最後のページのまま
-        } else {
-          // 次のチャプターの最初のページへ
-          newChapterNumber = chapterNumber + 1;
-          newPageNumber = 1;
-        }
-      } else {
-        newPageNumber = pageNumber + 1;
-      }
-    } else {
-      if (isFirstPage) {
-        // 最初の章の最初のページなら、それ以上戻れない
-        if (isFirstChapter) {
-          newPageNumber = 1; // 現在の最初のページのまま
-        } else {
-          // 前のチャプターの最後のページへ
-          newChapterNumber = chapterNumber - 1;
-          newPageNumber =
-            bookTableOfContents.chapters[chapterIndex - 1].pageNumbers.length;
-        }
-      } else {
-        newPageNumber = pageNumber - 1;
-      }
-    }
-
-    return { chapterNumber: newChapterNumber, pageNumber: newPageNumber };
-  };
-
-  const { chapterNumber: nextChapter, pageNumber: nextPage } = getPageInfo(
+  const nextPageLink = getPageLink(
     bookTableOfContents,
     chapterNumber,
     pageNumber,
     'next'
   );
-  const nextPageLink = `/read/${bookId}/chapter/${nextChapter}/page/${nextPage}`;
 
-  const { chapterNumber: prevChapter, pageNumber: prevPage } = getPageInfo(
+  const prevPageLink = getPageLink(
     bookTableOfContents,
     chapterNumber,
     pageNumber,
     'prev'
   );
-  const prevPageLink = `/read/${bookId}/chapter/${prevChapter}/page/${prevPage}`;
 
   return (
     <div className="delay-0 duration-200 animate-in fade-in-0">
@@ -140,8 +82,8 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
           <p className="mb-2 text-xs text-muted-foreground/70 sm:text-sm">{`chapter ${bookContentPage.chapterNumber}`}</p>
           <div className="text-xl font-bold sm:text-2xl">
             {bookContentPage.chapterTitle}
-            <span className="text-sm text-muted-foreground sm:text-base">
-              {pageTitle}
+            <span className="ml-4 mr-2 text-sm text-muted-foreground sm:text-base">
+              {currentPageText}
             </span>
             <div className="inline-block">
               <Tooltip>

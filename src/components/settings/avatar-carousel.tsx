@@ -1,67 +1,54 @@
 import SwipeArea from '@/components/settings/swipe-area';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { AVATER_IMAGE_MAX_COIUNT, AVATER_IMAGE_URL } from '@/constants/constants';
+import { AVATAR_URLS } from '@/constants/constants';
 import { cn } from '@/lib/util';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-
-const AVATARS = Array.from({ length: AVATER_IMAGE_MAX_COIUNT }, (_, index) => ({
-  index,
-  avatarUrl: `${AVATER_IMAGE_URL}/avatar${String(index).padStart(2, '0')}.png`,
-}));
+import { useRef, useState } from 'react';
 
 type Props = {
   value: string;
   onChange: (avatarUrl: string) => void;
-  itemWidth?: number;
-  frameWidth?: number;
-  paddingItem?: number;
 };
 
-export default function AvatarCarousel({
-  value,
-  onChange,
-  itemWidth = 70,
-  frameWidth = 192,
-  paddingItem = 2,
-}: Props) {
+export default function AvatarCarousel({ value, onChange }: Props) {
+  // 座標など調整用の値
+  const itemWidth = 70;
+  const frameWidth = 192;
+  const paddingItem = 2;
+  const marginLeft = Math.floor(frameWidth / 2) - Math.floor(itemWidth / 2);
+
   // 配列の最初と最後の切れ目部分にアイテムを追加しておく
   // 循環参照するときの見た目の調整のため
-  const extendedItems = [
-    ...AVATARS.slice(-paddingItem),
-    ...AVATARS,
-    ...AVATARS.slice(0, paddingItem),
+  const extendedAvatarUrls = [
+    ...AVATAR_URLS.slice(-paddingItem),
+    ...AVATAR_URLS,
+    ...AVATAR_URLS.slice(0, paddingItem),
   ];
 
-  // カルーセルの位置調整用
-  const marginLeft = Math.floor(frameWidth / 2) - Math.floor(itemWidth / 2);
+  // 引数のvalueが見つからなかった場合、findIndex()は-1を返すので、
+  // Math.max()で最小でも0になるようにする
+  const defaultIndex = Math.max(
+    0,
+    AVATAR_URLS.findIndex((avatarUrl) => avatarUrl === value)
+  );
 
   // インデックス番号でカルーセルを制御
   // innerIndexは内部的なインデックスとして使用（スクロールアニメーション用）
-  const defaultIndex =
-    AVATARS.find((avater) => avater.avatarUrl === value)?.index || AVATARS[0].index;
   const [currentIndex, setCurrentIndex] = useState(defaultIndex);
   const [innerIndex, setInnerIndex] = useState(defaultIndex);
 
   const [isScrolling, setIsScrolling] = useState(false);
   const carouselRef = useRef<HTMLUListElement>(null);
 
-  // 初期値がない（空文字）の場合は０番のアバターをデフォルトとする
-  useEffect(() => {
-    if (value === '') {
-      onChange(AVATARS[0].avatarUrl);
-    }
-  }, [onChange, value]);
-
   const handlePrev = () => {
     if (isScrolling) return;
     setIsScrolling(true);
     setInnerIndex(innerIndex - 1);
 
-    const prevIndex = (currentIndex - 1 + AVATARS.length) % AVATARS.length;
+    const prevIndex = (currentIndex - 1 + AVATAR_URLS.length) % AVATAR_URLS.length;
     setCurrentIndex(prevIndex);
-    onChange(AVATARS[prevIndex].avatarUrl);
+    onChange(AVATAR_URLS[prevIndex]);
   };
 
   const handleNext = () => {
@@ -69,9 +56,9 @@ export default function AvatarCarousel({
     setIsScrolling(true);
     setInnerIndex(innerIndex + 1);
 
-    const nextIndex = (currentIndex + 1) % AVATARS.length;
+    const nextIndex = (currentIndex + 1) % AVATAR_URLS.length;
     setCurrentIndex(nextIndex);
-    onChange(AVATARS[nextIndex].avatarUrl);
+    onChange(AVATAR_URLS[nextIndex]);
   };
 
   const handleTransitonEnd = () => {
@@ -80,7 +67,7 @@ export default function AvatarCarousel({
 
     // 循環スクロールのために、先頭から終端などに座標を変化させるとスクロールの
     // ちらつきが発生してしまうので、切れ目の変化ではアニメーションをいったんOffにする
-    if (currentIndex === 0 || currentIndex === AVATARS.length - 1) {
+    if (currentIndex === 0 || currentIndex === AVATAR_URLS.length - 1) {
       setIsScrolling(true);
       carouselRef.current!.style.transitionProperty = 'none';
       setTimeout(() => {
@@ -115,7 +102,7 @@ export default function AvatarCarousel({
           }}
           onTransitionEnd={handleTransitonEnd}
         >
-          {extendedItems.map((item, index) => (
+          {extendedAvatarUrls.map((avatarUrl, index) => (
             <li
               key={index}
               className={`flex shrink-0 items-center justify-center`}
@@ -126,13 +113,13 @@ export default function AvatarCarousel({
                   className={cn(
                     'transition-all duration-200',
                     'size-12 opacity-25 scale-100',
-                    currentIndex === item.index &&
+                    avatarUrl === AVATAR_URLS[currentIndex] &&
                       'opacity-100 scale-150 outline-1 outline-offset-1 outline outline-primary'
                   )}
                 >
                   <AvatarImage
                     className="bg-primary"
-                    src={item.avatarUrl}
+                    src={avatarUrl}
                     alt="avatar-image"
                     draggable={false}
                   />

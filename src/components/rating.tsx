@@ -10,6 +10,8 @@ type Props = {
 };
 
 export default function Rating({ rating, max = 5, readOnly = false, onChange }: Props) {
+  // 現在の評価点と表示上の評価点は別で管理
+  // 表示上の評価点はマウスでホバーしたときに変化する値として使用する
   const [currentRating, setCurrentRating] = useState(0);
   const [dispRating, setDispRating] = useState(0);
 

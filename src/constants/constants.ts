@@ -23,15 +23,14 @@ export const MENU_LIST = [
 ];
 
 // API Endpoits
-// export const BOOKS_API_ENDPOINT = 'http://vsv-emerald/my-books/api/v1';
-// export const BOOKS_IMAGE_URL = 'http://vsv-emerald/images';
-// export const AVATER_IMAGE_URL = 'https://vsv-emerald/images/avatars';
-
+// export const BOOKS_API_ENDPOINT = 'https://vsv-emerald/my-books/api/v1';
 export const BOOKS_API_ENDPOINT = 'https://localhost/my-books/api/v1';
-export const BOOKS_IMAGE_URL = 'https://localhost/images';
 
-export const AVATER_IMAGE_URL = 'https://localhost/images/avatars';
-export const AVATER_IMAGE_MAX_COIUNT = 41;
+// export const AVATAR_BASE_URL = 'https://vsv-emerald/images/avatars';
+export const AVATAR_BASE_URL = 'https://localhost/images/avatars';
+export const AVATAR_URLS = [...Array(41)].map(
+  (_, index) => `${AVATAR_BASE_URL}/avatar${String(index).padStart(2, '0')}.png`
+);
 
 export const FETCH_BOOKS_MAX_RESULTS = 20;
 export const FETCH_REVIEWS_MAX_RESULTS = 5;

@@ -130,7 +130,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   };
 
   useEffect(() => {
-    // リロードするとアクセストークンがメモリから消えてしまうので
+    // リロードするとメモリからアクセストークンが消えてしまうので
     // 初期読み込み時にリフレッシュトークンを使って再取得する
     const init = async () => {
       const accessToken = await fetchAccessToken();

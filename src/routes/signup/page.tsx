@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useApiUser } from '@/hooks/api/use-api-user';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/util';
@@ -25,11 +26,19 @@ export default function Page() {
   const [avatarUrl, setAvatarUrl] = useState('');
 
   const navigate = useNavigate();
-  const { signup } = useAuth();
+  const { signup, setUser } = useAuth();
+  const { getCurrentUser } = useApiUser();
   const { toast } = useToast();
 
   const signupMutation = useMutation({
     mutationFn: (requestBody: SignupRequest) => signup(requestBody),
+    onSuccess: async () => {
+      const user = await getCurrentUser();
+      setUser(user);
+    },
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   useEffect(() => {

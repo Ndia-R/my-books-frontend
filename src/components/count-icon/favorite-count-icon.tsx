@@ -53,6 +53,9 @@ export default function FavoriteCountIcon({ bookId, size = 'md' }: Props) {
       }
       queryClient.invalidateQueries({ queryKey });
     },
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   const handleClick = () => {

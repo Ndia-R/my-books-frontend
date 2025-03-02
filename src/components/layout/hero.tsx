@@ -1,4 +1,4 @@
-import imgUrl from '@/assets/main-visual.png';
+import mainVisualImage from '@/assets/main-visual.png';
 import SearchInput from '@/components/layout/search-input';
 
 export default function Hero() {
@@ -26,7 +26,7 @@ export default function Hero() {
       </div>
       <div className="absolute right-0 top-10 w-[400px] opacity-25 sm:right-5 sm:w-[400px] lg:w-[450px] lg:opacity-100">
         <div className="delay-500 duration-500 animate-in fade-in-0 slide-in-from-right-10 fill-mode-both">
-          <img src={imgUrl} alt="main-visual-image" />
+          <img src={mainVisualImage} alt="main-visual-image" />
         </div>
       </div>
     </div>

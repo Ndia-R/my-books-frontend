@@ -129,11 +129,7 @@ export default function ReviewCreateDialog({ bookId, page, isOpen, setIsOpen }: 
           <Button className="rounded-full" variant="ghost" onClick={handleCloseDialog}>
             閉じる
           </Button>
-          <Button
-            className="rounded-full"
-            disabled={comment === '' ? true : false}
-            onClick={handlePost}
-          >
+          <Button className="rounded-full" disabled={comment === ''} onClick={handlePost}>
             投稿する
           </Button>
         </DialogFooter>

@@ -36,12 +36,18 @@ export default function BookmarkButton({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getBookmarkByBookId', bookId] });
     },
+    onError: (error) => {
+      console.error(error);
+    },
   });
 
   const { mutate: deleteMutation } = useMutation({
     mutationFn: (bookmarkId: number) => deleteBookmark(bookmarkId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['getBookmarkByBookId', bookId] });
+    },
+    onError: (error) => {
+      console.error(error);
     },
   });
 

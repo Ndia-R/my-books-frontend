@@ -25,9 +25,7 @@ export default function SwipeArea({
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    if (!startX || !startY) {
-      return;
-    }
+    if (!startX || !startY) return;
 
     const touch = e.touches[0];
     const diffX = touch.clientX - startX;

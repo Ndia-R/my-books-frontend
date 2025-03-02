@@ -1,34 +1,8 @@
 import { Button } from '@/components/ui/button';
+import { createPageNumbers } from '@/lib/pagination';
 import { cn } from '@/lib/util';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { HTMLAttributes } from 'react';
-
-const createPageNumbers = (page: number, total: number) => {
-  const pages = [];
-  const maxPages = 7;
-
-  if (page <= 4) {
-    for (let i = 1; i <= Math.min(5, total); i++) {
-      pages.push(i);
-    }
-    if (total > 5) {
-      pages.push(0, total);
-    }
-  } else if (page >= total - 3) {
-    pages.push(1, 0);
-    for (let i = total - 4; i <= total; i++) {
-      pages.push(i);
-    }
-  } else {
-    pages.push(1, 0);
-    for (let i = page - 1; i <= page + 1; i++) {
-      pages.push(i);
-    }
-    pages.push(0, total);
-  }
-
-  return pages.slice(0, maxPages);
-};
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   total: number;
