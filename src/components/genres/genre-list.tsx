@@ -1,30 +1,24 @@
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/util';
+import GenreItem from '@/components/genres/genre-item';
 import { Genre } from '@/types';
-import { Link } from 'react-router-dom';
 
 type Props = {
   genres: Genre[];
-  className?: string;
-  filterList?: number[];
-  variant?: 'default' | 'outline' | 'secondary' | 'ghost';
+  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
+  activeIds?: number[];
+  onClick?: (genreId: number) => void;
 };
 
-export default function GenreList({ genres, className, variant = 'default' }: Props) {
+export default function GenreList({ genres, variant, activeIds, onClick }: Props) {
   return (
-    <ul className={cn('flex flex-wrap', className)}>
+    <ul className="flex flex-wrap">
       {genres.map((genre) => (
         <li key={genre.id}>
-          <Button
-            className={cn('rounded-full', variant === 'outline' && 'bg-transparent')}
+          <GenreItem
+            genre={genre}
             variant={variant}
-            size="sm"
-            asChild
-          >
-            <Link to={`/discover?genreIds=${genre.id}&condition=SINGLE`}>
-              {genre.name}
-            </Link>
-          </Button>
+            isActive={activeIds?.includes(genre.id)}
+            onClick={onClick}
+          />
         </li>
       ))}
     </ul>

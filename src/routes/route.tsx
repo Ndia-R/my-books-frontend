@@ -24,6 +24,7 @@ export const router = createBrowserRouter(
         <Route index element={<RootPage />} />
 
         <Route path="book/:bookId" element={<BookDetailPage />} />
+        <Route path="book/:bookId/reviews" element={<BookDetailPage />} />
 
         <Route path="read/:bookId">
           <Route path="table-of-contents" element={<BookReadTableOfContentsPage />} />

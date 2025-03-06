@@ -4,17 +4,17 @@ import { useApiBook } from '@/hooks/api/use-api-book';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
-  genreIdsQuery: string;
-  conditionQuery: string;
+  genreIds: string;
+  condition: string;
   page: number;
 };
 
-export default function BooksDiscover({ genreIdsQuery, conditionQuery, page }: Props) {
+export default function BooksDiscover({ genreIds, condition, page }: Props) {
   const { getBookPageByGenreId } = useApiBook();
 
   const { data: bookPage } = useSuspenseQuery({
-    queryKey: ['getBookPageByGenreId', genreIdsQuery, conditionQuery, page],
-    queryFn: () => getBookPageByGenreId(genreIdsQuery, conditionQuery, page),
+    queryKey: ['getBookPageByGenreId', genreIds, condition, page],
+    queryFn: () => getBookPageByGenreId(genreIds, condition, page),
   });
 
   return (

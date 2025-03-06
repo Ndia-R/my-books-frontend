@@ -10,11 +10,11 @@ type Props = {
   book: Book;
 };
 
-export default function BookCard({ book }: Props) {
+export default function BookItem({ book }: Props) {
   return (
     <Card className="border-card-foreground/5 bg-card/70">
       <CardContent className="relative flex w-40 flex-col items-center px-3 pb-2 pt-4 sm:w-48 sm:px-4">
-        <Link to={`/book/${book.id}`} className="flex justify-center">
+        <Link to={`/book/${book.id}`} className="size-fit">
           <img
             className="h-44 rounded object-cover sm:h-52"
             src={book.imageUrl}

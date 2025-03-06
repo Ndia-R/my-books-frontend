@@ -1,4 +1,5 @@
-import BookmarkButton from '@/components/book-read/bookmark-button';
+import BookmarkCreateDialog from '@/components/bookmarks/bookmark-create-dialog';
+import BookmarkUpdateDialog from '@/components/bookmarks/bookmark-update-dialog';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useApiBook } from '@/hooks/api/use-api-book';
@@ -9,9 +10,15 @@ import {
   getPagePosition,
 } from '@/lib/book-read-content';
 import { cn } from '@/lib/util';
-import { Bookmark } from '@/types';
-import { useSuspenseQueries } from '@tanstack/react-query';
-import { ChevronLeftIcon, ChevronRightIcon, TableOfContentsIcon } from 'lucide-react';
+import { Bookmark, BookmarkRequest } from '@/types';
+import { useMutation, useQueryClient, useSuspenseQueries } from '@tanstack/react-query';
+import {
+  BookmarkIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  TableOfContentsIcon,
+} from 'lucide-react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -21,8 +28,12 @@ type Props = {
 };
 
 export default function BookReadContent({ bookId, chapterNumber, pageNumber }: Props) {
+  const [isOpenCreateDialog, setIsOpenCreateDialog] = useState(false);
+  const [isOpenUpdateDialog, setIsOpenUpdateDialog] = useState(false);
+
   const { getBookTableOfContents, getBookContentPage } = useApiBook();
-  const { getBookmarkByBookId } = useApiBookmark();
+  const { getBookmarkByBookId, createBookmark, updateBookmark, deleteBookmark } =
+    useApiBookmark();
 
   const [{ data: bookTableOfContents }, { data: bookContentPage }, { data: bookmark }] =
     useSuspenseQueries({
@@ -48,6 +59,43 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
         },
       ],
     });
+
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['getBookmarkByBookId', bookId] });
+  };
+
+  const onError = (error: Error) => {
+    console.error(error);
+  };
+
+  const createMutation = useMutation({
+    mutationFn: (requestBody: BookmarkRequest) => createBookmark(requestBody),
+    onSuccess,
+    onError,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, requestBody }: { id: number; requestBody: BookmarkRequest }) =>
+      updateBookmark(id, requestBody),
+    onSuccess,
+    onError,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (bookmarkId: number) => deleteBookmark(bookmarkId),
+    onSuccess,
+    onError,
+  });
+
+  const handleClickCreate = () => {
+    setIsOpenCreateDialog(true);
+  };
+
+  const handleClickUpdate = () => {
+    setIsOpenUpdateDialog(true);
+  };
 
   const currentPageText = getCurrentPageText(
     bookTableOfContents,
@@ -78,52 +126,90 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
   return (
     <div className="delay-0 duration-200 animate-in fade-in-0">
       <div className="flex flex-col gap-y-12 px-4 pb-6 pt-12 sm:px-20">
-        <div className="flex flex-col items-start justify-center gap-x-2">
-          <p className="mb-2 text-xs text-muted-foreground/70 sm:text-sm">{`chapter ${bookContentPage.chapterNumber}`}</p>
-          <div className="text-xl font-bold sm:text-2xl">
-            {bookContentPage.chapterTitle}
-            <span className="ml-4 mr-2 text-sm text-muted-foreground sm:text-base">
+        <div>
+          <p className="mb-2 text-xs text-muted-foreground sm:text-sm">{`第 ${bookContentPage.chapterNumber} 章`}</p>
+          <div className="flex flex-wrap items-center">
+            <p className="text-wrap text-xl font-bold sm:text-2xl">
+              {bookContentPage.chapterTitle}
+            </p>
+            <p className="ml-4 mr-2 text-xs text-muted-foreground sm:text-sm">
               {currentPageText}
-            </span>
-            <div className="inline-block">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button
-                    className="size-8 rounded-full"
-                    variant="ghost"
-                    size="icon"
-                    asChild
+            </p>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="size-8 rounded-full"
+                  variant="ghost"
+                  size="icon"
+                  asChild
+                >
+                  <Link
+                    to={`/read/${bookId}/table-of-contents`}
+                    className="flex items-center gap-x-2"
                   >
-                    <Link
-                      to={`/read/${bookId}/table-of-contents`}
-                      className="flex items-center gap-x-2"
+                    <TableOfContentsIcon className="size-4" />
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>目次に戻る</TooltipContent>
+            </Tooltip>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                {bookmark ? (
+                  <>
+                    <Button
+                      className={cn(
+                        'rounded-full text-muted-foreground size-8',
+                        bookmark && 'text-primary bg-transparent'
+                      )}
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleClickUpdate}
                     >
-                      <TableOfContentsIcon className="size-4" />
-                    </Link>
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent>目次に戻る</TooltipContent>
-              </Tooltip>
-            </div>
-            <div className="inline-block">
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <BookmarkButton
-                    bookmark={bookmark}
-                    bookId={bookId}
-                    chapterNumber={chapterNumber}
-                    pageNumber={pageNumber}
-                  />
-                </TooltipTrigger>
-                <TooltipContent>
-                  {bookmark
-                    ? bookmark.note
-                      ? `メモ「${bookmark.note}」`
-                      : 'ブックマークからから削除'
-                    : 'ブックマークに追加'}
-                </TooltipContent>
-              </Tooltip>
-            </div>
+                      <BookmarkIcon
+                        className="size-4"
+                        style={{
+                          fill: 'hsl(var(--primary))',
+                        }}
+                      />
+                    </Button>
+                    <BookmarkUpdateDialog
+                      bookmark={bookmark}
+                      isOpen={isOpenUpdateDialog}
+                      setIsOpen={setIsOpenUpdateDialog}
+                      updateMutation={updateMutation}
+                      deleteMutation={deleteMutation}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      className="size-8 rounded-full text-muted-foreground"
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleClickCreate}
+                    >
+                      <BookmarkIcon className="size-4" />
+                    </Button>
+                    <BookmarkCreateDialog
+                      bookId={bookId}
+                      chapterNumber={chapterNumber}
+                      pageNumber={pageNumber}
+                      isOpen={isOpenCreateDialog}
+                      setIsOpen={setIsOpenCreateDialog}
+                      createMutation={createMutation}
+                    />
+                  </>
+                )}
+              </TooltipTrigger>
+              <TooltipContent>
+                {bookmark
+                  ? bookmark.note
+                    ? `メモ「${bookmark.note}」`
+                    : 'ブックマークからから削除'
+                  : 'ブックマークに追加'}
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
         <p className="whitespace-pre-wrap">{bookContentPage.content}</p>

@@ -1,4 +1,5 @@
 import { Book } from '@/types';
+import { UseMutationResult } from '@tanstack/react-query';
 
 export interface Review {
   id: number;
@@ -35,3 +36,17 @@ export interface ReviewRequest {
 export interface SelfReviewExists {
   exists: boolean;
 }
+
+export type ReviewCreateMutation = UseMutationResult<void, Error, ReviewRequest, unknown>;
+
+export type ReviewUpdateMutation = UseMutationResult<
+  void,
+  Error,
+  {
+    id: number;
+    requestBody: ReviewRequest;
+  },
+  unknown
+>;
+
+export type ReviewDeleteMutation = UseMutationResult<void, Error, number, unknown>;

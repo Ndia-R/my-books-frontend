@@ -1,27 +1,41 @@
-import Pagination from '@/components/pagination';
 import ReviewCreateDialog from '@/components/reviews/review-create-dialog';
 import ReviewList from '@/components/reviews/review-list';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { useApiRevew } from '@/hooks/api/use-api-review';
+import { useApiReview } from '@/hooks/api/use-api-review';
 import { useAuth } from '@/hooks/use-auth';
-import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+import { Review, ReviewRequest } from '@/types';
+import {
+  useMutation,
+  useQuery,
+  useQueryClient,
+  useSuspenseQuery,
+} from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
 type Props = {
   bookId: string;
 };
 
 export default function ReviewsBookDetail({ bookId }: Props) {
-  const [page, setPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { user } = useAuth();
-  const { getReviewPage, checkSelfReviewExists } = useApiRevew();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const { data: reviewPage } = useSuspenseQuery({
-    queryKey: ['getReviewPage', bookId, page],
-    queryFn: () => getReviewPage(bookId, page),
+  const { user } = useAuth();
+  const {
+    getReviewPage,
+    checkSelfReviewExists,
+    createReview,
+    updateReview,
+    deleteReview,
+  } = useApiReview();
+
+  const { data: initialReviewPage } = useSuspenseQuery({
+    queryKey: ['getReviewPage', bookId, 1],
+    queryFn: () => getReviewPage(bookId, 1),
   });
 
   // ログインしていない場合は、enabledオプションを指定して
@@ -33,10 +47,59 @@ export default function ReviewsBookDetail({ bookId }: Props) {
     retry: false,
   });
 
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['getReviewPage', bookId, 1] });
+    queryClient.invalidateQueries({ queryKey: ['getBookDetailsById', bookId] });
+    queryClient.invalidateQueries({ queryKey: ['checkSelfReviewExists', bookId] });
+  };
+
+  const onError = (error: Error) => {
+    console.error(error);
+  };
+
+  const createMutation = useMutation({
+    mutationFn: (reqestBody: ReviewRequest) => createReview(reqestBody),
+    onSuccess,
+    onError,
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, requestBody }: { id: number; requestBody: ReviewRequest }) =>
+      updateReview(id, requestBody),
+    onSuccess,
+    onError,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => deleteReview(id),
+    onSuccess,
+    onError,
+  });
+
+  useEffect(() => {
+    if (initialReviewPage) {
+      setCurrentPage(1);
+      setReviews(initialReviewPage.reviews);
+      setTotalPages(initialReviewPage.totalPages);
+    }
+  }, [initialReviewPage]);
+
+  const loadMoreReviews = async () => {
+    const nextPage = currentPage + 1;
+    const nextReviewPage = await getReviewPage(bookId, nextPage);
+    console.log(reviews);
+    console.log(nextReviewPage.reviews);
+
+    setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.reviews]);
+    setCurrentPage(nextPage);
+  };
+
   return (
-    <div className="mx-auto w-full lg:w-3/4">
+    <div className="mx-auto w-full pb-4 lg:w-3/4">
       <div className="flex flex-col-reverse items-center justify-end gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
-        <p>レビュー {reviewPage.totalItems} 件</p>
+        <p>レビュー {initialReviewPage.totalItems} 件</p>
         <Tooltip>
           <TooltipTrigger asChild>
             <Button
@@ -56,19 +119,30 @@ export default function ReviewsBookDetail({ bookId }: Props) {
         </Tooltip>
         <ReviewCreateDialog
           bookId={bookId}
-          page={page}
+          page={currentPage}
           isOpen={isOpen}
           setIsOpen={setIsOpen}
+          createMutation={createMutation}
         />
       </div>
 
-      <ReviewList reviews={reviewPage.reviews} bookId={bookId} page={page} />
+      <ReviewList
+        reviews={reviews}
+        updateMutation={updateMutation}
+        deleteMutation={deleteMutation}
+      />
 
-      <div className="mb-4 flex justify-center">
-        {reviewPage.totalPages > 1 && (
-          <Pagination total={reviewPage.totalPages} page={page} onChangePage={setPage} />
-        )}
-      </div>
+      {currentPage < totalPages && (
+        <div className="flex justify-center">
+          <Button
+            className="w-44 rounded-full text-muted-foreground"
+            variant="ghost"
+            onClick={loadMoreReviews}
+          >
+            もっと見る
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

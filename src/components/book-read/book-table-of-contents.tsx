@@ -54,7 +54,7 @@ export default function BookTableOfContents({ bookId }: Props) {
           <ul className="flex w-full flex-col gap-y-8">
             {bookTableOfContents.chapters.map((chapter) => (
               <li className="w-full text-center sm:text-left" key={chapter.chapterNumber}>
-                <p className="text-xs text-muted-foreground/70 sm:text-sm">{`chapter ${chapter.chapterNumber}`}</p>
+                <p className="text-xs text-muted-foreground/70 sm:text-sm">{`第 ${chapter.chapterNumber} 章`}</p>
                 <Link
                   to={`/read/${bookId}/chapter/${chapter.chapterNumber}/page/1`}
                   className={cn(

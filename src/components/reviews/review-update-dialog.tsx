@@ -2,47 +2,29 @@ import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { useApiRevew } from '@/hooks/api/use-api-review';
 import { useToast } from '@/hooks/use-toast';
-import { Review, ReviewRequest } from '@/types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Review, ReviewRequest, ReviewUpdateMutation } from '@/types';
 import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
-  bookId: string;
-  page: number;
   review: Review;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  updateMutation?: ReviewUpdateMutation;
 };
 
 export default function ReviewUpdateDialog({
-  bookId,
-  page,
   review,
   isOpen,
   setIsOpen,
+  updateMutation,
 }: Props) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
-  const { updateReview } = useApiRevew();
   const { toast } = useToast();
-
-  const queryClient = useQueryClient();
-  const updateMutation = useMutation({
-    mutationFn: ({ id, requestBody }: { id: number; requestBody: ReviewRequest }) =>
-      updateReview(id, requestBody),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getReviewPage', bookId, page] });
-      queryClient.invalidateQueries({ queryKey: ['getBookDetailsById', bookId] });
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
 
   useEffect(() => {
     if (isOpen) {
@@ -57,18 +39,18 @@ export default function ReviewUpdateDialog({
     }
   };
 
-  const handlePost = async () => {
-    const requestBody: ReviewRequest = { bookId, comment, rating };
-    updateMutation.mutate(
+  const handleClickUpdate = () => {
+    const requestBody: ReviewRequest = { bookId: review.bookId, comment, rating };
+    updateMutation?.mutate(
       { id: review.id, requestBody },
       {
         onSuccess: () => {
-          toast({ title: 'レビューを投稿しました' });
+          toast({ title: 'レビューを更新しました' });
           setIsOpen(false);
         },
         onError: () => {
           toast({
-            title: 'レビュー投稿に失敗しました',
+            title: 'レビューの更新に失敗しました',
             description: '管理者へ連絡してください。',
             variant: 'destructive',
             duration: 5000,
@@ -79,7 +61,7 @@ export default function ReviewUpdateDialog({
     );
   };
 
-  const handleCloseDialog = async () => {
+  const handleClickCancel = async () => {
     setIsOpen(false);
   };
 
@@ -87,15 +69,15 @@ export default function ReviewUpdateDialog({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
         className="w-3/4 min-w-[360px] max-w-[600px] p-4 sm:p-6"
-        onEscapeKeyDown={handleCloseDialog}
-        onPointerDownOutside={handleCloseDialog}
+        onEscapeKeyDown={handleClickCancel}
+        onPointerDownOutside={handleClickCancel}
         onAnimationStart={handleAnimationStart}
       >
         <div className="flex items-start justify-between">
           <div>
             <p className="font-semibold leading-10">レビュー</p>
             <p className="text-xs text-muted-foreground sm:text-sm">
-              素敵な感想を伝えましょう！
+              レビュー内容を編集できます。
             </p>
           </div>
           <div>
@@ -114,11 +96,19 @@ export default function ReviewUpdateDialog({
         />
 
         <DialogFooter>
-          <Button className="rounded-full" variant="ghost" onClick={handleCloseDialog}>
-            閉じる
+          <Button
+            className="min-w-24 rounded-full"
+            variant="ghost"
+            onClick={handleClickCancel}
+          >
+            キャンセル
           </Button>
-          <Button className="rounded-full" disabled={comment === ''} onClick={handlePost}>
-            投稿する
+          <Button
+            className="min-w-24 rounded-full"
+            disabled={comment === ''}
+            onClick={handleClickUpdate}
+          >
+            更新
           </Button>
         </DialogFooter>
       </DialogContent>

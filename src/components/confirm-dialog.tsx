@@ -163,12 +163,16 @@ const ConfirmDialog = () => {
 
         <DialogFooter className="flex justify-end">
           {!options.actionOnly && (
-            <Button className="rounded-full" variant="ghost" onClick={handleClickCancel}>
+            <Button
+              className="min-w-24 rounded-full"
+              variant="ghost"
+              onClick={handleClickCancel}
+            >
               キャンセル
             </Button>
           )}
           <Button
-            className={cn('rounded-full', options.actionLabel === 'OK' && 'sm:w-20')}
+            className={cn('min-w-24 rounded-full')}
             variant={iconTypes[options.icon].variant || 'default'}
             onClick={handleClickAction}
           >

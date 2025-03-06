@@ -1,4 +1,4 @@
-import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
+import { FETCH_FAVORITES_MAX_RESULTS } from '@/constants/constants';
 import { useApi } from '@/hooks/api/use-api';
 import { Favorite, FavoriteInfo, FavoritePage, FavoriteRequest } from '@/types';
 
@@ -18,7 +18,7 @@ export const useApiFavorite = () => {
   const getFavoritePage = async (page: number = 0) => {
     try {
       const basePage = page > 0 ? page - 1 : 0;
-      const url = `/favorites?&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
+      const url = `/favorites?&page=${basePage}&maxResults=${FETCH_FAVORITES_MAX_RESULTS}`;
       const favoritePage = await fetcherWithAuth<FavoritePage>(url);
       return favoritePage;
     } catch (error) {

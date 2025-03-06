@@ -11,7 +11,11 @@ export default function BooksNewReleases() {
   });
 
   return (
-    <div className="pb-4">
+    <div className="flex flex-col gap-y-4 pb-4">
+      <p className="text-right">
+        {bookPage.totalItems}
+        <span className="ml-1 mr-4 text-sm text-muted-foreground">件</span>
+      </p>
       <BookList books={bookPage.books} />
     </div>
   );

@@ -1,5 +1,6 @@
-import BooksFavorites from '@/components/books/books-favorites';
-import BooksSkeleton from '@/components/books/books-skeleton';
+import Favorites from '@/components/favorites/favorites';
+import FavoritesSkeleton from '@/components/favorites/favorites-skeleton';
+import { Separator } from '@/components/ui/separator';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -12,12 +13,14 @@ export default function Page() {
   return (
     <>
       <div className="m-4 flex h-10 items-center">
-        <p>お気に入り</p>
+        <p className="font-bold">お気に入り</p>
       </div>
 
+      <Separator className="my-4 bg-foreground/10" />
+
       <ErrorBoundary fallback={<ErrorElement />}>
-        <Suspense fallback={<BooksSkeleton />}>
-          <BooksFavorites page={page} />
+        <Suspense fallback={<FavoritesSkeleton />}>
+          <Favorites page={page} />
         </Suspense>
       </ErrorBoundary>
     </>

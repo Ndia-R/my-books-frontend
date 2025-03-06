@@ -4,16 +4,16 @@ import { useApiBook } from '@/hooks/api/use-api-book';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
-  query: string;
+  searchQuery: string;
   page: number;
 };
 
-export default function BooksSearch({ query, page }: Props) {
+export default function BooksSearch({ searchQuery, page }: Props) {
   const { getBookPageByQuery } = useApiBook();
 
   const { data: bookPage } = useSuspenseQuery({
-    queryKey: ['getBookPageByQuery', query, page],
-    queryFn: () => getBookPageByQuery(query, page),
+    queryKey: ['getBookPageByQuery', searchQuery, page],
+    queryFn: () => getBookPageByQuery(searchQuery, page),
   });
 
   return (

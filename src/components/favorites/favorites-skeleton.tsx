@@ -1,7 +1,7 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function BookmarksSkeleton() {
+export default function FavoritesSkeleton() {
   return (
     <div className="flex flex-col gap-y-4 pb-4">
       <p className="text-right">

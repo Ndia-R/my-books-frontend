@@ -17,8 +17,8 @@ export const MENU_LIST = [
     icon: BookCopyIcon,
   },
   { href: '/favorites', title: 'お気に入り', icon: HeartIcon },
-  { href: '/my-reviews', title: 'マイレビュー', icon: MessageSquareIcon },
   { href: '/bookmarks', title: 'ブックマーク', icon: BookmarkIcon },
+  { href: '/my-reviews', title: 'マイレビュー', icon: MessageSquareIcon },
   { href: '/settings/profile', title: '設定', icon: SettingsIcon },
 ];
 
@@ -33,7 +33,8 @@ export const AVATAR_URLS = [...Array(41)].map(
 );
 
 export const FETCH_BOOKS_MAX_RESULTS = 20;
-export const FETCH_REVIEWS_MAX_RESULTS = 5;
+export const FETCH_REVIEWS_MAX_RESULTS = 3;
 
+export const FETCH_FAVORITES_MAX_RESULTS = 5;
 export const FETCH_MY_REVIEWS_MAX_RESULTS = 5;
 export const FETCH_BOOKMARKS_MAX_RESULTS = 5;

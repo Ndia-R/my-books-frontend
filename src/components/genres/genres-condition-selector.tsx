@@ -1,39 +1,28 @@
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function GenresConditionSelector() {
-  const CONDITIONS: string[] = ['SINGLE', 'AND', 'OR'];
+type Props = {
+  condition: string;
+  onConditionChange: (condition: string) => void;
+};
 
-  const location = useLocation();
-  const navigate = useNavigate();
+export default function GenresConditionSelector({ condition, onConditionChange }: Props) {
+  const CONDITIONS = [
+    { text: '単一選択', value: 'SINGLE' },
+    { text: 'AND条件', value: 'AND' },
+    { text: 'OR条件', value: 'OR' },
+  ];
 
-  const [selectedCondition, setSelectedCondition] = useState(CONDITIONS[0]);
+  const [selectedCondition, setSelectedCondition] = useState(condition);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const conditionQuery = params.get('condition') ?? '';
-
-    setSelectedCondition(conditionQuery);
-  }, [location.search]);
+    setSelectedCondition(condition);
+  }, [condition]);
 
   const handleChangeCondition = (condition: string) => {
     setSelectedCondition(condition);
-
-    const params = new URLSearchParams(location.search);
-
-    // SINGLE選択以外は複数ジャンル選択可能OKだが
-    // SINGLE選択の場合、複数ジャンルの中の最初の値（単一の値）とする
-    let genreIdsQuery = params.get('genreIds') ?? '';
-    if (condition === 'SINGLE') {
-      genreIdsQuery = genreIdsQuery.split(',')[0];
-    }
-
-    params.set('genreIds', genreIdsQuery);
-    params.set('condition', condition);
-    params.set('page', '1');
-    navigate(`/discover?${params.toString()}`);
+    onConditionChange(condition);
   };
 
   return (
@@ -43,10 +32,16 @@ export default function GenresConditionSelector() {
       onValueChange={handleChangeCondition}
     >
       {CONDITIONS.map((condition) => (
-        <div className="flex items-center" key={condition}>
-          <RadioGroupItem value={condition} id={condition} />
-          <Label className="cursor-pointer select-none p-2" htmlFor={condition}>
-            {condition}
+        <div
+          className="flex flex-col-reverse items-center sm:flex-row"
+          key={condition.value}
+        >
+          <RadioGroupItem value={condition.value} id={condition.value} />
+          <Label
+            className="cursor-pointer select-none p-2 text-xs sm:text-sm"
+            htmlFor={condition.value}
+          >
+            {condition.text}
           </Label>
         </div>
       ))}

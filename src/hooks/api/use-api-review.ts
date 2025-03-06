@@ -5,13 +5,13 @@ import {
 import { useApi } from '@/hooks/api/use-api';
 import { ReviewPage, ReviewRequest, ReviewSummary, SelfReviewExists } from '@/types';
 
-export const useApiRevew = () => {
+export const useApiReview = () => {
   const { fetcher, fetcherWithAuth, mutationWithAuth } = useApi();
 
   const getReviewPage = async (bookId: string, page: number = 0) => {
     try {
       const basePage = page > 0 ? page - 1 : 0;
-      const url = `/books/${bookId}/reviews?&page=${basePage}&maxResults=${FETCH_MY_REVIEWS_MAX_RESULTS}`;
+      const url = `/books/${bookId}/reviews?&page=${basePage}&maxResults=${FETCH_REVIEWS_MAX_RESULTS}`;
       const reviewPage = await fetcher<ReviewPage>(url);
       return reviewPage;
     } catch (error) {
@@ -42,7 +42,7 @@ export const useApiRevew = () => {
   const getReviewPageByUser = async (page: number = 0) => {
     try {
       const basePage = page > 0 ? page - 1 : 0;
-      const url = `/reviews?&page=${basePage}&maxResults=${FETCH_REVIEWS_MAX_RESULTS}`;
+      const url = `/reviews?&page=${basePage}&maxResults=${FETCH_MY_REVIEWS_MAX_RESULTS}`;
       const reviewPage = await fetcherWithAuth<ReviewPage>(url);
       return reviewPage;
     } catch (error) {

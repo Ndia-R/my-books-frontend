@@ -2,11 +2,9 @@ import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { useApiRevew } from '@/hooks/api/use-api-review';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
-import { ReviewRequest } from '@/types';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { ReviewCreateMutation, ReviewRequest } from '@/types';
 import React, { useEffect, useRef, useState } from 'react';
 
 type Props = {
@@ -14,30 +12,22 @@ type Props = {
   page: number;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  createMutation?: ReviewCreateMutation;
 };
 
-export default function ReviewCreateDialog({ bookId, page, isOpen, setIsOpen }: Props) {
+export default function ReviewCreateDialog({
+  bookId,
+  isOpen,
+  setIsOpen,
+  createMutation,
+}: Props) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
   const ref = useRef<HTMLTextAreaElement | null>(null);
 
-  const { createReview } = useApiRevew();
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
-
-  const queryClient = useQueryClient();
-  const createMutation = useMutation({
-    mutationFn: (reqestBody: ReviewRequest) => createReview(reqestBody),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getReviewPage', bookId, page] });
-      queryClient.invalidateQueries({ queryKey: ['getBookDetailsById', bookId] });
-      queryClient.invalidateQueries({ queryKey: ['checkSelfReviewExists', bookId] });
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
 
   useEffect(() => {
     if (isOpen) {
@@ -52,19 +42,19 @@ export default function ReviewCreateDialog({ bookId, page, isOpen, setIsOpen }: 
     }
   };
 
-  const handlePost = async () => {
+  const handleClickPost = async () => {
     if (rating === 0) {
       const { isCancel } = await confirmDialog({
         icon: '?',
         title: 'このまま投稿しますか？',
         message: '星の数が「0」のままです。',
-        actionLabel: '投稿する',
+        actionLabel: '投稿',
       });
       if (isCancel) return;
     }
 
     const requestBody: ReviewRequest = { bookId, comment, rating };
-    createMutation.mutate(requestBody, {
+    createMutation?.mutate(requestBody, {
       onSuccess: () => {
         toast({ title: 'レビューを投稿しました' });
         setIsOpen(false);
@@ -81,13 +71,12 @@ export default function ReviewCreateDialog({ bookId, page, isOpen, setIsOpen }: 
     });
   };
 
-  const handleCloseDialog = async () => {
+  const handleClickCancel = async () => {
     if (comment) {
       const { isCancel } = await confirmDialog({
         icon: '?',
-        title: '本当に閉じますか？',
+        title: 'キャンセルして閉じますか？',
         message: 'コメントはまだ投稿していません。',
-        actionLabel: '閉じる',
         persistent: true,
       });
       if (isCancel) return;
@@ -99,8 +88,8 @@ export default function ReviewCreateDialog({ bookId, page, isOpen, setIsOpen }: 
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
         className="w-3/4 min-w-[360px] max-w-[600px] p-4 sm:p-6"
-        onEscapeKeyDown={handleCloseDialog}
-        onPointerDownOutside={handleCloseDialog}
+        onEscapeKeyDown={handleClickCancel}
+        onPointerDownOutside={handleClickCancel}
         onAnimationStart={handleAnimationStart}
       >
         <div className="flex items-start justify-between">
@@ -126,11 +115,19 @@ export default function ReviewCreateDialog({ bookId, page, isOpen, setIsOpen }: 
         />
 
         <DialogFooter>
-          <Button className="rounded-full" variant="ghost" onClick={handleCloseDialog}>
-            閉じる
+          <Button
+            className="min-w-24 rounded-full"
+            variant="ghost"
+            onClick={handleClickCancel}
+          >
+            キャンセル
           </Button>
-          <Button className="rounded-full" disabled={comment === ''} onClick={handlePost}>
-            投稿する
+          <Button
+            className="min-w-24 rounded-full"
+            disabled={comment === ''}
+            onClick={handleClickPost}
+          >
+            投稿
           </Button>
         </DialogFooter>
       </DialogContent>

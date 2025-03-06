@@ -23,7 +23,7 @@ export default function BookDetail({ bookId }: Props) {
   return (
     <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">
       <div className="flex flex-col items-center justify-center lg:w-1/2">
-        <Link to={`/read/${bookId}/table-of-contents`}>
+        <Link to={`/read/${bookId}/table-of-contents`} className="size-fit">
           <img
             className="h-[360px] rounded object-cover sm:h-[480px]"
             src={book.imageUrl}
@@ -55,7 +55,8 @@ export default function BookDetail({ bookId }: Props) {
             </p>
           ))}
         </div>
-        <GenreList className="gap-2" genres={book.genres} variant="outline" />
+
+        <GenreList genres={book.genres} variant="outline" />
 
         <div className="my-6 md:my-10">{book.description}</div>
 

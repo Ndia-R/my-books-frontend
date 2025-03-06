@@ -1,4 +1,4 @@
-import BookList from '@/components/books/book-list';
+import FavoriteList from '@/components/favorites/favorite-list';
 import PaginationUrl from '@/components/pagination-url';
 import { useApiFavorite } from '@/hooks/api/use-api-favorite';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -7,7 +7,7 @@ type Props = {
   page: number;
 };
 
-export default function BooksFavorites({ page }: Props) {
+export default function Favorites({ page }: Props) {
   const { getFavoritePage } = useApiFavorite();
 
   const { data: bookPage } = useSuspenseQuery({
@@ -21,7 +21,7 @@ export default function BooksFavorites({ page }: Props) {
         {bookPage.totalItems}
         <span className="ml-1 mr-4 text-sm text-muted-foreground">件</span>
       </p>
-      <BookList books={bookPage.favorites.map((favorite) => favorite.book)} />
+      <FavoriteList favorites={bookPage.favorites} />
       <PaginationUrl totalPages={bookPage.totalPages} />
     </div>
   );
