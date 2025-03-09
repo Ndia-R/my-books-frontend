@@ -30,6 +30,9 @@ export default function Page() {
 
   const updateMutation = useMutation({
     mutationFn: (requestBody: ChangePassword) => changePassword(requestBody),
+    onSuccess: () => {
+      navigate('/settings/profile');
+    },
     onError: (error) => {
       console.error(error);
     },
@@ -70,7 +73,6 @@ export default function Page() {
     updateMutation.mutate(requestBody, {
       onSuccess: () => {
         toast({ title: 'パスワードを変更しました' });
-        navigate('/settings/profile');
       },
       onError: () => {
         toast({

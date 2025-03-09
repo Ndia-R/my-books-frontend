@@ -115,7 +115,7 @@ export default function BookmarkUpdateDialog({
         <div>
           <p className="font-semibold leading-10">ブックマーク</p>
           <p className="text-xs text-muted-foreground sm:text-sm">
-            メモを編集できます。未入力でもブックマーク登録は消えません。
+            メモを編集できます。メモが未入力でもブックマーク登録は消えません。
           </p>
         </div>
 

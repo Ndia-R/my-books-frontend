@@ -33,6 +33,7 @@ export default function Page() {
     mutationFn: (requestBody: ChangeEmail) => changeEmail(requestBody),
     onSuccess: async () => {
       await logout();
+      navigate('/login');
     },
     onError: (error) => {
       console.error(error);
@@ -68,7 +69,6 @@ export default function Page() {
     updateMutation.mutate(requestBody, {
       onSuccess: async () => {
         toast({ title: 'メールアドレスを変更し、ログアウトしました', duration: 5000 });
-        navigate('/login');
       },
       onError: () => {
         toast({

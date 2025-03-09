@@ -35,6 +35,7 @@ export default function Page() {
     onSuccess: async () => {
       const user = await getCurrentUser();
       setUser(user);
+      navigate('/');
     },
     onError: (error) => {
       console.error(error);
@@ -63,9 +64,7 @@ export default function Page() {
 
     const requestBody: SignupRequest = { email, password, name, avatarUrl };
     signupMutation.mutate(requestBody, {
-      onSuccess: () => {
-        navigate('/');
-      },
+      onSuccess: () => {},
       onError: () => {
         toast({
           title: '新規登録できませんでした',

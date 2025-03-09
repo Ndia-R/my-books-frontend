@@ -23,8 +23,8 @@ export const MENU_LIST = [
 ];
 
 // API Endpoits
-// export const BOOKS_API_ENDPOINT = 'https://vsv-emerald/my-books/api/v1';
-export const BOOKS_API_ENDPOINT = 'https://localhost/my-books/api/v1';
+// export const BOOKS_API_ENDPOINT = 'https://api.my-books.vsv-emerald/api/v1';
+export const BOOKS_API_ENDPOINT = 'https://api.my-books.localhost/api/v1';
 
 // export const AVATAR_BASE_URL = 'https://vsv-emerald/images/avatars';
 export const AVATAR_BASE_URL = 'https://localhost/images/avatars';

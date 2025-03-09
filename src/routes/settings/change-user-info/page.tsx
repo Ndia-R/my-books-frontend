@@ -29,6 +29,9 @@ export default function Page() {
 
   const updateMutation = useMutation({
     mutationFn: (requestBody: UpdateCurrentUser) => updateCurrentUser(requestBody),
+    onSuccess: () => {
+      navigate('/settings/profile');
+    },
     onError: (error) => {
       console.error(error);
     },
@@ -59,9 +62,7 @@ export default function Page() {
         // 名前とアバターURLだけなので楽観的に更新しておく
         const newUser = user ? { ...user, name, avatarUrl } : null;
         setUser(newUser);
-
         toast({ title: 'ユーザー情報を変更しました' });
-        navigate('/settings/profile');
       },
       onError: () => {
         toast({

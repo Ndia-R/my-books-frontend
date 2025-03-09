@@ -89,9 +89,6 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   const loadMoreReviews = async () => {
     const nextPage = currentPage + 1;
     const nextReviewPage = await getReviewPage(bookId, nextPage);
-    console.log(reviews);
-    console.log(nextReviewPage.reviews);
-
     setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.reviews]);
     setCurrentPage(nextPage);
   };
