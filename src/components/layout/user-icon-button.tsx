@@ -73,7 +73,12 @@ export default function UserIconButton() {
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger className="ml-2 flex items-center justify-center" asChild>
-        <Button className="rounded-full" variant="ghost" size="icon">
+        <Button
+          className="rounded-full"
+          variant="ghost"
+          size="icon"
+          aria-label="アバター画像"
+        >
           <Avatar>
             <AvatarImage
               className="bg-primary/50"

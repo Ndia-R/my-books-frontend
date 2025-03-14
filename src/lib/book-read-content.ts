@@ -6,6 +6,7 @@ export const getCurrentPageText = (
   chapterNumber: number,
   pageNumber: number
 ) => {
+  // 章番号が見つからなかった場合でも chapterIndex は少なくとも1にする
   const chapterIndex = Math.max(
     1,
     bookTableOfContents.chapters.findIndex(

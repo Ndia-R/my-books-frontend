@@ -23,10 +23,10 @@ export const MENU_LIST = [
 ];
 
 // API Endpoits
-// export const BOOKS_API_ENDPOINT = 'https://api.my-books.vsv-emerald/api/v1';
-export const BOOKS_API_ENDPOINT = 'https://api.my-books.localhost/api/v1';
+// export const BOOKS_API_ENDPOINT = 'https://vsv-emerald.skygroup.local/api/v1';
+export const BOOKS_API_ENDPOINT = 'https://localhost/api/v1';
 
-// export const AVATAR_BASE_URL = 'https://vsv-emerald/images/avatars';
+// export const AVATAR_BASE_URL = 'https://vsv-emerald.skygroup.local/images/avatars';
 export const AVATAR_BASE_URL = 'https://localhost/images/avatars';
 export const AVATAR_URLS = [...Array(41)].map(
   (_, index) => `${AVATAR_BASE_URL}/avatar${String(index).padStart(2, '0')}.png`

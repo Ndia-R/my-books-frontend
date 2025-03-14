@@ -14,9 +14,14 @@ const TEXT_SIZE = { sm: 'text-xs', md: 'text-sm' };
 type Props = {
   bookId: string;
   size?: 'sm' | 'md';
+  showCount?: boolean;
 };
 
-export default function FavoriteCountIcon({ bookId, size = 'md' }: Props) {
+export default function FavoriteCountIcon({
+  bookId,
+  size = 'md',
+  showCount = false,
+}: Props) {
   const { user } = useAuth();
   const { getFavoriteInfo, createFavorite, deleteFavorite } = useApiFavorite();
 
@@ -84,6 +89,9 @@ export default function FavoriteCountIcon({ bookId, size = 'md' }: Props) {
             )}
             variant="ghost"
             size="icon"
+            aria-label={
+              optimisticData?.isFavorite ? 'お気に入りから削除' : 'お気に入りに追加'
+            }
             onClick={handleClick}
           >
             <HeartIcon
@@ -105,14 +113,16 @@ export default function FavoriteCountIcon({ bookId, size = 'md' }: Props) {
         )}
       </Tooltip>
 
-      <p
-        className={cn(
-          'flex min-w-4 text-muted-foreground justify-center',
-          TEXT_SIZE[size]
-        )}
-      >
-        {optimisticData?.favoriteCount}
-      </p>
+      {showCount && (
+        <p
+          className={cn(
+            'flex min-w-4 text-muted-foreground justify-center',
+            TEXT_SIZE[size]
+          )}
+        >
+          {optimisticData?.favoriteCount}
+        </p>
+      )}
     </div>
   );
 }

@@ -84,6 +84,7 @@ export default function AvatarCarousel({ value, onChange }: Props) {
         type="button"
         variant="ghost"
         size="icon"
+        aria-label="前へ"
         onClick={handlePrev}
       >
         <ChevronLeft className="size-4" />
@@ -140,6 +141,7 @@ export default function AvatarCarousel({ value, onChange }: Props) {
         type="button"
         variant="ghost"
         size="icon"
+        aria-label="次へ"
         onClick={handleNext}
       >
         <ChevronRight className="size-4" />

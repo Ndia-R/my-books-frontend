@@ -31,11 +31,11 @@ export default function BookDetail({ bookId }: Props) {
           />
         </Link>
         <div className="mt-2 flex flex-col items-center justify-around sm:w-[440px] sm:flex-row">
-          <div className="flex justify-center gap-x-2">
-            <FavoriteCountIcon bookId={bookId} />
-            <ReviewCountIcon reviewCount={book.reviewCount} />
-          </div>
           <Rating rating={book.averageRating} readOnly />
+          <div className="flex justify-center gap-x-2">
+            <ReviewCountIcon reviewCount={book.reviewCount} />
+            <FavoriteCountIcon bookId={bookId} showCount={true} />
+          </div>
         </div>
         <div className="my-4 flex items-center">
           <Button className="w-44 rounded-full bg-transparent" variant="outline" asChild>

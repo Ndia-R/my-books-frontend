@@ -161,7 +161,7 @@ const ConfirmDialog = () => {
           </div>
         )}
 
-        <DialogFooter className="flex justify-end">
+        <DialogFooter className="flex justify-end gap-y-4 sm:gap-y-0">
           {!options.actionOnly && (
             <Button
               className="min-w-24 rounded-full"

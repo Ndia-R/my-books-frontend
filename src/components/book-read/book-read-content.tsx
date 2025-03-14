@@ -28,8 +28,8 @@ type Props = {
 };
 
 export default function BookReadContent({ bookId, chapterNumber, pageNumber }: Props) {
-  const [isOpenCreateDialog, setIsOpenCreateDialog] = useState(false);
-  const [isOpenUpdateDialog, setIsOpenUpdateDialog] = useState(false);
+  const [isOpenBookmarkCreateDialog, setIsOpenBookmarkCreateDialog] = useState(false);
+  const [isOpenBookmarkUpdateDialog, setIsOpenBookmarkUpdateDialog] = useState(false);
 
   const { getBookTableOfContents, getBookContentPage } = useApiBook();
   const { getBookmarkByBookId, createBookmark, updateBookmark, deleteBookmark } =
@@ -90,11 +90,11 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
   });
 
   const handleClickCreate = () => {
-    setIsOpenCreateDialog(true);
+    setIsOpenBookmarkCreateDialog(true);
   };
 
   const handleClickUpdate = () => {
-    setIsOpenUpdateDialog(true);
+    setIsOpenBookmarkUpdateDialog(true);
   };
 
   const currentPageText = getCurrentPageText(
@@ -141,11 +141,13 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
                   className="size-8 rounded-full"
                   variant="ghost"
                   size="icon"
+                  aria-label="目次に戻る"
                   asChild
                 >
                   <Link
                     to={`/read/${bookId}/table-of-contents`}
                     className="flex items-center gap-x-2"
+                    aria-label="目次に戻る"
                   >
                     <TableOfContentsIcon className="size-4" />
                   </Link>
@@ -164,6 +166,7 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
                       )}
                       variant="ghost"
                       size="icon"
+                      aria-label="ブックマーク"
                       onClick={handleClickUpdate}
                     >
                       <BookmarkIcon
@@ -175,8 +178,8 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
                     </Button>
                     <BookmarkUpdateDialog
                       bookmark={bookmark}
-                      isOpen={isOpenUpdateDialog}
-                      setIsOpen={setIsOpenUpdateDialog}
+                      isOpen={isOpenBookmarkUpdateDialog}
+                      setIsOpen={setIsOpenBookmarkUpdateDialog}
                       updateMutation={updateMutation}
                       deleteMutation={deleteMutation}
                     />
@@ -187,6 +190,7 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
                       className="size-8 rounded-full text-muted-foreground"
                       variant="ghost"
                       size="icon"
+                      aria-label="ブックマーク"
                       onClick={handleClickCreate}
                     >
                       <BookmarkIcon className="size-4" />
@@ -195,8 +199,8 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
                       bookId={bookId}
                       chapterNumber={chapterNumber}
                       pageNumber={pageNumber}
-                      isOpen={isOpenCreateDialog}
-                      setIsOpen={setIsOpenCreateDialog}
+                      isOpen={isOpenBookmarkCreateDialog}
+                      setIsOpen={setIsOpenBookmarkCreateDialog}
                       createMutation={createMutation}
                     />
                   </>

@@ -25,6 +25,7 @@ export default function Pagination({
         className="size-8 rounded-full"
         variant="ghost"
         size="icon"
+        aria-label="前のページへ"
         disabled={page <= 1}
         onClick={() => onChangePage(page - 1)}
       >
@@ -41,6 +42,7 @@ export default function Pagination({
                 className="size-8 rounded-full"
                 variant={page === pageNumber ? 'secondary' : 'ghost'}
                 size="icon"
+                aria-label="ページ番号"
                 onClick={() => {
                   if (page !== pageNumber) {
                     onChangePage(pageNumber);
@@ -58,6 +60,7 @@ export default function Pagination({
         className="size-8 rounded-full"
         variant="ghost"
         size="icon"
+        aria-label="次のページへ"
         disabled={page >= total}
         onClick={() => onChangePage(page + 1)}
       >

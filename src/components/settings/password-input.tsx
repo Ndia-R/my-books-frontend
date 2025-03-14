@@ -19,6 +19,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, React.ComponentProps<'i
           className="absolute right-0 top-0 rounded-full hover:bg-transparent hover:text-foreground"
           variant="ghost"
           size="icon"
+          aria-label={isShownPassword ? 'パスワードを非表示' : 'パスワードを表示'}
           type="button"
           onClick={() => setIsShownPassword(!isShownPassword)}
         >

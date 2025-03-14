@@ -77,6 +77,7 @@ export default function ReviewItem({ review, updateMutation, deleteMutation }: P
                         className="size-8 rounded-full text-muted-foreground"
                         variant="ghost"
                         size="icon"
+                        aria-label="レビューを編集"
                         onClick={handleClickUpdate}
                       >
                         <SquarePenIcon className="size-4" />
@@ -91,6 +92,7 @@ export default function ReviewItem({ review, updateMutation, deleteMutation }: P
                         className="size-8 rounded-full text-muted-foreground"
                         variant="ghost"
                         size="icon"
+                        aria-label="レビューを削除"
                         onClick={handleClickDelete}
                       >
                         <Trash2Icon className="size-4" />

@@ -1,5 +1,4 @@
 import AverageRatingIcon from '@/components/count-icon/average-rating-icon';
-import FavoriteCountIcon from '@/components/count-icon/favorite-count-icon';
 import ReviewCountIcon from '@/components/count-icon/review-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatDateJP } from '@/lib/util';
@@ -31,10 +30,9 @@ export default function BookItem({ book }: Props) {
           <p className="text-xs tracking-wide text-muted-foreground">
             {formatDateJP(book.publishedDate)}
           </p>
-          <div className="flex justify-around gap-x-2 sm:gap-x-4">
-            <FavoriteCountIcon size="sm" bookId={book.id} />
-            <ReviewCountIcon size="sm" reviewCount={book.reviewCount} />
+          <div className="flex gap-x-2">
             <AverageRatingIcon size="sm" averageRating={book.averageRating} />
+            <ReviewCountIcon size="sm" reviewCount={book.reviewCount} />
           </div>
         </div>
       </CardContent>

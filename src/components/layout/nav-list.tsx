@@ -26,14 +26,17 @@ export default function NavList() {
 
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <SheetTrigger asChild>
-          <Button className="rounded-full lg:hidden" variant="ghost" size="icon">
+          <Button
+            className="rounded-full lg:hidden"
+            variant="ghost"
+            size="icon"
+            aria-label="メニュー"
+          >
             <MenuIcon className="size-5" />
           </Button>
         </SheetTrigger>
         <SheetContent className="w-fit p-8" side="left">
-          <div className="mb-8" onClick={() => setIsOpen(false)}>
-            <Logo />
-          </div>
+          <Logo className="mb-8" onClick={() => setIsOpen(false)} />
           <MenuList onClick={() => setIsOpen(false)} />
         </SheetContent>
       </Sheet>

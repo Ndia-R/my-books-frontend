@@ -1,7 +1,7 @@
+import FavoriteCountIcon from '@/components/count-icon/favorite-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { formatDateJP, formatTime } from '@/lib/util';
 import { Favorite } from '@/types';
-import { HeartIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -12,7 +12,7 @@ export default function FavoriteItem({ favorite }: Props) {
   return (
     <Card>
       <CardContent>
-        <div className="flex gap-x-4 p-4">
+        <div className="flex gap-x-4 px-3 py-4">
           <div className="flex min-w-20 justify-center sm:min-w-24">
             <Link to={`/book/${favorite.book.id}`} className="size-fit">
               <img
@@ -30,11 +30,8 @@ export default function FavoriteItem({ favorite }: Props) {
                 </p>
               </Link>
               <div className="flex items-center">
-                <HeartIcon
-                  className="size-4 text-primary"
-                  style={{ fill: 'hsl(var(--primary))' }}
-                />
-                <p className="mx-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm">
+                <FavoriteCountIcon bookId={favorite.bookId} />
+                <p className="mr-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm">
                   {formatDateJP(favorite.updatedAt)} {formatTime(favorite.updatedAt)}
                 </p>
               </div>

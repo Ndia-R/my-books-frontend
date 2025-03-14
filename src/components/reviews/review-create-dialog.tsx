@@ -114,7 +114,7 @@ export default function ReviewCreateDialog({
           onChange={(e) => setComment(e.currentTarget.value)}
         />
 
-        <DialogFooter>
+        <DialogFooter className="gap-y-4 sm:gap-y-0">
           <Button
             className="min-w-24 rounded-full"
             variant="ghost"

@@ -6,9 +6,6 @@
   html {
     font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
   }
-  body {
-    touch-action: pan-y;
-  }
 
   /* スクロールバー */
   body ::-webkit-scrollbar-track {
@@ -45,25 +42,6 @@ https://ui.jln.dev/
 
 @layer base {
   :root {
-    /* --background: 210 25% 98%;
-    --foreground: 234 10% 37%;
-    --muted: 210 12% 90%;
-    --muted-foreground: 210 12% 30%;
-    --popover: 210 25% 95%;
-    --popover-foreground: 234 10% 27%;
-    --card: 210 25% 96%;
-    --card-foreground: 234 10% 32%;
-    --border: 210 15% 93%;
-    --input: 210 15% 90%;
-    --primary: 140 59% 43%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 140 30% 75%;
-    --secondary-foreground: 140 30% 15%;
-    --accent: 210 25% 83%;
-    --accent-foreground: 210 25% 23%;
-    --destructive: 8 93% 44%;
-    --destructive-foreground: 0 0% 100%; */
-
     --background: 112 100% 97%;
     --foreground: 60 2% 30%;
     --muted: 112 12% 90%;
@@ -82,25 +60,6 @@ https://ui.jln.dev/
     --accent-foreground: 112 100% 2%;
     --destructive: 2 96% 27%;
     --destructive-foreground: 2 96% 87%;
-
-    /* --background: 0 0% 100%;
-    --foreground: 167 62% 25%;
-    --muted: 0 12% 90%;
-    --muted-foreground: 0 12% 30%;
-    --popover: 0 0% 97%;
-    --popover-foreground: 167 62% 15%;
-    --card: 0 0% 98%;
-    --card-foreground: 167 62% 20%;
-    --border: 0 0% 95%;
-    --input: 0 0% 92%;
-    --primary: 143 88% 29%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 143 30% 75%;
-    --secondary-foreground: 143 30% 15%;
-    --accent: 0 0% 85%;
-    --accent-foreground: 0 0% 25%;
-    --destructive: 7 100% 27%;
-    --destructive-foreground: 7 100% 87%; */
 
     --ring: 155 58% 29%;
     --radius: 0.5rem;

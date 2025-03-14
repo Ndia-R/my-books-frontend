@@ -22,7 +22,13 @@ export default function ThemeToggleButton() {
   };
 
   return (
-    <Button className="rounded-full" variant="ghost" size="icon" onClick={handleClick}>
+    <Button
+      className="rounded-full"
+      variant="ghost"
+      size="icon"
+      aria-label={theme === 'light' ? 'ダークモードに切り替え' : 'ライトモードに切り替え'}
+      onClick={handleClick}
+    >
       {theme === 'light' ? (
         <MoonIcon className="size-5" />
       ) : (

@@ -3,11 +3,18 @@ import { cn } from '@/lib/util';
 import { Link } from 'react-router-dom';
 
 type Props = {
+  className?: string;
   size?: 'sm' | 'md' | 'lg';
   disableLink?: boolean;
+  onClick?: () => void;
 };
 
-export default function Logo({ size = 'md', disableLink = false }: Props) {
+export default function Logo({
+  className,
+  size = 'md',
+  disableLink = false,
+  onClick,
+}: Props) {
   const SIZE = {
     sm: 'text-xl',
     md: 'text-3xl',
@@ -15,7 +22,7 @@ export default function Logo({ size = 'md', disableLink = false }: Props) {
   };
 
   return (
-    <h1>
+    <h1 className={className}>
       <Link
         to="/"
         className={cn(
@@ -25,6 +32,7 @@ export default function Logo({ size = 'md', disableLink = false }: Props) {
           SIZE[size]
         )}
         aria-disabled={disableLink}
+        onClick={onClick}
       >
         {LOGO_TITLE}
       </Link>

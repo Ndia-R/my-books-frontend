@@ -54,7 +54,7 @@ export default function BookmarkItem({
   return (
     <Card>
       <CardContent>
-        <div className="flex gap-x-4 p-4">
+        <div className="flex gap-x-4 px-3 py-4">
           <div className="flex min-w-20 justify-center sm:min-w-24">
             <Link
               to={`/read/${bookmark.bookId}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
@@ -78,17 +78,20 @@ export default function BookmarkItem({
                 </p>
               </Link>
               <div className="flex flex-wrap items-center">
-                <BookmarkIcon
-                  className="size-4 text-primary"
-                  style={{ fill: 'hsl(var(--primary))' }}
-                />
-                <p className="mx-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm">
+                <div className="flex size-8 items-center justify-center">
+                  <BookmarkIcon
+                    className="size-4 text-primary"
+                    style={{ fill: 'hsl(var(--primary))' }}
+                  />
+                </div>
+                <p className="mr-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm">
                   {formatDateJP(bookmark.updatedAt)} {formatTime(bookmark.updatedAt)}
                 </p>
                 <Button
                   className="size-8 rounded-full text-muted-foreground"
                   variant="ghost"
                   size="icon"
+                  aria-label="レビューを編集"
                   onClick={handleClickUpdate}
                 >
                   <SquarePenIcon className="size-4" />
@@ -103,6 +106,7 @@ export default function BookmarkItem({
                   className="size-8 rounded-full text-muted-foreground"
                   variant="ghost"
                   size="icon"
+                  aria-label="レビューを削除"
                   onClick={handleClickDelete}
                 >
                   <Trash2Icon className="size-4" />

@@ -51,7 +51,7 @@ export default function MyReviewItem({ review, updateMutation, deleteMutation }:
   return (
     <Card>
       <CardContent>
-        <div className="flex gap-x-4 p-4">
+        <div className="flex gap-x-4 px-3 py-4">
           <div className="flex min-w-20 justify-center sm:min-w-24">
             <Link to={`/book/${review.book.id}`} className="size-fit">
               <img
@@ -79,6 +79,7 @@ export default function MyReviewItem({ review, updateMutation, deleteMutation }:
                   className="size-8 rounded-full text-muted-foreground"
                   variant="ghost"
                   size="icon"
+                  aria-label="レビューを編集"
                   onClick={handleClickUpdate}
                 >
                   <SquarePenIcon className="size-4" />
@@ -93,6 +94,7 @@ export default function MyReviewItem({ review, updateMutation, deleteMutation }:
                   className="size-8 rounded-full text-muted-foreground"
                   variant="ghost"
                   size="icon"
+                  aria-label="レビューを削除"
                   onClick={handleClickDelete}
                 >
                   <Trash2Icon className="size-4" />
