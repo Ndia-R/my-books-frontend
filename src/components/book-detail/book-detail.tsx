@@ -3,6 +3,7 @@ import ReviewCountIcon from '@/components/count-icon/review-count-icon';
 import GenreList from '@/components/genres/genre-list';
 import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
+import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { useApiBook } from '@/hooks/api/use-api-book';
 import { formatDateJP, formatIsbn, formatPrice } from '@/lib/util';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -26,7 +27,7 @@ export default function BookDetail({ bookId }: Props) {
         <Link to={`/read/${bookId}/table-of-contents`} className="size-fit">
           <img
             className="h-[360px] rounded object-cover sm:h-[480px]"
-            src={book.imageUrl}
+            src={BOOK_IMAGE_BASE_URL + book.imagePath}
             alt={book.title}
           />
         </Link>

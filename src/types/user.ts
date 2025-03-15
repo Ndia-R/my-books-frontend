@@ -3,7 +3,7 @@ export interface User {
   email: string;
   roles: string[];
   name: string;
-  avatarUrl: string;
+  avatarPath: string;
 }
 
 export interface ProfileCounts {
@@ -12,20 +12,9 @@ export interface ProfileCounts {
   reviewCount: number;
 }
 
-export interface UserDetails {
-  user: User;
-  profieleCounts: ProfileCounts;
-}
-
-export interface SimpleUserInfo {
-  id: number;
-  name: string;
-  avatarUrl: string;
-}
-
 export interface UpdateCurrentUser {
   name: string;
-  avatarUrl: string;
+  avatarPath: string;
 }
 
 export interface ChangePassword {

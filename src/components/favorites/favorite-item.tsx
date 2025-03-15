@@ -1,5 +1,6 @@
 import FavoriteCountIcon from '@/components/count-icon/favorite-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
+import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { formatDateJP, formatTime } from '@/lib/util';
 import { Favorite } from '@/types';
 import { Link } from 'react-router-dom';
@@ -17,7 +18,7 @@ export default function FavoriteItem({ favorite }: Props) {
             <Link to={`/book/${favorite.book.id}`} className="size-fit">
               <img
                 className="h-24 rounded object-cover sm:h-28"
-                src={favorite.book.imageUrl}
+                src={BOOK_IMAGE_BASE_URL + favorite.book.imagePath}
                 alt={favorite.book.title}
               />
             </Link>

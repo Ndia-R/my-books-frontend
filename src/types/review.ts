@@ -6,7 +6,7 @@ export interface Review {
   userId: number;
   bookId: string;
   name: string;
-  avatarUrl: string;
+  avatarPath: string;
   comment: string;
   rating: number;
   createdAt: string;

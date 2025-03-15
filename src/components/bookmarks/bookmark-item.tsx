@@ -1,6 +1,7 @@
 import BookmarkUpdateDialog from '@/components/bookmarks/bookmark-update-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { formatDateJP, formatTime } from '@/lib/util';
@@ -62,7 +63,7 @@ export default function BookmarkItem({
             >
               <img
                 className="h-24 rounded object-cover sm:h-28"
-                src={bookmark.book.imageUrl}
+                src={BOOK_IMAGE_BASE_URL + bookmark.book.imagePath}
                 alt={bookmark.book.title}
               />
             </Link>

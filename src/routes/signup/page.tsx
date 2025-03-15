@@ -23,7 +23,7 @@ export default function Page() {
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const nameRef = useRef<HTMLInputElement | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState('');
+  const [avatarPath, setAvatarPath] = useState('');
 
   const navigate = useNavigate();
   const { signup, setUser } = useAuth();
@@ -62,7 +62,7 @@ export default function Page() {
       return;
     }
 
-    const requestBody: SignupRequest = { email, password, name, avatarUrl };
+    const requestBody: SignupRequest = { email, password, name, avatarPath };
     signupMutation.mutate(requestBody, {
       onSuccess: () => {},
       onError: () => {
@@ -195,7 +195,7 @@ export default function Page() {
               <Label className="text-xs" htmlFor="name">
                 アバター画像
               </Label>
-              <AvatarCarousel value={avatarUrl} onChange={setAvatarUrl} />
+              <AvatarCarousel value={avatarPath} onChange={setAvatarPath} />
             </div>
 
             <Button

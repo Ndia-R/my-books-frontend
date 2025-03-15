@@ -47,13 +47,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signup = async ({ email, password, name, avatarUrl }: SignupRequest) => {
+  const signup = async ({ email, password, name, avatarPath }: SignupRequest) => {
     try {
       const url = `${BOOKS_API_ENDPOINT}/signup`;
       const options: RequestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, avatarUrl }),
+        body: JSON.stringify({ email, password, name, avatarPath }),
         credentials: 'include',
       };
 

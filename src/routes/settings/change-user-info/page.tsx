@@ -25,7 +25,7 @@ export default function Page() {
 
   const { user, setUser } = useAuth();
 
-  const [avatarUrl, setAvaterUrl] = useState(user?.avatarUrl || '');
+  const [avatarPath, setAvatarPath] = useState(user?.avatarPath || '');
 
   const updateMutation = useMutation({
     mutationFn: (requestBody: UpdateCurrentUser) => updateCurrentUser(requestBody),
@@ -56,11 +56,11 @@ export default function Page() {
       return;
     }
 
-    const requestBody: UpdateCurrentUser = { name, avatarUrl };
+    const requestBody: UpdateCurrentUser = { name, avatarPath };
     updateMutation.mutate(requestBody, {
       onSuccess: () => {
         // 名前とアバターURLだけなので楽観的に更新しておく
-        const newUser = user ? { ...user, name, avatarUrl } : null;
+        const newUser = user ? { ...user, name, avatarPath } : null;
         setUser(newUser);
         toast({ title: 'ユーザー情報を変更しました' });
       },
@@ -118,7 +118,7 @@ export default function Page() {
               <Label className="text-xs" htmlFor="name">
                 アバター画像
               </Label>
-              <AvatarCarousel value={avatarUrl} onChange={setAvaterUrl} />
+              <AvatarCarousel value={avatarPath} onChange={setAvatarPath} />
             </div>
 
             <Button

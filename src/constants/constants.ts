@@ -6,10 +6,8 @@ import {
   SettingsIcon,
 } from 'lucide-react';
 
-// ロゴ
 export const LOGO_TITLE = 'My Books';
 
-// メニュー一覧
 export const MENU_LIST = [
   {
     href: '/discover?genreIds=1&condition=SINGLE',
@@ -23,10 +21,13 @@ export const MENU_LIST = [
 ];
 
 export const BOOKS_API_ENDPOINT = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
+export const IMAGE_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/images`;
 
-export const AVATAR_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/images/avatars`;
-export const AVATAR_URLS = [...Array(41)].map(
-  (_, index) => `${AVATAR_BASE_URL}/avatar${String(index).padStart(2, '0')}.png`
+export const BOOK_IMAGE_BASE_URL = `${IMAGE_BASE_URL}/my-books`;
+export const AVATAR_IMAGE_BASE_URL = `${IMAGE_BASE_URL}/avatars`;
+
+export const AVATAR_PATHS = [...Array(41)].map(
+  (_, index) => `/avatar${String(index).padStart(2, '0')}.png`
 );
 
 export const FETCH_BOOKS_MAX_RESULTS = 20;

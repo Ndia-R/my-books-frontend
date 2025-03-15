@@ -1,6 +1,7 @@
 import AverageRatingIcon from '@/components/count-icon/average-rating-icon';
 import ReviewCountIcon from '@/components/count-icon/review-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
+import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { formatDateJP } from '@/lib/util';
 import { Book } from '@/types';
 import { Link } from 'react-router-dom';
@@ -16,7 +17,7 @@ export default function BookItem({ book }: Props) {
         <Link to={`/book/${book.id}`} className="size-fit">
           <img
             className="h-44 rounded object-cover sm:h-52"
-            src={book.imageUrl}
+            src={BOOK_IMAGE_BASE_URL + book.imagePath}
             alt={book.title}
           />
         </Link>

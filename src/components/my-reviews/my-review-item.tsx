@@ -2,6 +2,7 @@ import Rating from '@/components/rating';
 import ReviewUpdateDialog from '@/components/reviews/review-update-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { formatDateJP, formatTime } from '@/lib/util';
@@ -56,7 +57,7 @@ export default function MyReviewItem({ review, updateMutation, deleteMutation }:
             <Link to={`/book/${review.book.id}`} className="size-fit">
               <img
                 className="h-24 rounded object-cover sm:h-28"
-                src={review.book.imageUrl}
+                src={BOOK_IMAGE_BASE_URL + review.book.imagePath}
                 alt={review.book.title}
               />
             </Link>

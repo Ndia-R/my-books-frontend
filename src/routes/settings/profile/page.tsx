@@ -3,6 +3,7 @@ import ProfileCounts from '@/components/settings/profile-counts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { useAuth } from '@/hooks/use-auth';
 import ErrorElement from '@/routes/error-element';
 import { KeyRoundIcon, MailIcon, UserRoundIcon } from 'lucide-react';
@@ -26,7 +27,7 @@ export default function Page() {
             <Avatar className="mb-4 size-24">
               <AvatarImage
                 className="bg-primary"
-                src={user.avatarUrl}
+                src={AVATAR_IMAGE_BASE_URL + user.avatarPath}
                 alt="avatar-image"
               />
               <AvatarFallback className="bg-primary text-5xl font-semibold">

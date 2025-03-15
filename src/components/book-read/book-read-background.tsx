@@ -1,3 +1,4 @@
+import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { useApiBook } from '@/hooks/api/use-api-book';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
@@ -17,7 +18,7 @@ export default function BookReadBackground({ bookId }: Props) {
     <div className="fixed left-0 top-0 -z-10 flex h-screen w-full justify-center">
       <img
         className="w-full max-w-7xl object-cover opacity-5"
-        src={book.imageUrl}
+        src={BOOK_IMAGE_BASE_URL + book.imagePath}
         alt="bg-image"
       />
     </div>

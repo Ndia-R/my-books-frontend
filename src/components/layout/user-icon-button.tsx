@@ -8,7 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { MENU_LIST } from '@/constants/constants';
+import { AVATAR_IMAGE_BASE_URL, MENU_LIST } from '@/constants/constants';
 import { useApiUser } from '@/hooks/api/use-api-user';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
@@ -82,7 +82,7 @@ export default function UserIconButton() {
           <Avatar>
             <AvatarImage
               className="bg-primary/50"
-              src={user.avatarUrl}
+              src={AVATAR_IMAGE_BASE_URL + user.avatarPath}
               alt="avatar-image"
             />
             <AvatarFallback className="text-lg font-semibold">
@@ -97,7 +97,7 @@ export default function UserIconButton() {
             <Avatar className="size-8">
               <AvatarImage
                 className="bg-primary/50"
-                src={user.avatarUrl}
+                src={AVATAR_IMAGE_BASE_URL + user.avatarPath}
                 alt="avatar-image"
               />
               <AvatarFallback className="font-semibold">

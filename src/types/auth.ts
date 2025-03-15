@@ -7,7 +7,7 @@ export interface SignupRequest {
   email: string;
   password: string;
   name: string;
-  avatarUrl: string;
+  avatarPath: string;
 }
 
 export interface AccessToken {

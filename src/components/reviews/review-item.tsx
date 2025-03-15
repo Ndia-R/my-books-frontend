@@ -2,6 +2,7 @@ import Rating from '@/components/rating';
 import ReviewUpdateDialog from '@/components/reviews/review-update-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { useAuth } from '@/hooks/use-auth';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
@@ -57,7 +58,7 @@ export default function ReviewItem({ review, updateMutation, deleteMutation }: P
             <Avatar className="size-16">
               <AvatarImage
                 className="bg-primary/50"
-                src={review.avatarUrl}
+                src={AVATAR_IMAGE_BASE_URL + review.avatarPath}
                 alt="avatar-image"
               />
               <AvatarFallback className="font-semibold">
