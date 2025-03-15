@@ -13,7 +13,6 @@ VSCodeのDevcontainerを使ったひな型
 |Git Graph|Gitリポジトリの履歴を視覚的に表示するグラフ|"mhutchie.git-graph"|
 |HTML CSS Support|HTML内で使用されるCSSクラスの補完とサポート|"ecmel.vscode-html-css"|
 |indent-rainbow|インデントを色分けして可視化する|"oderwat.indent-rainbow"|
-|Material Icon Theme|VSCodeにMaterial Design風のアイコンテーマを追加|"PKief.material-icon-theme"|
 |Path Intellisense|ファイルパスを入力時に自動補完|"christian-kohler.path-intellisense"|
 |Prettier - Code formatter|コードフォーマットツールPrettierをVSCode上で使用可能にする|"esbenp.prettier-vscode"|
 |Tailwind CSS IntelliSense|Tailwind CSSのクラス名補完とサポート|"bradlc.vscode-tailwindcss"|

@@ -22,12 +22,9 @@ export const MENU_LIST = [
   { href: '/settings/profile', title: '設定', icon: SettingsIcon },
 ];
 
-// API Endpoits
-// export const BOOKS_API_ENDPOINT = 'https://vsv-emerald.skygroup.local/api/v1';
-export const BOOKS_API_ENDPOINT = 'https://localhost/api/v1';
+export const BOOKS_API_ENDPOINT = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
 
-// export const AVATAR_BASE_URL = 'https://vsv-emerald.skygroup.local/images/avatars';
-export const AVATAR_BASE_URL = 'https://localhost/images/avatars';
+export const AVATAR_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/images/avatars`;
 export const AVATAR_URLS = [...Array(41)].map(
   (_, index) => `${AVATAR_BASE_URL}/avatar${String(index).padStart(2, '0')}.png`
 );

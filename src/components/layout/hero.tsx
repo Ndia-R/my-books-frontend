@@ -1,4 +1,4 @@
-import mainVisualImage from '@/assets/main-visual.png';
+import mainVisualImage from '@/assets/main-visual.webp';
 import SearchInput from '@/components/layout/search-input';
 
 export default function Hero() {
