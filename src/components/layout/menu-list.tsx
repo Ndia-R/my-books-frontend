@@ -1,7 +1,15 @@
 import { Button } from '@/components/ui/button';
-import { MENU_LIST } from '@/constants/constants';
 import { cn } from '@/lib/util';
 import { Link, useLocation } from 'react-router-dom';
+
+const MENU_LIST = [
+  {
+    href: '/discover?genreIds=1&condition=SINGLE',
+    title: 'ジャンル',
+  },
+  { href: '/ranking', title: 'ランキング' },
+  { href: '/special-features', title: '特集' },
+];
 
 type Props = {
   onClick?: () => void;

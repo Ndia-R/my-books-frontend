@@ -1,17 +1,10 @@
 import GenreList from '@/components/genres/genre-list';
 import { useApiGenre } from '@/hooks/api/use-api-genre';
+import { useSearchFilters } from '@/hooks/use-search-filters';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
 
-type Props = {
-  genreIds: string;
-  condition: string;
-  onGenreIdsChange: (genreIds: string) => void;
-};
-
-export default function GenresDiscover({ genreIds, condition, onGenreIdsChange }: Props) {
-  const [selectedGenreIds, setSelectedGenreIds] = useState<number[]>([]);
-
+export default function GenresSelector() {
+  const { genreIds, condition, updateQueryParams } = useSearchFilters();
   const { getGenres } = useApiGenre();
 
   const { data: genres } = useSuspenseQuery({
@@ -19,10 +12,8 @@ export default function GenresDiscover({ genreIds, condition, onGenreIdsChange }
     queryFn: () => getGenres(),
   });
 
-  useEffect(() => {
-    const ids = genreIds.split(',').map((genreId) => Number(genreId));
-    setSelectedGenreIds(ids);
-  }, [genreIds]);
+  // クエリ文字列から配列へ
+  const selectedGenreIds = genreIds.split(',').map((genreId) => Number(genreId));
 
   const handleClick = (genreId: number) => {
     let newGenreIds = selectedGenreIds.includes(genreId)
@@ -34,8 +25,7 @@ export default function GenresDiscover({ genreIds, condition, onGenreIdsChange }
     if (newGenreIds.length === 0 || condition === 'SINGLE') {
       newGenreIds = [genreId];
     }
-    setSelectedGenreIds(newGenreIds);
-    onGenreIdsChange(newGenreIds.join(','));
+    updateQueryParams({ genreIds: newGenreIds.join(',') });
   };
 
   return <GenreList genres={genres} activeIds={selectedGenreIds} onClick={handleClick} />;

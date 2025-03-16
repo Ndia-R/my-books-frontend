@@ -8,15 +8,28 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { AVATAR_IMAGE_BASE_URL, MENU_LIST } from '@/constants/constants';
+import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { useApiUser } from '@/hooks/api/use-api-user';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/util';
 import { useMutation } from '@tanstack/react-query';
-import { LogOutIcon } from 'lucide-react';
+import {
+  BookmarkIcon,
+  HeartIcon,
+  LogOutIcon,
+  MessageSquareIcon,
+  SettingsIcon,
+} from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+
+const MENU_LIST = [
+  { href: '/favorites', title: 'お気に入り', icon: HeartIcon },
+  { href: '/bookmarks', title: 'ブックマーク', icon: BookmarkIcon },
+  { href: '/my-reviews', title: 'マイレビュー', icon: MessageSquareIcon },
+  { href: '/settings/profile', title: '設定', icon: SettingsIcon },
+];
 
 export default function UserIconButton() {
   const [isOpen, setIsOpen] = useState(false);

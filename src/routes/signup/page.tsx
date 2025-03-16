@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
 import { useApiUser } from '@/hooks/api/use-api-user';
 import { useAuth } from '@/hooks/use-auth';
 import { useToast } from '@/hooks/use-toast';
@@ -129,7 +130,7 @@ export default function Page() {
   return (
     <div className="my-3 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
-      <p className="font-semibold">アカウントの作成</p>
+      <h1 className="font-semibold">アカウントの作成</h1>
       <Card className="w-80 rounded-3xl sm:w-96">
         <CardContent className="p-6 sm:px-10">
           <form className="flex w-full flex-col gap-y-4" onSubmit={handleSubmit}>
@@ -171,6 +172,8 @@ export default function Page() {
               )}
             </div>
 
+            <Separator className="mb-2 mt-6 bg-foreground/10" />
+
             <div>
               <Label className="text-xs" htmlFor="name">
                 ユーザー名
@@ -199,7 +202,7 @@ export default function Page() {
             </div>
 
             <Button
-              className="mt-6 w-full rounded-full"
+              className="mt-2 w-full rounded-full"
               type="submit"
               disabled={signupMutation.isPending}
             >

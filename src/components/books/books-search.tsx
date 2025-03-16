@@ -1,5 +1,5 @@
 import BookList from '@/components/books/book-list';
-import PaginationUrl from '@/components/pagination-url';
+import SearchPagination from '@/components/search-pagination';
 import { useApiBook } from '@/hooks/api/use-api-book';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
@@ -23,7 +23,7 @@ export default function BooksSearch({ searchQuery, page }: Props) {
         <span className="ml-1 mr-4 text-sm text-muted-foreground">件</span>
       </p>
       <BookList books={bookPage.books} />
-      <PaginationUrl totalPages={bookPage.totalPages} />
+      <SearchPagination totalPages={bookPage.totalPages} />
     </div>
   );
 }

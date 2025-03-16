@@ -1,5 +1,5 @@
 import MyReviewList from '@/components/my-reviews/my-review-list';
-import PaginationUrl from '@/components/pagination-url';
+import SearchPagination from '@/components/search-pagination';
 import { useApiReview } from '@/hooks/api/use-api-review';
 import { ReviewRequest } from '@/types';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
@@ -56,7 +56,7 @@ export default function MyReviews({ page }: Props) {
         updateMutation={updateMutation}
         deleteMutation={deleteMutation}
       />
-      <PaginationUrl totalPages={reviewPage.totalPages} />
+      <SearchPagination totalPages={reviewPage.totalPages} />
     </div>
   );
 }

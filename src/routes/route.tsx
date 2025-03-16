@@ -7,6 +7,7 @@ import LoginPage from '@/routes/login/page';
 import MyReviewsPage from '@/routes/my-reviews/page';
 import RootPage from '@/routes/page';
 import { ProtectedRoute } from '@/routes/protected-route';
+import RankingPage from '@/routes/ranking/page';
 import BookReadPage from '@/routes/read/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
 import BookReadTableOfContentsPage from '@/routes/read/[bookId]/table-of-contents/page';
 import SearchPage from '@/routes/search/page';
@@ -15,6 +16,7 @@ import ChangePasswordPage from '@/routes/settings/change-password/page';
 import ChangeUserInfoPage from '@/routes/settings/change-user-info/page';
 import ProfilePage from '@/routes/settings/profile/page';
 import SignupPage from '@/routes/signup/page';
+import SpecialFeaturesPage from '@/routes/special-features/page';
 import { createBrowserRouter, createRoutesFromElements, Route } from 'react-router-dom';
 
 export const router = createBrowserRouter(
@@ -23,42 +25,29 @@ export const router = createBrowserRouter(
       <Route path="/" element={<RootLayout />}>
         <Route index element={<RootPage />} />
 
-        <Route path="book/:bookId" element={<BookDetailPage />} />
-        <Route path="book/:bookId/reviews" element={<BookDetailPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="signup" element={<SignupPage />} />
 
-        <Route path="read/:bookId">
-          <Route path="table-of-contents" element={<BookReadTableOfContentsPage />} />
+        <Route path="book">
+          <Route path=":bookId" element={<BookDetailPage />} />
         </Route>
 
-        <Route path="search">
-          <Route index element={<SearchPage />} />
+        <Route path="read">
+          <Route path=":bookId">
+            <Route path="table-of-contents" element={<BookReadTableOfContentsPage />} />
+          </Route>
         </Route>
 
-        <Route path="discover">
-          <Route index element={<DiscoverPage />} />
-        </Route>
-
-        <Route path="login">
-          <Route index element={<LoginPage />} />
-        </Route>
-
-        <Route path="signup">
-          <Route index element={<SignupPage />} />
-        </Route>
+        <Route path="search" element={<SearchPage />} />
+        <Route path="discover" element={<DiscoverPage />} />
+        <Route path="ranking" element={<RankingPage />} />
+        <Route path="special-features" element={<SpecialFeaturesPage />} />
 
         {/* 以下、認証が必要な画面 */}
         <Route element={<ProtectedRoute />}>
-          <Route path="favorites">
-            <Route index element={<FavoritesPage />} />
-          </Route>
-
-          <Route path="my-reviews">
-            <Route index element={<MyReviewsPage />} />
-          </Route>
-
-          <Route path="bookmarks">
-            <Route index element={<BookmarksPage />} />
-          </Route>
+          <Route path="favorites" element={<FavoritesPage />} />
+          <Route path="bookmarks" element={<BookmarksPage />} />
+          <Route path="my-reviews" element={<MyReviewsPage />} />
 
           <Route path="settings">
             <Route path="profile" element={<ProfilePage />} />

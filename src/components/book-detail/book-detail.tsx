@@ -46,7 +46,7 @@ export default function BookDetail({ bookId }: Props) {
       </div>
 
       <div className="p-4 lg:w-1/2">
-        <p className="text-3xl font-bold sm:text-4xl">{book.title}</p>
+        <h1 className="text-3xl font-bold sm:text-4xl">{book.title}</h1>
 
         <div className="my-4 flex w-full flex-wrap items-center justify-end gap-x-3">
           <p>著者</p>

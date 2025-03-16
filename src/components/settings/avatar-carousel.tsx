@@ -1,10 +1,14 @@
 import SwipeArea from '@/components/settings/swipe-area';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { AVATAR_IMAGE_BASE_URL, AVATAR_PATHS } from '@/constants/constants';
+import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/util';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRef, useState } from 'react';
+
+const AVATAR_PATHS = [...Array(41)].map(
+  (_, index) => `/avatar${String(index).padStart(2, '0')}.png`
+);
 
 type Props = {
   value: string;

@@ -1,47 +1,33 @@
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { useEffect, useState } from 'react';
+import { useSearchFilters } from '@/hooks/use-search-filters';
 
-type Props = {
-  condition: string;
-  onConditionChange: (condition: string) => void;
-};
+const CONDITION_LIST = [
+  { text: '単一選択', value: 'SINGLE' },
+  { text: 'AND条件', value: 'AND' },
+  { text: 'OR条件', value: 'OR' },
+];
 
-export default function GenresConditionSelector({ condition, onConditionChange }: Props) {
-  const CONDITIONS = [
-    { text: '単一選択', value: 'SINGLE' },
-    { text: 'AND条件', value: 'AND' },
-    { text: 'OR条件', value: 'OR' },
-  ];
+export default function GenresConditionSelector() {
+  const { genreIds, condition, updateQueryParams } = useSearchFilters();
 
-  const [selectedCondition, setSelectedCondition] = useState(condition);
-
-  useEffect(() => {
-    setSelectedCondition(condition);
-  }, [condition]);
-
-  const handleChangeCondition = (condition: string) => {
-    setSelectedCondition(condition);
-    onConditionChange(condition);
+  const handleChange = (condition: string) => {
+    // SINGLE選択以外は複数ジャンル選択可能OKだが
+    // SINGLE選択の場合、複数ジャンルの中の最初の値（単一の値）とする
+    const ids = condition === 'SINGLE' ? genreIds.split(',')[0] : undefined;
+    updateQueryParams({ genreIds: ids, condition, page: 1 });
   };
 
   return (
-    <RadioGroup
-      className="flex gap-x-4"
-      value={selectedCondition}
-      onValueChange={handleChangeCondition}
-    >
-      {CONDITIONS.map((condition) => (
-        <div
-          className="flex flex-col-reverse items-center sm:flex-row"
-          key={condition.value}
-        >
-          <RadioGroupItem value={condition.value} id={condition.value} />
+    <RadioGroup className="flex gap-x-4" value={condition} onValueChange={handleChange}>
+      {CONDITION_LIST.map((item) => (
+        <div className="flex flex-col-reverse items-center sm:flex-row" key={item.value}>
+          <RadioGroupItem value={item.value} id={item.value} />
           <Label
             className="cursor-pointer select-none p-2 text-xs sm:text-sm"
-            htmlFor={condition.value}
+            htmlFor={item.value}
           >
-            {condition.text}
+            {item.text}
           </Label>
         </div>
       ))}

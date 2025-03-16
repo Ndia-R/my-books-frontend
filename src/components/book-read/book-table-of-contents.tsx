@@ -31,7 +31,7 @@ export default function BookTableOfContents({ bookId }: Props) {
     <div className="delay-0 duration-200 animate-in fade-in-0">
       <div className="flex flex-col gap-y-12 px-4 py-12 sm:px-20">
         <div className="flex w-full flex-col items-center gap-y-6 sm:items-start">
-          <p className="text-3xl font-bold sm:text-5xl">{book.title}</p>
+          <h1 className="text-3xl font-bold sm:text-5xl">{book.title}</h1>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button

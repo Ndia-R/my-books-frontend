@@ -19,10 +19,10 @@ export default function Page() {
   return (
     <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
-      <p className="font-semibold">プロフィール</p>
+      <h1 className="font-semibold">プロフィール</h1>
 
       <Card className="w-80 overflow-hidden rounded-3xl sm:w-96">
-        <CardHeader className="h-80 w-full bg-gradient-to-tr from-secondary to-primary">
+        <CardHeader className="h-80 w-full bg-gradient-to-tr from-secondary to-primary px-2 sm:px-6">
           <div className="flex flex-col items-center pt-8">
             <Avatar className="mb-4 size-24">
               <AvatarImage

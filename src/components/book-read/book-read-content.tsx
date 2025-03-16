@@ -129,9 +129,9 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
         <div>
           <p className="mb-2 text-xs text-muted-foreground sm:text-sm">{`第 ${bookContentPage.chapterNumber} 章`}</p>
           <div className="flex flex-wrap items-center">
-            <p className="text-wrap text-xl font-bold sm:text-2xl">
+            <h1 className="text-wrap text-xl font-bold sm:text-2xl">
               {bookContentPage.chapterTitle}
-            </p>
+            </h1>
             <p className="ml-4 mr-2 text-xs text-muted-foreground sm:text-sm">
               {currentPageText}
             </p>

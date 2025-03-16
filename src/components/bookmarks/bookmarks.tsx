@@ -1,5 +1,5 @@
 import BookmarkList from '@/components/bookmarks/bookmark-list';
-import PaginationUrl from '@/components/pagination-url';
+import SearchPagination from '@/components/search-pagination';
 import { useApiBookmark } from '@/hooks/api/use-api-bookmark';
 import { BookmarkRequest } from '@/types';
 import { useMutation, useQueryClient, useSuspenseQuery } from '@tanstack/react-query';
@@ -53,7 +53,7 @@ export default function Bookmarks({ page }: Props) {
         updateMutation={updateMutation}
         deleteMutation={deleteMutation}
       />
-      <PaginationUrl totalPages={bookmarkPage.totalPages} />
+      <SearchPagination totalPages={bookmarkPage.totalPages} />
     </div>
   );
 }

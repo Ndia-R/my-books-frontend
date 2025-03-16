@@ -132,7 +132,7 @@ export default function Page() {
   return (
     <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
-      <p className="font-semibold">パスワード変更</p>
+      <h1 className="font-semibold">パスワード変更</h1>
       <Card className="w-80 rounded-3xl sm:w-96">
         <CardContent className="p-6 sm:px-10">
           <form className="flex w-full flex-col gap-y-4" onSubmit={handleSubmit}>

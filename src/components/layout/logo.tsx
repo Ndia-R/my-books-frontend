@@ -1,4 +1,5 @@
-import { LOGO_TITLE } from '@/constants/constants';
+import { Button } from '@/components/ui/button';
+import { TITLE_LOGO } from '@/constants/constants';
 import { cn } from '@/lib/util';
 import { Link } from 'react-router-dom';
 
@@ -22,20 +23,24 @@ export default function Logo({
   };
 
   return (
-    <h1 className={className}>
+    <Button
+      className={cn(
+        "select-none whitespace-nowrap font-['Alfa_Slab_One'] tracking-tighter text-primary hover:bg-transparent",
+        disableLink && 'cursor-default pointer-events-none',
+        SIZE[size],
+        className
+      )}
+      variant="ghost"
+      asChild
+    >
       <Link
         to="/"
-        className={cn(
-          "select-none whitespace-nowrap font-['Alfa_Slab_One'] tracking-tighter text-primary",
-          'px-4 py-2 ',
-          disableLink && 'cursor-default pointer-events-none',
-          SIZE[size]
-        )}
+        aria-label="タイトルロゴ"
         aria-disabled={disableLink}
         onClick={onClick}
       >
-        {LOGO_TITLE}
+        {TITLE_LOGO}
       </Link>
-    </h1>
+    </Button>
   );
 }

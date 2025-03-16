@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -6,39 +7,26 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { ConfirmDialogOptions } from '@/hooks/use-confirm-dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { CONFIRM_DIALOG_EVENT, ConfirmDialogOptions } from '@/hooks/use-confirm-dialog';
+import { cn } from '@/lib/util';
 import {
   AlertTriangleIcon,
   CheckCircle2Icon,
   HelpCircleIcon,
   InfoIcon,
-  LucideProps,
 } from 'lucide-react';
-
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { cn } from '@/lib/util';
 import React, { useEffect, useRef, useState } from 'react';
 
-type IconType = {
-  [key: string]: {
-    icon: React.ForwardRefExoticComponent<
-      Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
-    >;
-    variant: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
-    color: string;
-  };
+const ICON_TYPES = {
+  ['']: InfoIcon,
+  ['i']: InfoIcon,
+  ['?']: HelpCircleIcon,
+  ['!']: AlertTriangleIcon,
+  ['c']: CheckCircle2Icon,
 };
 
-const iconTypes: IconType = {
-  ['']: { icon: InfoIcon, variant: 'default', color: '' },
-  ['i']: { icon: InfoIcon, variant: 'default', color: '' },
-  ['?']: { icon: HelpCircleIcon, variant: 'default', color: '' },
-  ['!']: { icon: AlertTriangleIcon, variant: 'destructive', color: 'text-destructive' },
-  ['c']: { icon: CheckCircle2Icon, variant: 'default', color: '' },
-};
-
-const defaultOptions: ConfirmDialogOptions = {
+const DEFAULT_OPTION_VALUE: ConfirmDialogOptions = {
   icon: '',
   title: '',
   message: '',
@@ -51,21 +39,19 @@ const defaultOptions: ConfirmDialogOptions = {
   inputRows: 1,
 };
 
-export const CONFIRM_DIALOG_EVENT = 'CONFIRM_DIALOG_EVENT';
-
-type SELECTED_BUTTON = 'action' | 'cancel' | undefined;
-
-const ConfirmDialog = () => {
+export default function ConfirmDialog() {
   const [isOpen, setIsOpen] = useState(false);
-  const [options, setOptions] = useState<ConfirmDialogOptions>(defaultOptions);
+  const [options, setOptions] = useState<ConfirmDialogOptions>(DEFAULT_OPTION_VALUE);
   const refTextarea = useRef<HTMLTextAreaElement | null>(null);
-  const Icon = iconTypes[options.icon].icon || InfoIcon;
+
+  const iconKey = options.icon as keyof typeof ICON_TYPES;
+  const Icon = ICON_TYPES[iconKey] ?? ICON_TYPES[''];
 
   // hooksから呼ぶためにイベントリスナー登録
   useEffect(() => {
     const handleEvent = (event: CustomEvent<ConfirmDialogOptions>) => {
       setIsOpen(true);
-      setOptions({ ...defaultOptions, ...event.detail });
+      setOptions({ ...DEFAULT_OPTION_VALUE, ...event.detail });
     };
     document.addEventListener(CONFIRM_DIALOG_EVENT, handleEvent as EventListener);
     return () => {
@@ -89,7 +75,7 @@ const ConfirmDialog = () => {
   };
 
   // 押したボタンによって、戻り値（resolveの引数も変更する）
-  const [selected, setSelected] = useState<SELECTED_BUTTON>();
+  const [selected, setSelected] = useState<'action' | 'cancel' | undefined>();
 
   const handleClickAction = () => {
     setIsOpen(false);
@@ -139,8 +125,10 @@ const ConfirmDialog = () => {
       >
         <DialogHeader>
           <DialogTitle className="my-2 flex items-center">
-            <Icon className={cn('mr-3 min-w-fit', iconTypes[options.icon].color)} />
-            <p className=" leading-6">{options.title}</p>
+            <Icon
+              className={cn('mr-3 min-w-fit', options.icon === '!' && 'text-destructive')}
+            />
+            <p className="leading-6">{options.title}</p>
           </DialogTitle>
           {options.message && (
             <DialogDescription className="pt-2 text-left">
@@ -154,7 +142,7 @@ const ConfirmDialog = () => {
             <p className="text-xs">{options.inputLabel}</p>
             <Textarea
               ref={refTextarea}
-              className="min-h-[16px] resize-none"
+              className="min-h-4 resize-none"
               placeholder={options.inputPlaceholder}
               rows={options.inputRows}
             />
@@ -173,7 +161,7 @@ const ConfirmDialog = () => {
           )}
           <Button
             className={cn('min-w-24 rounded-full')}
-            variant={iconTypes[options.icon].variant || 'default'}
+            variant={options.icon === '!' ? 'destructive' : 'default'}
             onClick={handleClickAction}
           >
             {options.actionLabel}
@@ -182,6 +170,4 @@ const ConfirmDialog = () => {
       </DialogContent>
     </Dialog>
   );
-};
-
-export { ConfirmDialog };
+}

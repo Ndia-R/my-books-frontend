@@ -1,28 +1,30 @@
 import { Input } from '@/components/ui/input';
+import { useSearchFilters } from '@/hooks/use-search-filters';
 import { Search } from 'lucide-react';
 import { FormEvent, useEffect, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function SearchInput() {
-  const location = useLocation();
+  const { q, updateQueryParams } = useSearchFilters();
   const navigate = useNavigate();
-
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(q);
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
-    const query = params.get('q') ?? '';
-    setQuery(query);
-  }, [location.search]);
+    setQuery(q);
+  }, [q]);
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!query) return;
 
-    const params = new URLSearchParams();
-    params.set('q', query);
-    params.set('page', '1');
-    navigate(`/search?${params.toString()}`);
+    const newQuery = query.trim();
+    if (!newQuery) return;
+
+    // `/search` 以外のページなら遷移する。それ以外はクエリパラメータだけ更新
+    if (location.pathname !== '/search') {
+      navigate(`/search?q=${encodeURIComponent(newQuery)}`);
+    } else {
+      updateQueryParams({ q: newQuery });
+    }
   };
 
   return (

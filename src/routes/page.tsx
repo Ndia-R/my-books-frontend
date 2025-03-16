@@ -12,25 +12,25 @@ export default function Page() {
     <>
       <Hero />
 
-      <div className="mb-4 flex flex-col gap-y-4">
-        <p className="font-bold">ジャンル</p>
+      <section className="mb-4 flex flex-col gap-y-4">
+        <h2 className="font-bold">ジャンル</h2>
 
         <ErrorBoundary fallback={<ErrorElement />}>
           <Suspense fallback={<GenresSkeleton />}>
             <GenresTopPage />
           </Suspense>
         </ErrorBoundary>
-      </div>
+      </section>
 
-      <div className="flex flex-col">
-        <p className="font-bold">ニューリリース</p>
+      <section className="flex flex-col">
+        <h2 className="font-bold">ニューリリース</h2>
 
         <ErrorBoundary fallback={<ErrorElement />}>
           <Suspense fallback={<BooksSkeleton />}>
             <BooksNewReleases />
           </Suspense>
         </ErrorBoundary>
-      </div>
+      </section>
     </>
   );
 }

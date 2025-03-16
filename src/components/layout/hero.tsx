@@ -1,9 +1,9 @@
 import mainVisualImage from '@/assets/main-visual.webp';
-import SearchInput from '@/components/layout/search-input';
+import SearchInput from '@/components/search-input';
 
 export default function Hero() {
   return (
-    <div className="relative mb-8 flex h-[460px] w-full items-center gap-3 sm:mb-0 sm:gap-4 lg:h-[500px]">
+    <section className="relative mb-8 flex h-[460px] w-full items-center gap-3 sm:mb-0 sm:gap-4 lg:h-[500px]">
       <div className="z-10 flex w-3/4 flex-col justify-between lg:w-3/5">
         <div>
           <div className="delay-0 duration-500 animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both">
@@ -29,6 +29,6 @@ export default function Hero() {
           <img src={mainVisualImage} alt="main-visual-image" />
         </div>
       </div>
-    </div>
+    </section>
   );
 }
