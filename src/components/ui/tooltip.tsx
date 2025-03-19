@@ -1,5 +1,12 @@
 import { cn } from '@/lib/util';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 
 type TooltipSideType = 'top' | 'right' | 'bottom' | 'left';
 type TooltipAlignType = 'start' | 'center' | 'end';
@@ -165,7 +172,7 @@ const TooltipContent = React.forwardRef<HTMLDivElement, TooltipContentProps>(
       };
     }, [handleWheel, isOpen]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       // triggerとなる要素からTooltipを表示する座標を計算する
       // （style属性に指定する文字列作成）
       if (triggerRef.current) {

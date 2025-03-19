@@ -60,7 +60,7 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   };
 
   const createMutation = useMutation({
-    mutationFn: (reqestBody: ReviewRequest) => createReview(reqestBody),
+    mutationFn: (requestBody: ReviewRequest) => createReview(requestBody),
     onSuccess,
     onError,
   });

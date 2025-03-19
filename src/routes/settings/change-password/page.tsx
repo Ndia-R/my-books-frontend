@@ -10,7 +10,7 @@ import { cn } from '@/lib/util';
 import { ChangePassword } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Page() {
@@ -38,10 +38,6 @@ export default function Page() {
     },
   });
 
-  useEffect(() => {
-    currentPasswordRef.current?.focus();
-  }, []);
-
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -59,7 +55,7 @@ export default function Page() {
     }
 
     const { isCancel } = await confirmDialog({
-      icon: '?',
+      icon: 'question',
       title: '本当に変更しますか？',
       message: 'パスワードを変更します。',
     });

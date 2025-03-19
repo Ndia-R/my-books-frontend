@@ -1,5 +1,12 @@
 import { useSearchParams } from 'react-router-dom';
 
+type ParamsType = {
+  q?: string;
+  genreIds?: string;
+  condition?: string;
+  page?: number;
+};
+
 export const useSearchFilters = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -8,12 +15,7 @@ export const useSearchFilters = () => {
   const condition = searchParams.get('condition') ?? '';
   const page = Number(searchParams.get('page') ?? '1');
 
-  const updateQueryParams = (params: {
-    q?: string;
-    genreIds?: string;
-    condition?: string;
-    page?: number;
-  }) => {
+  const updateQueryParams = (params: ParamsType) => {
     const newParams = new URLSearchParams(searchParams);
 
     Object.entries(params).forEach(([key, value]) => {

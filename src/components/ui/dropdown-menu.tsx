@@ -1,5 +1,12 @@
 import { cn } from '@/lib/util';
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from 'react';
 import ReactDOM from 'react-dom';
 
 type DropdownMenuSideType = 'top' | 'right' | 'bottom' | 'left';
@@ -267,7 +274,7 @@ const DropdownMenuContent = ({
 
   const [transformStyle, setTransformStyle] = useState('');
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     // triggerとなる要素からDropdownMenuを表示する座標を計算する
     // （style属性に指定する文字列作成）
     if (triggerRef.current) {

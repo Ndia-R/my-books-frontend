@@ -35,7 +35,7 @@ export default function MyReviewItem({ review, updateMutation, deleteMutation }:
 
   const handleClickDelete = async () => {
     const { isCancel } = await confirmDialog({
-      icon: '!',
+      icon: 'warning',
       title: '削除しますか？',
       message: '削除すると元に戻りません。',
       actionLabel: '削除',

@@ -37,13 +37,13 @@ export const useApiFavorite = () => {
     }
   };
 
-  const createFavorite = async (reqestBody: FavoriteRequest) => {
+  const createFavorite = async (requestBody: FavoriteRequest) => {
     try {
       const url = `/favorites`;
       const options: RequestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reqestBody),
+        body: JSON.stringify(requestBody),
       };
       await mutationWithAuth(url, options);
     } catch (error) {

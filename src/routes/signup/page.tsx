@@ -13,7 +13,7 @@ import { cn } from '@/lib/util';
 import { SignupRequest } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 export default function Page() {
@@ -42,10 +42,6 @@ export default function Page() {
       console.error(error);
     },
   });
-
-  useEffect(() => {
-    emailRef.current?.focus();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

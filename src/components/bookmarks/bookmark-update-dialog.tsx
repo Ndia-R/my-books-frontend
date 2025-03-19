@@ -9,7 +9,7 @@ import {
   BookmarkRequest,
   BookmarkUpdateMutation,
 } from '@/types';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
 type Props = {
@@ -29,8 +29,6 @@ export default function BookmarkUpdateDialog({
 }: Props) {
   const [note, setNote] = useState('');
 
-  const ref = useRef<HTMLTextAreaElement | null>(null);
-
   const location = useLocation();
 
   const { confirmDialog } = useConfirmDialog();
@@ -42,15 +40,9 @@ export default function BookmarkUpdateDialog({
     }
   }, [isOpen, bookmark.note]);
 
-  const handleAnimationStart = (e: React.AnimationEvent) => {
-    if (e.animationName === 'enter') {
-      ref.current?.focus();
-    }
-  };
-
   const handleDelete = async () => {
     const { isCancel } = await confirmDialog({
-      icon: '!',
+      icon: 'warning',
       title: 'このブックマークを削除しますか？',
       message: 'ブックマークのメモも削除されます。',
     });
@@ -110,7 +102,6 @@ export default function BookmarkUpdateDialog({
         className="w-3/4 min-w-[360px] max-w-[600px] p-4 sm:p-6"
         onEscapeKeyDown={handleCloseDialog}
         onPointerDownOutside={handleCloseDialog}
-        onAnimationStart={handleAnimationStart}
       >
         <div>
           <p className="font-semibold leading-10">ブックマーク</p>
@@ -120,7 +111,6 @@ export default function BookmarkUpdateDialog({
         </div>
 
         <Textarea
-          ref={ref}
           spellCheck={false}
           value={note}
           onChange={(e) => setNote(e.currentTarget.value)}

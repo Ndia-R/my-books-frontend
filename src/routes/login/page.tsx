@@ -10,12 +10,10 @@ import { useToast } from '@/hooks/use-toast';
 import { LoginRequest } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Page() {
-  const emailRef = useRef<HTMLInputElement | null>(null);
-
   const location = useLocation();
   const navigate = useNavigate();
   const { login, setUser } = useAuth();
@@ -32,10 +30,6 @@ export default function Page() {
       console.error(error);
     },
   });
-
-  useEffect(() => {
-    emailRef.current?.focus();
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -74,7 +68,6 @@ export default function Page() {
                 メールアドレス
               </Label>
               <Input
-                ref={emailRef}
                 className="my-2 rounded-full"
                 id="email"
                 name="email"

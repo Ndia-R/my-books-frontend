@@ -4,7 +4,7 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Review, ReviewRequest, ReviewUpdateMutation } from '@/types';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   review: Review;
@@ -22,8 +22,6 @@ export default function ReviewUpdateDialog({
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
-  const ref = useRef<HTMLTextAreaElement | null>(null);
-
   const { toast } = useToast();
 
   useEffect(() => {
@@ -32,12 +30,6 @@ export default function ReviewUpdateDialog({
       setComment(review.comment);
     }
   }, [isOpen, review.comment, review.rating]);
-
-  const handleAnimationStart = (e: React.AnimationEvent) => {
-    if (e.animationName === 'enter') {
-      ref.current?.focus();
-    }
-  };
 
   const handleClickUpdate = () => {
     const requestBody: ReviewRequest = { bookId: review.bookId, comment, rating };
@@ -71,7 +63,6 @@ export default function ReviewUpdateDialog({
         className="w-3/4 min-w-[360px] max-w-[600px] p-4 sm:p-6"
         onEscapeKeyDown={handleClickCancel}
         onPointerDownOutside={handleClickCancel}
-        onAnimationStart={handleAnimationStart}
       >
         <div className="flex items-start justify-between">
           <div>
@@ -89,7 +80,6 @@ export default function ReviewUpdateDialog({
         </div>
 
         <Textarea
-          ref={ref}
           spellCheck={false}
           value={comment}
           onChange={(e) => setComment(e.currentTarget.value)}

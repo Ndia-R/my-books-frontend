@@ -16,18 +16,17 @@ import {
   HelpCircleIcon,
   InfoIcon,
 } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
-const ICON_TYPES = {
-  ['']: InfoIcon,
-  ['i']: InfoIcon,
-  ['?']: HelpCircleIcon,
-  ['!']: AlertTriangleIcon,
-  ['c']: CheckCircle2Icon,
+const ICON_COMPONENTS = {
+  info: InfoIcon,
+  question: HelpCircleIcon,
+  warning: AlertTriangleIcon,
+  check: CheckCircle2Icon,
 };
 
 const DEFAULT_OPTION_VALUE: ConfirmDialogOptions = {
-  icon: '',
+  icon: 'info',
   title: '',
   message: '',
   actionLabel: 'OK',
@@ -42,10 +41,11 @@ const DEFAULT_OPTION_VALUE: ConfirmDialogOptions = {
 export default function ConfirmDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [options, setOptions] = useState<ConfirmDialogOptions>(DEFAULT_OPTION_VALUE);
-  const refTextarea = useRef<HTMLTextAreaElement | null>(null);
+  const [isPersistentAnimation, setIsPersistentAnimation] = useState(false);
 
-  const iconKey = options.icon as keyof typeof ICON_TYPES;
-  const Icon = ICON_TYPES[iconKey] ?? ICON_TYPES[''];
+  const refTextarea = useRef<HTMLTextAreaElement>(null);
+
+  const IconComponent = ICON_COMPONENTS[options.icon];
 
   // hooksから呼ぶためにイベントリスナー登録
   useEffect(() => {
@@ -59,11 +59,8 @@ export default function ConfirmDialog() {
     };
   }, []);
 
-  // アニメーションフラグ（閉じれないことを伝えるためにぶるっとする）
-  const [isPersistentAnimation, setIsPersistentAnimation] = useState(false);
-
-  // ダイアログを閉じる時のイベント
   const handleCloseDialog = () => {
+    // アニメーションフラグ（閉じれないことを伝えるためにぶるっとする）
     if (options.persistent) {
       setIsPersistentAnimation(true);
       setTimeout(() => {
@@ -74,42 +71,22 @@ export default function ConfirmDialog() {
     handleClickCancel();
   };
 
-  // 押したボタンによって、戻り値（resolveの引数も変更する）
-  const [selected, setSelected] = useState<'action' | 'cancel' | undefined>();
-
   const handleClickAction = () => {
     setIsOpen(false);
-    setSelected('action');
+    options.resolve?.({
+      isAction: true,
+      isCancel: false,
+      text: refTextarea.current?.value || '',
+    });
   };
 
   const handleClickCancel = () => {
     setIsOpen(false);
-    setSelected('cancel');
-  };
-
-  const handleAnimationEnd = (e: React.AnimationEvent) => {
-    if (e.animationName === 'enter') {
-      if (isOpen && options.showInput) {
-        refTextarea.current?.focus();
-      }
-    } else if (e.animationName === 'exit') {
-      switch (selected) {
-        case 'action':
-          options.resolve?.({
-            isAction: true,
-            isCancel: false,
-            text: refTextarea.current?.value || '',
-          });
-          return;
-        case 'cancel':
-          options.resolve?.({
-            isAction: false,
-            isCancel: true,
-            text: '',
-          });
-          return;
-      }
-    }
+    options.resolve?.({
+      isAction: false,
+      isCancel: true,
+      text: '',
+    });
   };
 
   return (
@@ -121,12 +98,14 @@ export default function ConfirmDialog() {
         )}
         onEscapeKeyDown={handleCloseDialog}
         onPointerDownOutside={handleCloseDialog}
-        onAnimationEnd={handleAnimationEnd}
       >
         <DialogHeader>
           <DialogTitle className="my-2 flex items-center">
-            <Icon
-              className={cn('mr-3 min-w-fit', options.icon === '!' && 'text-destructive')}
+            <IconComponent
+              className={cn(
+                'mr-3 min-w-fit',
+                options.icon === 'warning' && 'text-destructive'
+              )}
             />
             <p className="leading-6">{options.title}</p>
           </DialogTitle>
@@ -160,8 +139,8 @@ export default function ConfirmDialog() {
             </Button>
           )}
           <Button
-            className={cn('min-w-24 rounded-full')}
-            variant={options.icon === '!' ? 'destructive' : 'default'}
+            className="min-w-24 rounded-full"
+            variant={options.icon === 'warning' ? 'destructive' : 'default'}
             onClick={handleClickAction}
           >
             {options.actionLabel}

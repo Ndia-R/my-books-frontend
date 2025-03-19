@@ -26,13 +26,13 @@ export const useApiBookmark = () => {
     }
   };
 
-  const createBookmark = async (reqestBody: BookmarkRequest) => {
+  const createBookmark = async (requestBody: BookmarkRequest) => {
     try {
       const url = `/bookmarks`;
       const options: RequestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reqestBody),
+        body: JSON.stringify(requestBody),
       };
       await mutationWithAuth(url, options);
     } catch (error) {
@@ -40,13 +40,13 @@ export const useApiBookmark = () => {
     }
   };
 
-  const updateBookmark = async (id: number, reqestBody: BookmarkRequest) => {
+  const updateBookmark = async (id: number, requestBody: BookmarkRequest) => {
     try {
       const url = `/bookmarks/${id}`;
       const options: RequestInit = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reqestBody),
+        body: JSON.stringify(requestBody),
       };
       await mutationWithAuth(url, options);
     } catch (error) {

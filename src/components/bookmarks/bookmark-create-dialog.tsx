@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogFooter } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { BookmarkCreateMutation, BookmarkRequest } from '@/types';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   bookId: string;
@@ -24,8 +24,6 @@ export default function BookmarkCreateDialog({
 }: Props) {
   const [note, setNote] = useState('');
 
-  const ref = useRef<HTMLTextAreaElement | null>(null);
-
   const { toast } = useToast();
 
   useEffect(() => {
@@ -33,12 +31,6 @@ export default function BookmarkCreateDialog({
       setNote('');
     }
   }, [isOpen]);
-
-  const handleAnimationStart = (e: React.AnimationEvent) => {
-    if (e.animationName === 'enter') {
-      ref.current?.focus();
-    }
-  };
 
   const handleCreate = () => {
     const requestBody: BookmarkRequest = {
@@ -74,7 +66,6 @@ export default function BookmarkCreateDialog({
         className="w-3/4 min-w-[360px] max-w-[600px] p-4 sm:p-6"
         onEscapeKeyDown={handleCloseDialog}
         onPointerDownOutside={handleCloseDialog}
-        onAnimationStart={handleAnimationStart}
       >
         <div>
           <p className="font-semibold leading-10">ブックマーク</p>
@@ -84,7 +75,6 @@ export default function BookmarkCreateDialog({
         </div>
 
         <Textarea
-          ref={ref}
           spellCheck={false}
           value={note}
           onChange={(e) => setNote(e.currentTarget.value)}

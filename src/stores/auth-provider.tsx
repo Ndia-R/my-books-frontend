@@ -20,13 +20,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const login = async ({ email, password }: LoginRequest) => {
+  const login = async (requestBody: LoginRequest) => {
     try {
       const url = `${BOOKS_API_ENDPOINT}/login`;
       const options: RequestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(requestBody),
         credentials: 'include',
       };
 
@@ -47,13 +47,13 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const signup = async ({ email, password, name, avatarPath }: SignupRequest) => {
+  const signup = async (requestBody: SignupRequest) => {
     try {
       const url = `${BOOKS_API_ENDPOINT}/signup`;
       const options: RequestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name, avatarPath }),
+        body: JSON.stringify(requestBody),
         credentials: 'include',
       };
 

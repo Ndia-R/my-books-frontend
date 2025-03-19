@@ -1,6 +1,8 @@
+type IconType = 'info' | 'question' | 'warning' | 'check';
+
 // 確認ダイアログの引数
 export type ConfirmDialogOptions = {
-  icon: string; // アイコンの種類（「''」「'i'」「'?'」「'!'」「'c'」）
+  icon: IconType; // アイコンの種類（「'i'」「'?'」「'!'」「'c'」）
   title: string; // タイトル
   message?: string; // メッセージ
   actionLabel?: string; // アクションボタンの文字（デフォルト「OK」）

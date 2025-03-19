@@ -5,7 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useToast } from '@/hooks/use-toast';
 import { ReviewCreateMutation, ReviewRequest } from '@/types';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Props = {
   bookId: string;
@@ -24,8 +24,6 @@ export default function ReviewCreateDialog({
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
 
-  const ref = useRef<HTMLTextAreaElement | null>(null);
-
   const { toast } = useToast();
   const { confirmDialog } = useConfirmDialog();
 
@@ -36,16 +34,10 @@ export default function ReviewCreateDialog({
     }
   }, [isOpen]);
 
-  const handleAnimationStart = (e: React.AnimationEvent) => {
-    if (e.animationName === 'enter') {
-      ref.current?.focus();
-    }
-  };
-
   const handleClickPost = async () => {
     if (rating === 0) {
       const { isCancel } = await confirmDialog({
-        icon: '?',
+        icon: 'question',
         title: 'このまま投稿しますか？',
         message: '星の数が「0」のままです。',
         actionLabel: '投稿',
@@ -74,7 +66,7 @@ export default function ReviewCreateDialog({
   const handleClickCancel = async () => {
     if (comment) {
       const { isCancel } = await confirmDialog({
-        icon: '?',
+        icon: 'question',
         title: 'キャンセルして閉じますか？',
         message: 'コメントはまだ投稿していません。',
         persistent: true,
@@ -90,7 +82,6 @@ export default function ReviewCreateDialog({
         className="w-3/4 min-w-[360px] max-w-[600px] p-4 sm:p-6"
         onEscapeKeyDown={handleClickCancel}
         onPointerDownOutside={handleClickCancel}
-        onAnimationStart={handleAnimationStart}
       >
         <div className="flex items-start justify-between">
           <div>
@@ -108,7 +99,6 @@ export default function ReviewCreateDialog({
         </div>
 
         <Textarea
-          ref={ref}
           spellCheck={false}
           value={comment}
           onChange={(e) => setComment(e.currentTarget.value)}

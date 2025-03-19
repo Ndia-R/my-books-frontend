@@ -50,13 +50,13 @@ export const useApiReview = () => {
     }
   };
 
-  const createReview = async (reqestBody: ReviewRequest) => {
+  const createReview = async (requestBody: ReviewRequest) => {
     try {
       const url = `/reviews`;
       const options: RequestInit = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reqestBody),
+        body: JSON.stringify(requestBody),
       };
       await mutationWithAuth(url, options);
     } catch (error) {
@@ -64,13 +64,13 @@ export const useApiReview = () => {
     }
   };
 
-  const updateReview = async (id: number, reqestBody: ReviewRequest) => {
+  const updateReview = async (id: number, requestBody: ReviewRequest) => {
     try {
       const url = `/reviews/${id}`;
       const options: RequestInit = {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(reqestBody),
+        body: JSON.stringify(requestBody),
       };
       await mutationWithAuth(url, options);
     } catch (error) {

@@ -39,7 +39,6 @@ export default function Page() {
 
   useEffect(() => {
     if (nameRef.current && user) {
-      nameRef.current.focus();
       nameRef.current.value = user.name || '';
     }
   }, [user]);
