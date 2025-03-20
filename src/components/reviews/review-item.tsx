@@ -51,63 +51,64 @@ export default function ReviewItem({ review, updateMutation, deleteMutation }: P
   };
 
   return (
-    <div className="delay-0 duration-500 animate-in fade-in-0 slide-in-from-top-2 fill-mode-both">
-      <div className="p-4">
-        <div className="flex flex-col items-center justify-between sm:flex-row">
-          <div className="flex w-full items-center gap-x-4">
-            <Avatar className="size-16">
-              <AvatarImage
-                className="bg-primary/50"
-                src={AVATAR_IMAGE_BASE_URL + review.avatarPath}
-                alt="avatar-image"
-              />
-              <AvatarFallback className="font-semibold">
-                {review.name.slice(0, 1)}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <p className="-mb-1 text-lg font-semibold">{review.name}</p>
-              <div className="flex items-center">
-                <p className="whitespace-nowrap text-sm leading-8 tracking-wide text-muted-foreground">
-                  {formatDateJP(review.updatedAt)} {formatTime(review.updatedAt)}
-                </p>
-                <div className="ml-2 flex w-16">
-                  {user?.id === review.userId && (
-                    <>
-                      <Button
-                        className="size-8 rounded-full text-muted-foreground"
-                        variant="ghost"
-                        size="icon"
-                        aria-label="レビューを編集"
-                        onClick={handleClickUpdate}
-                      >
-                        <SquarePenIcon className="size-4" />
-                      </Button>
-                      <ReviewUpdateDialog
-                        review={review}
-                        isOpen={isOpen}
-                        setIsOpen={setIsOpen}
-                        updateMutation={updateMutation}
-                      />
-                      <Button
-                        className="size-8 rounded-full text-muted-foreground"
-                        variant="ghost"
-                        size="icon"
-                        aria-label="レビューを削除"
-                        onClick={handleClickDelete}
-                      >
-                        <Trash2Icon className="size-4" />
-                      </Button>
-                    </>
-                  )}
-                </div>
+    <div className="p-4">
+      <div className="flex flex-col items-center justify-between sm:flex-row">
+        <div className="flex w-full items-center gap-x-4">
+          <Avatar className="size-16">
+            <AvatarImage
+              className="bg-primary/50"
+              src={AVATAR_IMAGE_BASE_URL + review.avatarPath}
+              alt="avatar-image"
+            />
+            <AvatarFallback className="font-semibold">
+              {review.name.slice(0, 1)}
+            </AvatarFallback>
+          </Avatar>
+          <div>
+            <p className="-mb-1 text-lg font-semibold">{review.name}</p>
+            <div className="flex items-center">
+              <time
+                className="whitespace-nowrap text-sm leading-8 tracking-wide text-muted-foreground"
+                dateTime={Date.parse(review.updatedAt) ? review.updatedAt : ''}
+              >
+                {formatDateJP(review.updatedAt)} {formatTime(review.updatedAt)}
+              </time>
+              <div className="ml-2 flex w-16">
+                {user?.id === review.userId && (
+                  <>
+                    <Button
+                      className="size-8 rounded-full text-muted-foreground"
+                      variant="ghost"
+                      size="icon"
+                      aria-label="レビューを編集"
+                      onClick={handleClickUpdate}
+                    >
+                      <SquarePenIcon className="size-4" />
+                    </Button>
+                    <ReviewUpdateDialog
+                      review={review}
+                      isOpen={isOpen}
+                      setIsOpen={setIsOpen}
+                      updateMutation={updateMutation}
+                    />
+                    <Button
+                      className="size-8 rounded-full text-muted-foreground"
+                      variant="ghost"
+                      size="icon"
+                      aria-label="レビューを削除"
+                      onClick={handleClickDelete}
+                    >
+                      <Trash2Icon className="size-4" />
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </div>
-          <Rating rating={review.rating} readOnly />
         </div>
-        <p className="mt-2 text-muted-foreground sm:pl-20">{review.comment}</p>
+        <Rating rating={review.rating} readOnly />
       </div>
+      <p className="mt-2 text-muted-foreground sm:pl-20">{review.comment}</p>
     </div>
   );
 }

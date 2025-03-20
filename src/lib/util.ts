@@ -21,11 +21,11 @@ export const sleep = (msec: number) =>
  */
 export const formatDateJP = (dateString: string) => {
   const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-
-  return `${year}年${month}月${day}日`;
+  return new Intl.DateTimeFormat('ja-JP', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(date);
 };
 
 /**
@@ -35,11 +35,13 @@ export const formatDateJP = (dateString: string) => {
  */
 export const formatDate = (dateString: string) => {
   const date = new Date(dateString);
-  const year = date.getFullYear().toString().padStart(2, '0');
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-
-  return `${year}/${month}/${day}`;
+  return new Intl.DateTimeFormat('ja-JP', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  })
+    .format(date)
+    .replace(/\./g, '/'); // '.'区切りを '/' に変換
 };
 
 /**
@@ -49,10 +51,11 @@ export const formatDate = (dateString: string) => {
  */
 export const formatTime = (dateString: string) => {
   const date = new Date(dateString);
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-
-  return `${hours}:${minutes}`;
+  return new Intl.DateTimeFormat('ja-JP', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(date);
 };
 
 /**

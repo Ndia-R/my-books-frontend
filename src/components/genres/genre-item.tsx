@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/util';
 import { Genre } from '@/types';
 import { CheckIcon } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 type Props = {
   genre: Genre;
@@ -17,16 +17,6 @@ export default function GenreItem({
   isActive = false,
   onClick,
 }: Props) {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    if (onClick) {
-      onClick(genre.id);
-    } else {
-      navigate(`/discover?genreIds=${genre.id}&condition=SINGLE`);
-    }
-  };
-
   return (
     <Button
       className={cn(
@@ -36,10 +26,15 @@ export default function GenreItem({
       )}
       variant={isActive ? 'secondary' : variant}
       size="sm"
-      onClick={handleClick}
+      asChild
     >
-      {isActive && <CheckIcon className="mr-1 size-4" strokeWidth={4} />}
-      {genre.name}
+      <Link
+        to={`/discover?genreIds=${genre.id}&condition=SINGLE`}
+        onClick={() => onClick?.(genre.id)}
+      >
+        {isActive && <CheckIcon className="mr-1 size-4" strokeWidth={4} />}
+        {genre.name}
+      </Link>
     </Button>
   );
 }

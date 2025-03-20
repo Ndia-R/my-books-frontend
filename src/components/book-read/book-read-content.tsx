@@ -141,7 +141,6 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
                   className="size-8 rounded-full"
                   variant="ghost"
                   size="icon"
-                  aria-label="目次に戻る"
                   asChild
                 >
                   <Link
@@ -222,7 +221,7 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
         <Button
           className={cn(
             'flex items-center gap-x-2 rounded-full hover:bg-transparent',
-            isFirstPage && 'pointer-events-none opacity-30'
+            isFirstPage && 'pointer-events-none text-muted-foreground'
           )}
           variant="ghost"
           asChild
@@ -235,7 +234,7 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
         <Button
           className={cn(
             'flex items-center gap-x-2 rounded-full hover:bg-transparent',
-            isLastPage && 'pointer-events-none opacity-30'
+            isLastPage && 'pointer-events-none text-muted-foreground'
           )}
           variant="ghost"
           asChild

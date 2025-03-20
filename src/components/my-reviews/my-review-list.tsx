@@ -23,12 +23,14 @@ export default function MyReviewList({
     <ul className="flex flex-col gap-y-2">
       {reviews.map((review) => (
         <li key={review.id}>
-          <MyReviewItem
-            review={review}
-            createMutation={createMutation}
-            updateMutation={updateMutation}
-            deleteMutation={deleteMutation}
-          />
+          <article>
+            <MyReviewItem
+              review={review}
+              createMutation={createMutation}
+              updateMutation={updateMutation}
+              deleteMutation={deleteMutation}
+            />
+          </article>
         </li>
       ))}
     </ul>

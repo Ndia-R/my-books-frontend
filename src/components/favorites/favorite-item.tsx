@@ -26,15 +26,18 @@ export default function FavoriteItem({ favorite }: Props) {
           <div className="flex w-full flex-col justify-center">
             <div className="mb-2 flex flex-col items-start gap-x-4 sm:flex-row sm:items-center">
               <Link to={`/book/${favorite.book.id}`} className="size-fit">
-                <p className="text-base font-semibold hover:text-primary sm:text-xl">
+                <h2 className="text-base font-semibold hover:text-primary sm:text-xl">
                   {favorite.book.title}
-                </p>
+                </h2>
               </Link>
               <div className="flex items-center">
                 <FavoriteCountIcon bookId={favorite.bookId} />
-                <p className="mr-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm">
+                <time
+                  className="mr-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm"
+                  dateTime={Date.parse(favorite.updatedAt) ? favorite.updatedAt : ''}
+                >
                   {formatDateJP(favorite.updatedAt)} {formatTime(favorite.updatedAt)}
-                </p>
+                </time>
               </div>
             </div>
             <div className="mb-4 flex w-full flex-wrap items-center gap-x-3 text-muted-foreground">

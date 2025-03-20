@@ -2,12 +2,13 @@ import Logo from '@/components/layout/logo';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/util';
 import { FacebookIcon, InstagramIcon, TwitterIcon, YoutubeIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const SNS_LIST = [
-  { label: 'Youtube', icon: YoutubeIcon },
-  { label: 'Twitter', icon: TwitterIcon },
-  { label: 'Instagram', icon: InstagramIcon },
-  { label: 'Facebook', icon: FacebookIcon },
+  { label: 'Youtube', icon: YoutubeIcon, url: 'https://www.youtube.com' },
+  { label: 'Twitter', icon: TwitterIcon, url: 'https://x.com' },
+  { label: 'Instagram', icon: InstagramIcon, url: 'https://www.instagram.com' },
+  { label: 'Facebook', icon: FacebookIcon, url: 'https://www.facebook.com' },
 ];
 
 type Props = {
@@ -22,13 +23,15 @@ export default function Footer({ className }: Props) {
           <ul className="flex">
             {SNS_LIST.map((item) => (
               <li key={item.label}>
-                <Button
-                  className="rounded-full"
-                  variant="ghost"
-                  size="icon"
-                  aria-label="Youtube"
-                >
-                  <item.icon className="size-5" />
+                <Button className="rounded-full" variant="ghost" size="icon" asChild>
+                  <Link
+                    to={item.url}
+                    aria-label={item.label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <item.icon className="size-5" />
+                  </Link>
                 </Button>
               </li>
             ))}

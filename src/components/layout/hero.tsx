@@ -10,6 +10,9 @@ export default function Hero() {
             <h1 className="w-fit text-5xl font-bold sm:text-6xl xl:text-7xl">
               Let’s search for <span className="text-primary">Books</span> to discover new
               knowledge.
+              <span className="sr-only" lang="ja">
+                新たな知識を発見するために、本を探しましょう。
+              </span>
             </h1>
           </div>
           <div className="delay-150 duration-500 animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both">

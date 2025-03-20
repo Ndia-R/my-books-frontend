@@ -12,24 +12,13 @@ type Props = {
 
 export default function AverageRatingIcon({ averageRating, size = 'md' }: Props) {
   return (
-    <div className="flex items-center">
-      <div
-        className={cn(
-          'rounded-full text-muted-foreground flex justify-center items-center',
-          BUTTON_SIZE[size]
-        )}
-      >
+    <div className="flex items-center text-muted-foreground">
+      <div className={cn('flex items-center justify-center', BUTTON_SIZE[size])}>
         <StarIcon className={ICON_SIZE[size]} />
       </div>
-
-      <p
-        className={cn(
-          'flex min-w-4 text-muted-foreground justify-center',
-          TEXT_SIZE[size]
-        )}
-      >
+      <div className={cn('flex min-w-4 justify-center', TEXT_SIZE[size])}>
         {averageRating.toFixed(1)}
-      </p>
+      </div>
     </div>
   );
 }

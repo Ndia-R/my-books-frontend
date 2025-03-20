@@ -25,12 +25,14 @@ export default function ReviewList({
       {reviews.map((review) => (
         <li key={review.id}>
           <Separator className="bg-foreground/10" />
-          <ReviewItem
-            review={review}
-            createMutation={createMutation}
-            updateMutation={updateMutation}
-            deleteMutation={deleteMutation}
-          />
+          <article className="delay-0 duration-500 animate-in fade-in-0 slide-in-from-top-2 fill-mode-both">
+            <ReviewItem
+              review={review}
+              createMutation={createMutation}
+              updateMutation={updateMutation}
+              deleteMutation={deleteMutation}
+            />
+          </article>
         </li>
       ))}
     </ul>

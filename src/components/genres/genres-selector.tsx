@@ -25,7 +25,7 @@ export default function GenresSelector() {
     if (newGenreIds.length === 0 || condition === 'SINGLE') {
       newGenreIds = [genreId];
     }
-    updateQueryParams({ genreIds: newGenreIds.join(',') });
+    updateQueryParams({ genreIds: newGenreIds.join(','), page: 1 });
   };
 
   return <GenreList genres={genres} activeIds={selectedGenreIds} onClick={handleClick} />;

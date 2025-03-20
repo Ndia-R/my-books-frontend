@@ -74,9 +74,9 @@ export default function BookmarkItem({
                 to={`/read/${bookmark.bookId}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
                 className="size-fit"
               >
-                <p className="text-base font-semibold hover:text-primary sm:text-xl">
+                <h2 className="text-base font-semibold hover:text-primary sm:text-xl">
                   {bookmark.book.title}
-                </p>
+                </h2>
               </Link>
               <div className="flex flex-wrap items-center">
                 <div className="flex size-8 items-center justify-center">
@@ -85,9 +85,12 @@ export default function BookmarkItem({
                     style={{ fill: 'hsl(var(--primary))' }}
                   />
                 </div>
-                <p className="mr-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm">
+                <time
+                  className="mr-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm"
+                  dateTime={Date.parse(bookmark.updatedAt) ? bookmark.updatedAt : ''}
+                >
                   {formatDateJP(bookmark.updatedAt)} {formatTime(bookmark.updatedAt)}
-                </p>
+                </time>
                 <Button
                   className="size-8 rounded-full text-muted-foreground"
                   variant="ghost"

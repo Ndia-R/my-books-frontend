@@ -64,18 +64,21 @@ export default function MyReviewItem({ review, updateMutation, deleteMutation }:
           </div>
           <div className="flex w-full flex-col justify-center">
             <Link to={`/book/${review.book.id}`} className="size-fit">
-              <p className="text-base font-semibold hover:text-primary sm:text-xl">
+              <h2 className="text-base font-semibold hover:text-primary sm:text-xl">
                 {review.book.title}
-              </p>
+              </h2>
             </Link>
             <div className="mb-2 flex flex-col items-start sm:flex-row sm:items-center">
               <div className="mr-2">
                 <Rating rating={review.rating} readOnly />
               </div>
               <div className="flex flex-wrap items-center">
-                <p className="mr-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm">
+                <time
+                  className="mr-2 whitespace-nowrap text-xs leading-8 tracking-wide text-muted-foreground sm:text-sm"
+                  dateTime={Date.parse(review.updatedAt) ? review.updatedAt : ''}
+                >
                   {formatDateJP(review.updatedAt)} {formatTime(review.updatedAt)}
-                </p>
+                </time>
                 <Button
                   className="size-8 rounded-full text-muted-foreground"
                   variant="ghost"

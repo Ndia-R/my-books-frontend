@@ -13,28 +13,29 @@ type Props = {
 export default function BookItem({ book }: Props) {
   return (
     <Card className="border-card-foreground/5 bg-card/70">
-      <CardContent className="relative flex w-40 flex-col items-center px-3 pb-2 pt-4 sm:w-48 sm:px-4">
+      <CardContent className="flex w-40 flex-col items-center gap-y-0 p-3 sm:w-48 sm:gap-y-1 sm:p-4">
         <Link to={`/book/${book.id}`} className="size-fit">
           <img
-            className="h-44 rounded object-cover sm:h-52"
+            className="mb-1 h-44 rounded object-cover sm:mb-0 sm:h-52"
             src={BOOK_IMAGE_BASE_URL + book.imagePath}
             alt={book.title}
           />
         </Link>
         <Link
           to={`/book/${book.id}`}
-          className="mt-1 flex h-8 w-full items-center justify-center text-xs hover:text-primary sm:h-10 sm:text-sm"
+          className="flex h-8 items-center justify-center text-xs hover:text-primary sm:h-10 sm:text-sm"
         >
-          <p className="line-clamp-2 text-center">{book.title}</p>
+          <h2 className="line-clamp-2 text-center">{book.title}</h2>
         </Link>
-        <div className="mt-1 flex w-full flex-col items-center gap-y-1">
-          <p className="text-xs tracking-wide text-muted-foreground">
-            {formatDateJP(book.publishedDate)}
-          </p>
-          <div className="flex gap-x-2">
-            <AverageRatingIcon size="sm" averageRating={book.averageRating} />
-            <ReviewCountIcon size="sm" reviewCount={book.reviewCount} />
-          </div>
+        <time
+          className="text-xs tracking-wide text-muted-foreground"
+          dateTime={Date.parse(book.publishedDate) ? book.publishedDate : ''}
+        >
+          {formatDateJP(book.publishedDate)}
+        </time>
+        <div className="flex gap-x-3">
+          <AverageRatingIcon size="sm" averageRating={book.averageRating} />
+          <ReviewCountIcon size="sm" reviewCount={book.reviewCount} />
         </div>
       </CardContent>
     </Card>

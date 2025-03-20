@@ -1,4 +1,4 @@
-import NavList from '@/components/layout/nav-list';
+import Menu from '@/components/layout/menu';
 import ThemeToggleButton from '@/components/layout/theme-toggle-button';
 import UserIconButton from '@/components/layout/user-icon-button';
 import SearchInput from '@/components/search-input';
@@ -16,7 +16,7 @@ export default function Header({ className }: Props) {
       <div className="mx-auto max-w-7xl px-3 sm:px-6">
         <div className="delay-0 duration-500 animate-in fade-in-0 slide-in-from-top-10 fill-mode-both">
           <div className="flex h-16 w-full items-center sm:gap-x-2">
-            <NavList />
+            <Menu />
             <span className="flex-1"></span>
             <SearchInput />
             <UserIconButton />

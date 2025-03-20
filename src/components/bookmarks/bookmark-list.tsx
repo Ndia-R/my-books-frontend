@@ -23,12 +23,14 @@ export default function BookmarkList({
     <ul className="flex flex-col gap-y-2">
       {bookmarks.map((bookmark) => (
         <li key={bookmark.id}>
-          <BookmarkItem
-            bookmark={bookmark}
-            createMutation={createMutation}
-            updateMutation={updateMutation}
-            deleteMutation={deleteMutation}
-          />
+          <article>
+            <BookmarkItem
+              bookmark={bookmark}
+              createMutation={createMutation}
+              updateMutation={updateMutation}
+              deleteMutation={deleteMutation}
+            />
+          </article>
         </li>
       ))}
     </ul>

@@ -1,45 +1,45 @@
-import Logo from '@/components/layout/logo';
-import MenuList from '@/components/layout/menu-list';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useWindowSize } from '@/hooks/use-window-size';
-import { MenuIcon } from 'lucide-react';
-import { useState } from 'react';
+import { cn } from '@/lib/util';
+import { Link, useLocation } from 'react-router-dom';
 
-export default function NavList() {
-  const [isOpen, setIsOpen] = useState(false);
+const NAV_LIST = [
+  {
+    href: '/discover?genreIds=1&condition=SINGLE',
+    title: 'ジャンル',
+  },
+  { href: '/ranking', title: 'ランキング' },
+  { href: '/special-features', title: '特集' },
+];
 
-  const DEBOUNCED_DELAY = 100;
-  const { width } = useWindowSize(DEBOUNCED_DELAY);
+type Props = {
+  onClick?: () => void;
+};
 
-  const TABLET_WIDTH = 1024;
-  if (isOpen && width >= TABLET_WIDTH) {
-    setIsOpen(false);
-  }
+export default function NavList({ onClick }: Props) {
+  const location = useLocation();
 
   return (
-    <>
-      <div className="hidden lg:flex lg:items-center lg:gap-x-8">
-        <Logo />
-        <MenuList />
-      </div>
-
-      <Sheet open={isOpen} onOpenChange={setIsOpen}>
-        <SheetTrigger asChild>
-          <Button
-            className="rounded-full lg:hidden"
-            variant="ghost"
-            size="icon"
-            aria-label="メニュー"
-          >
-            <MenuIcon className="size-5" />
-          </Button>
-        </SheetTrigger>
-        <SheetContent className="w-fit p-8" side="left">
-          <Logo className="mb-8" onClick={() => setIsOpen(false)} />
-          <MenuList onClick={() => setIsOpen(false)} />
-        </SheetContent>
-      </Sheet>
-    </>
+    <nav>
+      <ul className="flex flex-col gap-y-2 lg:flex-row">
+        {NAV_LIST.map((item) => (
+          <li className="w-full" key={item.href}>
+            <Button
+              className={cn(
+                'rounded-full w-full hover:bg-transparent hover:text-foreground/50',
+                location.pathname !== '/' &&
+                  item.href.includes(location.pathname) &&
+                  'text-primary'
+              )}
+              variant="ghost"
+              asChild
+            >
+              <Link to={item.href} onClick={onClick}>
+                {item.title}
+              </Link>
+            </Button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }

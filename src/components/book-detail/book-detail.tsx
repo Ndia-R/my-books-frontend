@@ -73,7 +73,12 @@ export default function BookDetail({ bookId }: Props) {
             </div>
             <div className="flex">
               <p className="min-w-20">発売日</p>
-              <p className="tracking-wide">{formatDateJP(book.publishedDate)}</p>
+              <time
+                className="tracking-wide"
+                dateTime={Date.parse(book.publishedDate) ? book.publishedDate : ''}
+              >
+                {formatDateJP(book.publishedDate)}
+              </time>
             </div>
             <div className="flex">
               <p className="min-w-20">ページ数</p>

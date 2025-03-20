@@ -43,7 +43,7 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
 
   return (
     <div className="flex h-10 items-center text-foreground">
-      <p
+      <div
         className={cn(
           'w-8',
           currentRating !== dispRating
@@ -56,7 +56,7 @@ export default function Rating({ rating, max = 5, readOnly = false, onChange }: 
         onMouseLeave={() => handleMouseLeave()}
       >
         {dispRating.toFixed(1)}
-      </p>
+      </div>
 
       <div className="relative">
         <div className="flex">

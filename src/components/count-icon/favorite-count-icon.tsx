@@ -78,7 +78,7 @@ export default function FavoriteCountIcon({
   const optimisticData = isPending ? variables : favoriteInfo;
 
   return (
-    <div className="flex items-center">
+    <div className="flex items-center text-muted-foreground">
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
@@ -114,14 +114,9 @@ export default function FavoriteCountIcon({
       </Tooltip>
 
       {showCount && (
-        <p
-          className={cn(
-            'flex min-w-4 text-muted-foreground justify-center',
-            TEXT_SIZE[size]
-          )}
-        >
+        <div className={cn('flex min-w-4 justify-center', TEXT_SIZE[size])}>
           {optimisticData?.favoriteCount}
-        </p>
+        </div>
       )}
     </div>
   );
