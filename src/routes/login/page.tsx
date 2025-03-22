@@ -1,11 +1,12 @@
 import Logo from '@/components/layout/logo';
-import PasswordInput from '@/components/settings/password-input';
+import PasswordInput from '@/components/profile/password-input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useApiUser } from '@/hooks/api/use-api-user';
 import { useAuth } from '@/hooks/use-auth';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { useToast } from '@/hooks/use-toast';
 import { LoginRequest } from '@/types';
 import { useMutation } from '@tanstack/react-query';
@@ -13,7 +14,13 @@ import { Loader2Icon } from 'lucide-react';
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
-export default function Page() {
+type Props = {
+  title: string;
+};
+
+export default function Page({ title }: Props) {
+  usePageTitle(title);
+
   const location = useLocation();
   const navigate = useNavigate();
   const { login, setUser } = useAuth();

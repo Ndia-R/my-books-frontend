@@ -1,10 +1,11 @@
 import Logo from '@/components/layout/logo';
-import PasswordInput from '@/components/settings/password-input';
+import PasswordInput from '@/components/profile/password-input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useApiUser } from '@/hooks/api/use-api-user';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/util';
 import { ChangePassword } from '@/types';
@@ -13,7 +14,13 @@ import { Loader2Icon } from 'lucide-react';
 import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function Page() {
+type Props = {
+  title: string;
+};
+
+export default function Page({ title }: Props) {
+  usePageTitle(title);
+
   const [currentPasswordErrorMessage, setCurrentPasswordErrorMessage] = useState('');
   const [newPasswordErrorMessage, setNewPasswordErrorMessage] = useState('');
   const [confirmPasswordErrorMessage, setConfirmPasswordErrorMessage] = useState('');
@@ -31,7 +38,7 @@ export default function Page() {
   const updateMutation = useMutation({
     mutationFn: (requestBody: ChangePassword) => changePassword(requestBody),
     onSuccess: () => {
-      navigate('/settings/profile');
+      navigate('/profile');
     },
     onError: (error) => {
       console.error(error);
@@ -204,7 +211,7 @@ export default function Page() {
               variant="outline"
               asChild
             >
-              <Link to="/settings/profile">キャンセル</Link>
+              <Link to="/profile">キャンセル</Link>
             </Button>
           </form>
         </CardContent>

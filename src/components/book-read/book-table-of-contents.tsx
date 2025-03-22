@@ -2,8 +2,9 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useApiBook } from '@/hooks/api/use-api-book';
 import { useAuth } from '@/hooks/use-auth';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { cn } from '@/lib/util';
-import { useSuspenseQueries } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
 
 type Props = {
@@ -11,27 +12,21 @@ type Props = {
 };
 
 export default function BookTableOfContents({ bookId }: Props) {
-  const { getBookDetailsById, getBookTableOfContents } = useApiBook();
+  const { getBookTableOfContents } = useApiBook();
   const { user } = useAuth();
 
-  const [{ data: book }, { data: bookTableOfContents }] = useSuspenseQueries({
-    queries: [
-      {
-        queryKey: ['getBookDetailsById', bookId],
-        queryFn: () => getBookDetailsById(bookId),
-      },
-      {
-        queryKey: ['getBookTableOfContents', bookId],
-        queryFn: () => getBookTableOfContents(bookId),
-      },
-    ],
+  const { data: bookTableOfContents } = useSuspenseQuery({
+    queryKey: ['getBookTableOfContents', bookId],
+    queryFn: () => getBookTableOfContents(bookId),
   });
+
+  usePageTitle(bookTableOfContents.title);
 
   return (
     <div className="delay-0 duration-200 animate-in fade-in-0">
       <div className="flex flex-col gap-y-12 px-4 py-12 sm:px-20">
         <div className="flex w-full flex-col items-center gap-y-6 sm:items-start">
-          <h1 className="text-3xl font-bold sm:text-5xl">{book.title}</h1>
+          <h1 className="text-3xl font-bold sm:text-5xl">{bookTableOfContents.title}</h1>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button

@@ -19,7 +19,7 @@ import {
   HeartIcon,
   LogOutIcon,
   MessageSquareIcon,
-  SettingsIcon,
+  UserRoundIcon,
 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
@@ -28,7 +28,7 @@ const MENU_LIST = [
   { href: '/favorites', title: 'お気に入り', icon: HeartIcon },
   { href: '/bookmarks', title: 'ブックマーク', icon: BookmarkIcon },
   { href: '/my-reviews', title: 'マイレビュー', icon: MessageSquareIcon },
-  { href: '/settings/profile', title: '設定', icon: SettingsIcon },
+  { href: '/profile', title: 'プロフィール', icon: UserRoundIcon },
 ];
 
 export default function UserIconButton() {

@@ -5,6 +5,7 @@ import Rating from '@/components/rating';
 import { Button } from '@/components/ui/button';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { useApiBook } from '@/hooks/api/use-api-book';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { formatDateJP, formatIsbn, formatPrice } from '@/lib/util';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
@@ -20,6 +21,8 @@ export default function BookDetail({ bookId }: Props) {
     queryKey: ['getBookDetailsById', bookId],
     queryFn: () => getBookDetailsById(bookId),
   });
+
+  usePageTitle(book.title);
 
   return (
     <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">

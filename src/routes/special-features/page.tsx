@@ -1,6 +1,13 @@
 import { Separator } from '@/components/ui/separator';
+import { usePageTitle } from '@/hooks/use-page-title';
 
-export default function Page() {
+type Props = {
+  title: string;
+};
+
+export default function Page({ title }: Props) {
+  usePageTitle(title);
+
   return (
     <>
       <div className="m-4 flex h-10 items-center">

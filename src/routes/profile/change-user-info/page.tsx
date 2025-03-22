@@ -1,11 +1,12 @@
 import Logo from '@/components/layout/logo';
-import AvatarCarousel from '@/components/settings/avatar-carousel';
+import AvatarCarousel from '@/components/profile/avatar-carousel';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useApiUser } from '@/hooks/api/use-api-user';
 import { useAuth } from '@/hooks/use-auth';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/util';
 import { UpdateCurrentUser } from '@/types';
@@ -14,7 +15,13 @@ import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function Page() {
+type Props = {
+  title: string;
+};
+
+export default function Page({ title }: Props) {
+  usePageTitle(title);
+
   const [nameErrorMessage, setNameErrorMessage] = useState('');
 
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -30,7 +37,7 @@ export default function Page() {
   const updateMutation = useMutation({
     mutationFn: (requestBody: UpdateCurrentUser) => updateCurrentUser(requestBody),
     onSuccess: () => {
-      navigate('/settings/profile');
+      navigate('/profile');
     },
     onError: (error) => {
       console.error(error);
@@ -89,7 +96,7 @@ export default function Page() {
   return (
     <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
       <Logo size="lg" disableLink />
-      <h1 className="font-semibold">ユーザー情報の編集</h1>
+      <h1 className="font-semibold">ユーザー情報変更</h1>
       <Card className="w-80 rounded-3xl sm:w-96">
         <CardContent className="p-6 sm:px-10">
           <form className="flex w-full flex-col gap-y-4" onSubmit={handleSubmit}>
@@ -138,7 +145,7 @@ export default function Page() {
               variant="outline"
               asChild
             >
-              <Link to="/settings/profile">キャンセル</Link>
+              <Link to="/profile">キャンセル</Link>
             </Button>
           </form>
         </CardContent>

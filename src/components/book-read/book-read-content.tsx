@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { useApiBook } from '@/hooks/api/use-api-book';
 import { useApiBookmark } from '@/hooks/api/use-api-bookmark';
+import { usePageTitle } from '@/hooks/use-page-title';
 import {
   getCurrentPageText,
   getPageLink,
@@ -122,6 +123,8 @@ export default function BookReadContent({ bookId, chapterNumber, pageNumber }: P
     pageNumber,
     'prev'
   );
+
+  usePageTitle(`${bookContentPage.chapterTitle} (${currentPageText})`);
 
   return (
     <div className="delay-0 duration-200 animate-in fade-in-0">

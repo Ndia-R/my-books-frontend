@@ -6,5 +6,6 @@ export interface BookChapter {
 
 export interface BookTableOfContents {
   bookId: string;
+  title: string;
   chapters: BookChapter[];
 }

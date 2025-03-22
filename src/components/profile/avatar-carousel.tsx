@@ -1,4 +1,4 @@
-import SwipeArea from '@/components/settings/swipe-area';
+import SwipeArea from '@/components/profile/swipe-area';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';

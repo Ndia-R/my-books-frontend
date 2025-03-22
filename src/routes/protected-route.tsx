@@ -1,7 +1,7 @@
 import { useAuth } from '@/hooks/use-auth';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
-export const ProtectedRoute = () => {
+export default function ProtectedRoute() {
   const location = useLocation();
   const { accessToken, isLoading } = useAuth();
 
@@ -16,4 +16,4 @@ export const ProtectedRoute = () => {
       )}
     </>
   );
-};
+}

@@ -10,9 +10,7 @@ type Props = {
 
 export default function Header({ className }: Props) {
   return (
-    <header
-      className={cn('w-screen max-w-full bg-background/30 backdrop-blur-lg', className)}
-    >
+    <header className={cn('backdrop-blur', className)}>
       <div className="mx-auto max-w-7xl px-3 sm:px-6">
         <div className="delay-0 duration-500 animate-in fade-in-0 slide-in-from-top-10 fill-mode-both">
           <div className="flex h-16 w-full items-center sm:gap-x-2">

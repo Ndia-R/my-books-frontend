@@ -1,6 +1,7 @@
 import BooksSearch from '@/components/books/books-search';
 import BooksSkeleton from '@/components/books/books-skeleton';
 import { Separator } from '@/components/ui/separator';
+import { usePageTitle } from '@/hooks/use-page-title';
 import { useSearchFilters } from '@/hooks/use-search-filters';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
@@ -8,6 +9,8 @@ import { ErrorBoundary } from 'react-error-boundary';
 
 export default function Page() {
   const { q, page } = useSearchFilters();
+
+  usePageTitle(q);
 
   return (
     <>

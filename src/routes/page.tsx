@@ -10,7 +10,9 @@ import { ErrorBoundary } from 'react-error-boundary';
 export default function Page() {
   return (
     <>
-      <Hero />
+      <section className="mb-4 sm:mb-0">
+        <Hero />
+      </section>
 
       <section className="mb-4 flex flex-col gap-y-4">
         <h2 className="font-bold">ジャンル</h2>

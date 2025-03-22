@@ -1,17 +1,24 @@
 import Logo from '@/components/layout/logo';
-import ProfileCounts from '@/components/settings/profile-counts';
+import ProfileCounts from '@/components/profile/profile-counts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { useAuth } from '@/hooks/use-auth';
+import { usePageTitle } from '@/hooks/use-page-title';
 import ErrorElement from '@/routes/error-element';
-import { KeyRoundIcon, MailIcon, UserRoundIcon } from 'lucide-react';
+import { KeyRoundIcon, MailIcon, UserRoundPenIcon } from 'lucide-react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Link } from 'react-router-dom';
 
-export default function Page() {
+type Props = {
+  title: string;
+};
+
+export default function Page({ title }: Props) {
+  usePageTitle(title);
+
   const { user } = useAuth();
 
   if (!user) return null;
@@ -48,11 +55,11 @@ export default function Page() {
         <CardContent className="relative p-6">
           <ul>
             <li className="flex items-center p-2">
-              <UserRoundIcon className="mr-4" />
+              <UserRoundPenIcon className="mr-4" />
               <p>ユーザー情報</p>
               <div className="flex-1"></div>
               <Button className="rounded-full bg-transparent" variant="outline" asChild>
-                <Link to="/settings/change-user-info">変更</Link>
+                <Link to="/profile/change-user-info">変更</Link>
               </Button>
             </li>
             <li className="flex items-center p-2">
@@ -60,7 +67,7 @@ export default function Page() {
               <p>メールアドレス</p>
               <div className="flex-1"></div>
               <Button className="rounded-full bg-transparent" variant="outline" asChild>
-                <Link to="/settings/change-email">変更</Link>
+                <Link to="/profile/change-email">変更</Link>
               </Button>
             </li>
             <li className="flex items-center p-2">
@@ -68,7 +75,7 @@ export default function Page() {
               <p>パスワード</p>
               <div className="flex-1"></div>
               <Button className="rounded-full bg-transparent" variant="outline" asChild>
-                <Link to="/settings/change-password">変更</Link>
+                <Link to="/profile/change-password">変更</Link>
               </Button>
             </li>
           </ul>
