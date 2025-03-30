@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/my-books-frontend
+      - node_modules:/my-books-frontend/node_modules
+    tty: true
+    ports:
+      - 5173:5173
+      - 4173:4173
+    command: sleep infinity
+
+volumes:
+  node_modules:
