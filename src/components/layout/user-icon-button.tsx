@@ -61,7 +61,7 @@ export default function UserIconButton() {
   const handleClickLogout = async () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
-        toast('ログアウトしました');
+        toast.success('ログアウトしました');
         setIsOpen(false);
         navigate('/');
       },

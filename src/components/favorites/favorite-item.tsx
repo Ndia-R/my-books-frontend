@@ -33,13 +33,13 @@ export default function FavoriteItem({ favorite }: Props) {
               <div className="flex items-center">
                 <FavoriteCountIcon bookId={favorite.bookId} />
                 <time
-                  className="text-muted-foreground mr-2 text-xs leading-8 tracking-wide whitespace-nowrap sm:text-sm"
+                  className="text-muted-foreground mr-2 flex gap-x-1 text-xs leading-8 tracking-wide whitespace-nowrap sm:text-sm"
                   dateTime={
-                    Date.parse(favorite.updatedAt) ? favorite.updatedAt : ''
+                    Date.parse(favorite.createdAt) ? favorite.createdAt : ''
                   }
                 >
-                  {formatDateJP(favorite.updatedAt)}{' '}
-                  {formatTime(favorite.updatedAt)}
+                  <span>{formatDateJP(favorite.createdAt)}</span>
+                  <span>{formatTime(favorite.createdAt)}</span>
                 </time>
               </div>
             </div>

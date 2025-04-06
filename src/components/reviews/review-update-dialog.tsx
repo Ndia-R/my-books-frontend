@@ -8,7 +8,14 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { Review, ReviewRequest, ReviewUpdateMutation } from '@/types';
+import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
+import {
+  Review,
+  ReviewDeleteMutation,
+  ReviewRequest,
+  ReviewUpdateMutation,
+} from '@/types';
+import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -16,7 +23,8 @@ type Props = {
   review: Review;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  updateMutation?: ReviewUpdateMutation;
+  updateMutation: ReviewUpdateMutation;
+  deleteMutation: ReviewDeleteMutation;
 };
 
 export default function ReviewUpdateDialog({
@@ -24,9 +32,11 @@ export default function ReviewUpdateDialog({
   isOpen,
   setIsOpen,
   updateMutation,
+  deleteMutation,
 }: Props) {
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const { confirmDialog } = useConfirmDialog();
 
   useEffect(() => {
     if (isOpen) {
@@ -35,32 +45,53 @@ export default function ReviewUpdateDialog({
     }
   }, [isOpen, review.comment, review.rating]);
 
+  const handleClickCancel = async () => {
+    setIsOpen(false);
+  };
+
+  const handleClickDelete = async () => {
+    const { isCancel } = await confirmDialog({
+      icon: 'warning',
+      title: '削除しますか？',
+      message: '削除すると元に戻りません。',
+      actionLabel: '削除',
+    });
+    if (isCancel) return;
+
+    deleteMutation.mutate(review.id, {
+      onSuccess: () => {
+        toast.success('レビューを削除しました');
+      },
+      onError: () => {
+        toast.error('レビューの削除に失敗しました', { duration: 5000 });
+      },
+      onSettled: () => {
+        setIsOpen(false);
+      },
+    });
+  };
+
   const handleClickUpdate = () => {
     const requestBody: ReviewRequest = {
       bookId: review.bookId,
       comment,
       rating,
     };
-    updateMutation?.mutate(
+
+    updateMutation.mutate(
       { id: review.id, requestBody },
       {
         onSuccess: () => {
           toast.success('レビューを更新しました');
-          setIsOpen(false);
         },
         onError: () => {
-          toast.error('レビューの更新に失敗しました', {
-            description: '管理者へ連絡してください。',
-            duration: 5000,
-          });
+          toast.error('レビューの更新に失敗しました', { duration: 5000 });
+        },
+        onSettled: () => {
           setIsOpen(false);
         },
       }
     );
-  };
-
-  const handleClickCancel = async () => {
-    setIsOpen(false);
   };
 
   return (
@@ -103,10 +134,26 @@ export default function ReviewUpdateDialog({
           </Button>
           <Button
             className="min-w-24 rounded-full"
-            disabled={comment === ''}
+            variant="outline"
+            disabled={deleteMutation.isPending}
+            onClick={handleClickDelete}
+          >
+            {deleteMutation.isPending ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              '削除'
+            )}
+          </Button>
+          <Button
+            className="min-w-24 rounded-full"
+            disabled={comment === '' || updateMutation.isPending}
             onClick={handleClickUpdate}
           >
-            更新
+            {updateMutation.isPending ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              '更新'
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

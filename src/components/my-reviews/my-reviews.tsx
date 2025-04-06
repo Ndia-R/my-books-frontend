@@ -1,36 +1,27 @@
 import MyReviewList from '@/components/my-reviews/my-review-list';
 import SearchPagination from '@/components/search-pagination';
 import { useApiReview } from '@/hooks/api/use-api-review';
+import { useSearchFilters } from '@/hooks/use-search-filters';
 import { ReviewRequest } from '@/types';
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
-import { useNavigate } from 'react-router';
 
 type Props = {
   page: number;
 };
 
 export default function MyReviews({ page }: Props) {
-  const navigate = useNavigate();
-
   const { getReviewPageByUser, updateReview, deleteReview } = useApiReview();
+  const { updateQueryParams } = useSearchFilters();
+  const queryClient = useQueryClient();
 
   const { data: reviewPage } = useSuspenseQuery({
     queryKey: ['getReviewPageByUser', page],
     queryFn: () => getReviewPageByUser(page),
   });
-
-  const queryClient = useQueryClient();
-
-  const onSuccess = () => {
-    queryClient.invalidateQueries({
-      queryKey: ['getReviewPageByUser', page],
-    });
-    navigate('/my-reviews');
-  };
 
   const onError = (error: Error) => {
     console.error(error);
@@ -44,13 +35,30 @@ export default function MyReviews({ page }: Props) {
       id: number;
       requestBody: ReviewRequest;
     }) => updateReview(id, requestBody),
-    onSuccess,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['getReviewPageByUser', page],
+      });
+    },
     onError,
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deleteReview(id),
-    onSuccess,
+    onSuccess: () => {
+      // ２ページ以降で、そのページの最後の１つを削除した場合は、１ページ戻る
+      if (page >= 2 && reviewPage.reviews.length === 1) {
+        queryClient.invalidateQueries({
+          queryKey: ['getBookmarkPage', page - 1],
+        });
+        updateQueryParams({ page: page - 1 });
+        return;
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: ['getReviewPageByUser', page],
+      });
+    },
     onError,
   });
 

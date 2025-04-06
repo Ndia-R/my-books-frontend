@@ -1,33 +1,27 @@
 import BookmarkList from '@/components/bookmarks/bookmark-list';
 import SearchPagination from '@/components/search-pagination';
 import { useApiBookmark } from '@/hooks/api/use-api-bookmark';
+import { useSearchFilters } from '@/hooks/use-search-filters';
 import { BookmarkRequest } from '@/types';
 import {
   useMutation,
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
-import { useNavigate } from 'react-router';
 
 type Props = {
   page: number;
 };
 
 export default function Bookmarks({ page }: Props) {
-  const navigate = useNavigate();
   const { getBookmarkPage, updateBookmark, deleteBookmark } = useApiBookmark();
+  const { updateQueryParams } = useSearchFilters();
+  const queryClient = useQueryClient();
 
   const { data: bookmarkPage } = useSuspenseQuery({
     queryKey: ['getBookmarkPage', page],
     queryFn: () => getBookmarkPage(page),
   });
-
-  const queryClient = useQueryClient();
-
-  const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['getBookmarkPage', page] });
-    navigate('/bookmarks');
-  };
 
   const onError = (error: Error) => {
     console.error(error);
@@ -41,13 +35,26 @@ export default function Bookmarks({ page }: Props) {
       id: number;
       requestBody: BookmarkRequest;
     }) => updateBookmark(id, requestBody),
-    onSuccess,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['getBookmarkPage', page] });
+    },
     onError,
   });
 
   const deleteMutation = useMutation({
     mutationFn: (bookmarkId: number) => deleteBookmark(bookmarkId),
-    onSuccess,
+    onSuccess: () => {
+      // ２ページ以降で、そのページの最後の１つを削除した場合は、１ページ戻る
+      if (page >= 2 && bookmarkPage.bookmarks.length === 1) {
+        queryClient.invalidateQueries({
+          queryKey: ['getBookmarkPage', page - 1],
+        });
+        updateQueryParams({ page: page - 1 });
+        return;
+      }
+
+      queryClient.invalidateQueries({ queryKey: ['getBookmarkPage', page] });
+    },
     onError,
   });
 

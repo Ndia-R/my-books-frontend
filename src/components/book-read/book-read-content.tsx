@@ -1,6 +1,6 @@
 import BookmarkCreateDialog from '@/components/bookmarks/bookmark-create-dialog';
 import BookmarkUpdateDialog from '@/components/bookmarks/bookmark-update-dialog';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Tooltip,
   TooltipContent,
@@ -41,10 +41,8 @@ export default function BookReadContent({
   chapterNumber,
   pageNumber,
 }: Props) {
-  const [isOpenBookmarkCreateDialog, setIsOpenBookmarkCreateDialog] =
-    useState(false);
-  const [isOpenBookmarkUpdateDialog, setIsOpenBookmarkUpdateDialog] =
-    useState(false);
+  const [isOpenCreateDialog, setIsOpenCreateDialog] = useState(false);
+  const [isOpenUpdateDialog, setIsOpenUpdateDialog] = useState(false);
 
   const { getBookTableOfContents, getBookContentPage } = useApiBook();
   const {
@@ -118,14 +116,6 @@ export default function BookReadContent({
     onError,
   });
 
-  const handleClickCreate = () => {
-    setIsOpenBookmarkCreateDialog(true);
-  };
-
-  const handleClickUpdate = () => {
-    setIsOpenBookmarkUpdateDialog(true);
-  };
-
   const currentPageText = getCurrentPageText(
     bookTableOfContents,
     chapterNumber,
@@ -155,39 +145,35 @@ export default function BookReadContent({
   usePageTitle(`${bookContentPage.chapterTitle} (${currentPageText})`);
 
   return (
-    <div className="animate-in fade-in-0 delay-0 duration-200">
-      <div className="flex flex-col gap-y-12 px-4 pt-12 pb-6 sm:px-20">
-        <div>
-          <p className="text-muted-foreground mb-2 text-xs sm:text-sm">{`第 ${bookContentPage.chapterNumber} 章`}</p>
-          <div className="flex flex-wrap items-center">
-            <h1 className="text-xl font-bold text-wrap sm:text-2xl">
-              {bookContentPage.chapterTitle}
-            </h1>
-            <p className="text-muted-foreground mr-2 ml-4 text-xs sm:text-sm">
-              {currentPageText}
-            </p>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  className="size-8 rounded-full"
-                  variant="ghost"
-                  size="icon"
-                  asChild
-                >
+    <>
+      <div className="animate-in fade-in-0 delay-0 duration-200">
+        <div className="flex flex-col gap-y-12 px-4 pt-12 pb-6 sm:px-20">
+          <div>
+            <p className="text-muted-foreground mb-2 text-xs sm:text-sm">{`第 ${bookContentPage.chapterNumber} 章`}</p>
+            <div className="flex flex-wrap items-center">
+              <h1 className="text-xl font-bold text-wrap sm:text-2xl">
+                {bookContentPage.chapterTitle}
+              </h1>
+              <p className="text-muted-foreground mr-2 ml-4 text-xs sm:text-sm">
+                {currentPageText}
+              </p>
+              <Tooltip>
+                <TooltipTrigger asChild>
                   <Link
+                    className={cn(
+                      buttonVariants({ variant: 'ghost', size: 'icon' }),
+                      'rounded-full'
+                    )}
                     to={`/read/${bookId}/table-of-contents`}
-                    className="flex items-center gap-x-2"
                     aria-label="目次に戻る"
                   >
                     <TableOfContentsIcon className="size-4" />
                   </Link>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>目次に戻る</TooltipContent>
-            </Tooltip>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                {bookmark ? (
+                </TooltipTrigger>
+                <TooltipContent>目次に戻る</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
                   <Button
                     className={cn(
                       'text-muted-foreground size-8 rounded-full',
@@ -196,81 +182,77 @@ export default function BookReadContent({
                     variant="ghost"
                     size="icon"
                     aria-label="ブックマーク"
-                    onClick={handleClickUpdate}
+                    onClick={
+                      bookmark
+                        ? () => setIsOpenUpdateDialog(true)
+                        : () => setIsOpenCreateDialog(true)
+                    }
                   >
-                    <BookmarkIcon className="fill-primary size-4" />
+                    <BookmarkIcon
+                      className={cn('size-4', bookmark && 'fill-primary')}
+                    />
                   </Button>
-                ) : (
-                  <Button
-                    className="text-muted-foreground size-8 rounded-full"
-                    variant="ghost"
-                    size="icon"
-                    aria-label="ブックマーク"
-                    onClick={handleClickCreate}
-                  >
-                    <BookmarkIcon className="size-4" />
-                  </Button>
-                )}
-              </TooltipTrigger>
-              <TooltipContent>
-                {bookmark
-                  ? bookmark.note
-                    ? `メモ「${bookmark.note}」`
-                    : 'ブックマークからから削除'
-                  : 'ブックマークに追加'}
-              </TooltipContent>
-            </Tooltip>
-
-            {bookmark ? (
-              <BookmarkUpdateDialog
-                bookmark={bookmark}
-                isOpen={isOpenBookmarkUpdateDialog}
-                setIsOpen={setIsOpenBookmarkUpdateDialog}
-                updateMutation={updateMutation}
-                deleteMutation={deleteMutation}
-              />
-            ) : (
-              <BookmarkCreateDialog
-                bookId={bookId}
-                chapterNumber={chapterNumber}
-                pageNumber={pageNumber}
-                isOpen={isOpenBookmarkCreateDialog}
-                setIsOpen={setIsOpenBookmarkCreateDialog}
-                createMutation={createMutation}
-              />
-            )}
+                </TooltipTrigger>
+                <TooltipContent>
+                  {bookmark
+                    ? bookmark.note
+                      ? `メモ「${bookmark.note}」`
+                      : 'ブックマークからから削除'
+                    : 'ブックマークに追加'}
+                </TooltipContent>
+              </Tooltip>
+            </div>
           </div>
+          <p className="whitespace-pre-wrap">{bookContentPage.content}</p>
         </div>
-        <p className="whitespace-pre-wrap">{bookContentPage.content}</p>
+        <div className="flex justify-between px-0 py-6 sm:px-12">
+          <Button
+            className={cn(
+              'flex items-center gap-x-2 rounded-full hover:bg-transparent',
+              isFirstPage && 'text-muted-foreground pointer-events-none'
+            )}
+            variant="ghost"
+            asChild
+          >
+            <Link to={prevPageLink}>
+              <ChevronLeftIcon />
+              <span>前のページへ</span>
+            </Link>
+          </Button>
+          <Button
+            className={cn(
+              'flex items-center gap-x-2 rounded-full hover:bg-transparent',
+              isLastPage && 'text-muted-foreground pointer-events-none'
+            )}
+            variant="ghost"
+            asChild
+          >
+            <Link to={nextPageLink}>
+              <span>次のページへ</span>
+              <ChevronRightIcon />
+            </Link>
+          </Button>
+        </div>
       </div>
-      <div className="flex justify-between px-0 py-6 sm:px-12">
-        <Button
-          className={cn(
-            'flex items-center gap-x-2 rounded-full hover:bg-transparent',
-            isFirstPage && 'text-muted-foreground pointer-events-none'
-          )}
-          variant="ghost"
-          asChild
-        >
-          <Link to={prevPageLink}>
-            <ChevronLeftIcon />
-            <span>前のページへ</span>
-          </Link>
-        </Button>
-        <Button
-          className={cn(
-            'flex items-center gap-x-2 rounded-full hover:bg-transparent',
-            isLastPage && 'text-muted-foreground pointer-events-none'
-          )}
-          variant="ghost"
-          asChild
-        >
-          <Link to={nextPageLink}>
-            <span>次のページへ</span>
-            <ChevronRightIcon />
-          </Link>
-        </Button>
-      </div>
-    </div>
+
+      {bookmark && (
+        <BookmarkUpdateDialog
+          bookmark={bookmark}
+          isOpen={isOpenUpdateDialog}
+          setIsOpen={setIsOpenUpdateDialog}
+          updateMutation={updateMutation}
+          deleteMutation={deleteMutation}
+        />
+      )}
+
+      <BookmarkCreateDialog
+        bookId={bookId}
+        chapterNumber={chapterNumber}
+        pageNumber={pageNumber}
+        isOpen={isOpenCreateDialog}
+        setIsOpen={setIsOpenCreateDialog}
+        createMutation={createMutation}
+      />
+    </>
   );
 }

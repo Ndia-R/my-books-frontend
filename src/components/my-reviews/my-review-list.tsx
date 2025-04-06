@@ -1,21 +1,14 @@
 import MyReviewItem from '@/components/my-reviews/my-review-item';
-import {
-  Review,
-  ReviewCreateMutation,
-  ReviewDeleteMutation,
-  ReviewUpdateMutation,
-} from '@/types';
+import { Review, ReviewDeleteMutation, ReviewUpdateMutation } from '@/types';
 
 type Props = {
   reviews: Review[];
-  createMutation?: ReviewCreateMutation;
-  updateMutation?: ReviewUpdateMutation;
-  deleteMutation?: ReviewDeleteMutation;
+  updateMutation: ReviewUpdateMutation;
+  deleteMutation: ReviewDeleteMutation;
 };
 
 export default function MyReviewList({
   reviews,
-  createMutation,
   updateMutation,
   deleteMutation,
 }: Props) {
@@ -26,7 +19,6 @@ export default function MyReviewList({
           <article>
             <MyReviewItem
               review={review}
-              createMutation={createMutation}
               updateMutation={updateMutation}
               deleteMutation={deleteMutation}
             />

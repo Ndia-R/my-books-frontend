@@ -14,16 +14,16 @@ import {
   BookmarkRequest,
   BookmarkUpdateMutation,
 } from '@/types';
+import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router';
 import { toast } from 'sonner';
 
 type Props = {
   bookmark: Bookmark;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  updateMutation?: BookmarkUpdateMutation;
-  deleteMutation?: BookmarkDeleteMutation;
+  updateMutation: BookmarkUpdateMutation;
+  deleteMutation: BookmarkDeleteMutation;
 };
 
 export default function BookmarkUpdateDialog({
@@ -34,9 +34,6 @@ export default function BookmarkUpdateDialog({
   deleteMutation,
 }: Props) {
   const [note, setNote] = useState('');
-
-  const location = useLocation();
-
   const { confirmDialog } = useConfirmDialog();
 
   useEffect(() => {
@@ -45,7 +42,11 @@ export default function BookmarkUpdateDialog({
     }
   }, [isOpen, bookmark.note]);
 
-  const handleDelete = async () => {
+  const handleClickCancel = () => {
+    setIsOpen(false);
+  };
+
+  const handleClickDelete = async () => {
     const { isCancel } = await confirmDialog({
       icon: 'warning',
       title: 'このブックマークを削除しますか？',
@@ -53,56 +54,50 @@ export default function BookmarkUpdateDialog({
     });
     if (isCancel) return;
 
-    deleteMutation?.mutate(bookmark.id, {
+    deleteMutation.mutate(bookmark.id, {
       onSuccess: () => {
         toast.success('ブックマークを削除しました');
-        setIsOpen(false);
       },
       onError: () => {
-        toast.error('ブックマークの削除に失敗しました', {
-          description: '管理者へ連絡してください。',
-          duration: 5000,
-        });
+        toast.error('ブックマークの削除に失敗しました', { duration: 5000 });
+      },
+      onSettled: () => {
         setIsOpen(false);
       },
     });
   };
 
-  const handleUpdate = () => {
+  const handleClickUpdate = () => {
     const requestBody: BookmarkRequest = {
       bookId: bookmark.bookId,
       chapterNumber: bookmark.chapterNumber,
       pageNumber: bookmark.pageNumber,
       note,
     };
-    updateMutation?.mutate(
+    updateMutation.mutate(
       { id: bookmark.id, requestBody },
       {
         onSuccess: () => {
           toast.success('ブックマークのメモを更新しました');
-          setIsOpen(false);
         },
         onError: () => {
           toast.error('ブックマークのメモを更新に失敗しました', {
-            description: '管理者へ連絡してください。',
             duration: 5000,
           });
+        },
+        onSettled: () => {
           setIsOpen(false);
         },
       }
     );
   };
 
-  const handleCloseDialog = () => {
-    setIsOpen(false);
-  };
-
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
         className="w-3/4 max-w-[600px] min-w-[360px] p-4 sm:p-6"
-        onEscapeKeyDown={handleCloseDialog}
-        onPointerDownOutside={handleCloseDialog}
+        onEscapeKeyDown={handleClickCancel}
+        onPointerDownOutside={handleClickCancel}
       >
         <div>
           <DialogTitle className="leading-10 font-semibold">
@@ -123,21 +118,32 @@ export default function BookmarkUpdateDialog({
           <Button
             className="min-w-24 rounded-full"
             variant="ghost"
-            onClick={handleCloseDialog}
+            onClick={handleClickCancel}
           >
             キャンセル
           </Button>
-          {location.pathname.includes('read') && (
-            <Button
-              className="min-w-24 rounded-full"
-              variant="outline"
-              onClick={handleDelete}
-            >
-              削除
-            </Button>
-          )}
-          <Button className="min-w-24 rounded-full" onClick={handleUpdate}>
-            更新
+          <Button
+            className="min-w-24 rounded-full"
+            variant="outline"
+            disabled={deleteMutation.isPending}
+            onClick={handleClickDelete}
+          >
+            {deleteMutation.isPending ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              '削除'
+            )}
+          </Button>
+          <Button
+            className="min-w-24 rounded-full"
+            disabled={updateMutation.isPending}
+            onClick={handleClickUpdate}
+          >
+            {updateMutation.isPending ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              '更新'
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

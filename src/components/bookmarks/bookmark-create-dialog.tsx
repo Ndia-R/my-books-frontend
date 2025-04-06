@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { BookmarkCreateMutation, BookmarkRequest } from '@/types';
+import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -17,7 +18,7 @@ type Props = {
   pageNumber: number;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  createMutation?: BookmarkCreateMutation;
+  createMutation: BookmarkCreateMutation;
 };
 
 export default function BookmarkCreateDialog({
@@ -36,38 +37,36 @@ export default function BookmarkCreateDialog({
     }
   }, [isOpen]);
 
-  const handleCreate = () => {
+  const handleClickCancel = () => {
+    setIsOpen(false);
+  };
+
+  const handleClickCreate = () => {
     const requestBody: BookmarkRequest = {
       bookId,
       chapterNumber,
       pageNumber,
       note,
     };
-    createMutation?.mutate(requestBody, {
+    createMutation.mutate(requestBody, {
       onSuccess: () => {
         toast.success('ブックマークを作成しました');
-        setIsOpen(false);
       },
       onError: () => {
-        toast.error('ブックマークの作成に失敗しました', {
-          description: '管理者へ連絡してください。',
-          duration: 5000,
-        });
+        toast.error('ブックマークの作成に失敗しました', { duration: 5000 });
+      },
+      onSettled: () => {
         setIsOpen(false);
       },
     });
-  };
-
-  const handleCloseDialog = () => {
-    setIsOpen(false);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
         className="w-3/4 max-w-[600px] min-w-[360px] p-4 sm:p-6"
-        onEscapeKeyDown={handleCloseDialog}
-        onPointerDownOutside={handleCloseDialog}
+        onEscapeKeyDown={handleClickCancel}
+        onPointerDownOutside={handleClickCancel}
       >
         <div>
           <DialogTitle className="leading-10 font-semibold">
@@ -88,12 +87,20 @@ export default function BookmarkCreateDialog({
           <Button
             className="min-w-24 rounded-full"
             variant="ghost"
-            onClick={handleCloseDialog}
+            onClick={handleClickCancel}
           >
             キャンセル
           </Button>
-          <Button className="min-w-24 rounded-full" onClick={handleCreate}>
-            作成
+          <Button
+            className="min-w-24 rounded-full"
+            disabled={createMutation.isPending}
+            onClick={handleClickCreate}
+          >
+            {createMutation.isPending ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              '作成'
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

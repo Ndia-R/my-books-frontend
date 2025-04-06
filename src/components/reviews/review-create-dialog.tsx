@@ -10,6 +10,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { ReviewCreateMutation, ReviewRequest } from '@/types';
+import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 
@@ -18,7 +19,7 @@ type Props = {
   page: number;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
-  createMutation?: ReviewCreateMutation;
+  createMutation: ReviewCreateMutation;
 };
 
 export default function ReviewCreateDialog({
@@ -39,6 +40,19 @@ export default function ReviewCreateDialog({
     }
   }, [isOpen]);
 
+  const handleClickCancel = async () => {
+    if (comment) {
+      const { isCancel } = await confirmDialog({
+        icon: 'question',
+        title: 'キャンセルして閉じますか？',
+        message: 'コメントはまだ投稿していません。',
+        persistent: true,
+      });
+      if (isCancel) return;
+    }
+    setIsOpen(false);
+  };
+
   const handleClickPost = async () => {
     if (rating === 0) {
       const { isCancel } = await confirmDialog({
@@ -51,32 +65,17 @@ export default function ReviewCreateDialog({
     }
 
     const requestBody: ReviewRequest = { bookId, comment, rating };
-    createMutation?.mutate(requestBody, {
+    createMutation.mutate(requestBody, {
       onSuccess: () => {
         toast.success('レビューを投稿しました');
-        setIsOpen(false);
       },
       onError: () => {
-        toast.error('レビュー投稿に失敗しました', {
-          description: '管理者へ連絡してください。',
-          duration: 5000,
-        });
+        toast.error('レビュー投稿に失敗しました', { duration: 5000 });
+      },
+      onSettled: () => {
         setIsOpen(false);
       },
     });
-  };
-
-  const handleClickCancel = async () => {
-    if (comment) {
-      const { isCancel } = await confirmDialog({
-        icon: 'question',
-        title: 'キャンセルして閉じますか？',
-        message: 'コメントはまだ投稿していません。',
-        persistent: true,
-      });
-      if (isCancel) return;
-    }
-    setIsOpen(false);
   };
 
   return (
@@ -119,10 +118,14 @@ export default function ReviewCreateDialog({
           </Button>
           <Button
             className="min-w-24 rounded-full"
-            disabled={comment === ''}
+            disabled={comment === '' || createMutation.isPending}
             onClick={handleClickPost}
           >
-            投稿
+            {createMutation.isPending ? (
+              <Loader2Icon className="animate-spin" />
+            ) : (
+              '投稿'
+            )}
           </Button>
         </DialogFooter>
       </DialogContent>

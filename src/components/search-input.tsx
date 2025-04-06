@@ -23,7 +23,7 @@ export default function SearchInput() {
     if (location.pathname !== '/search') {
       navigate(`/search?q=${encodeURIComponent(newQuery)}`);
     } else {
-      updateQueryParams({ q: newQuery });
+      updateQueryParams({ q: newQuery, page: 1 });
     }
   };
 

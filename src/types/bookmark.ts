@@ -9,6 +9,7 @@ export interface Bookmark {
   pageNumber: number;
   note: string;
   chapterTitle: string;
+  createdAt: string;
   updatedAt: string;
   book: Book;
 }

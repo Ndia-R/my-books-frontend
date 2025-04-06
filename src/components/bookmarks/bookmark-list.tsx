@@ -1,21 +1,18 @@
 import BookmarkItem from '@/components/bookmarks/bookmark-item';
 import {
   Bookmark,
-  BookmarkCreateMutation,
   BookmarkDeleteMutation,
   BookmarkUpdateMutation,
 } from '@/types';
 
 type Props = {
   bookmarks: Bookmark[];
-  createMutation?: BookmarkCreateMutation;
-  updateMutation?: BookmarkUpdateMutation;
-  deleteMutation?: BookmarkDeleteMutation;
+  updateMutation: BookmarkUpdateMutation;
+  deleteMutation: BookmarkDeleteMutation;
 };
 
 export default function BookmarkList({
   bookmarks,
-  createMutation,
   updateMutation,
   deleteMutation,
 }: Props) {
@@ -26,7 +23,6 @@ export default function BookmarkList({
           <article>
             <BookmarkItem
               bookmark={bookmark}
-              createMutation={createMutation}
               updateMutation={updateMutation}
               deleteMutation={deleteMutation}
             />

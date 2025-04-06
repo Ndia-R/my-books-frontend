@@ -11,7 +11,7 @@ export default function MyReviewsSkeleton() {
         <ul className="flex flex-col gap-y-2">
           {[...Array<number>(5)].map((_, index) => (
             <li key={index}>
-              <Card>
+              <Card className="p-0">
                 <CardContent className="p-4">
                   <div className="flex gap-x-4">
                     <div className="flex min-w-20 justify-center sm:min-w-24">

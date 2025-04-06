@@ -3,6 +3,7 @@ import { Book } from '@/types/book';
 export interface Favorite {
   userId: number;
   bookId: string;
+  createdAt: string;
   updatedAt: string;
   book: Book;
 }

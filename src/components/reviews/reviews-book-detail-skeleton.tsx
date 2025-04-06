@@ -30,7 +30,7 @@ const ReviewItemSkeleton = () => {
 export default function ReviewsBookDetailSkeleton() {
   return (
     <div className="mx-auto w-full lg:w-3/4">
-      <div className="flex items-center justify-end px-3 sm:px-6">
+      <div className="flex flex-col-reverse items-center justify-end gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
         <Skeleton className="bg-muted-foreground/5 h-10 w-44 rounded-full" />
       </div>
       <ul className="flex flex-col p-3 sm:p-6">
@@ -41,11 +41,6 @@ export default function ReviewsBookDetailSkeleton() {
           </li>
         ))}
       </ul>
-      <div className="mb-4 flex justify-center">
-        <Skeleton className="bg-muted-foreground/5 size-8 rounded-full" />
-        <Skeleton className="bg-muted-foreground/5 size-8 rounded-full" />
-        <Skeleton className="bg-muted-foreground/5 size-8 rounded-full" />
-      </div>
     </div>
   );
 }

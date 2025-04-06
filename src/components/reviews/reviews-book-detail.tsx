@@ -15,6 +15,7 @@ import {
   useQueryClient,
   useSuspenseQuery,
 } from '@tanstack/react-query';
+import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type Props = {
@@ -27,6 +28,7 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [totalPages, setTotalPages] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useAuth();
   const {
@@ -98,66 +100,76 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   }, [initialReviewPage]);
 
   const loadMoreReviews = async () => {
+    setIsLoading(true);
     const nextPage = currentPage + 1;
     const nextReviewPage = await getReviewPage(bookId, nextPage);
     setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.reviews]);
     setCurrentPage(nextPage);
+    setIsLoading(false);
   };
 
   return (
-    <div className="mx-auto w-full pb-4 lg:w-3/4">
-      <div className="flex flex-col-reverse items-center justify-end gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
-        <p>レビュー {initialReviewPage.totalItems} 件</p>
-        {user ? (
-          <Button
-            className="w-44 rounded-full bg-transparent"
-            variant="outline"
-            disabled={reviewExists}
-            onClick={() => user && setIsOpen(true)}
-          >
-            {reviewExists ? 'レビュー済み' : 'レビューする'}
-          </Button>
-        ) : (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                className="hover:border-primary/50 w-44 cursor-default rounded-full bg-transparent opacity-50 hover:bg-transparent"
-                variant="outline"
-              >
-                レビューする
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              ログインしてこの本の「レビュー」を書きましょう
-            </TooltipContent>
-          </Tooltip>
-        )}
-        <ReviewCreateDialog
-          bookId={bookId}
-          page={currentPage}
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
-          createMutation={createMutation}
+    <>
+      <div className="mx-auto w-full pb-4 lg:w-3/4">
+        <div className="flex flex-col-reverse items-center justify-end gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
+          <p>レビュー {initialReviewPage.totalItems} 件</p>
+          {user ? (
+            <Button
+              className="w-44 rounded-full bg-transparent"
+              variant="outline"
+              disabled={reviewExists}
+              onClick={() => user && setIsOpen(true)}
+            >
+              {reviewExists ? 'レビュー済み' : 'レビューする'}
+            </Button>
+          ) : (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  className="hover:border-primary/50 w-44 cursor-default rounded-full bg-transparent opacity-50 hover:bg-transparent"
+                  variant="outline"
+                >
+                  レビューする
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                ログインしてこの本の「レビュー」を書きましょう
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+
+        <ReviewList
+          reviews={reviews}
+          updateMutation={updateMutation}
+          deleteMutation={deleteMutation}
         />
+
+        {currentPage < totalPages && (
+          <div className="flex justify-center">
+            <Button
+              className="text-muted-foreground w-44 rounded-full"
+              variant="ghost"
+              disabled={isLoading}
+              onClick={loadMoreReviews}
+            >
+              {isLoading ? (
+                <Loader2Icon className="animate-spin" />
+              ) : (
+                'もっと見る'
+              )}
+            </Button>
+          </div>
+        )}
       </div>
 
-      <ReviewList
-        reviews={reviews}
-        updateMutation={updateMutation}
-        deleteMutation={deleteMutation}
+      <ReviewCreateDialog
+        bookId={bookId}
+        page={currentPage}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        createMutation={createMutation}
       />
-
-      {currentPage < totalPages && (
-        <div className="flex justify-center">
-          <Button
-            className="text-muted-foreground w-44 rounded-full"
-            variant="ghost"
-            onClick={loadMoreReviews}
-          >
-            もっと見る
-          </Button>
-        </div>
-      )}
-    </div>
+    </>
   );
 }
