@@ -2,7 +2,7 @@ import BookmarkUpdateDialog from '@/components/bookmarks/bookmark-update-dialog'
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
-import { formatDateJP, formatTime } from '@/lib/utils';
+import { chapterNumberString, formatDateJP, formatTime } from '@/lib/utils';
 import {
   Bookmark,
   BookmarkDeleteMutation,
@@ -77,8 +77,8 @@ export default function BookmarkItem({
                 </div>
               </div>
               <p className="text-muted-foreground mb-4 text-xs sm:text-sm">
-                第 {bookmark.chapterNumber} 章 : {bookmark.chapterTitle}（
-                {bookmark.pageNumber}ページ目）
+                {`${chapterNumberString(bookmark.chapterNumber)} : ${bookmark.chapterTitle}（
+                ${bookmark.pageNumber}ページ目）`}
               </p>
               <p className="text-muted-foreground">
                 {bookmark.note && <span>{bookmark.note}</span>}

@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/tooltip';
 import { useApiBook } from '@/hooks/api/use-api-book';
 import { usePageTitle } from '@/hooks/use-page-title';
-import { cn } from '@/lib/utils';
+import { chapterNumberString, cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
@@ -70,7 +70,9 @@ export default function BookTableOfContents({ bookId }: Props) {
                 className="w-full text-center sm:text-left"
                 key={chapter.chapterNumber}
               >
-                <p className="text-muted-foreground text-xs sm:text-sm">{`第 ${chapter.chapterNumber} 章`}</p>
+                <p className="text-muted-foreground text-xs sm:text-sm">
+                  {chapterNumberString(chapter.chapterNumber)}
+                </p>
                 <Link
                   to={`/read/${bookId}/chapter/${chapter.chapterNumber}/page/1`}
                   className={cn(

@@ -1,5 +1,6 @@
 import Pagination from '@/components/pagination';
 import { useSearchFilters } from '@/hooks/use-search-filters';
+import { useEffect, useState } from 'react';
 
 type Props = {
   totalPages: number;
@@ -7,8 +8,14 @@ type Props = {
 
 export default function SearchPagination({ totalPages }: Props) {
   const { page, updateQueryParams } = useSearchFilters();
+  const [currentPage, setCurrentPage] = useState(page);
+
+  useEffect(() => {
+    setCurrentPage(page);
+  }, [page]);
 
   const handleChange = (newPage: number) => {
+    setCurrentPage(newPage);
     updateQueryParams({ page: newPage });
   };
 
@@ -17,7 +24,7 @@ export default function SearchPagination({ totalPages }: Props) {
       {totalPages > 1 && (
         <Pagination
           total={totalPages}
-          page={page}
+          page={currentPage}
           onChangePage={handleChange}
         />
       )}

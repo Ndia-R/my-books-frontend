@@ -9,13 +9,8 @@ import {
 import { useApiBook } from '@/hooks/api/use-api-book';
 import { useApiBookmark } from '@/hooks/api/use-api-bookmark';
 import { usePageTitle } from '@/hooks/use-page-title';
-import {
-  getCurrentPageText,
-  getPageLink,
-  getPagePosition,
-} from '@/lib/book-read-content';
-import { cn } from '@/lib/utils';
-import { Bookmark, BookmarkRequest } from '@/types';
+import { chapterNumberString, cn } from '@/lib/utils';
+import { Bookmark, BookmarkRequest, BookTableOfContents } from '@/types';
 import {
   useMutation,
   useQueryClient,
@@ -29,6 +24,101 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
+
+// 「現在のページ/総ページ数」を表す文字列を返す
+const getCurrentPageText = (
+  bookTableOfContents: BookTableOfContents,
+  chapterNumber: number,
+  pageNumber: number
+) => {
+  // 章番号が見つからなかった場合でも chapterIndex は少なくとも1にする
+  const chapterIndex = Math.max(
+    1,
+    bookTableOfContents.chapters.findIndex(
+      (chapter) => chapter.chapterNumber === chapterNumber
+    )
+  );
+
+  const totalPage =
+    bookTableOfContents.chapters[chapterIndex]?.pageNumbers.length ?? 1;
+  return `${pageNumber}/${totalPage}`;
+};
+
+// 現在のページが最初か最後かを判定する
+const getPagePosition = (
+  bookTableOfContents: BookTableOfContents,
+  chapterNumber: number,
+  pageNumber: number
+) => {
+  const isFirstPage = chapterNumber === 1 && pageNumber === 1;
+  const isLastPage =
+    chapterNumber === bookTableOfContents.chapters.length &&
+    pageNumber ===
+      bookTableOfContents.chapters.find(
+        (chapter) => chapter.chapterNumber === chapterNumber
+      )?.pageNumbers.length;
+
+  return { isFirstPage, isLastPage };
+};
+
+// 指定方向（次 or 前）のページのリンク先を返す
+const getPageLink = (
+  bookTableOfContents: BookTableOfContents,
+  chapterNumber: number,
+  pageNumber: number,
+  direction: 'next' | 'prev'
+) => {
+  const chapterIndex = bookTableOfContents.chapters.findIndex(
+    (chapter) => chapter.chapterNumber === chapterNumber
+  );
+
+  if (chapterIndex === -1) {
+    return `/read/${bookTableOfContents.bookId}/chapter/${chapterNumber}/page/${pageNumber}`;
+  }
+
+  const totalPages =
+    bookTableOfContents.chapters[chapterIndex]?.pageNumbers.length ?? 1;
+  const isMovingForward = direction === 'next';
+
+  const isLastPage = pageNumber >= totalPages;
+  const isFirstPage = pageNumber <= 1;
+  const isLastChapter = chapterIndex >= bookTableOfContents.chapters.length - 1;
+  const isFirstChapter = chapterIndex <= 0;
+
+  let newChapterNumber = chapterNumber;
+  let newPageNumber = pageNumber;
+
+  if (isMovingForward) {
+    if (isLastPage) {
+      // 最終章の最後のページなら、それ以上進めない
+      if (isLastChapter) {
+        newPageNumber = totalPages; // 現在の最後のページのまま
+      } else {
+        // 次のチャプターの最初のページへ
+        newChapterNumber = chapterNumber + 1;
+        newPageNumber = 1;
+      }
+    } else {
+      newPageNumber = pageNumber + 1;
+    }
+  } else {
+    if (isFirstPage) {
+      // 最初の章の最初のページなら、それ以上戻れない
+      if (isFirstChapter) {
+        newPageNumber = 1; // 現在の最初のページのまま
+      } else {
+        // 前のチャプターの最後のページへ
+        newChapterNumber = chapterNumber - 1;
+        newPageNumber =
+          bookTableOfContents.chapters[chapterIndex - 1].pageNumbers.length;
+      }
+    } else {
+      newPageNumber = pageNumber - 1;
+    }
+  }
+
+  return `/read/${bookTableOfContents.bookId}/chapter/${newChapterNumber}/page/${newPageNumber}`;
+};
 
 type Props = {
   bookId: string;
@@ -149,7 +239,9 @@ export default function BookReadContent({
       <div className="animate-in fade-in-0 delay-0 duration-200">
         <div className="flex flex-col gap-y-12 px-4 pt-12 pb-6 sm:px-20">
           <div>
-            <p className="text-muted-foreground mb-2 text-xs sm:text-sm">{`第 ${bookContentPage.chapterNumber} 章`}</p>
+            <p className="text-muted-foreground mb-2 text-xs sm:text-sm">
+              {chapterNumberString(bookContentPage.chapterNumber)}
+            </p>
             <div className="flex flex-wrap items-center">
               <h1 className="text-xl font-bold text-wrap sm:text-2xl">
                 {bookContentPage.chapterTitle}

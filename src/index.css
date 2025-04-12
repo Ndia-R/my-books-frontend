@@ -3,6 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* https://ui.jln.dev/ で色情報を探す */
 :root {
   --background: hsl(112 100% 97%);
   --foreground: hsl(60 2% 30%);

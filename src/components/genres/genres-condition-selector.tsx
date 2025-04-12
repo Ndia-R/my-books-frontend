@@ -1,6 +1,7 @@
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useSearchFilters } from '@/hooks/use-search-filters';
+import { useState } from 'react';
 
 const CONDITION_LIST = [
   { text: '単一選択', value: 'SINGLE' },
@@ -10,18 +11,20 @@ const CONDITION_LIST = [
 
 export default function GenresConditionSelector() {
   const { genreIds, condition, updateQueryParams } = useSearchFilters();
+  const [currentCondition, setCurrentCondition] = useState(condition);
 
-  const handleChange = (condition: string) => {
+  const handleChange = (newCondition: string) => {
     // SINGLE選択以外は複数ジャンル選択可能OKだが
     // SINGLE選択の場合、複数ジャンルの中の最初の値（単一の値）とする
-    const ids = condition === 'SINGLE' ? genreIds.split(',')[0] : undefined;
-    updateQueryParams({ genreIds: ids, condition, page: 1 });
+    const ids = newCondition === 'SINGLE' ? genreIds.split(',')[0] : undefined;
+    setCurrentCondition(newCondition);
+    updateQueryParams({ genreIds: ids, condition: newCondition, page: 1 });
   };
 
   return (
     <RadioGroup
       className="flex gap-x-4"
-      value={condition}
+      value={currentCondition}
       onValueChange={handleChange}
     >
       {CONDITION_LIST.map((item) => (

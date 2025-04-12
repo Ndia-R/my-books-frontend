@@ -81,3 +81,12 @@ export const formatIsbn = (isbnString: string) => {
 
   return country + '-' + area + '-' + publisher + '-' + book + '-' + check;
 };
+
+/**
+ * 章番号文字列を返す
+ * @param num 章番号
+ * @returns 章番号を含めた文字列
+ */
+export const chapterNumberString = (num: number) => {
+  return `第 ${num} 章`;
+};

@@ -2,6 +2,7 @@ import GenreList from '@/components/genres/genre-list';
 import { useApiGenre } from '@/hooks/api/use-api-genre';
 import { useSearchFilters } from '@/hooks/use-search-filters';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
 
 export default function GenresSelector() {
   const { genreIds, condition, updateQueryParams } = useSearchFilters();
@@ -12,10 +13,13 @@ export default function GenresSelector() {
     queryFn: () => getGenres(),
   });
 
-  // クエリ文字列から配列へ
-  const selectedGenreIds = genreIds
-    .split(',')
-    .map((genreId) => Number(genreId));
+  const [selectedGenreIds, isSelectedGenreIds] = useState<number[]>([]);
+
+  useEffect(() => {
+    // クエリ文字列から配列へ
+    const initSelected = genreIds.split(',').map((genreId) => Number(genreId));
+    isSelectedGenreIds(initSelected);
+  }, [genreIds]);
 
   const handleClick = (genreId: number) => {
     let newGenreIds = selectedGenreIds.includes(genreId)
@@ -28,6 +32,7 @@ export default function GenresSelector() {
       newGenreIds = [genreId];
     }
 
+    isSelectedGenreIds(newGenreIds);
     updateQueryParams({ genreIds: newGenreIds.join(','), page: 1 });
   };
 
