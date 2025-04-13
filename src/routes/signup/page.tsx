@@ -6,7 +6,6 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { useApiUser } from '@/hooks/api/use-api-user';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
@@ -34,16 +33,11 @@ export default function Page({ title }: Props) {
   const [avatarPath, setAvatarPath] = useState('');
 
   const navigate = useNavigate();
-  const { signup, setUser } = useAuth();
-  const { getCurrentUser } = useApiUser();
+  const { signup } = useAuth();
 
   const signupMutation = useMutation({
     mutationFn: (requestBody: SignupRequest) => signup(requestBody),
-    onSuccess: async () => {
-      const user = await getCurrentUser();
-      setUser(user);
-      navigate('/');
-    },
+    onSuccess: () => {},
     onError: (error) => {
       console.error(error);
     },
@@ -67,7 +61,9 @@ export default function Page({ title }: Props) {
 
     const requestBody: SignupRequest = { email, password, name, avatarPath };
     signupMutation.mutate(requestBody, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        navigate('/');
+      },
       onError: () => {
         toast.error('新規登録できませんでした', {
           description: '入力内容を確認してください。',

@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useApiUser } from '@/hooks/api/use-api-user';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { useAuth } from '@/providers/auth-provider';
 import { LoginRequest } from '@/types';
@@ -23,15 +22,11 @@ export default function Page({ title }: Props) {
 
   const location = useLocation();
   const navigate = useNavigate();
-  const { login, setUser } = useAuth();
-  const { getCurrentUser } = useApiUser();
+  const { login } = useAuth();
 
   const loginMutation = useMutation({
     mutationFn: (requestBody: LoginRequest) => login(requestBody),
-    onSuccess: async () => {
-      const user = await getCurrentUser();
-      setUser(user);
-    },
+    onSuccess: () => {},
     onError: (error) => {
       console.error(error);
     },

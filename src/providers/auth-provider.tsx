@@ -52,6 +52,19 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       const data = (await response.json()) as AccessToken;
       setAccessToken(data.accessToken);
+
+      // 直前にsetAccessToken(data.accessToken)しているものの即座に反映されないため
+      // ログイン成功後のonSuccessでgetCurrentUser()を呼び出しても
+      // そのタイミングではAuthProviderのaccessTokenは更新されていない
+      // （authenticatedRequest()内のaccessTokenはnull）なので、このタイミングで
+      // ユーザー情報を取得
+      const userRes = await fetch(`${BOOKS_API_ENDPOINT}/me`, {
+        headers: {
+          Authorization: `Bearer ${data.accessToken}`,
+        },
+      });
+      const user = (await userRes.json()) as User;
+      setUser(user);
     } catch (error) {
       setAccessToken(null);
       setUser(null);
@@ -79,6 +92,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
       const data = (await response.json()) as AccessToken;
       setAccessToken(data.accessToken);
+
+      // ここでユーザー取得しているのは、ログイン時と同じ理由
+      const userRes = await fetch(`${BOOKS_API_ENDPOINT}/me`, {
+        headers: {
+          Authorization: `Bearer ${data.accessToken}`,
+        },
+      });
+      const user = (await userRes.json()) as User;
+      setUser(user);
     } catch (error) {
       setAccessToken(null);
       setUser(null);
