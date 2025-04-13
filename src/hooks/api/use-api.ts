@@ -14,33 +14,18 @@ export const useApi = () => {
   };
 
   const fetcherWithAuth = async <T>(url: string, options: RequestInit = {}) => {
-    let response = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
-      ...options,
-      headers: {
-        ...options.headers,
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    if (response.status === 401) {
-      const newAccessToken = await refreshAccessToken();
-      response = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
-        ...options,
-        headers: {
-          ...options.headers,
-          Authorization: `Bearer ${newAccessToken}`,
-        },
-      });
-    }
-
-    if (!response.ok) {
-      throw new Error(await generateErrorMessage(url, response));
-    }
-
+    const response = await authenticatedRequest(url, options);
     return response.json() as Promise<T>;
   };
 
   const mutationWithAuth = async (url: string, options: RequestInit = {}) => {
+    await authenticatedRequest(url, options);
+  };
+
+  const authenticatedRequest = async (
+    url: string,
+    options: RequestInit = {}
+  ) => {
     let response = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
       ...options,
       headers: {
@@ -51,6 +36,9 @@ export const useApi = () => {
 
     if (response.status === 401) {
       const newAccessToken = await refreshAccessToken();
+      if (!newAccessToken) {
+        throw new Error('認証に失敗しました。再ログインしてください。');
+      }
       response = await fetch(`${BOOKS_API_ENDPOINT}${url}`, {
         ...options,
         headers: {
@@ -63,6 +51,8 @@ export const useApi = () => {
     if (!response.ok) {
       throw new Error(await generateErrorMessage(url, response));
     }
+
+    return response;
   };
 
   const generateErrorMessage = async (url: string, response: Response) => {
