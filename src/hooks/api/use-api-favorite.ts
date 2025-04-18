@@ -3,7 +3,7 @@ import { useApi } from '@/hooks/api/use-api';
 import { Favorite, FavoriteInfo, FavoritePage, FavoriteRequest } from '@/types';
 
 export const useApiFavorite = () => {
-  const { fetcher, fetcherWithAuth, mutationWithAuth } = useApi();
+  const { fetcher, fetcherWithAuth, mutatorWithAuth } = useApi();
 
   const getFavoriteByBookId = async (bookId: string) => {
     try {
@@ -48,7 +48,7 @@ export const useApiFavorite = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('お気に入りの作成に失敗しました。' + error);
     }
@@ -58,7 +58,7 @@ export const useApiFavorite = () => {
     try {
       const url = `/favorites/${bookId}`;
       const options: RequestInit = { method: 'DELETE' };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('お気に入りの削除に失敗しました。' + error);
     }

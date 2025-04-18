@@ -9,7 +9,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
-import { useApiUser } from '@/hooks/api/use-api-user';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useMutation } from '@tanstack/react-query';
@@ -20,7 +19,7 @@ import {
   MessageSquareIcon,
   UserRoundIcon,
 } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
@@ -36,34 +35,27 @@ export default function UserIconButton() {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const pathname = location.pathname;
 
-  const { accessToken, user, setUser, logout } = useAuth();
-  const { getCurrentUser } = useApiUser();
+  const { user, logout } = useAuth();
 
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
+    onSuccess: () => {},
     onError: (error) => {
       console.error(error);
     },
   });
 
-  useEffect(() => {
-    const init = async () => {
-      if (accessToken && !user) {
-        const currentUser = await getCurrentUser();
-        setUser(currentUser);
-      }
-    };
-    init();
-  }, [accessToken, getCurrentUser, setUser, user]);
-
-  const handleClickLogout = async () => {
+  const handleClickLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
         toast.success('ログアウトしました');
+      },
+      onError: () => {
+        toast.error('ログアウトに失敗しました', { duration: 5000 });
+      },
+      onSettled: () => {
         setIsOpen(false);
-        navigate('/');
       },
     });
   };
@@ -133,7 +125,9 @@ export default function UserIconButton() {
         {MENU_LIST.map((item) => (
           <DropdownMenuItem
             className={cn(
-              pathname !== '/' && item.href.includes(pathname) && 'text-primary'
+              location.pathname !== '/' &&
+                item.href.includes(location.pathname) &&
+                'text-primary'
             )}
             key={item.href}
             onClick={() => handleClickMenuItem(item.href)}

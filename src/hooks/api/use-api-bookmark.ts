@@ -3,7 +3,7 @@ import { useApi } from '@/hooks/api/use-api';
 import { Bookmark, BookmarkPage, BookmarkRequest } from '@/types';
 
 export const useApiBookmark = () => {
-  const { fetcherWithAuth, mutationWithAuth } = useApi();
+  const { fetcherWithAuth, mutatorWithAuth } = useApi();
 
   const getBookmarkByBookId = async (bookId: string) => {
     try {
@@ -34,7 +34,7 @@ export const useApiBookmark = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('ブックマークの作成に失敗しました。' + error);
     }
@@ -48,7 +48,7 @@ export const useApiBookmark = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('ブックマークの更新に失敗しました。' + error);
     }
@@ -58,7 +58,7 @@ export const useApiBookmark = () => {
     try {
       const url = `/bookmarks/${id}`;
       const options: RequestInit = { method: 'DELETE' };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('ブックマークの削除に失敗しました。' + error);
     }

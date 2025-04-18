@@ -8,7 +8,7 @@ import {
 } from '@/types';
 
 export const useApiUser = () => {
-  const { fetcherWithAuth, mutationWithAuth } = useApi();
+  const { fetcherWithAuth, mutatorWithAuth } = useApi();
 
   const getCurrentUser = async () => {
     try {
@@ -40,7 +40,7 @@ export const useApiUser = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('ユーザー情報の更新に失敗しました。' + error);
     }
@@ -54,7 +54,7 @@ export const useApiUser = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('パスワードの更新に失敗しました。' + error);
     }
@@ -68,7 +68,7 @@ export const useApiUser = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('メールアドレスの更新に失敗しました。' + error);
     }

@@ -11,7 +11,7 @@ import {
 } from '@/types';
 
 export const useApiReview = () => {
-  const { fetcher, fetcherWithAuth, mutationWithAuth } = useApi();
+  const { fetcher, fetcherWithAuth, mutatorWithAuth } = useApi();
 
   const getReviewPage = async (bookId: string, page: number = 0) => {
     try {
@@ -63,7 +63,7 @@ export const useApiReview = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('レビューの作成に失敗しました。' + error);
     }
@@ -77,7 +77,7 @@ export const useApiReview = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(requestBody),
       };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('レビューの更新に失敗しました。' + error);
     }
@@ -89,7 +89,7 @@ export const useApiReview = () => {
       const options: RequestInit = {
         method: 'DELETE',
       };
-      await mutationWithAuth(url, options);
+      await mutatorWithAuth(url, options);
     } catch (error) {
       throw new Error('レビューの削除に失敗しました。' + error);
     }

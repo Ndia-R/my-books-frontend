@@ -28,7 +28,7 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<RootLayout />}>
-        <Route index element={<RootPage />} />
+        <Route index element={<RootPage title="" />} />
 
         <Route path="login" element={<LoginPage title="ログイン" />} />
         <Route path="signup" element={<SignupPage title="サインアップ" />} />
@@ -92,7 +92,7 @@ export const router = createBrowserRouter(
           </Route>
         </Route>
 
-        <Route path="*" element={<NotFoundPage />} />
+        <Route path="*" element={<NotFoundPage title="404" />} />
       </Route>
     </Route>
   )

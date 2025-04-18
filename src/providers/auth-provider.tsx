@@ -53,17 +53,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const data = (await response.json()) as AccessToken;
       setAccessToken(data.accessToken);
 
-      // 直前にsetAccessToken(data.accessToken)しているものの即座に反映されないため
-      // ログイン成功後のonSuccessでgetCurrentUser()を呼び出しても
-      // そのタイミングではAuthProviderのaccessTokenは更新されていない
-      // （authenticatedRequest()内のaccessTokenはnull）なので、このタイミングで
-      // ユーザー情報を取得
-      const userRes = await fetch(`${BOOKS_API_ENDPOINT}/me`, {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      });
-      const user = (await userRes.json()) as User;
+      const user = await fetchUser(data.accessToken);
       setUser(user);
     } catch (error) {
       setAccessToken(null);
@@ -93,13 +83,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const data = (await response.json()) as AccessToken;
       setAccessToken(data.accessToken);
 
-      // ここでユーザー取得しているのは、ログイン時と同じ理由
-      const userRes = await fetch(`${BOOKS_API_ENDPOINT}/me`, {
-        headers: {
-          Authorization: `Bearer ${data.accessToken}`,
-        },
-      });
-      const user = (await userRes.json()) as User;
+      const user = await fetchUser(data.accessToken);
       setUser(user);
     } catch (error) {
       setAccessToken(null);
@@ -163,12 +147,39 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
+  const fetchUser = async (token: string | null) => {
+    if (!token) return null;
+
+    try {
+      const url = `${BOOKS_API_ENDPOINT}/me`;
+      const options: RequestInit = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+
+      const response = await fetch(url, options);
+      if (!response.ok) {
+        throw new Error('Failed fetch user');
+      }
+
+      const user = (await response.json()) as User;
+      return user;
+    } catch {
+      return null;
+    }
+  };
+
   useEffect(() => {
     // リロードするとメモリからアクセストークンが消えてしまうので
     // 初期読み込み時にリフレッシュトークンを使って再取得する
     const init = async () => {
       const accessToken = await fetchAccessToken();
       setAccessToken(accessToken);
+
+      const user = await fetchUser(accessToken);
+      setUser(user);
+
       setIsLoading(false);
     };
     init();
