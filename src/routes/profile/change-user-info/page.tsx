@@ -29,7 +29,7 @@ export default function Page({ title }: Props) {
   const navigate = useNavigate();
   const { updateCurrentUser } = useApiUser();
 
-  const { user, setUser } = useAuth();
+  const { user, refreshUserInfo } = useAuth();
 
   const [avatarPath, setAvatarPath] = useState(user?.avatarPath || '');
 
@@ -64,10 +64,8 @@ export default function Page({ title }: Props) {
 
     const requestBody: UpdateCurrentUser = { name, avatarPath };
     updateMutation.mutate(requestBody, {
-      onSuccess: () => {
-        // 名前とアバターURLだけなので楽観的に更新しておく
-        const newUser = user ? { ...user, name, avatarPath } : null;
-        setUser(newUser);
+      onSuccess: async () => {
+        await refreshUserInfo();
         toast.success('ユーザー情報を変更しました');
       },
       onError: () => {
