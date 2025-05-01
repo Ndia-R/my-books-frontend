@@ -1,4 +1,4 @@
-import { fetchApi, handleApiError } from '@/api/client';
+import { fetchApi } from '@/api/client';
 import { AccessToken, LoginRequest, SignupRequest, User } from '@/types';
 
 export const login = async (requestBody: LoginRequest) => {
@@ -13,7 +13,8 @@ export const login = async (requestBody: LoginRequest) => {
     const response = await fetchApi<AccessToken>(endpoint, options);
     return response.data;
   } catch (error) {
-    throw handleApiError(error);
+    console.error(error);
+    throw new Error('ログインに失敗しました。');
   }
 };
 
@@ -29,7 +30,8 @@ export const signup = async (requestBody: SignupRequest) => {
     const response = await fetchApi<AccessToken>(endpoint, options);
     return response.data;
   } catch (error) {
-    throw handleApiError(error);
+    console.error(error);
+    throw new Error('サインアップに失敗しました。');
   }
 };
 
@@ -42,7 +44,8 @@ export const logout = async () => {
     };
     await fetchApi(endpoint, options);
   } catch (error) {
-    throw handleApiError(error);
+    console.error(error);
+    throw new Error('ログアウトに失敗しました。');
   }
 };
 
@@ -55,8 +58,9 @@ export const getAccessToken = async () => {
     };
     const response = await fetchApi<AccessToken>(endpoint, options);
     return response.data.accessToken;
-  } catch {
-    return null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('トークンの取得に失敗しました。');
   }
 };
 
@@ -70,7 +74,8 @@ export const getUser = async (token: string | null) => {
     };
     const response = await fetchApi<User>(endpoint, options);
     return response.data;
-  } catch {
-    return null;
+  } catch (error) {
+    console.error(error);
+    throw new Error('ユーザー情報の取得に失敗しました。');
   }
 };

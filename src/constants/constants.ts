@@ -1,7 +1,7 @@
 export const TITLE_LOGO = 'My Books';
 
-export const BOOKS_API_ENDPOINT = `${import.meta.env.VITE_API_BASE_URL}/api/v1`;
-export const IMAGE_BASE_URL = `${import.meta.env.VITE_API_BASE_URL}/images`;
+export const BOOKS_API_BASE_URL = `${import.meta.env.VITE_BASE_URL}/api/v1`;
+export const IMAGE_BASE_URL = `${import.meta.env.VITE_BASE_URL}/images`;
 
 export const BOOK_IMAGE_BASE_URL = `${IMAGE_BASE_URL}/my-books`;
 export const AVATAR_IMAGE_BASE_URL = `${IMAGE_BASE_URL}/avatars`;

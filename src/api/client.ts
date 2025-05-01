@@ -1,15 +1,15 @@
-import { BOOKS_API_ENDPOINT } from '@/constants/constants';
+import { BOOKS_API_BASE_URL } from '@/constants/constants';
 import { ApiResponse, ErrorResponse } from '@/types';
 
 export const fetchApi = async <T>(
   endpoint: string,
   options: RequestInit = {}
-) => {
-  const url = `${BOOKS_API_ENDPOINT}${endpoint}`;
+): Promise<ApiResponse<T>> => {
+  const url = `${BOOKS_API_BASE_URL}${endpoint}`;
   const response = await fetch(url, { ...options });
 
   if (!response.ok) {
-    throw new Error(await generateErrorMessage(endpoint, response));
+    throw new Error(await generateErrorMessage(url, response));
   }
 
   return await parseApiResponse<T>(response);
@@ -25,15 +25,12 @@ export const parseApiResponse = async <T>(
   return {
     data,
     status: response.status,
-    ok: response.ok,
+    statusText: response.statusText,
   };
 };
 
-export const generateErrorMessage = async (
-  endpoint: string,
-  response: Response
-) => {
-  let errorMessage = `[URL] ${endpoint}`;
+export const generateErrorMessage = async (url: string, response: Response) => {
+  let errorMessage = `[URL] ${url}`;
   try {
     const errorResponse = (await response.json()) as ErrorResponse;
     errorMessage += ` [MESSAGE] ${errorResponse.message} [STATUS] ${response.status}(${errorResponse.status})`;
@@ -41,11 +38,4 @@ export const generateErrorMessage = async (
     // JSON でない場合は無視
   }
   return errorMessage;
-};
-
-export const handleApiError = (error: unknown): never => {
-  if (error instanceof Error) {
-    throw new Error(error.message);
-  }
-  throw new Error('不明なエラーが発生しました');
 };

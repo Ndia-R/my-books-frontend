@@ -1,9 +1,3 @@
-export interface ApiResponse<T> {
-  data: T;
-  status: number;
-  ok: boolean;
-}
-
 export interface LoginRequest {
   email: string;
   password: string;

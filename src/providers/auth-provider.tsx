@@ -1,6 +1,6 @@
 import * as AuthApi from '@/api/auth';
 import { generateErrorMessage, parseApiResponse } from '@/api/client';
-import { BOOKS_API_ENDPOINT } from '@/constants/constants';
+import { BOOKS_API_BASE_URL } from '@/constants/constants';
 import { ApiResponse, LoginRequest, SignupRequest, User } from '@/types';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'sonner';
@@ -42,7 +42,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAccessToken(null);
       setUser(null);
       console.error(error);
-      throw new Error('ログインできませんでした。');
+      throw new Error('ログインに失敗しました。');
     }
   };
 
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       setAccessToken(null);
       setUser(null);
       console.error(error);
-      throw new Error('サインアップできませんでした。');
+      throw new Error('サインアップに失敗しました。');
     }
   };
 
@@ -79,7 +79,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } catch (error) {
       setUser(null);
       console.error(error);
-      throw new Error('ユーザー情報の更新に失敗しました。');
+      throw new Error('ユーザー情報の取得に失敗しました。');
     }
   };
 
@@ -87,7 +87,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     endpoint: string,
     options: RequestInit = {}
   ) => {
-    const url = `${BOOKS_API_ENDPOINT}${endpoint}`;
+    const url = `${BOOKS_API_BASE_URL}${endpoint}`;
     let response = await fetch(url, {
       ...options,
       headers: {
@@ -97,9 +97,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     });
 
     if (response.status === 401) {
-      const newAccessToken = await AuthApi.getAccessToken();
-      setAccessToken(newAccessToken);
-      if (!newAccessToken) {
+      try {
+        const newAccessToken = await AuthApi.getAccessToken();
+        setAccessToken(newAccessToken);
+
+        response = await fetch(url, {
+          ...options,
+          headers: {
+            ...options.headers,
+            Authorization: `Bearer ${newAccessToken}`,
+          },
+        });
+      } catch {
         logout();
         toast.error('ログインセッションの期限が切れました。', {
           description: '作業を続けるには再度ログインしてください。',
@@ -107,13 +116,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         });
         throw new Error('ログインセッションの期限が切れました。');
       }
-      response = await fetch(url, {
-        ...options,
-        headers: {
-          ...options.headers,
-          Authorization: `Bearer ${newAccessToken}`,
-        },
-      });
     }
 
     if (!response.ok) {
@@ -127,10 +129,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     // リロードするとメモリからアクセストークンが消えてしまうので
     // 初期読み込み時にリフレッシュトークンを使って再取得する
     const init = async () => {
-      const accessToken = await AuthApi.getAccessToken();
-      setAccessToken(accessToken);
-      const user = await AuthApi.getUser(accessToken);
-      setUser(user);
+      try {
+        const accessToken = await AuthApi.getAccessToken();
+        setAccessToken(accessToken);
+        const user = await AuthApi.getUser(accessToken);
+        setUser(user);
+      } catch {
+        setAccessToken(null);
+        setUser(null);
+        console.warn('自動ログインできませんでした。');
+      }
 
       setIsLoading(false);
     };
