@@ -3,9 +3,9 @@ import PasswordInput from '@/components/profile/password-input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
-import { useApiUser } from '@/hooks/api/use-api-user';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { usePageTitle } from '@/hooks/use-page-title';
+import { changePassword } from '@/lib/api/user';
 import { cn } from '@/lib/utils';
 import { ChangePassword } from '@/types';
 import { useMutation } from '@tanstack/react-query';
@@ -32,7 +32,6 @@ export default function Page({ title }: Props) {
   const confirmPasswordRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { changePassword } = useApiUser();
 
   const { confirmDialog } = useConfirmDialog();
 

@@ -6,9 +6,14 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useApiBook } from '@/hooks/api/use-api-book';
-import { useApiBookmark } from '@/hooks/api/use-api-bookmark';
 import { usePageTitle } from '@/hooks/use-page-title';
+import {
+  createBookmark,
+  deleteBookmark,
+  getBookmarkByBookId,
+  updateBookmark,
+} from '@/lib/api/bookmarks';
+import { getBookContentPage, getBookTableOfContents } from '@/lib/api/books';
 import { chapterNumberString, cn } from '@/lib/utils';
 import { Bookmark, BookmarkRequest, BookTableOfContents } from '@/types';
 import {
@@ -133,14 +138,6 @@ export default function BookReadContent({
 }: Props) {
   const [isOpenCreateDialog, setIsOpenCreateDialog] = useState(false);
   const [isOpenUpdateDialog, setIsOpenUpdateDialog] = useState(false);
-
-  const { getBookTableOfContents, getBookContentPage } = useApiBook();
-  const {
-    getBookmarkByBookId,
-    createBookmark,
-    updateBookmark,
-    deleteBookmark,
-  } = useApiBookmark();
 
   const [
     { data: bookTableOfContents },

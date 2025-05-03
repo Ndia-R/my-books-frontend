@@ -1,12 +1,11 @@
 import GenreList from '@/components/genres/genre-list';
-import { useApiGenre } from '@/hooks/api/use-api-genre';
 import { useSearchFilters } from '@/hooks/use-search-filters';
+import { getGenres } from '@/lib/api/genres';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export default function GenresSelector() {
   const { genreIds, condition, updateQueryParams } = useSearchFilters();
-  const { getGenres } = useApiGenre();
 
   const { data: genres } = useSuspenseQuery({
     queryKey: ['getGenres'],

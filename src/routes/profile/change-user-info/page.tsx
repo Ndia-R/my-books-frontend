@@ -4,8 +4,8 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useApiUser } from '@/hooks/api/use-api-user';
 import { usePageTitle } from '@/hooks/use-page-title';
+import { updateCurrentUser } from '@/lib/api/user';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { UpdateCurrentUser } from '@/types';
@@ -27,7 +27,6 @@ export default function Page({ title }: Props) {
   const nameRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { updateCurrentUser } = useApiUser();
 
   const { user, refreshUserInfo } = useAuth();
 

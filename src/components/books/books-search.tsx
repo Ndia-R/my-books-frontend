@@ -1,6 +1,6 @@
 import BookList from '@/components/books/book-list';
 import SearchPagination from '@/components/search-pagination';
-import { useApiBook } from '@/hooks/api/use-api-book';
+import { getBookPageByQuery } from '@/lib/api/books';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
@@ -9,8 +9,6 @@ type Props = {
 };
 
 export default function BooksSearch({ searchQuery, page }: Props) {
-  const { getBookPageByQuery } = useApiBook();
-
   const { data: bookPage } = useSuspenseQuery({
     queryKey: ['getBookPageByQuery', searchQuery, page],
     queryFn: () => getBookPageByQuery(searchQuery, page),

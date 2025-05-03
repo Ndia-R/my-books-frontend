@@ -1,7 +1,11 @@
 import BookmarkList from '@/components/bookmarks/bookmark-list';
 import SearchPagination from '@/components/search-pagination';
-import { useApiBookmark } from '@/hooks/api/use-api-bookmark';
 import { useSearchFilters } from '@/hooks/use-search-filters';
+import {
+  deleteBookmark,
+  getBookmarkPage,
+  updateBookmark,
+} from '@/lib/api/bookmarks';
 import { BookmarkRequest } from '@/types';
 import {
   useMutation,
@@ -14,7 +18,6 @@ type Props = {
 };
 
 export default function Bookmarks({ page }: Props) {
-  const { getBookmarkPage, updateBookmark, deleteBookmark } = useApiBookmark();
   const { updateQueryParams } = useSearchFilters();
   const queryClient = useQueryClient();
 

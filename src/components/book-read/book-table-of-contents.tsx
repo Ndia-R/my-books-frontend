@@ -4,8 +4,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useApiBook } from '@/hooks/api/use-api-book';
 import { usePageTitle } from '@/hooks/use-page-title';
+import { getBookTableOfContents } from '@/lib/api/books';
 import { chapterNumberString, cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -16,7 +16,6 @@ type Props = {
 };
 
 export default function BookTableOfContents({ bookId }: Props) {
-  const { getBookTableOfContents } = useApiBook();
   const { user } = useAuth();
 
   const { data: bookTableOfContents } = useSuspenseQuery({

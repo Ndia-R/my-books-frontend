@@ -1,10 +1,8 @@
 import GenreList from '@/components/genres/genre-list';
-import { useApiGenre } from '@/hooks/api/use-api-genre';
+import { getGenres } from '@/lib/api/genres';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function GenresTopPage() {
-  const { getGenres } = useApiGenre();
-
   const { data: genres } = useSuspenseQuery({
     queryKey: ['getGenres'],
     queryFn: () => getGenres(),

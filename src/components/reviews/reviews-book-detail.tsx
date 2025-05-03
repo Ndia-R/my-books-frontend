@@ -6,7 +6,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useApiReview } from '@/hooks/api/use-api-review';
+import {
+  checkSelfReviewExists,
+  createReview,
+  deleteReview,
+  getReviewPage,
+  updateReview,
+} from '@/lib/api/review';
 import { useAuth } from '@/providers/auth-provider';
 import { Review, ReviewRequest } from '@/types';
 import {
@@ -31,13 +37,6 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { user } = useAuth();
-  const {
-    getReviewPage,
-    checkSelfReviewExists,
-    createReview,
-    updateReview,
-    deleteReview,
-  } = useApiReview();
 
   const { data: initialReviewPage } = useSuspenseQuery({
     queryKey: ['getReviewPage', bookId, 1],

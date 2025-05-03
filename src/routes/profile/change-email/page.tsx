@@ -4,9 +4,9 @@ import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useApiUser } from '@/hooks/api/use-api-user';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { usePageTitle } from '@/hooks/use-page-title';
+import { changeEmail } from '@/lib/api/user';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { ChangeEmail } from '@/types';
@@ -30,7 +30,6 @@ export default function Page({ title }: Props) {
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
   const navigate = useNavigate();
-  const { changeEmail } = useApiUser();
 
   const { user, logout } = useAuth();
   const { confirmDialog } = useConfirmDialog();

@@ -1,6 +1,6 @@
 import FavoriteList from '@/components/favorites/favorite-list';
 import SearchPagination from '@/components/search-pagination';
-import { useApiFavorite } from '@/hooks/api/use-api-favorite';
+import { getFavoritePage } from '@/lib/api/favorite';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
@@ -8,8 +8,6 @@ type Props = {
 };
 
 export default function Favorites({ page }: Props) {
-  const { getFavoritePage } = useApiFavorite();
-
   const { data: bookPage } = useSuspenseQuery({
     queryKey: ['getFavoritePage', page],
     queryFn: () => getFavoritePage(page),

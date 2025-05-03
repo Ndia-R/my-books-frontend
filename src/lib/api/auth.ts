@@ -1,5 +1,5 @@
-import { fetchApi } from '@/api/client';
-import { AccessToken, LoginRequest, SignupRequest, User } from '@/types';
+import { fetchApi } from '@/lib/api/fetch-api/api-client';
+import { AccessToken, LoginRequest, SignupRequest } from '@/types';
 
 export const login = async (requestBody: LoginRequest) => {
   try {
@@ -46,36 +46,5 @@ export const logout = async () => {
   } catch (error) {
     console.error(error);
     throw new Error('ログアウトに失敗しました。');
-  }
-};
-
-export const getAccessToken = async () => {
-  try {
-    const endpoint = `/refresh-token`;
-    const options: RequestInit = {
-      method: 'POST',
-      credentials: 'include',
-    };
-    const response = await fetchApi<AccessToken>(endpoint, options);
-    return response.data.accessToken;
-  } catch (error) {
-    console.error(error);
-    throw new Error('トークンの取得に失敗しました。');
-  }
-};
-
-export const getUser = async (token: string | null) => {
-  if (!token) return null;
-
-  try {
-    const endpoint = `/me`;
-    const options: RequestInit = {
-      headers: { Authorization: `Bearer ${token}` },
-    };
-    const response = await fetchApi<User>(endpoint, options);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('ユーザー情報の取得に失敗しました。');
   }
 };

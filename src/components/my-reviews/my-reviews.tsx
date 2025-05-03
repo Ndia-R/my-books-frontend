@@ -1,7 +1,11 @@
 import MyReviewList from '@/components/my-reviews/my-review-list';
 import SearchPagination from '@/components/search-pagination';
-import { useApiReview } from '@/hooks/api/use-api-review';
 import { useSearchFilters } from '@/hooks/use-search-filters';
+import {
+  deleteReview,
+  getReviewPageByUser,
+  updateReview,
+} from '@/lib/api/review';
 import { ReviewRequest } from '@/types';
 import {
   useMutation,
@@ -14,7 +18,6 @@ type Props = {
 };
 
 export default function MyReviews({ page }: Props) {
-  const { getReviewPageByUser, updateReview, deleteReview } = useApiReview();
   const { updateQueryParams } = useSearchFilters();
   const queryClient = useQueryClient();
 

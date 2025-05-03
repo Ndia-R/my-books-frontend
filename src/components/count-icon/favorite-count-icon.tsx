@@ -4,7 +4,11 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { useApiFavorite } from '@/hooks/api/use-api-favorite';
+import {
+  createFavorite,
+  deleteFavorite,
+  getFavoriteInfo,
+} from '@/lib/api/favorite';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { FavoriteInfo, FavoriteRequest } from '@/types';
@@ -27,7 +31,6 @@ export default function FavoriteCountIcon({
   showCount = false,
 }: Props) {
   const { user } = useAuth();
-  const { getFavoriteInfo, createFavorite, deleteFavorite } = useApiFavorite();
 
   const queryClient = useQueryClient();
 
