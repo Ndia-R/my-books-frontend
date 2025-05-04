@@ -1,21 +1,25 @@
 import * as AuthApi from '@/lib/api/auth';
-import { refreshToken } from '@/lib/api/fetch-api/api-client';
-import { setAccessToken } from '@/lib/api/fetch-api/auth-token';
-import { getCurrentUser } from '@/lib/api/user';
-import { LoginRequest, SignupRequest, User } from '@/types';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { refreshAccessToken, setAccessToken } from '@/lib/api/fetch-client';
+import { LoginRequest, SignupRequest } from '@/types';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { toast } from 'sonner';
 
 type AuthProviderProps = {
   children: React.ReactNode;
 };
 
 type AuthProviderState = {
-  user: User | null;
   isLoading: boolean;
+  isAuthenticated: boolean;
   login: (requestBody: LoginRequest) => Promise<void>;
   signup: (requestBody: SignupRequest) => Promise<void>;
   logout: () => Promise<void>;
-  refreshUserInfo: () => Promise<void>;
 };
 
 const AuthProviderContext = createContext<AuthProviderState | undefined>(
@@ -23,18 +27,17 @@ const AuthProviderContext = createContext<AuthProviderState | undefined>(
 );
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User | null>(null);
   const [isLoading, setisLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const login = async (requestBody: LoginRequest) => {
     try {
       const response = await AuthApi.login(requestBody);
       setAccessToken(response.accessToken);
-      const user = await getCurrentUser();
-      setUser(user);
+      setIsAuthenticated(true);
     } catch (error) {
       setAccessToken(null);
-      setUser(null);
+      setIsAuthenticated(false);
       console.error(error);
       throw new Error('ログインに失敗しました。');
     }
@@ -44,17 +47,16 @@ export function AuthProvider({ children }: AuthProviderProps) {
     try {
       const response = await AuthApi.signup(requestBody);
       setAccessToken(response.accessToken);
-      const user = await getCurrentUser();
-      setUser(user);
+      setIsAuthenticated(true);
     } catch (error) {
       setAccessToken(null);
-      setUser(null);
+      setIsAuthenticated(false);
       console.error(error);
       throw new Error('サインアップに失敗しました。');
     }
   };
 
-  const logout = async () => {
+  const logout = useCallback(async () => {
     try {
       await AuthApi.logout();
     } catch (error) {
@@ -62,50 +64,49 @@ export function AuthProvider({ children }: AuthProviderProps) {
       throw new Error('ログアウトに失敗しました。');
     } finally {
       setAccessToken(null);
-      setUser(null);
+      setIsAuthenticated(false);
     }
-  };
+  }, []);
 
-  const refreshUserInfo = async () => {
-    try {
-      const user = await getCurrentUser();
-      setUser(user);
-    } catch (error) {
-      setUser(null);
-      console.error(error);
-      throw new Error('ユーザー情報の取得に失敗しました。');
-    }
-  };
-
+  // リロードするとメモリからアクセストークンが消えてしまうので
+  // 初期読み込み時にリフレッシュトークンを使って再取得する
+  // アクセストークンはrefreshAccessToken()内でセットしている
   useEffect(() => {
-    // リロードするとメモリからアクセストークンが消えてしまうので
-    // 初期読み込み時にリフレッシュトークンを使って再取得する
     const init = async () => {
-      console.log('provider useEffect');
-
-      try {
-        const accessToken = await refreshToken();
-        setAccessToken(accessToken);
-        const user = await getCurrentUser();
-        setUser(user);
-      } catch {
-        setAccessToken(null);
-        setUser(null);
+      const refreshed = await refreshAccessToken();
+      if (refreshed) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
         console.warn('自動ログインできませんでした。');
-      } finally {
-        setisLoading(false);
       }
+      setisLoading(false);
     };
     init();
   }, []);
 
+  // リフレッシュトークンが期限切れの場合のイベントハンドラ
+  useEffect(() => {
+    const handleSessionExpired = async () => {
+      await logout();
+      toast.error(
+        'セッションの有効期限が切れました。再ログインしてください。',
+        { duration: 5000 }
+      );
+    };
+
+    window.addEventListener('auth:sessionExpired', handleSessionExpired);
+    return () => {
+      window.removeEventListener('auth:sessionExpired', handleSessionExpired);
+    };
+  }, [logout]);
+
   const value = {
-    user,
+    isAuthenticated,
     isLoading,
     login,
     signup,
     logout,
-    refreshUserInfo,
   };
 
   return (

@@ -1,12 +1,12 @@
 import Logo from '@/components/layout/logo';
-import ProfileCounts from '@/components/profile/profile-counts';
+import ProfileCounts from '@/components/profile/profile-count';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/providers/auth-provider';
+import { useUser } from '@/providers/user-provider';
 import ErrorElement from '@/routes/error-element';
 import { KeyRoundIcon, MailIcon, UserRoundPenIcon } from 'lucide-react';
 import { Suspense } from 'react';
@@ -44,9 +44,7 @@ type Props = {
 export default function Page({ title }: Props) {
   usePageTitle(title);
 
-  const { user } = useAuth();
-
-  if (!user) return null;
+  const { user } = useUser();
 
   return (
     <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
@@ -59,16 +57,16 @@ export default function Page({ title }: Props) {
             <Avatar className="size-24">
               <AvatarImage
                 className="bg-primary"
-                src={AVATAR_IMAGE_BASE_URL + user.avatarPath}
+                src={AVATAR_IMAGE_BASE_URL + user?.avatarPath}
                 alt="avatar-image"
               />
               <AvatarFallback className="bg-primary text-5xl font-semibold">
-                {user.name.slice(0, 1)}
+                {user?.name.slice(0, 1)}
               </AvatarFallback>
             </Avatar>
             <div className="w-full p-4 text-center">
-              <p className="text-xl font-semibold">{user.name}</p>
-              <p className="text-sm">{user.email}</p>
+              <p className="text-xl font-semibold">{user?.name}</p>
+              <p className="text-sm">{user?.email}</p>
             </div>
 
             <div className="h-20 w-full p-4">

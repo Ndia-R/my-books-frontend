@@ -10,7 +10,7 @@ import {
   getFavoriteInfo,
 } from '@/lib/api/favorite';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/providers/auth-provider';
+import { useUser } from '@/providers/user-provider';
 import { FavoriteInfo, FavoriteRequest } from '@/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
@@ -30,7 +30,7 @@ export default function FavoriteCountIcon({
   size = 'md',
   showCount = false,
 }: Props) {
-  const { user } = useAuth();
+  const { user } = useUser();
 
   const queryClient = useQueryClient();
 

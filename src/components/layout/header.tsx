@@ -2,13 +2,19 @@ import Menu from '@/components/layout/menu';
 import ThemeToggleButton from '@/components/layout/theme-toggle-button';
 import UserIconButton from '@/components/layout/user-icon-button';
 import SearchInput from '@/components/search-input';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/providers/auth-provider';
+import { Link, useLocation } from 'react-router';
 
 type Props = {
   className?: string;
 };
 
 export default function Header({ className }: Props) {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+
   return (
     <header className={cn('backdrop-blur-sm', className)}>
       <div className="mx-auto max-w-7xl px-3 sm:px-6">
@@ -17,7 +23,22 @@ export default function Header({ className }: Props) {
             <Menu />
             <div className="flex">
               <SearchInput />
-              <UserIconButton />
+
+              {isAuthenticated ? (
+                <UserIconButton />
+              ) : (
+                <Link
+                  className={cn(
+                    buttonVariants({ variant: 'ghost' }),
+                    'rounded-full'
+                  )}
+                  to="/login"
+                  state={{ from: location }}
+                >
+                  ログイン
+                </Link>
+              )}
+
               <ThemeToggleButton />
             </div>
           </div>

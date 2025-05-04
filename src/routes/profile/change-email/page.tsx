@@ -9,6 +9,7 @@ import { usePageTitle } from '@/hooks/use-page-title';
 import { changeEmail } from '@/lib/api/user';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
+import { useUser } from '@/providers/user-provider';
 import { ChangeEmail } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
@@ -31,7 +32,9 @@ export default function Page({ title }: Props) {
 
   const navigate = useNavigate();
 
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
+  const { user } = useUser();
+
   const { confirmDialog } = useConfirmDialog();
 
   const updateMutation = useMutation({

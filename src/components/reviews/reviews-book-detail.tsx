@@ -36,7 +36,7 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { user } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const { data: initialReviewPage } = useSuspenseQuery({
     queryKey: ['getReviewPage', bookId, 1],
@@ -48,7 +48,7 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   const { data: reviewExists = false } = useQuery({
     queryKey: ['checkSelfReviewExists', bookId],
     queryFn: () => checkSelfReviewExists(bookId),
-    enabled: !!user,
+    enabled: isAuthenticated,
     retry: false,
   });
 
@@ -112,12 +112,12 @@ export default function ReviewsBookDetail({ bookId }: Props) {
       <div className="mx-auto w-full pb-4 lg:w-3/4">
         <div className="flex flex-col-reverse items-center justify-end gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
           <p>レビュー {initialReviewPage.totalItems} 件</p>
-          {user ? (
+          {isAuthenticated ? (
             <Button
               className="w-44 rounded-full bg-transparent"
               variant="outline"
               disabled={reviewExists}
-              onClick={() => user && setIsOpen(true)}
+              onClick={() => setIsOpen(true)}
             >
               {reviewExists ? 'レビュー済み' : 'レビューする'}
             </Button>

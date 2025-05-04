@@ -1,10 +1,10 @@
-import { fetchApi } from '@/lib/api/fetch-api/api-client';
+import { customFetch } from '@/lib/api/fetch-client';
 import { Genre } from '@/types';
 
 export const getGenres = async () => {
   try {
     const endpoint = `/genres`;
-    const response = await fetchApi<Genre[]>(endpoint);
+    const response = await customFetch<Genre[]>(endpoint);
     return response.data;
   } catch (error) {
     console.error(error);

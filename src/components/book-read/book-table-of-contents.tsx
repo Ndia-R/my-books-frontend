@@ -16,7 +16,7 @@ type Props = {
 };
 
 export default function BookTableOfContents({ bookId }: Props) {
-  const { user } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   const { data: bookTableOfContents } = useSuspenseQuery({
     queryKey: ['getBookTableOfContents', bookId],
@@ -33,7 +33,7 @@ export default function BookTableOfContents({ bookId }: Props) {
             {bookTableOfContents.title}
           </h1>
 
-          {user && bookTableOfContents.chapters.length ? (
+          {isAuthenticated && bookTableOfContents.chapters.length ? (
             <Link
               className={cn(
                 buttonVariants({ variant: 'outline' }),
@@ -76,7 +76,7 @@ export default function BookTableOfContents({ bookId }: Props) {
                   to={`/read/${bookId}/chapter/${chapter.chapterNumber}/page/1`}
                   className={cn(
                     'hover:text-primary text-base font-semibold sm:text-xl',
-                    !user && 'pointer-events-none'
+                    !isAuthenticated && 'pointer-events-none'
                   )}
                 >
                   {chapter.chapterTitle}

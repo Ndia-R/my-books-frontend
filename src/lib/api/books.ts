@@ -1,5 +1,5 @@
 import { FETCH_BOOKS_MAX_RESULTS } from '@/constants/constants';
-import { fetchApi } from '@/lib/api/fetch-api/api-client';
+import { customFetch } from '@/lib/api/fetch-client';
 import {
   BookContentPage,
   BookDetails,
@@ -10,7 +10,7 @@ import {
 export const getBookDetailsById = async (bookId: string) => {
   try {
     const endpoint = `/books/${bookId}`;
-    const response = await fetchApi<BookDetails>(endpoint);
+    const response = await customFetch<BookDetails>(endpoint);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -23,7 +23,7 @@ export const getBookPageByQuery = async (q: string, page: number = 0) => {
     const basePage = page > 0 ? page - 1 : 0;
     const endpoint = `/books/search`;
     const query = `?q=${q}&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
-    const response = await fetchApi<BookPage>(endpoint + query);
+    const response = await customFetch<BookPage>(endpoint + query);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -40,7 +40,7 @@ export const getBookPageByGenreId = async (
     const basePage = page > 0 ? page - 1 : 0;
     const endpoint = `/books/discover`;
     const query = `?genreIds=${genreIdsQuery}&condition=${conditionQuery}&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
-    const response = await fetchApi<BookPage>(endpoint + query);
+    const response = await customFetch<BookPage>(endpoint + query);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -51,7 +51,7 @@ export const getBookPageByGenreId = async (
 export const getNewBooks = async () => {
   try {
     const endpoint = `/books/new-books`;
-    const response = await fetchApi<BookPage>(endpoint);
+    const response = await customFetch<BookPage>(endpoint);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -62,7 +62,7 @@ export const getNewBooks = async () => {
 export const getBookTableOfContents = async (bookId: string) => {
   try {
     const endpoint = `/books/${bookId}/table-of-contents`;
-    const response = await fetchApi<BookTableOfContents>(endpoint);
+    const response = await customFetch<BookTableOfContents>(endpoint);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -77,7 +77,7 @@ export const getBookContentPage = async (
 ) => {
   try {
     const endpoint = `/read/books/${bookId}/chapters/${chapterNumber}/pages/${pageNumber}`;
-    const response = await fetchApi<BookContentPage>(endpoint);
+    const response = await customFetch<BookContentPage>(endpoint);
     return response.data;
   } catch (error) {
     console.error(error);

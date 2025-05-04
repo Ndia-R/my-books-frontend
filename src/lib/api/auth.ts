@@ -1,4 +1,4 @@
-import { fetchApi } from '@/lib/api/fetch-api/api-client';
+import { customFetch } from '@/lib/api/fetch-client';
 import { AccessToken, LoginRequest, SignupRequest } from '@/types';
 
 export const login = async (requestBody: LoginRequest) => {
@@ -10,7 +10,7 @@ export const login = async (requestBody: LoginRequest) => {
       body: JSON.stringify(requestBody),
       credentials: 'include',
     };
-    const response = await fetchApi<AccessToken>(endpoint, options);
+    const response = await customFetch<AccessToken>(endpoint, options);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -27,7 +27,7 @@ export const signup = async (requestBody: SignupRequest) => {
       body: JSON.stringify(requestBody),
       credentials: 'include',
     };
-    const response = await fetchApi<AccessToken>(endpoint, options);
+    const response = await customFetch<AccessToken>(endpoint, options);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -42,7 +42,7 @@ export const logout = async () => {
       method: 'POST',
       credentials: 'include',
     };
-    await fetchApi(endpoint, options);
+    await customFetch(endpoint, options);
   } catch (error) {
     console.error(error);
     throw new Error('ログアウトに失敗しました。');

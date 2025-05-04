@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { updateCurrentUser } from '@/lib/api/user';
 import { cn } from '@/lib/utils';
-import { useAuth } from '@/providers/auth-provider';
+import { useUser } from '@/providers/user-provider';
 import { UpdateCurrentUser } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
@@ -28,7 +28,7 @@ export default function Page({ title }: Props) {
 
   const navigate = useNavigate();
 
-  const { user, refreshUserInfo } = useAuth();
+  const { user, setCurrentUser } = useUser();
 
   const [avatarPath, setAvatarPath] = useState(user?.avatarPath || '');
 
@@ -64,7 +64,7 @@ export default function Page({ title }: Props) {
     const requestBody: UpdateCurrentUser = { name, avatarPath };
     updateMutation.mutate(requestBody, {
       onSuccess: async () => {
-        await refreshUserInfo();
+        await setCurrentUser();
         toast.success('ユーザー情報を変更しました');
       },
       onError: () => {

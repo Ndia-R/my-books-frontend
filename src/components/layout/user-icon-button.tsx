@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,6 +11,7 @@ import {
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
+import { useUser } from '@/providers/user-provider';
 import { useMutation } from '@tanstack/react-query';
 import {
   BookmarkIcon,
@@ -20,7 +21,7 @@ import {
   UserRoundIcon,
 } from 'lucide-react';
 import { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
 const MENU_LIST = [
@@ -34,9 +35,9 @@ export default function UserIconButton() {
   const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
 
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
+  const { user } = useUser();
 
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
@@ -65,17 +66,6 @@ export default function UserIconButton() {
     navigate(href);
   };
 
-  if (!user)
-    return (
-      <Link
-        className={cn(buttonVariants({ variant: 'ghost' }), 'rounded-full')}
-        to="/login"
-        state={{ from: location }}
-      >
-        ログイン
-      </Link>
-    );
-
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger
@@ -91,11 +81,11 @@ export default function UserIconButton() {
           <Avatar>
             <AvatarImage
               className="bg-primary/50"
-              src={AVATAR_IMAGE_BASE_URL + user.avatarPath}
+              src={AVATAR_IMAGE_BASE_URL + user?.avatarPath}
               alt="avatar-image"
             />
             <AvatarFallback className="text-lg font-semibold">
-              {user.name.slice(0, 1)}
+              {user?.name.slice(0, 1)}
             </AvatarFallback>
           </Avatar>
         </Button>
@@ -106,17 +96,17 @@ export default function UserIconButton() {
             <Avatar className="size-8">
               <AvatarImage
                 className="bg-primary/50"
-                src={AVATAR_IMAGE_BASE_URL + user.avatarPath}
+                src={AVATAR_IMAGE_BASE_URL + user?.avatarPath}
                 alt="avatar-image"
               />
               <AvatarFallback className="font-semibold">
-                {user.name.slice(0, 1)}
+                {user?.name.slice(0, 1)}
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 overflow-hidden">
-              <p className="truncate">{user.name}</p>
+              <p className="truncate">{user?.name}</p>
               <p className="text-muted-foreground truncate text-xs font-normal">
-                {user.email}
+                {user?.email}
               </p>
             </div>
           </div>

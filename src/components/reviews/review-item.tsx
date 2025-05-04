@@ -4,7 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { formatDateJP, formatTime } from '@/lib/utils';
-import { useAuth } from '@/providers/auth-provider';
+import { useUser } from '@/providers/user-provider';
 import { Review, ReviewDeleteMutation, ReviewUpdateMutation } from '@/types';
 import { SquarePenIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -21,7 +21,7 @@ export default function ReviewItem({
   deleteMutation,
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useAuth();
+  const { user } = useUser();
 
   return (
     <>
