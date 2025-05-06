@@ -6,7 +6,7 @@ export interface Book {
   description: string;
   genreIds: number[];
   authors: string[];
-  publishedDate: string;
+  publicationDate: string;
   imagePath: string;
   reviewCount: number;
   averageRating: number;
@@ -26,7 +26,7 @@ export interface BookDetails {
   genres: Genre[];
   authors: string[];
   publisher: string;
-  publishedDate: string;
+  publicationDate: string;
   price: number;
   pageCount: number;
   isbn: string;

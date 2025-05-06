@@ -29,9 +29,11 @@ export default function BookItem({ book }: Props) {
         </Link>
         <time
           className="text-muted-foreground text-xs tracking-wide"
-          dateTime={Date.parse(book.publishedDate) ? book.publishedDate : ''}
+          dateTime={
+            Date.parse(book.publicationDate) ? book.publicationDate : ''
+          }
         >
-          {formatDateJP(book.publishedDate)}
+          {formatDateJP(book.publicationDate)}
         </time>
         <div className="flex gap-x-3">
           <AverageRatingIcon size="sm" averageRating={book.averageRating} />

@@ -43,9 +43,23 @@ export const customFetch = async <T>(
         );
       }
     }
-    return await parseApiResponse<T>(response);
+
+    // レスポンスを解析
+    const apiResponse = await parseApiResponse<T>(response);
+
+    // エラーレスポンスの場合は例外をスロー
+    if (!response.ok) {
+      const error = new Error(
+        apiResponse.statusText || `HTTPエラー ${response.status}`
+      );
+      // エラーオブジェクトにレスポンス情報を追加
+      (error as any).response = apiResponse;
+      throw error;
+    }
+
+    return apiResponse;
   } catch (error) {
-    console.error(error);
+    console.error('API呼び出し中にエラーが発生しました:', error);
     throw error;
   }
 };
@@ -54,13 +68,24 @@ const parseApiResponse = async <T>(
   response: Response
 ): Promise<ApiResponse<T>> => {
   const contentType = response.headers.get('content-type');
-  const data = contentType?.includes('application/json')
-    ? await response.json()
-    : ((await response.text()) as unknown as T);
+  let data: T;
+
+  try {
+    if (contentType?.includes('application/json')) {
+      data = await response.json();
+    } else {
+      data = (await response.text()) as unknown as T;
+    }
+  } catch (e) {
+    console.error('レスポンスの解析に失敗しました:', e);
+    data = {} as T;
+  }
+
   return {
     data,
     status: response.status,
     statusText: response.statusText,
+    ok: response.ok,
   };
 };
 

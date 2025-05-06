@@ -6,24 +6,32 @@ export interface User {
   avatarPath: string;
 }
 
-export interface ProfileCounts {
+export interface UserProfile {
+  id: number;
+  email: string;
+  roles: string[];
+  name: string;
+  avatarPath: string;
+}
+
+export interface UserProfileCounts {
   favoriteCount: number;
   bookmarkCount: number;
   reviewCount: number;
 }
 
-export interface UpdateCurrentUser {
+export interface UpdateUserProfile {
   name: string;
   avatarPath: string;
 }
 
-export interface ChangePassword {
+export interface UpdateUserPassword {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
 }
 
-export interface ChangeEmail {
+export interface UpdateUserEmail {
   email: string;
   password: string;
 }

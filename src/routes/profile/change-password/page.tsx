@@ -5,9 +5,9 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { usePageTitle } from '@/hooks/use-page-title';
-import { changePassword } from '@/lib/api/user';
+import { updateUserPassword } from '@/lib/api/user';
 import { cn } from '@/lib/utils';
-import { ChangePassword } from '@/types';
+import { UpdateUserPassword } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import React, { useRef, useState } from 'react';
@@ -36,7 +36,8 @@ export default function Page({ title }: Props) {
   const { confirmDialog } = useConfirmDialog();
 
   const updateMutation = useMutation({
-    mutationFn: (requestBody: ChangePassword) => changePassword(requestBody),
+    mutationFn: (requestBody: UpdateUserPassword) =>
+      updateUserPassword(requestBody),
     onSuccess: () => {
       navigate('/profile');
     },
@@ -72,7 +73,7 @@ export default function Page({ title }: Props) {
     });
     if (isCancel) return;
 
-    const requestBody: ChangePassword = {
+    const requestBody: UpdateUserPassword = {
       currentPassword,
       newPassword,
       confirmPassword,

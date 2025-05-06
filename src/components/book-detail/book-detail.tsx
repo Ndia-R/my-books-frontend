@@ -4,8 +4,9 @@ import GenreList from '@/components/genres/genre-list';
 import Rating from '@/components/rating';
 import { buttonVariants } from '@/components/ui/button';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
+import { queryKeys } from '@/constants/query-keys';
 import { usePageTitle } from '@/hooks/use-page-title';
-import { getBookDetailsById } from '@/lib/api/books';
+import { getBookDetails } from '@/lib/api/books';
 import { cn, formatDateJP, formatIsbn, formatPrice } from '@/lib/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
@@ -16,8 +17,8 @@ type Props = {
 
 export default function BookDetail({ bookId }: Props) {
   const { data: book } = useSuspenseQuery({
-    queryKey: ['getBookDetailsById', bookId],
-    queryFn: () => getBookDetailsById(bookId),
+    queryKey: queryKeys.book.details(bookId),
+    queryFn: () => getBookDetails(bookId),
   });
 
   usePageTitle(book.title);
@@ -83,10 +84,10 @@ export default function BookDetail({ bookId }: Props) {
               <time
                 className="tracking-wide"
                 dateTime={
-                  Date.parse(book.publishedDate) ? book.publishedDate : ''
+                  Date.parse(book.publicationDate) ? book.publicationDate : ''
                 }
               >
-                {formatDateJP(book.publishedDate)}
+                {formatDateJP(book.publicationDate)}
               </time>
             </div>
             <div className="flex">

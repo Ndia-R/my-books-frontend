@@ -25,7 +25,7 @@ export default function Page() {
 
       <ErrorBoundary fallback={<ErrorElement />}>
         <Suspense fallback={<BooksSkeleton />}>
-          <BooksSearch searchQuery={q} page={page} />
+          <BooksSearch q={q} page={page} />
         </Suspense>
       </ErrorBoundary>
     </>

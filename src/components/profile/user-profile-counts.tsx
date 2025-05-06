@@ -1,12 +1,13 @@
 import CountUpNumber from '@/components/count-up-number';
-import { getProfileCounts } from '@/lib/api/user';
+import { queryKeys } from '@/constants/query-keys';
+import { getUserProfileCounts } from '@/lib/api/user';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 
-export default function ProfileCounts() {
-  const { data: profileCounts } = useSuspenseQuery({
-    queryKey: ['getProfileCounts'],
-    queryFn: () => getProfileCounts(),
+export default function UserProfileCounts() {
+  const { data: userProfileCounts } = useSuspenseQuery({
+    queryKey: queryKeys.user.profileCounts(),
+    queryFn: () => getUserProfileCounts(),
   });
 
   return (
@@ -15,7 +16,10 @@ export default function ProfileCounts() {
         <Link to="/favorites">
           <div className="w-24 text-center">
             <p className="text-xl font-bold">
-              <CountUpNumber end={profileCounts.favoriteCount} delay={300} />
+              <CountUpNumber
+                end={userProfileCounts.favoriteCount}
+                delay={300}
+              />
             </p>
             <p className="text-sm">お気に入り</p>
           </div>
@@ -25,7 +29,10 @@ export default function ProfileCounts() {
         <Link to="/bookmarks">
           <div className="w-24 text-center">
             <p className="text-xl font-bold">
-              <CountUpNumber end={profileCounts.bookmarkCount} delay={400} />
+              <CountUpNumber
+                end={userProfileCounts.bookmarkCount}
+                delay={400}
+              />
             </p>
             <p className="text-sm">ブックマーク</p>
           </div>
@@ -35,7 +42,7 @@ export default function ProfileCounts() {
         <Link to="/my-reviews">
           <div className="w-24 text-center">
             <p className="text-xl font-bold">
-              <CountUpNumber end={profileCounts.reviewCount} delay={500} />
+              <CountUpNumber end={userProfileCounts.reviewCount} delay={500} />
             </p>
             <p className="text-sm">マイレビュー</p>
           </div>

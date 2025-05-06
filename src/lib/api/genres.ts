@@ -1,6 +1,7 @@
 import { customFetch } from '@/lib/api/fetch-client';
 import { Genre } from '@/types';
 
+// すべてのジャンル取得
 export const getGenres = async () => {
   try {
     const endpoint = `/genres`;

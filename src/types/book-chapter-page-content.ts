@@ -1,4 +1,4 @@
-export interface BookContentPage {
+export interface BookChapterPageContent {
   bookId: string;
   chapterNumber: number;
   chapterTitle: string;

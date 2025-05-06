@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/lib/api/user';
+import { getUserProfile } from '@/lib/api/user';
 import { useAuth } from '@/providers/auth-provider';
 import { User } from '@/types';
 import {
@@ -28,8 +28,8 @@ export function UserProvider({ children }: UserProviderProps) {
 
   const setCurrentUser = useCallback(async () => {
     if (isAuthenticated) {
-      const currentUser = await getCurrentUser();
-      setUser(currentUser);
+      const profile = await getUserProfile();
+      setUser(profile);
     } else {
       setUser(null);
     }

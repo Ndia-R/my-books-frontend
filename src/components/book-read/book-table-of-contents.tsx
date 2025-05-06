@@ -4,6 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { queryKeys } from '@/constants/query-keys';
 import { usePageTitle } from '@/hooks/use-page-title';
 import { getBookTableOfContents } from '@/lib/api/books';
 import { chapterNumberString, cn } from '@/lib/utils';
@@ -19,7 +20,7 @@ export default function BookTableOfContents({ bookId }: Props) {
   const { isAuthenticated } = useAuth();
 
   const { data: bookTableOfContents } = useSuspenseQuery({
-    queryKey: ['getBookTableOfContents', bookId],
+    queryKey: queryKeys.book.tableOfContents(bookId),
     queryFn: () => getBookTableOfContents(bookId),
   });
 

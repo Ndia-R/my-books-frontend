@@ -1,17 +1,18 @@
 import BookList from '@/components/books/book-list';
 import SearchPagination from '@/components/search-pagination';
-import { getBookPageByQuery } from '@/lib/api/books';
+import { queryKeys } from '@/constants/query-keys';
+import { searchBooksByTitleKeyword } from '@/lib/api/books';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
-  searchQuery: string;
+  q: string;
   page: number;
 };
 
-export default function BooksSearch({ searchQuery, page }: Props) {
+export default function BooksSearch({ q, page }: Props) {
   const { data: bookPage } = useSuspenseQuery({
-    queryKey: ['getBookPageByQuery', searchQuery, page],
-    queryFn: () => getBookPageByQuery(searchQuery, page),
+    queryKey: queryKeys.book.byTitleKeyword(q, page),
+    queryFn: () => searchBooksByTitleKeyword(q, page),
   });
 
   return (

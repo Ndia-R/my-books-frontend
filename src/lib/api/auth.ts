@@ -1,6 +1,7 @@
 import { customFetch } from '@/lib/api/fetch-client';
 import { AccessToken, LoginRequest, SignupRequest } from '@/types';
 
+// ログイン
 export const login = async (requestBody: LoginRequest) => {
   try {
     const endpoint = `/login`;
@@ -18,6 +19,7 @@ export const login = async (requestBody: LoginRequest) => {
   }
 };
 
+// サインアップ
 export const signup = async (requestBody: SignupRequest) => {
   try {
     const endpoint = `/signup`;
@@ -35,6 +37,7 @@ export const signup = async (requestBody: SignupRequest) => {
   }
 };
 
+// ログアウト
 export const logout = async () => {
   try {
     const endpoint = `/logout`;

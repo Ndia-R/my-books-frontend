@@ -7,8 +7,8 @@ import LoginPage from '@/routes/login/page';
 import MyReviewsPage from '@/routes/my-reviews/page';
 import NotFoundPage from '@/routes/not-found';
 import RootPage from '@/routes/page';
-import ChangeEmailPage from '@/routes/profile/change-email/page';
-import ChangePasswordPage from '@/routes/profile/change-password/page';
+import UpdateUserEmailPage from '@/routes/profile/change-email/page';
+import UpdateUserPasswordPage from '@/routes/profile/change-password/page';
 import ChangeUserInfoPage from '@/routes/profile/change-user-info/page';
 import ProfilePage from '@/routes/profile/page';
 import ProtectedRoute from '@/routes/protected-route';
@@ -77,11 +77,11 @@ export const router = createBrowserRouter(
             />
             <Route
               path="change-email"
-              element={<ChangeEmailPage title="メールアドレス変更" />}
+              element={<UpdateUserEmailPage title="メールアドレス変更" />}
             />
             <Route
               path="change-password"
-              element={<ChangePasswordPage title="パスワード変更" />}
+              element={<UpdateUserPasswordPage title="パスワード変更" />}
             />
           </Route>
 

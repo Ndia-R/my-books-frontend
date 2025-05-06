@@ -1,6 +1,7 @@
 import BookList from '@/components/books/book-list';
 import SearchPagination from '@/components/search-pagination';
-import { getBookPageByGenreId } from '@/lib/api/books';
+import { queryKeys } from '@/constants/query-keys';
+import { searchBooksByGenre } from '@/lib/api/books';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
@@ -11,8 +12,8 @@ type Props = {
 
 export default function BooksDiscover({ genreIds, condition, page }: Props) {
   const { data: bookPage } = useSuspenseQuery({
-    queryKey: ['getBookPageByGenreId', genreIds, condition, page],
-    queryFn: () => getBookPageByGenreId(genreIds, condition, page),
+    queryKey: queryKeys.book.byGenre(genreIds, condition, page),
+    queryFn: () => searchBooksByGenre(genreIds, condition, page),
   });
 
   return (

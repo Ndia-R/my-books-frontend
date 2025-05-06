@@ -6,11 +6,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { usePageTitle } from '@/hooks/use-page-title';
-import { changeEmail } from '@/lib/api/user';
+import { updateUserEmail } from '@/lib/api/user';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useUser } from '@/providers/user-provider';
-import { ChangeEmail } from '@/types';
+import { UpdateUserEmail } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import React, { useRef, useState } from 'react';
@@ -38,7 +38,7 @@ export default function Page({ title }: Props) {
   const { confirmDialog } = useConfirmDialog();
 
   const updateMutation = useMutation({
-    mutationFn: (requestBody: ChangeEmail) => changeEmail(requestBody),
+    mutationFn: (requestBody: UpdateUserEmail) => updateUserEmail(requestBody),
     onSuccess: async () => {
       await logout();
       navigate('/login');
@@ -69,7 +69,7 @@ export default function Page({ title }: Props) {
     });
     if (isCancel) return;
 
-    const requestBody: ChangeEmail = { email, password };
+    const requestBody: UpdateUserEmail = { email, password };
     updateMutation.mutate(requestBody, {
       onSuccess: async () => {
         toast.success('メールアドレスを変更し、ログアウトしました', {

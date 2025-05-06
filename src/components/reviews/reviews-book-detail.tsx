@@ -6,13 +6,10 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import {
-  checkSelfReviewExists,
-  createReview,
-  deleteReview,
-  getReviewPage,
-  updateReview,
-} from '@/lib/api/review';
+import { queryKeys } from '@/constants/query-keys';
+import { getBookReviews } from '@/lib/api/books';
+import { createReview, deleteReview, updateReview } from '@/lib/api/review';
+import { getUserReviewForBook } from '@/lib/api/user';
 import { useAuth } from '@/providers/auth-provider';
 import { Review, ReviewRequest } from '@/types';
 import {
@@ -39,15 +36,15 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   const { isAuthenticated } = useAuth();
 
   const { data: initialReviewPage } = useSuspenseQuery({
-    queryKey: ['getReviewPage', bookId, 1],
-    queryFn: () => getReviewPage(bookId, 1),
+    queryKey: queryKeys.book.reviews(bookId, 1),
+    queryFn: () => getBookReviews(bookId, 1),
   });
 
   // ログインしていない場合は、enabledオプションを指定して
   // queryFnを呼び出さないようにする（この指定はuseSuspenseQueryでは出来ない模様）
-  const { data: reviewExists = false } = useQuery({
-    queryKey: ['checkSelfReviewExists', bookId],
-    queryFn: () => checkSelfReviewExists(bookId),
+  const { data: review } = useQuery({
+    queryKey: queryKeys.user.reviewForBook(bookId),
+    queryFn: () => getUserReviewForBook(bookId),
     enabled: isAuthenticated,
     retry: false,
   });
@@ -55,10 +52,14 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   const queryClient = useQueryClient();
 
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['getReviewPage', bookId, 1] });
-    queryClient.invalidateQueries({ queryKey: ['getBookDetailsById', bookId] });
     queryClient.invalidateQueries({
-      queryKey: ['checkSelfReviewExists', bookId],
+      queryKey: queryKeys.book.reviews(bookId, 1),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.user.reviewForBook(bookId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.book.details(bookId),
     });
   };
 
@@ -101,7 +102,7 @@ export default function ReviewsBookDetail({ bookId }: Props) {
   const loadMoreReviews = async () => {
     setIsLoading(true);
     const nextPage = currentPage + 1;
-    const nextReviewPage = await getReviewPage(bookId, nextPage);
+    const nextReviewPage = await getBookReviews(bookId, nextPage);
     setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.reviews]);
     setCurrentPage(nextPage);
     setIsLoading(false);
@@ -116,10 +117,10 @@ export default function ReviewsBookDetail({ bookId }: Props) {
             <Button
               className="w-44 rounded-full bg-transparent"
               variant="outline"
-              disabled={reviewExists}
+              disabled={!!review}
               onClick={() => setIsOpen(true)}
             >
-              {reviewExists ? 'レビュー済み' : 'レビューする'}
+              {review ? 'レビュー済み' : 'レビューする'}
             </Button>
           ) : (
             <Tooltip>

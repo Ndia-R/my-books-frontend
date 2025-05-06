@@ -21,7 +21,7 @@ export interface ReviewPage {
   reviews: Review[];
 }
 
-export interface ReviewSummary {
+export interface ReviewCounts {
   bookId: string;
   reviewCount: number;
   averageRating: number;

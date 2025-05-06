@@ -1,46 +1,7 @@
-import { FETCH_FAVORITES_MAX_RESULTS } from '@/constants/constants';
 import { customFetch } from '@/lib/api/fetch-client';
-import { Favorite, FavoriteInfo, FavoritePage, FavoriteRequest } from '@/types';
+import { FavoriteRequest } from '@/types';
 
-export const getFavoriteByBookId = async (bookId: string) => {
-  try {
-    const endpoint = `/favorites/${bookId}`;
-    const response = await customFetch<Favorite>(endpoint);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('お気に入りの読み込みが失敗しました。');
-  }
-};
-
-export const getFavoritePage = async (page: number = 0) => {
-  try {
-    const basePage = page > 0 ? page - 1 : 0;
-    const endpoint = `/favorites`;
-    const query = `?page=${basePage}&maxResults=${FETCH_FAVORITES_MAX_RESULTS}`;
-    const response = await customFetch<FavoritePage>(endpoint + query);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('お気に入り一覧の読み込みが失敗しました。');
-  }
-};
-
-export const getFavoriteInfo = async (
-  bookId: string,
-  userId: number | undefined
-) => {
-  try {
-    const endpoint = `/books/${bookId}/favorites/info`;
-    const query = userId ? `?userId=${userId}` : '';
-    const response = await customFetch<FavoriteInfo>(endpoint + query);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('お気に入り情報の読み込みが失敗しました。');
-  }
-};
-
+// お気に入り追加
 export const createFavorite = async (requestBody: FavoriteRequest) => {
   try {
     const endpoint = `/favorites`;
@@ -56,6 +17,7 @@ export const createFavorite = async (requestBody: FavoriteRequest) => {
   }
 };
 
+// お気に入り削除
 export const deleteFavorite = async (bookId: string) => {
   try {
     const endpoint = `/favorites/${bookId}`;

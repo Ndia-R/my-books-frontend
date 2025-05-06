@@ -1,31 +1,7 @@
-import { FETCH_BOOKMARKS_MAX_RESULTS } from '@/constants/constants';
 import { customFetch } from '@/lib/api/fetch-client';
-import { Bookmark, BookmarkPage, BookmarkRequest } from '@/types';
+import { BookmarkRequest } from '@/types';
 
-export const getBookmarkByBookId = async (bookId: string) => {
-  try {
-    const endpoint = `/bookmarks/${bookId}`;
-    const response = await customFetch<Bookmark[]>(endpoint);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('ブックマークの読み込みが失敗しました。');
-  }
-};
-
-export const getBookmarkPage = async (page: number = 0) => {
-  try {
-    const basePage = page > 0 ? page - 1 : 0;
-    const endpoint = `/bookmarks`;
-    const query = `?page=${basePage}&maxResults=${FETCH_BOOKMARKS_MAX_RESULTS}`;
-    const response = await customFetch<BookmarkPage>(endpoint + query);
-    return response.data;
-  } catch (error) {
-    console.error(error);
-    throw new Error('ブックマーク一覧の読み込みが失敗しました。');
-  }
-};
-
+// ブックマーク追加
 export const createBookmark = async (requestBody: BookmarkRequest) => {
   try {
     const endpoint = `/bookmarks`;
@@ -41,6 +17,7 @@ export const createBookmark = async (requestBody: BookmarkRequest) => {
   }
 };
 
+// ブックマーク更新
 export const updateBookmark = async (
   id: number,
   requestBody: BookmarkRequest
@@ -59,6 +36,7 @@ export const updateBookmark = async (
   }
 };
 
+// ブックマーク削除
 export const deleteBookmark = async (id: number) => {
   try {
     const endpoint = `/bookmarks/${id}`;

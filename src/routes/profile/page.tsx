@@ -1,5 +1,5 @@
 import Logo from '@/components/layout/logo';
-import ProfileCounts from '@/components/profile/profile-count';
+import UserProfileCounts from '@/components/profile/user-profile-counts';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -72,7 +72,7 @@ export default function Page({ title }: Props) {
             <div className="h-20 w-full p-4">
               <ErrorBoundary fallback={<ErrorElement />}>
                 <Suspense fallback={null}>
-                  <ProfileCounts />
+                  <UserProfileCounts />
                 </Suspense>
               </ErrorBoundary>
             </div>

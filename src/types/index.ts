@@ -2,7 +2,7 @@ export * from './api';
 export * from './auth';
 export * from './book';
 export * from './book-chapter';
-export * from './book-content-page';
+export * from './book-chapter-page-content';
 export * from './bookmark';
 export * from './favorite';
 export * from './genre';

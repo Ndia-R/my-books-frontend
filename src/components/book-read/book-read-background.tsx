@@ -1,5 +1,6 @@
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
-import { getBookDetailsById } from '@/lib/api/books';
+import { queryKeys } from '@/constants/query-keys';
+import { getBookDetails } from '@/lib/api/books';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {
@@ -8,8 +9,8 @@ type Props = {
 
 export default function BookReadBackground({ bookId }: Props) {
   const { data: book } = useSuspenseQuery({
-    queryKey: ['getBookDetailsById', bookId],
-    queryFn: () => getBookDetailsById(bookId),
+    queryKey: queryKeys.book.details(bookId),
+    queryFn: () => getBookDetails(bookId),
   });
 
   return (

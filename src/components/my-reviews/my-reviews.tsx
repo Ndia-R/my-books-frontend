@@ -1,11 +1,9 @@
 import MyReviewList from '@/components/my-reviews/my-review-list';
 import SearchPagination from '@/components/search-pagination';
+import { queryKeys } from '@/constants/query-keys';
 import { useSearchFilters } from '@/hooks/use-search-filters';
-import {
-  deleteReview,
-  getReviewPageByUser,
-  updateReview,
-} from '@/lib/api/review';
+import { deleteReview, updateReview } from '@/lib/api/review';
+import { getUserReviews } from '@/lib/api/user';
 import { ReviewRequest } from '@/types';
 import {
   useMutation,
@@ -22,8 +20,8 @@ export default function MyReviews({ page }: Props) {
   const queryClient = useQueryClient();
 
   const { data: reviewPage } = useSuspenseQuery({
-    queryKey: ['getReviewPageByUser', page],
-    queryFn: () => getReviewPageByUser(page),
+    queryKey: queryKeys.user.reviews(page),
+    queryFn: () => getUserReviews(page),
   });
 
   const onError = (error: Error) => {
@@ -40,7 +38,7 @@ export default function MyReviews({ page }: Props) {
     }) => updateReview(id, requestBody),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['getReviewPageByUser', page],
+        queryKey: queryKeys.user.reviews(page),
       });
     },
     onError,
@@ -52,14 +50,14 @@ export default function MyReviews({ page }: Props) {
       // ２ページ以降で、そのページの最後の１つを削除した場合は、１ページ戻る
       if (page >= 2 && reviewPage.reviews.length === 1) {
         queryClient.invalidateQueries({
-          queryKey: ['getBookmarkPage', page - 1],
+          queryKey: queryKeys.user.reviews(page - 1),
         });
         updateQueryParams({ page: page - 1 });
         return;
       }
 
       queryClient.invalidateQueries({
-        queryKey: ['getReviewPageByUser', page],
+        queryKey: queryKeys.user.reviews(page),
       });
     },
     onError,

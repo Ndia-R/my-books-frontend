@@ -1,4 +1,5 @@
 import GenreList from '@/components/genres/genre-list';
+import { queryKeys } from '@/constants/query-keys';
 import { useSearchFilters } from '@/hooks/use-search-filters';
 import { getGenres } from '@/lib/api/genres';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -8,7 +9,7 @@ export default function GenresSelector() {
   const { genreIds, condition, updateQueryParams } = useSearchFilters();
 
   const { data: genres } = useSuspenseQuery({
-    queryKey: ['getGenres'],
+    queryKey: queryKeys.genre.all,
     queryFn: () => getGenres(),
   });
 

@@ -1,11 +1,9 @@
 import BookmarkList from '@/components/bookmarks/bookmark-list';
 import SearchPagination from '@/components/search-pagination';
+import { queryKeys } from '@/constants/query-keys';
 import { useSearchFilters } from '@/hooks/use-search-filters';
-import {
-  deleteBookmark,
-  getBookmarkPage,
-  updateBookmark,
-} from '@/lib/api/bookmarks';
+import { deleteBookmark, updateBookmark } from '@/lib/api/bookmarks';
+import { getUserBookmarks } from '@/lib/api/user';
 import { BookmarkRequest } from '@/types';
 import {
   useMutation,
@@ -22,8 +20,8 @@ export default function Bookmarks({ page }: Props) {
   const queryClient = useQueryClient();
 
   const { data: bookmarkPage } = useSuspenseQuery({
-    queryKey: ['getBookmarkPage', page],
-    queryFn: () => getBookmarkPage(page),
+    queryKey: queryKeys.user.bookmarks(page),
+    queryFn: () => getUserBookmarks(page),
   });
 
   const onError = (error: Error) => {
@@ -39,7 +37,9 @@ export default function Bookmarks({ page }: Props) {
       requestBody: BookmarkRequest;
     }) => updateBookmark(id, requestBody),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['getBookmarkPage', page] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.user.bookmarks(page),
+      });
     },
     onError,
   });
@@ -50,13 +50,15 @@ export default function Bookmarks({ page }: Props) {
       // ２ページ以降で、そのページの最後の１つを削除した場合は、１ページ戻る
       if (page >= 2 && bookmarkPage.bookmarks.length === 1) {
         queryClient.invalidateQueries({
-          queryKey: ['getBookmarkPage', page - 1],
+          queryKey: queryKeys.user.bookmarks(page - 1),
         });
         updateQueryParams({ page: page - 1 });
         return;
       }
 
-      queryClient.invalidateQueries({ queryKey: ['getBookmarkPage', page] });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.user.bookmarks(page),
+      });
     },
     onError,
   });

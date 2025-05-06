@@ -6,14 +6,18 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { queryKeys } from '@/constants/query-keys';
 import { usePageTitle } from '@/hooks/use-page-title';
 import {
   createBookmark,
   deleteBookmark,
-  getBookmarkByBookId,
   updateBookmark,
 } from '@/lib/api/bookmarks';
-import { getBookContentPage, getBookTableOfContents } from '@/lib/api/books';
+import {
+  getBookChapterPageContent,
+  getBookTableOfContents,
+} from '@/lib/api/books';
+import { getUserBookmarksForBook } from '@/lib/api/user';
 import { chapterNumberString, cn } from '@/lib/utils';
 import { Bookmark, BookmarkRequest, BookTableOfContents } from '@/types';
 import {
@@ -141,21 +145,26 @@ export default function BookReadContent({
 
   const [
     { data: bookTableOfContents },
-    { data: bookContentPage },
+    { data: bookChapterPageContent },
     { data: bookmark },
   ] = useSuspenseQueries({
     queries: [
       {
-        queryKey: ['getBookTableOfContents', bookId],
+        queryKey: queryKeys.book.tableOfContents(bookId),
         queryFn: () => getBookTableOfContents(bookId),
       },
       {
-        queryKey: ['getBookContentPage', bookId, chapterNumber, pageNumber],
-        queryFn: () => getBookContentPage(bookId, chapterNumber, pageNumber),
+        queryKey: queryKeys.book.chapterPageContent(
+          bookId,
+          chapterNumber,
+          pageNumber
+        ),
+        queryFn: () =>
+          getBookChapterPageContent(bookId, chapterNumber, pageNumber),
       },
       {
-        queryKey: ['getBookmarkByBookId', bookId],
-        queryFn: () => getBookmarkByBookId(bookId),
+        queryKey: queryKeys.user.bookmarksForBook(bookId),
+        queryFn: () => getUserBookmarksForBook(bookId),
         select: (bookmarks: Bookmark[]) =>
           bookmarks.find(
             (bookmark) =>
@@ -171,7 +180,7 @@ export default function BookReadContent({
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: ['getBookmarkByBookId', bookId],
+      queryKey: queryKeys.user.bookmarksForBook(bookId),
     });
   };
 
@@ -229,7 +238,7 @@ export default function BookReadContent({
     'prev'
   );
 
-  usePageTitle(`${bookContentPage.chapterTitle} (${currentPageText})`);
+  usePageTitle(`${bookChapterPageContent.chapterTitle} (${currentPageText})`);
 
   return (
     <>
@@ -237,11 +246,11 @@ export default function BookReadContent({
         <div className="flex flex-col gap-y-12 px-4 pt-12 pb-6 sm:px-20">
           <div>
             <p className="text-muted-foreground mb-2 text-xs sm:text-sm">
-              {chapterNumberString(bookContentPage.chapterNumber)}
+              {chapterNumberString(bookChapterPageContent.chapterNumber)}
             </p>
             <div className="flex flex-wrap items-center">
               <h1 className="text-xl font-bold text-wrap sm:text-2xl">
-                {bookContentPage.chapterTitle}
+                {bookChapterPageContent.chapterTitle}
               </h1>
               <p className="text-muted-foreground mr-2 ml-4 text-xs sm:text-sm">
                 {currentPageText}
@@ -292,7 +301,9 @@ export default function BookReadContent({
               </Tooltip>
             </div>
           </div>
-          <p className="whitespace-pre-wrap">{bookContentPage.content}</p>
+          <p className="whitespace-pre-wrap">
+            {bookChapterPageContent.content}
+          </p>
         </div>
         <div className="flex justify-between px-0 py-6 sm:px-12">
           <Button

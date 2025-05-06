@@ -5,10 +5,10 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { usePageTitle } from '@/hooks/use-page-title';
-import { updateCurrentUser } from '@/lib/api/user';
+import { updateUserProfile } from '@/lib/api/user';
 import { cn } from '@/lib/utils';
 import { useUser } from '@/providers/user-provider';
-import { UpdateCurrentUser } from '@/types';
+import { UpdateUserProfile } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import React, { useEffect, useRef, useState } from 'react';
@@ -33,8 +33,8 @@ export default function Page({ title }: Props) {
   const [avatarPath, setAvatarPath] = useState(user?.avatarPath || '');
 
   const updateMutation = useMutation({
-    mutationFn: (requestBody: UpdateCurrentUser) =>
-      updateCurrentUser(requestBody),
+    mutationFn: (requestBody: UpdateUserProfile) =>
+      updateUserProfile(requestBody),
     onSuccess: () => {
       navigate('/profile');
     },
@@ -61,7 +61,7 @@ export default function Page({ title }: Props) {
       return;
     }
 
-    const requestBody: UpdateCurrentUser = { name, avatarPath };
+    const requestBody: UpdateUserProfile = { name, avatarPath };
     updateMutation.mutate(requestBody, {
       onSuccess: async () => {
         await setCurrentUser();
