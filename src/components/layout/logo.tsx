@@ -26,7 +26,7 @@ export default function Logo({
     <Link
       className={cn(
         buttonVariants({ variant: 'ghost' }),
-        "text-primary bg-transparent font-['Alfa_Slab_One'] tracking-tighter whitespace-nowrap select-none hover:bg-transparent",
+        'text-primary bg-transparent font-mono tracking-tighter whitespace-nowrap select-none hover:bg-transparent',
         disableLink && 'pointer-events-none cursor-default',
         SIZE[size],
         className

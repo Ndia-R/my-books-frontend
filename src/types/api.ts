@@ -1,11 +1,11 @@
-export interface ApiResponse<T> {
+export type ApiResponse<T> = {
   data: T;
   status: number;
   statusText: string;
   ok: boolean;
-}
+};
 
-export interface ErrorResponse {
+export type ErrorResponse = {
   message: string;
   status: string;
-}
+};

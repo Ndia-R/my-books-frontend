@@ -1,37 +1,37 @@
-export interface User {
+export type User = {
   id: number;
   email: string;
   roles: string[];
   name: string;
   avatarPath: string;
-}
+};
 
-export interface UserProfile {
+export type UserProfile = {
   id: number;
   email: string;
   roles: string[];
   name: string;
   avatarPath: string;
-}
+};
 
-export interface UserProfileCounts {
+export type UserProfileCounts = {
   favoriteCount: number;
   bookmarkCount: number;
   reviewCount: number;
-}
+};
 
-export interface UpdateUserProfile {
+export type UpdateUserProfile = {
   name: string;
   avatarPath: string;
-}
+};
 
-export interface UpdateUserPassword {
+export type UpdateUserPassword = {
   currentPassword: string;
   newPassword: string;
   confirmPassword: string;
-}
+};
 
-export interface UpdateUserEmail {
+export type UpdateUserEmail = {
   email: string;
   password: string;
-}
+};

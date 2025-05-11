@@ -1,15 +1,15 @@
-export interface LoginRequest {
+export type LoginRequest = {
   email: string;
   password: string;
-}
+};
 
-export interface SignupRequest {
+export type SignupRequest = {
   email: string;
   password: string;
   name: string;
   avatarPath: string;
-}
+};
 
-export interface AccessToken {
+export type AccessToken = {
   accessToken: string;
-}
+};

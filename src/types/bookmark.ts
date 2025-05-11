@@ -1,7 +1,7 @@
 import { Book } from '@/types/book';
 import { UseMutationResult } from '@tanstack/react-query';
 
-export interface Bookmark {
+export type Bookmark = {
   id: number;
   userId: number;
   bookId: string;
@@ -12,21 +12,21 @@ export interface Bookmark {
   createdAt: string;
   updatedAt: string;
   book: Book;
-}
+};
 
-export interface BookmarkPage {
+export type BookmarkPage = {
   page: number;
   totalPages: number;
   totalItems: number;
   bookmarks: Bookmark[];
-}
+};
 
-export interface BookmarkRequest {
+export type BookmarkRequest = {
   bookId: string;
   chapterNumber: number;
   pageNumber: number;
   note: string;
-}
+};
 
 export type BookmarkCreateMutation = UseMutationResult<
   void,

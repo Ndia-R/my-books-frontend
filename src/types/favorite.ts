@@ -1,25 +1,25 @@
 import { Book } from '@/types/book';
 
-export interface Favorite {
+export type Favorite = {
   userId: number;
   bookId: string;
   createdAt: string;
   updatedAt: string;
   book: Book;
-}
+};
 
-export interface FavoritePage {
+export type FavoritePage = {
   page: number;
   totalPages: number;
   totalItems: number;
   favorites: Favorite[];
-}
+};
 
-export interface FavoriteCounts {
+export type FavoriteCounts = {
   bookId: string;
   favoriteCount: number;
-}
+};
 
-export interface FavoriteRequest {
+export type FavoriteRequest = {
   bookId: string;
-}
+};

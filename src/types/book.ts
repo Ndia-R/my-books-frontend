@@ -1,6 +1,6 @@
 import { Genre } from '@/types/genre';
 
-export interface Book {
+export type Book = {
   id: string;
   title: string;
   description: string;
@@ -10,16 +10,16 @@ export interface Book {
   imagePath: string;
   reviewCount: number;
   averageRating: number;
-}
+};
 
-export interface BookPage {
+export type BookPage = {
   page: number;
   totalPages: number;
   totalItems: number;
   books: Book[];
-}
+};
 
-export interface BookDetails {
+export type BookDetails = {
   id: string;
   title: string;
   description: string;
@@ -33,4 +33,24 @@ export interface BookDetails {
   imagePath: string;
   reviewCount: number;
   averageRating: number;
-}
+};
+
+export type BookChapter = {
+  chapterNumber: number;
+  chapterTitle: string;
+  pageNumbers: number[];
+};
+
+export type BookTableOfContents = {
+  bookId: string;
+  title: string;
+  chapters: BookChapter[];
+};
+
+export type BookChapterPageContent = {
+  bookId: string;
+  chapterNumber: number;
+  chapterTitle: string;
+  pageNumber: number;
+  content: string;
+};

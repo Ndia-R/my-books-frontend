@@ -46,11 +46,11 @@ const createPageNumbers = (page: number, total: number) => {
   return pages;
 };
 
-interface Props extends HTMLAttributes<HTMLDivElement> {
+type Props = HTMLAttributes<HTMLDivElement> & {
   total: number;
   page: number;
   onChangePage: (page: number) => void;
-}
+};
 
 export default function Pagination({
   total,
