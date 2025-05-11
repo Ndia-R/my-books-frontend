@@ -170,3 +170,14 @@ export const updateUserPassword = async (requestBody: UpdateUserPassword) => {
     throw new Error('パスワードの更新に失敗しました。');
   }
 };
+
+// この書籍をユーザーがお気に入り登録しているかどうか
+// （データの取得を試みてエラーなら未登録とする）
+export const isBookFavoritedByUser = async (bookId: string) => {
+  try {
+    await getUserFavoriteForBook(bookId);
+    return true;
+  } catch {
+    return false;
+  }
+};

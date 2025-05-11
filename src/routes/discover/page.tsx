@@ -4,7 +4,7 @@ import GenresConditionSelector from '@/components/genres/genres-condition-select
 import GenresSelector from '@/components/genres/genres-selector';
 import GenresSkeleton from '@/components/genres/genres-skeleton';
 import { Separator } from '@/components/ui/separator';
-import { usePageTitle } from '@/hooks/use-page-title';
+import { APP_TITLE } from '@/constants/constants';
 import { useSearchFilters } from '@/hooks/use-search-filters';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
@@ -15,12 +15,12 @@ type Props = {
 };
 
 export default function Page({ title }: Props) {
-  usePageTitle(title);
-
   const { genreIds, condition, page } = useSearchFilters();
 
   return (
     <>
+      <title>{`${title} - ${APP_TITLE}`}</title>
+
       <div className="m-4 flex h-10 items-center justify-between">
         <h1 className="font-bold">ジャンル</h1>
         <GenresConditionSelector />

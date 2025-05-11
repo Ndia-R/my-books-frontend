@@ -1,3 +1,4 @@
+import { AUTH_SESSION_EXPIRED_EVENT } from '@/constants/constants';
 import * as AuthApi from '@/lib/api/auth';
 import { refreshAccessToken, setAccessToken } from '@/lib/api/fetch-client';
 import { LoginRequest, SignupRequest } from '@/types';
@@ -95,9 +96,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
       );
     };
 
-    window.addEventListener('auth:sessionExpired', handleSessionExpired);
+    window.addEventListener(AUTH_SESSION_EXPIRED_EVENT, handleSessionExpired);
     return () => {
-      window.removeEventListener('auth:sessionExpired', handleSessionExpired);
+      window.removeEventListener(
+        AUTH_SESSION_EXPIRED_EVENT,
+        handleSessionExpired
+      );
     };
   }, [logout]);
 

@@ -28,7 +28,7 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<RootLayout />}>
-        <Route index element={<RootPage title="" />} />
+        <Route index element={<RootPage />} />
 
         <Route path="login" element={<LoginPage title="ログイン" />} />
         <Route path="signup" element={<SignupPage title="サインアップ" />} />

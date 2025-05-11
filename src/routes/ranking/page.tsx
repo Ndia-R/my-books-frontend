@@ -1,15 +1,15 @@
 import { Separator } from '@/components/ui/separator';
-import { usePageTitle } from '@/hooks/use-page-title';
+import { APP_TITLE } from '@/constants/constants';
 
 type Props = {
   title: string;
 };
 
 export default function Page({ title }: Props) {
-  usePageTitle(title);
-
   return (
     <>
+      <title>{`${title} - ${APP_TITLE}`}</title>
+
       <div className="m-4 flex h-10 items-center">
         <h1>ランキング</h1>
       </div>

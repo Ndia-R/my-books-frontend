@@ -1,5 +1,8 @@
-import { BOOKS_API_BASE_URL } from '@/constants/constants';
-import { AccessToken, ApiResponse } from '@/types';
+import {
+  AUTH_SESSION_EXPIRED_EVENT,
+  BOOKS_API_BASE_URL,
+} from '@/constants/constants';
+import { AccessToken, ApiResponse, ErrorResponse } from '@/types';
 
 let accessToken: string | null = null;
 
@@ -37,7 +40,7 @@ export const customFetch = async <T>(
         response = await fetch(url, { ...options, headers: newHeaders });
       } else {
         // リフレッシュトークンも期限切れの場合、認証イベントを発火
-        window.dispatchEvent(new CustomEvent('auth:sessionExpired'));
+        window.dispatchEvent(new CustomEvent(AUTH_SESSION_EXPIRED_EVENT));
         throw new Error(
           'セッションの有効期限が切れました。再ログインしてください。'
         );
@@ -49,12 +52,11 @@ export const customFetch = async <T>(
 
     // エラーレスポンスの場合は例外をスロー
     if (!response.ok) {
-      const error = new Error(
-        apiResponse.statusText || `HTTPエラー ${response.status}`
-      );
-      // エラーオブジェクトにレスポンス情報を追加
-      (error as any).response = apiResponse;
-      throw error;
+      const errorResponse = apiResponse.data as ErrorResponse;
+      throw {
+        message: errorResponse.message,
+        status: errorResponse.status,
+      };
     }
 
     return apiResponse;

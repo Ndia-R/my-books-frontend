@@ -1,17 +1,18 @@
+import FormInput from '@/components/form-input';
 import Logo from '@/components/layout/logo';
 import AvatarCarousel from '@/components/profile/avatar-carousel';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { usePageTitle } from '@/hooks/use-page-title';
+import { APP_TITLE } from '@/constants/constants';
+import { useFieldValidation } from '@/hooks/use-field-validation';
 import { updateUserProfile } from '@/lib/api/user';
 import { cn } from '@/lib/utils';
 import { useUser } from '@/providers/user-provider';
 import { UpdateUserProfile } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import React, { useEffect, useRef, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
@@ -20,11 +21,7 @@ type Props = {
 };
 
 export default function Page({ title }: Props) {
-  usePageTitle(title);
-
-  const [nameErrorMessage, setNameErrorMessage] = useState('');
-
-  const nameRef = useRef<HTMLInputElement | null>(null);
+  const name = useFieldValidation<HTMLInputElement>();
 
   const navigate = useNavigate();
 
@@ -44,24 +41,24 @@ export default function Page({ title }: Props) {
   });
 
   useEffect(() => {
-    if (nameRef.current && user) {
-      nameRef.current.value = user.name || '';
+    if (name.ref.current && user) {
+      name.ref.current.value = user.name || '';
     }
-  }, [user]);
+  }, [name.ref, user]);
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const form = new FormData(e.currentTarget);
-    const name = form.get('name') as string;
-
-    const isNameValid = validateName();
-
+    const isNameValid = name.validate.name();
     if (!isNameValid) {
       return;
     }
 
-    const requestBody: UpdateUserProfile = { name, avatarPath };
+    const requestBody: UpdateUserProfile = {
+      name: name.getValue(),
+      avatarPath,
+    };
+
     updateMutation.mutate(requestBody, {
       onSuccess: async () => {
         await setCurrentUser();
@@ -76,79 +73,59 @@ export default function Page({ title }: Props) {
     });
   };
 
-  const validateName = () => {
-    const name = nameRef.current?.value as string;
-    setNameErrorMessage('');
-
-    if (name === '') {
-      setNameErrorMessage('ユーザー名は必須です。');
-      return false;
-    }
-
-    return true;
-  };
-
   return (
-    <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
-      <Logo size="lg" disableLink />
-      <h1 className="font-semibold">ユーザー情報変更</h1>
-      <Card className="w-80 rounded-3xl sm:w-96">
-        <CardContent className="p-6 sm:px-10">
-          <form
-            className="flex w-full flex-col gap-y-4"
-            onSubmit={handleSubmit}
-          >
-            <div>
-              <Label className="text-xs" htmlFor="name">
-                ユーザー名
-              </Label>
-              <Input
-                ref={nameRef}
-                className={cn(
-                  'my-2 rounded-full',
-                  nameErrorMessage && 'border-destructive'
-                )}
-                id="name"
-                name="name"
+    <>
+      <title>{`${title} - ${APP_TITLE}`}</title>
+
+      <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
+        <Logo size="lg" disableLink />
+        <h1 className="font-semibold">ユーザー情報変更</h1>
+        <Card className="w-80 rounded-3xl sm:w-96">
+          <CardContent className="p-6 sm:px-10">
+            <form
+              className="flex w-full flex-col gap-y-4"
+              onSubmit={handleSubmit}
+            >
+              <FormInput
+                label="ユーザー名"
+                ref={name.ref}
+                errorMessage={name.errorMessage}
                 autoComplete="off"
                 spellCheck="false"
               />
-              {nameErrorMessage && (
-                <p className="text-destructive text-xs">{nameErrorMessage}</p>
-              )}
-            </div>
 
-            <div>
-              <Label className="text-xs" htmlFor="name">
-                アバター画像
-              </Label>
-              <AvatarCarousel value={avatarPath} onChange={setAvatarPath} />
-            </div>
+              <div>
+                <Label className="text-xs" htmlFor="name">
+                  アバター画像
+                </Label>
+                <AvatarCarousel value={avatarPath} onChange={setAvatarPath} />
+              </div>
 
-            <Button
-              className="w-full rounded-full"
-              type="submit"
-              disabled={updateMutation.isPending}
-            >
-              {updateMutation.isPending ? (
-                <Loader2Icon className="animate-spin" />
-              ) : (
-                '変更'
-              )}
-            </Button>
+              <Button
+                className="w-full rounded-full"
+                type="submit"
+                disabled={updateMutation.isPending}
+              >
+                {updateMutation.isPending ? (
+                  <Loader2Icon className="animate-spin" />
+                ) : (
+                  '変更'
+                )}
+              </Button>
 
-            <Link
-              className={cn(
-                buttonVariants({ variant: 'outline' }),
-                'w-full rounded-full bg-transparent'
-              )}
-              to="/profile"
-            >
-              キャンセル
-            </Link>
-          </form>
-        </CardContent>
-      </Card>
-    </div>
+              <Link
+                className={cn(
+                  buttonVariants({ variant: 'outline' }),
+                  'w-full rounded-full bg-transparent'
+                )}
+                to="/profile"
+              >
+                キャンセル
+              </Link>
+            </form>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 }

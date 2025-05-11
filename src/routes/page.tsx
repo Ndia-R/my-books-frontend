@@ -3,18 +3,11 @@ import BooksSkeleton from '@/components/books/books-skeleton';
 import GenresSkeleton from '@/components/genres/genres-skeleton';
 import GenresTopPage from '@/components/genres/genres-top-page';
 import Hero from '@/components/layout/hero';
-import { usePageTitle } from '@/hooks/use-page-title';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
-type Props = {
-  title: string;
-};
-
-export default function Page({ title }: Props) {
-  usePageTitle(title);
-
+export default function Page() {
   return (
     <>
       <section className="mb-4 sm:mb-0">

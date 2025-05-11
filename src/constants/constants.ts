@@ -1,4 +1,5 @@
 export const TITLE_LOGO = 'My Books';
+export const APP_TITLE = 'My Books';
 
 export const BOOKS_API_BASE_URL = `${import.meta.env.VITE_BASE_URL}/api/v1`;
 export const IMAGE_BASE_URL = `${import.meta.env.VITE_BASE_URL}/images`;
@@ -12,3 +13,5 @@ export const FETCH_REVIEWS_MAX_RESULTS = 3;
 export const FETCH_FAVORITES_MAX_RESULTS = 5;
 export const FETCH_MY_REVIEWS_MAX_RESULTS = 5;
 export const FETCH_BOOKMARKS_MAX_RESULTS = 5;
+
+export const AUTH_SESSION_EXPIRED_EVENT = 'auth-session-expired';

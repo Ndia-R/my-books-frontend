@@ -62,5 +62,7 @@ export const queryKeys = {
       [...queryKeys.user.all, 'favoriteForBook', bookId] as const,
     bookmarksForBook: (bookId: string) =>
       [...queryKeys.user.all, 'bookmarksForBook', bookId] as const,
+    isBookFavoritedByUser: (bookId: string) =>
+      [...queryKeys.user.all, 'isBookFavoritedByUser', bookId] as const,
   },
 };

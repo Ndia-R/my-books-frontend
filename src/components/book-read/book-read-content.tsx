@@ -6,8 +6,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
-import { usePageTitle } from '@/hooks/use-page-title';
 import {
   createBookmark,
   deleteBookmark,
@@ -238,10 +238,10 @@ export default function BookReadContent({
     'prev'
   );
 
-  usePageTitle(`${bookChapterPageContent.chapterTitle} (${currentPageText})`);
-
   return (
     <>
+      <title>{`${bookChapterPageContent.chapterTitle} (${currentPageText}) - ${APP_TITLE}`}</title>
+
       <div className="animate-in fade-in-0 delay-0 duration-200">
         <div className="flex flex-col gap-y-12 px-4 pt-12 pb-6 sm:px-20">
           <div>

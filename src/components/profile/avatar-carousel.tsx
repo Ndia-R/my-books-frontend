@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const AVATAR_PATHS = [...Array(41)].map(
   (_, index) => `/avatar${String(index).padStart(2, '0')}.png`
@@ -44,6 +44,11 @@ export default function AvatarCarousel({ value, onChange }: Props) {
 
   const [isScrolling, setIsScrolling] = useState(false);
   const carouselRef = useRef<HTMLUListElement>(null);
+
+  // デフォルトのアバターをセット
+  useEffect(() => {
+    onChange(AVATAR_PATHS[currentIndex]);
+  }, [currentIndex, onChange]);
 
   const handlePrev = () => {
     if (isScrolling) return;

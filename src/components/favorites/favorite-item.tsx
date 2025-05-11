@@ -31,7 +31,11 @@ export default function FavoriteItem({ favorite }: Props) {
                 </h2>
               </Link>
               <div className="flex items-center">
-                <FavoriteCountIcon bookId={favorite.bookId} />
+                <FavoriteCountIcon
+                  bookId={favorite.bookId}
+                  isFavorite={true}
+                  count={1}
+                />
                 <time
                   className="text-muted-foreground mr-2 flex gap-x-1 text-xs leading-8 tracking-wide whitespace-nowrap sm:text-sm"
                   dateTime={

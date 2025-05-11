@@ -1,8 +1,9 @@
+// アイコンの種類（「i」「?」「!」「✓」）
 type IconType = 'info' | 'question' | 'warning' | 'check';
 
 // 確認ダイアログの引数
 export type ConfirmDialogOptions = {
-  icon: IconType; // アイコンの種類（「i」「?」「!」「✓」）
+  icon: IconType; // アイコンの種類
   title: string; // タイトル
   message?: string; // メッセージ
   actionLabel?: string; // アクションボタンの文字（デフォルト「OK」）
@@ -22,17 +23,19 @@ export type ConfirmDialogResult = {
   text: string;
 };
 
-export const CONFIRM_DIALOG_EVENT = 'CONFIRM_DIALOG_EVENT';
+export const CONFIRM_DIALOG_EVENT = 'confirm-dialog-event';
 
 export const useConfirmDialog = () => {
   const confirmDialog = (
     options: ConfirmDialogOptions
   ): Promise<ConfirmDialogResult> => {
     return new Promise((resolve) => {
-      const event = new CustomEvent(CONFIRM_DIALOG_EVENT, {
-        detail: { ...options, resolve },
-      });
-      document.dispatchEvent(event);
+      // イベント発火
+      document.dispatchEvent(
+        new CustomEvent(CONFIRM_DIALOG_EVENT, {
+          detail: { ...options, resolve },
+        })
+      );
     });
   };
   return { confirmDialog };
