@@ -64,7 +64,7 @@ export default function Pagination({
   return (
     <div className={cn('flex', className)} {...props}>
       <Button
-        className="size-8 rounded-full"
+        className="size-8"
         variant="ghost"
         size="icon"
         aria-label="前のページへ"
@@ -81,8 +81,8 @@ export default function Pagination({
               <div className="size-8 text-center">...</div>
             ) : (
               <Button
-                className="size-8 rounded-full"
-                variant={page === pageNumber ? 'secondary' : 'ghost'}
+                className="size-8"
+                variant={page === pageNumber ? 'outline' : 'ghost'}
                 size="icon"
                 aria-label="ページ番号"
                 onClick={() => {
@@ -99,7 +99,7 @@ export default function Pagination({
       </ul>
 
       <Button
-        className="size-8 rounded-full"
+        className="size-8"
         variant="ghost"
         size="icon"
         aria-label="次のページへ"

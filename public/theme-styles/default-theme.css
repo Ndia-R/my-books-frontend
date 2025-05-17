@@ -1,9 +1,10 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+/* ロゴとタイトルのフォント */
+:root {
+  --font-logo: 'Alfa Slab One';
+  --font-title: 'Inter';
+}
 
-@custom-variant dark (&:is(.dark *));
-
-/* https://tweakcn.com/ で色情報を作成 */
+/* 以下は https://tweakcn.com/ で作成 */
 :root {
   --background: oklch(0.97 0.01 80.72);
   --foreground: oklch(0.3 0.04 30.2);
@@ -161,54 +162,4 @@
   --shadow-lg: var(--shadow-lg);
   --shadow-xl: var(--shadow-xl);
   --shadow-2xl: var(--shadow-2xl);
-}
-
-/* ロゴとタイトルのフォント */
-:root {
-  --font-logo: 'Alfa Slab One';
-  --font-title: 'Inter';
-}
-
-@theme inline {
-  --font-logo: var(--font-logo);
-  --font-title: var(--font-title);
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-
-  /* デフォルトの<button>のカーソル */
-  button:not(:disabled),
-  [role='button']:not(:disabled) {
-    cursor: pointer;
-  }
-
-  /* デフォルトの<input>のプレースホルダー */
-  input::placeholder,
-  textarea::placeholder {
-    font-size: var(--text-sm);
-  }
-
-  /* スクロールバー */
-  ::-webkit-scrollbar-track {
-    cursor: default;
-    background-color: var(--background);
-  }
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  ::-webkit-scrollbar-thumb {
-    cursor: default;
-    border-radius: 8px;
-    background-color: hsl(from var(--foreground) h s l / 0.2);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: hsl(from var(--foreground) h s l / 0.3);
-  }
 }

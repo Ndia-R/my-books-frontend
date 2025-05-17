@@ -48,7 +48,7 @@ export type ReviewUpdateMutation = UseMutationResult<
   void,
   Error,
   {
-    id: number;
+    reviewId: number;
     requestBody: ReviewRequest;
   },
   unknown

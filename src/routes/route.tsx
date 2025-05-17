@@ -16,6 +16,7 @@ import RankingPage from '@/routes/ranking/page';
 import BookReadPage from '@/routes/read/[bookId]/chapter/[chapterNumber]/page';
 import BookReadTableOfContentsPage from '@/routes/read/[bookId]/table-of-contents/page';
 import SearchPage from '@/routes/search/page';
+import SettingsPage from '@/routes/settings/page';
 import SignupPage from '@/routes/signup/page';
 import SpecialFeaturesPage from '@/routes/special-features/page';
 import {
@@ -53,6 +54,7 @@ export const router = createBrowserRouter(
           path="special-features"
           element={<SpecialFeaturesPage title="特集" />}
         />
+        <Route path="settings" element={<SettingsPage title="設定" />} />
 
         {/* 以下、認証が必要な画面 */}
         <Route element={<ProtectedRoute />}>

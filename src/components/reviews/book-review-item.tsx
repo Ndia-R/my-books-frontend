@@ -3,25 +3,61 @@ import ReviewUpdateDialog from '@/components/reviews/review-update-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
+import { queryKeys } from '@/constants/query-keys';
+import { deleteReview, updateReview } from '@/lib/api/review';
 import { formatDateJP, formatTime } from '@/lib/utils';
 import { useUser } from '@/providers/user-provider';
-import { Review, ReviewDeleteMutation, ReviewUpdateMutation } from '@/types';
+import { Review, ReviewRequest } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SquarePenIcon } from 'lucide-react';
 import { useState } from 'react';
+import { useParams } from 'react-router';
 
 type Props = {
   review: Review;
-  updateMutation: ReviewUpdateMutation;
-  deleteMutation: ReviewDeleteMutation;
 };
 
-export default function ReviewItem({
-  review,
-  updateMutation,
-  deleteMutation,
-}: Props) {
+export default function BookReviewItem({ review }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const { user } = useUser();
+  const params = useParams();
+  const bookId = params.bookId || '';
+
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.book.reviews(bookId, 1),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.user.reviewForBook(bookId),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.book.details(bookId),
+    });
+  };
+
+  const onError = (error: Error) => {
+    console.error(error);
+  };
+
+  const updateMutation = useMutation({
+    mutationFn: ({
+      reviewId,
+      requestBody,
+    }: {
+      reviewId: number;
+      requestBody: ReviewRequest;
+    }) => updateReview(reviewId, requestBody),
+    onSuccess,
+    onError,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (reviewId: number) => deleteReview(reviewId),
+    onSuccess,
+    onError,
+  });
 
   return (
     <>
@@ -30,7 +66,7 @@ export default function ReviewItem({
           <div className="flex w-full items-center gap-x-4">
             <Avatar className="size-16">
               <AvatarImage
-                className="bg-primary/50"
+                className="bg-foreground/30"
                 src={AVATAR_IMAGE_BASE_URL + review.avatarPath}
                 alt="avatar-image"
               />
@@ -52,7 +88,7 @@ export default function ReviewItem({
                 </time>
                 {user?.id === review.userId && (
                   <Button
-                    className="text-muted-foreground size-8 rounded-full"
+                    className="text-muted-foreground size-8"
                     variant="ghost"
                     size="icon"
                     aria-label="レビューを編集"

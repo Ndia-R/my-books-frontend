@@ -47,7 +47,7 @@ export default function BookDetail({ bookId }: Props) {
         <div className="flex flex-col items-center justify-center lg:w-1/2">
           <Link to={`/read/${bookId}/table-of-contents`} className="size-fit">
             <img
-              className="h-[360px] rounded-sm object-cover sm:h-[480px]"
+              className="h-[360px] rounded-xs object-cover sm:h-[480px]"
               src={BOOK_IMAGE_BASE_URL + book.imagePath}
               alt={book.title}
             />
@@ -66,10 +66,7 @@ export default function BookDetail({ bookId }: Props) {
           </div>
           <div className="my-4 flex items-center">
             <Link
-              className={cn(
-                buttonVariants({ variant: 'outline' }),
-                'w-44 rounded-full bg-transparent'
-              )}
+              className={cn(buttonVariants({ variant: 'outline' }), 'w-44')}
               to={`/read/${bookId}/table-of-contents`}
             >
               目次を見る
@@ -89,7 +86,10 @@ export default function BookDetail({ bookId }: Props) {
             ))}
           </div>
 
-          <GenreList genres={book.genres} variant="outline" />
+          <GenreList
+            genres={book.genres}
+            activeIds={book.genres.map((genre) => genre.id)}
+          />
 
           <div className="my-6 md:my-10">{book.description}</div>
 

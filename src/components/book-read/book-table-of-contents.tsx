@@ -39,7 +39,7 @@ export default function BookTableOfContents({ bookId }: Props) {
               <Link
                 className={cn(
                   buttonVariants({ variant: 'outline' }),
-                  'w-44 rounded-full bg-transparent'
+                  'w-44 bg-transparent'
                 )}
                 to={`/read/${bookId}/chapter/1/page/1`}
               >
@@ -49,7 +49,7 @@ export default function BookTableOfContents({ bookId }: Props) {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Button
-                    className="hover:border-primary/50 w-44 cursor-default rounded-full bg-transparent opacity-50 hover:bg-transparent"
+                    className="hover:border-primary/50 w-44 cursor-default bg-transparent opacity-50 hover:bg-transparent"
                     variant="outline"
                   >
                     最初から読む

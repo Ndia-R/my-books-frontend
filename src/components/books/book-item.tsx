@@ -16,7 +16,7 @@ export default function BookItem({ book }: Props) {
       <CardContent className="flex w-38 flex-col items-center gap-y-0 p-0 sm:w-44 sm:gap-y-1">
         <Link to={`/book/${book.id}`} className="size-fit">
           <img
-            className="mb-1 h-44 rounded-sm object-cover sm:mb-0 sm:h-52"
+            className="mb-1 h-44 rounded-xs object-cover sm:mb-0 sm:h-52"
             src={BOOK_IMAGE_BASE_URL + book.imagePath}
             alt={book.title}
           />

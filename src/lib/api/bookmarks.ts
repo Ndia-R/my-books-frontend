@@ -19,11 +19,11 @@ export const createBookmark = async (requestBody: BookmarkRequest) => {
 
 // ブックマーク更新
 export const updateBookmark = async (
-  id: number,
+  bookmarkId: number,
   requestBody: BookmarkRequest
 ) => {
   try {
-    const endpoint = `/bookmarks/${id}`;
+    const endpoint = `/bookmarks/${bookmarkId}`;
     const options: RequestInit = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -37,9 +37,9 @@ export const updateBookmark = async (
 };
 
 // ブックマーク削除
-export const deleteBookmark = async (id: number) => {
+export const deleteBookmark = async (bookmarkId: number) => {
   try {
-    const endpoint = `/bookmarks/${id}`;
+    const endpoint = `/bookmarks/${bookmarkId}`;
     const options: RequestInit = { method: 'DELETE' };
     await customFetch(endpoint, options);
   } catch (error) {

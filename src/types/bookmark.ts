@@ -39,7 +39,7 @@ export type BookmarkUpdateMutation = UseMutationResult<
   void,
   Error,
   {
-    id: number;
+    bookmarkId: number;
     requestBody: BookmarkRequest;
   },
   unknown

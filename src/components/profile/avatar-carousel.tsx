@@ -90,7 +90,6 @@ export default function AvatarCarousel({ value, onChange }: Props) {
   return (
     <div className="flex items-center justify-center">
       <Button
-        className="rounded-full"
         type="button"
         variant="ghost"
         size="icon"
@@ -129,7 +128,7 @@ export default function AvatarCarousel({ value, onChange }: Props) {
                   )}
                 >
                   <AvatarImage
-                    className="bg-primary"
+                    className="bg-foreground/30"
                     src={AVATAR_IMAGE_BASE_URL + avatarPath}
                     alt="avatar-image"
                     draggable={false}
@@ -147,7 +146,7 @@ export default function AvatarCarousel({ value, onChange }: Props) {
       </div>
 
       <Button
-        className="rounded-full"
+        className=""
         type="button"
         variant="ghost"
         size="icon"

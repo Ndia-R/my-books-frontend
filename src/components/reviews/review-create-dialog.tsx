@@ -110,14 +110,14 @@ export default function ReviewCreateDialog({
 
         <DialogFooter className="gap-y-4 sm:gap-y-0">
           <Button
-            className="min-w-24 rounded-full"
+            className="min-w-24"
             variant="ghost"
             onClick={handleClickCancel}
           >
             キャンセル
           </Button>
           <Button
-            className="min-w-24 rounded-full"
+            className="min-w-24"
             disabled={comment === '' || createMutation.isPending}
             onClick={handleClickPost}
           >

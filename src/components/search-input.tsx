@@ -31,7 +31,7 @@ export default function SearchInput() {
     <div className="w-44 sm:w-64">
       <form className="relative w-full" onSubmit={handleSubmit}>
         <Input
-          className="border-foreground/20 bg-background/20 rounded-full pr-4 pl-8"
+          className="border-foreground/20 bg-background/20 pr-4 pl-8"
           type="search"
           placeholder="タイトルで検索"
           name="query"

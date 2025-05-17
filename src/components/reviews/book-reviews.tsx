@@ -1,5 +1,5 @@
+import ReviewList from '@/components/reviews/book-review-list';
 import ReviewCreateDialog from '@/components/reviews/review-create-dialog';
-import ReviewList from '@/components/reviews/review-list';
 import { Button } from '@/components/ui/button';
 import {
   Tooltip,
@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/tooltip';
 import { queryKeys } from '@/constants/query-keys';
 import { getBookReviews } from '@/lib/api/books';
-import { createReview, deleteReview, updateReview } from '@/lib/api/review';
+import { createReview } from '@/lib/api/review';
 import { getUserReviewForBook } from '@/lib/api/user';
 import { useAuth } from '@/providers/auth-provider';
 import { Review, ReviewRequest } from '@/types';
@@ -25,7 +25,7 @@ type Props = {
   bookId: string;
 };
 
-export default function ReviewsBookDetail({ bookId }: Props) {
+export default function BookReviews({ bookId }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,44 +51,22 @@ export default function ReviewsBookDetail({ bookId }: Props) {
 
   const queryClient = useQueryClient();
 
-  const onSuccess = () => {
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.book.reviews(bookId, 1),
-    });
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.user.reviewForBook(bookId),
-    });
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.book.details(bookId),
-    });
-  };
-
-  const onError = (error: Error) => {
-    console.error(error);
-  };
-
   const createMutation = useMutation({
     mutationFn: (requestBody: ReviewRequest) => createReview(requestBody),
-    onSuccess,
-    onError,
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: ({
-      id,
-      requestBody,
-    }: {
-      id: number;
-      requestBody: ReviewRequest;
-    }) => updateReview(id, requestBody),
-    onSuccess,
-    onError,
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: (id: number) => deleteReview(id),
-    onSuccess,
-    onError,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.book.reviews(bookId, 1),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.user.reviewForBook(bookId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.book.details(bookId),
+      });
+    },
+    onError: (error: Error) => {
+      console.error(error);
+    },
   });
 
   useEffect(() => {
@@ -115,7 +93,7 @@ export default function ReviewsBookDetail({ bookId }: Props) {
           <p>レビュー {initialReviewPage.totalItems} 件</p>
           {isAuthenticated ? (
             <Button
-              className="w-44 rounded-full bg-transparent"
+              className="w-44 bg-transparent"
               variant="outline"
               disabled={!!review}
               onClick={() => setIsOpen(true)}
@@ -126,7 +104,7 @@ export default function ReviewsBookDetail({ bookId }: Props) {
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  className="hover:border-primary/50 w-44 cursor-default rounded-full bg-transparent opacity-50 hover:bg-transparent"
+                  className="hover:border-primary/50 w-44 cursor-default bg-transparent opacity-50 hover:bg-transparent"
                   variant="outline"
                 >
                   レビューする
@@ -139,16 +117,12 @@ export default function ReviewsBookDetail({ bookId }: Props) {
           )}
         </div>
 
-        <ReviewList
-          reviews={reviews}
-          updateMutation={updateMutation}
-          deleteMutation={deleteMutation}
-        />
+        <ReviewList reviews={reviews} />
 
         {currentPage < totalPages && (
           <div className="flex justify-center">
             <Button
-              className="text-muted-foreground w-44 rounded-full"
+              className="text-muted-foreground w-44"
               variant="ghost"
               disabled={isLoading}
               onClick={loadMoreReviews}

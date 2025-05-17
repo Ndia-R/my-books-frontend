@@ -196,12 +196,12 @@ export default function BookReadContent({
 
   const updateMutation = useMutation({
     mutationFn: ({
-      id,
+      bookmarkId,
       requestBody,
     }: {
-      id: number;
+      bookmarkId: number;
       requestBody: BookmarkRequest;
-    }) => updateBookmark(id, requestBody),
+    }) => updateBookmark(bookmarkId, requestBody),
     onSuccess,
     onError,
   });
@@ -258,10 +258,10 @@ export default function BookReadContent({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Link
-                    className={cn(
-                      buttonVariants({ variant: 'ghost', size: 'icon' }),
-                      'rounded-full'
-                    )}
+                    className={buttonVariants({
+                      variant: 'ghost',
+                      size: 'icon',
+                    })}
                     to={`/read/${bookId}/table-of-contents`}
                     aria-label="目次に戻る"
                   >
@@ -274,7 +274,7 @@ export default function BookReadContent({
                 <TooltipTrigger asChild>
                   <Button
                     className={cn(
-                      'text-muted-foreground size-8 rounded-full',
+                      'text-muted-foreground size-8',
                       bookmark && 'text-primary bg-transparent'
                     )}
                     variant="ghost"
@@ -308,7 +308,7 @@ export default function BookReadContent({
         <div className="flex justify-between px-0 py-6 sm:px-12">
           <Button
             className={cn(
-              'flex items-center gap-x-2 rounded-full hover:bg-transparent',
+              'flex items-center gap-x-2 hover:bg-transparent',
               isFirstPage && 'text-muted-foreground pointer-events-none'
             )}
             variant="ghost"
@@ -321,7 +321,7 @@ export default function BookReadContent({
           </Button>
           <Button
             className={cn(
-              'flex items-center gap-x-2 rounded-full hover:bg-transparent',
+              'flex items-center gap-x-2 hover:bg-transparent',
               isLastPage && 'text-muted-foreground pointer-events-none'
             )}
             variant="ghost"

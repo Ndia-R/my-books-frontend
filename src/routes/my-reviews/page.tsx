@@ -1,5 +1,5 @@
-import MyReviews from '@/components/my-reviews/my-reviews';
-import MyReviewsSkeleton from '@/components/my-reviews/my-reviews-skeleton';
+import MyReviews from '@/components/reviews/my-reviews';
+import MyReviewsSkeleton from '@/components/reviews/my-reviews-skeleton';
 import { Separator } from '@/components/ui/separator';
 import { APP_TITLE } from '@/constants/constants';
 import { useSearchFilters } from '@/hooks/use-search-filters';

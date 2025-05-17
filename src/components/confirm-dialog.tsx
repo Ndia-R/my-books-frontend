@@ -141,7 +141,7 @@ export default function ConfirmDialog() {
         <DialogFooter className="flex justify-end gap-y-4 sm:gap-y-0">
           {!options.actionOnly && (
             <Button
-              className="min-w-24 rounded-full"
+              className="min-w-24"
               variant="ghost"
               onClick={handleClickCancel}
             >
@@ -149,7 +149,7 @@ export default function ConfirmDialog() {
             </Button>
           )}
           <Button
-            className="min-w-24 rounded-full"
+            className="min-w-24"
             variant={options.icon === 'warning' ? 'destructive' : 'default'}
             onClick={handleClickAction}
           >

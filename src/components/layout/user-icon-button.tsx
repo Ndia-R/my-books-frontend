@@ -68,10 +68,7 @@ export default function UserIconButton() {
 
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
-      <DropdownMenuTrigger
-        className="ml-2 flex items-center justify-center"
-        asChild
-      >
+      <DropdownMenuTrigger className="flex items-center justify-center" asChild>
         <Button
           className="rounded-full"
           variant="ghost"
@@ -80,7 +77,7 @@ export default function UserIconButton() {
         >
           <Avatar>
             <AvatarImage
-              className="bg-primary/50"
+              className="bg-foreground/30"
               src={AVATAR_IMAGE_BASE_URL + user?.avatarPath}
               alt="avatar-image"
             />
@@ -95,7 +92,7 @@ export default function UserIconButton() {
           <div className="flex items-center gap-x-2">
             <Avatar className="size-8">
               <AvatarImage
-                className="bg-primary/50"
+                className="bg-foreground/30"
                 src={AVATAR_IMAGE_BASE_URL + user?.avatarPath}
                 alt="avatar-image"
               />

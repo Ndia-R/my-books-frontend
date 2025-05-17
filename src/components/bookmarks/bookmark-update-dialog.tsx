@@ -75,7 +75,7 @@ export default function BookmarkUpdateDialog({
       note,
     };
     updateMutation.mutate(
-      { id: bookmark.id, requestBody },
+      { bookmarkId: bookmark.id, requestBody },
       {
         onSuccess: () => {
           toast.success('ブックマークのメモを更新しました');
@@ -116,14 +116,14 @@ export default function BookmarkUpdateDialog({
 
         <DialogFooter className="gap-y-4 sm:gap-y-0">
           <Button
-            className="min-w-24 rounded-full"
+            className="min-w-24"
             variant="ghost"
             onClick={handleClickCancel}
           >
             キャンセル
           </Button>
           <Button
-            className="min-w-24 rounded-full"
+            className="min-w-24"
             variant="outline"
             disabled={deleteMutation.isPending}
             onClick={handleClickDelete}
@@ -135,7 +135,7 @@ export default function BookmarkUpdateDialog({
             )}
           </Button>
           <Button
-            className="min-w-24 rounded-full"
+            className="min-w-24"
             disabled={updateMutation.isPending}
             onClick={handleClickUpdate}
           >

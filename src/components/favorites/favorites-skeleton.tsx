@@ -14,14 +14,14 @@ export default function FavoritesSkeleton() {
               <CardContent className="p-4">
                 <div className="flex gap-x-4">
                   <div className="flex min-w-20 justify-center sm:min-w-24">
-                    <Skeleton className="bg-muted-foreground/5 h-24 w-20 rounded-sm object-cover sm:h-28" />
+                    <Skeleton className="bg-muted-foreground/5 h-24 w-20 rounded-xs object-cover sm:h-28" />
                   </div>
                   <div className="flex flex-col gap-y-2">
-                    <Skeleton className="bg-muted-foreground/5 h-6 w-64 rounded-full sm:h-7" />
+                    <Skeleton className="bg-muted-foreground/5 h-6 w-64 sm:h-7" />
                     <div className="flex flex-col gap-y-1">
-                      <Skeleton className="bg-muted-foreground/5 my-1 h-4 w-96 rounded-full" />
-                      <Skeleton className="bg-muted-foreground/5 my-1 h-4 w-80 rounded-full" />
-                      <Skeleton className="bg-muted-foreground/5 my-1 h-4 w-64 rounded-full" />
+                      <Skeleton className="bg-muted-foreground/5 my-1 h-4 w-96" />
+                      <Skeleton className="bg-muted-foreground/5 my-1 h-4 w-80" />
+                      <Skeleton className="bg-muted-foreground/5 my-1 h-4 w-64" />
                     </div>
                   </div>
                 </div>

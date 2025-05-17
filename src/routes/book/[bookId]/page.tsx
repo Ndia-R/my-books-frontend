@@ -1,7 +1,7 @@
 import BookDetail from '@/components/book-detail/book-detail';
 import BookDetailSkeleton from '@/components/book-detail/book-detail-skeleton';
-import ReviewsBookDetail from '@/components/reviews/reviews-book-detail';
-import ReviewsBookDetailSkeleton from '@/components/reviews/reviews-book-detail-skeleton';
+import BookReviews from '@/components/reviews/book-reviews';
+import BookReviewsSkeleton from '@/components/reviews/book-reviews-skeleton';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -20,8 +20,8 @@ export default function Page() {
       </ErrorBoundary>
 
       <ErrorBoundary fallback={<ErrorElement />}>
-        <Suspense fallback={<ReviewsBookDetailSkeleton />}>
-          <ReviewsBookDetail bookId={bookId} />
+        <Suspense fallback={<BookReviewsSkeleton />}>
+          <BookReviews bookId={bookId} />
         </Suspense>
       </ErrorBoundary>
     </>

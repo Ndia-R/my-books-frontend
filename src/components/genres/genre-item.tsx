@@ -1,21 +1,14 @@
 import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
 import { Genre } from '@/types';
 import { useNavigate } from 'react-router';
 
 type Props = {
   genre: Genre;
-  variant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost';
   isActive?: boolean;
   onClick?: (genreId: number) => void;
 };
 
-export default function GenreItem({
-  genre,
-  variant = 'ghost',
-  isActive = false,
-  onClick,
-}: Props) {
+export default function GenreItem({ genre, isActive = false, onClick }: Props) {
   const navigate = useNavigate();
 
   const handleClick = (genreId: number) => {
@@ -28,12 +21,8 @@ export default function GenreItem({
 
   return (
     <Button
-      className={cn(
-        'text-muted-foreground m-1 rounded-full text-xs sm:text-sm',
-        isActive && 'text-foreground',
-        variant === 'outline' && 'text-primary bg-transparent'
-      )}
-      variant={isActive ? 'secondary' : variant}
+      className="m-1 text-xs sm:text-sm"
+      variant={isActive ? 'outline' : 'ghost'}
       size="sm"
       onClick={() => handleClick(genre.id)}
     >

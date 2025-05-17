@@ -80,7 +80,7 @@ export default function Page({ title }: Props) {
       <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
         <Logo size="lg" disableLink />
         <h1 className="font-semibold">ユーザー情報変更</h1>
-        <Card className="w-80 rounded-3xl sm:w-96">
+        <Card className="w-80 sm:w-96">
           <CardContent className="p-6 sm:px-10">
             <form
               className="flex w-full flex-col gap-y-4"
@@ -102,7 +102,7 @@ export default function Page({ title }: Props) {
               </div>
 
               <Button
-                className="w-full rounded-full"
+                className="w-full"
                 type="submit"
                 disabled={updateMutation.isPending}
               >
@@ -116,7 +116,7 @@ export default function Page({ title }: Props) {
               <Link
                 className={cn(
                   buttonVariants({ variant: 'outline' }),
-                  'w-full rounded-full bg-transparent'
+                  'w-full bg-transparent'
                 )}
                 to="/profile"
               >

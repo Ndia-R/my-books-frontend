@@ -39,7 +39,7 @@ export default function FormInput({
           ref={ref}
           className={cn(
             className,
-            'my-2 rounded-full',
+            'border-foreground/20 my-2',
             errorMessage && 'border-destructive'
           )}
           type={actualType}
@@ -49,7 +49,7 @@ export default function FormInput({
         />
         {inputType === 'password' && (
           <Button
-            className="hover:text-foreground absolute top-0 right-0 rounded-full hover:bg-transparent"
+            className="hover:text-foreground absolute top-0 right-0 hover:bg-transparent"
             variant="ghost"
             size="icon"
             aria-label={

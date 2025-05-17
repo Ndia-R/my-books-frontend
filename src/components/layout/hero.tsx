@@ -16,7 +16,7 @@ export default function Hero() {
 
       <div className="flex w-3/4 flex-col gap-y-6 lg:w-3/5">
         <div className="animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both delay-0 duration-500">
-          <h1 className="text-5xl font-bold sm:text-6xl xl:text-7xl">
+          <h1 className="font-title text-5xl font-bold sm:text-6xl xl:text-7xl">
             Let’s search for <span className="text-primary">Books</span> to
             discover new knowledge.
             <span className="sr-only" lang="ja">

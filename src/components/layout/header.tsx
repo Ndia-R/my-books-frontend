@@ -21,25 +21,21 @@ export default function Header({ className }: Props) {
         <div className="animate-in fade-in-0 slide-in-from-top-10 fill-mode-both delay-0 duration-500">
           <div className="flex h-16 w-full items-center justify-between sm:gap-x-2">
             <Menu />
-            <div className="flex">
+            <div className="flex sm:gap-x-2">
               <SearchInput />
+              <ThemeToggleButton />
 
               {isAuthenticated ? (
                 <UserIconButton />
               ) : (
                 <Link
-                  className={cn(
-                    buttonVariants({ variant: 'ghost' }),
-                    'rounded-full'
-                  )}
+                  className={buttonVariants({ variant: 'ghost' })}
                   to="/login"
                   state={{ from: location }}
                 >
                   ログイン
                 </Link>
               )}
-
-              <ThemeToggleButton />
             </div>
           </div>
         </div>

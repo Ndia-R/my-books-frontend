@@ -29,12 +29,7 @@ export default function Menu() {
       <div className="lg:hidden">
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button
-              className="rounded-full"
-              variant="ghost"
-              size="icon"
-              aria-label="メニュー"
-            >
+            <Button variant="ghost" size="icon" aria-label="メニュー">
               <MenuIcon className="size-4" />
             </Button>
           </SheetTrigger>

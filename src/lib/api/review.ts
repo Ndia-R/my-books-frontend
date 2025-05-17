@@ -18,9 +18,12 @@ export const createReview = async (requestBody: ReviewRequest) => {
 };
 
 // レビュー更新
-export const updateReview = async (id: number, requestBody: ReviewRequest) => {
+export const updateReview = async (
+  reviewId: number,
+  requestBody: ReviewRequest
+) => {
   try {
-    const endpoint = `/reviews/${id}`;
+    const endpoint = `/reviews/${reviewId}`;
     const options: RequestInit = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -34,9 +37,9 @@ export const updateReview = async (id: number, requestBody: ReviewRequest) => {
 };
 
 // レビュー削除
-export const deleteReview = async (id: number) => {
+export const deleteReview = async (reviewId: number) => {
   try {
-    const endpoint = `/reviews/${id}`;
+    const endpoint = `/reviews/${reviewId}`;
     const options: RequestInit = { method: 'DELETE' };
     await customFetch(endpoint, options);
   } catch (error) {

@@ -84,7 +84,7 @@ export default function FavoriteCountIcon({
         <TooltipTrigger asChild>
           <Button
             className={cn(
-              'text-muted-foreground rounded-full',
+              'text-muted-foreground',
               BUTTON_SIZE[size],
               optimisticState.isFavorite && 'text-primary bg-transparent'
             )}

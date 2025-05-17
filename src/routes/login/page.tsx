@@ -69,7 +69,7 @@ export default function Page({ title }: Props) {
       <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
         <Logo size="lg" disableLink />
         <h1 className="font-semibold">ログイン</h1>
-        <Card className="w-80 rounded-3xl p-6 sm:w-96 sm:p-10">
+        <Card className="w-80 p-6 sm:w-96 sm:p-10">
           <CardContent className="p-0">
             <form
               className="flex w-full flex-col gap-y-4"
@@ -91,7 +91,7 @@ export default function Page({ title }: Props) {
               />
 
               <Button
-                className="mt-6 w-full rounded-full"
+                className="mt-6 w-full"
                 type="submit"
                 disabled={loginMutation.isPending}
               >

@@ -9,6 +9,7 @@ const NAV_LIST = [
   },
   { href: '/ranking', title: 'ランキング' },
   { href: '/special-features', title: '特集' },
+  { href: '/settings', title: '設定' },
 ];
 
 type Props = {
@@ -26,7 +27,7 @@ export default function NavList({ onClick }: Props) {
             <Link
               className={cn(
                 buttonVariants({ variant: 'ghost' }),
-                'hover:text-foreground/50 w-full rounded-full hover:bg-transparent',
+                'w-full',
                 location.pathname !== '/' &&
                   item.href.includes(location.pathname) &&
                   'text-primary'

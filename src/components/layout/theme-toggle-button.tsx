@@ -11,7 +11,6 @@ export default function ThemeToggleButton() {
 
   return (
     <Button
-      className="rounded-full"
       variant="ghost"
       size="icon"
       aria-label={

@@ -29,10 +29,7 @@ export default function Footer({ className }: Props) {
             {SNS_LIST.map((item) => (
               <li key={item.label}>
                 <Link
-                  className={cn(
-                    buttonVariants({ variant: 'ghost', size: 'icon' }),
-                    'rounded-full'
-                  )}
+                  className={buttonVariants({ variant: 'ghost', size: 'icon' })}
                   to={item.url}
                   aria-label={item.label}
                   target="_blank"

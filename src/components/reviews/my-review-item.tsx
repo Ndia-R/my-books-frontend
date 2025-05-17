@@ -3,24 +3,66 @@ import ReviewUpdateDialog from '@/components/reviews/review-update-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
+import { queryKeys } from '@/constants/query-keys';
+import { useSearchFilters } from '@/hooks/use-search-filters';
+import { deleteReview, updateReview } from '@/lib/api/review';
+import { getUserReviews } from '@/lib/api/user';
 import { formatDateJP, formatTime } from '@/lib/utils';
-import { Review, ReviewDeleteMutation, ReviewUpdateMutation } from '@/types';
+import { Review, ReviewRequest } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SquarePenIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 
 type Props = {
   review: Review;
-  updateMutation: ReviewUpdateMutation;
-  deleteMutation: ReviewDeleteMutation;
 };
 
-export default function MyReviewItem({
-  review,
-  updateMutation,
-  deleteMutation,
-}: Props) {
+export default function MyReviewItem({ review }: Props) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const { page, updateQueryParams } = useSearchFilters();
+  const queryClient = useQueryClient();
+
+  const updateMutation = useMutation({
+    mutationFn: ({
+      reviewId,
+      requestBody,
+    }: {
+      reviewId: number;
+      requestBody: ReviewRequest;
+    }) => updateReview(reviewId, requestBody),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.user.reviews(page),
+      });
+    },
+    onError: (error: Error) => {
+      console.error(error);
+    },
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (reviewId: number) => deleteReview(reviewId),
+    onSuccess: async () => {
+      // ２ページ以降で、そのページの最後の１つを削除した場合は、１ページ戻る
+      const reviewPage = await getUserReviews(page);
+      if (page >= 2 && reviewPage.reviews.length === 0) {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.user.reviews(page - 1),
+        });
+        updateQueryParams({ page: page - 1 });
+        return;
+      }
+
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.user.reviews(page),
+      });
+    },
+    onError: (error: Error) => {
+      console.error(error);
+    },
+  });
 
   return (
     <>
@@ -30,7 +72,7 @@ export default function MyReviewItem({
             <div className="flex min-w-20 justify-center sm:min-w-24">
               <Link to={`/book/${review.book.id}`} className="size-fit">
                 <img
-                  className="h-24 rounded-sm object-cover sm:h-28"
+                  className="h-24 rounded-xs object-cover sm:h-28"
                   src={BOOK_IMAGE_BASE_URL + review.book.imagePath}
                   alt={review.book.title}
                 />
@@ -57,7 +99,7 @@ export default function MyReviewItem({
                     <span>{formatTime(review.createdAt)}</span>
                   </time>
                   <Button
-                    className="text-muted-foreground size-8 rounded-full"
+                    className="text-muted-foreground size-8"
                     variant="ghost"
                     size="icon"
                     aria-label="レビューを編集"

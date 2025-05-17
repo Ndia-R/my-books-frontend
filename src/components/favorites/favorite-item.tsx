@@ -17,7 +17,7 @@ export default function FavoriteItem({ favorite }: Props) {
           <div className="flex min-w-20 justify-center sm:min-w-24">
             <Link to={`/book/${favorite.book.id}`} className="size-fit">
               <img
-                className="h-24 rounded-sm object-cover sm:h-28"
+                className="h-24 rounded-xs object-cover sm:h-28"
                 src={BOOK_IMAGE_BASE_URL + favorite.book.imagePath}
                 alt={favorite.book.title}
               />

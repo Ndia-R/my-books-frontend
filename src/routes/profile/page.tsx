@@ -51,12 +51,12 @@ export default function Page({ title }: Props) {
         <Logo size="lg" disableLink />
         <h1 className="font-semibold">プロフィール</h1>
 
-        <Card className="w-80 overflow-hidden rounded-3xl p-0 sm:w-96">
-          <CardHeader className="from-secondary to-primary w-full bg-linear-to-tr p-0">
+        <Card className="w-80 overflow-hidden p-0 sm:w-96">
+          <CardHeader className="from-secondary/50 to-primary w-full bg-linear-to-tr p-0">
             <div className="flex flex-col items-center pt-12">
               <Avatar className="size-24">
                 <AvatarImage
-                  className="bg-primary"
+                  className="bg-foreground/30"
                   src={AVATAR_IMAGE_BASE_URL + user?.avatarPath}
                   alt="avatar-image"
                 />
@@ -90,7 +90,7 @@ export default function Page({ title }: Props) {
                   <Link
                     className={cn(
                       buttonVariants({ variant: 'outline' }),
-                      'rounded-full bg-transparent'
+                      'bg-transparent'
                     )}
                     to={item.linkTo}
                   >

@@ -79,7 +79,7 @@ export default function ReviewUpdateDialog({
     };
 
     updateMutation.mutate(
-      { id: review.id, requestBody },
+      { reviewId: review.id, requestBody },
       {
         onSuccess: () => {
           toast.success('レビューを更新しました');
@@ -126,14 +126,14 @@ export default function ReviewUpdateDialog({
 
         <DialogFooter className="gap-y-4 sm:gap-y-0">
           <Button
-            className="min-w-24 rounded-full"
+            className="min-w-24"
             variant="ghost"
             onClick={handleClickCancel}
           >
             キャンセル
           </Button>
           <Button
-            className="min-w-24 rounded-full"
+            className="min-w-24"
             variant="outline"
             disabled={deleteMutation.isPending}
             onClick={handleClickDelete}
@@ -145,7 +145,7 @@ export default function ReviewUpdateDialog({
             )}
           </Button>
           <Button
-            className="min-w-24 rounded-full"
+            className="min-w-24"
             disabled={comment === '' || updateMutation.isPending}
             onClick={handleClickUpdate}
           >
