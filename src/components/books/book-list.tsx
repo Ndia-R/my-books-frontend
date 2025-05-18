@@ -18,7 +18,9 @@ export default function BookList({ books }: Props) {
     <div className="grid grid-cols-2 justify-items-center gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 lg:grid-cols-5">
       {books.map((book) => (
         <article key={book.id}>
-          <BookItem book={book} />
+          <div className="rounded-xl transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-xl">
+            <BookItem book={book} />
+          </div>
         </article>
       ))}
     </div>

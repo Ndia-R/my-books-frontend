@@ -33,7 +33,7 @@ export default function Menu() {
               <MenuIcon className="size-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent className="w-fit p-8" side="left">
+          <SheetContent className="w-fit gap-y-10 p-8" side="left">
             <VisuallyHidden>
               <DialogTitle>ナビメニュー</DialogTitle>
               <DialogDescription>ナビメニュー</DialogDescription>

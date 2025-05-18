@@ -1,4 +1,4 @@
-import { buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Link, useLocation } from 'react-router';
 
@@ -21,22 +21,23 @@ export default function NavList({ onClick }: Props) {
 
   return (
     <nav>
-      <ul className="flex flex-col gap-y-2 lg:flex-row">
+      <ul className="flex flex-col gap-y-2 lg:flex-row lg:gap-x-2">
         {NAV_LIST.map((item) => (
-          <li className="w-full" key={item.href}>
-            <Link
-              className={cn(
-                buttonVariants({ variant: 'ghost' }),
-                'w-full',
-                location.pathname !== '/' &&
-                  item.href.includes(location.pathname) &&
-                  'text-primary'
-              )}
-              to={item.href}
-              onClick={onClick}
-            >
-              {item.title}
-            </Link>
+          <li key={item.href}>
+            <Button variant="link" asChild>
+              <Link
+                className={cn(
+                  'w-full',
+                  location.pathname !== '/' &&
+                    item.href.includes(location.pathname) &&
+                    'text-primary'
+                )}
+                to={item.href}
+                onClick={onClick}
+              >
+                <span>{item.title}</span>
+              </Link>
+            </Button>
           </li>
         ))}
       </ul>

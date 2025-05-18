@@ -11,7 +11,9 @@ export default function FavoriteList({ favorites }: Props) {
       {favorites.map((favorite, index) => (
         <li key={index}>
           <article>
-            <FavoriteItem favorite={favorite} />
+            <div className="rounded-xl transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-xl">
+              <FavoriteItem favorite={favorite} />
+            </div>
           </article>
         </li>
       ))}

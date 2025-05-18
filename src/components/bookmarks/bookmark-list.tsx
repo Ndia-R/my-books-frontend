@@ -11,7 +11,9 @@ export default function BookmarkList({ bookmarks }: Props) {
       {bookmarks.map((bookmark) => (
         <li key={bookmark.id}>
           <article>
-            <BookmarkItem bookmark={bookmark} />
+            <div className="rounded-xl transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:shadow-xl">
+              <BookmarkItem bookmark={bookmark} />
+            </div>
           </article>
         </li>
       ))}

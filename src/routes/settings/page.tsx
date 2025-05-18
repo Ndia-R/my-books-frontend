@@ -15,7 +15,7 @@ type ThemeCard = {
   background: string;
 };
 
-const cards: ThemeCard[] = [
+const THEME_CARDS: ThemeCard[] = [
   {
     themeStyle: 'default',
     title: 'Default',
@@ -164,36 +164,41 @@ export default function Page({ title }: Props) {
       <title>{`${title} - ${APP_TITLE}`}</title>
 
       <div className="m-4 flex h-10 items-center">
-        <h1>テーマ設定</h1>
+        <h1>設定</h1>
       </div>
 
       <Separator className="bg-foreground/10 my-4" />
 
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-        {cards.map((card) => (
-          <Card
-            key={card.themeStyle}
-            className={cn(
-              'border-transparent hover:cursor-pointer',
-              themeStyle === card.themeStyle && card.border,
-              card.bg
-            )}
-            onClick={() => handleClick(card.themeStyle)}
-          >
-            <CardContent>
-              <div className="flex flex-col items-center gap-2 md:flex-row">
-                <div className="flex gap-x-1">
-                  <div className={cn('size-3 rounded', card.primary)}></div>
-                  <div className={cn('size-3 rounded', card.secondary)}></div>
-                  <div className={cn('size-3 rounded', card.accent)}></div>
-                  <div className={cn('size-3 rounded', card.background)}></div>
+      <section className="p-4">
+        <h2 className="mb-4">テーマ</h2>
+
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+          {THEME_CARDS.map((card) => (
+            <Card
+              className={cn(
+                'transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:shadow-xl',
+                'border-transparent hover:cursor-pointer',
+                themeStyle === card.themeStyle && card.border,
+                card.bg
+              )}
+              key={card.themeStyle}
+              onClick={() => handleClick(card.themeStyle)}
+            >
+              <CardContent>
+                <div className="flex flex-col items-center gap-2 md:flex-row">
+                  <div className="flex gap-x-1">
+                    <div className={cn('size-3 rounded-sm', card.primary)} />
+                    <div className={cn('size-3 rounded-sm', card.secondary)} />
+                    <div className={cn('size-3 rounded-sm', card.accent)} />
+                    <div className={cn('size-3 rounded-sm', card.background)} />
+                  </div>
+                  <p className="text-nowrap">{card.title}</p>
                 </div>
-                <p>{card.title}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </section>
     </>
   );
 }

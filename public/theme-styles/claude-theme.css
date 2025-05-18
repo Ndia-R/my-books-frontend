@@ -1,6 +1,6 @@
 /* ロゴとタイトルのフォント */
 :root {
-  --font-logo: 'Ribeye';
+  --font-logo: 'Noto Serif JP';
   --font-title: 'Noto Serif JP';
 }
 

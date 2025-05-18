@@ -21,7 +21,7 @@ export default function GenreItem({ genre, isActive = false, onClick }: Props) {
 
   return (
     <Button
-      className="m-1 text-xs sm:text-sm"
+      className="text-xs sm:text-sm"
       variant={isActive ? 'outline' : 'ghost'}
       size="sm"
       onClick={() => handleClick(genre.id)}
