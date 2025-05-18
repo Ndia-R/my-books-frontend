@@ -24,6 +24,7 @@ export default function NavList({ onClick }: Props) {
       <ul className="flex flex-col gap-y-2 lg:flex-row lg:gap-x-2">
         {NAV_LIST.map((item) => (
           <li key={item.href}>
+            <Button>BUTTON</Button>
             <Button variant="link" asChild>
               <Link
                 className={cn(
