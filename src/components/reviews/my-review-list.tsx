@@ -11,9 +11,7 @@ export default function MyReviewList({ reviews }: Props) {
       {reviews.map((review) => (
         <li key={review.id}>
           <article>
-            <div className="rounded-xl transition-transform duration-300 ease-out hover:-translate-y-1 hover:shadow-xl">
-              <MyReviewItem review={review} />
-            </div>
+            <MyReviewItem review={review} />
           </article>
         </li>
       ))}

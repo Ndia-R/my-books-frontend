@@ -1,6 +1,6 @@
-import { Button } from '@/components/ui/button';
+import NavigateLink from '@/components/layout/navigate-link';
 import { cn } from '@/lib/utils';
-import { Link, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 
 const NAV_LIST = [
   {
@@ -24,21 +24,17 @@ export default function NavList({ onClick }: Props) {
       <ul className="flex flex-col gap-y-2 lg:flex-row lg:gap-x-2">
         {NAV_LIST.map((item) => (
           <li key={item.href}>
-            <Button>BUTTON</Button>
-            <Button variant="link" asChild>
-              <Link
-                className={cn(
-                  'w-full',
-                  location.pathname !== '/' &&
-                    item.href.includes(location.pathname) &&
-                    'text-primary'
-                )}
-                to={item.href}
-                onClick={onClick}
-              >
-                <span>{item.title}</span>
-              </Link>
-            </Button>
+            <NavigateLink
+              className={cn(
+                location.pathname !== '/' &&
+                  item.href.includes(location.pathname) &&
+                  'text-primary'
+              )}
+              href={item.href}
+              onClick={onClick}
+            >
+              {item.title}
+            </NavigateLink>
           </li>
         ))}
       </ul>

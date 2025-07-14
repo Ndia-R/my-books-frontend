@@ -51,7 +51,11 @@ export function ThemeStyleProvider({
   useEffect(() => {
     const existingLink = document.getElementById('theme-stylesheet');
     if (existingLink) {
-      document.head.removeChild(existingLink);
+      // 設定しているCSSをすぐに削除すると、デフォルトで設定しているCSSに一瞬変わった後に
+      // 新しく読み込んだCSSになるのでカクつく。そのため時間差をつくる。
+      setTimeout(() => {
+        document.head.removeChild(existingLink);
+      }, 200);
     }
 
     const link = document.createElement('link');

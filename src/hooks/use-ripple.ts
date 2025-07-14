@@ -17,8 +17,8 @@ export function useRipple() {
     ripple.className = `
       absolute
       rounded-full
-      bg-black
-      opacity-30
+      bg-white
+      opacity-10
       pointer-events-none
       animate-ripple
     `;

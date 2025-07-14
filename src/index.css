@@ -213,14 +213,14 @@
   }
 }
 
-/* ボタンの波紋アニメーション用 */
+/* useRipple 波紋アニメーション用 */
 @keyframes ripple {
   0% {
     transform: scale(0);
-    opacity: 0.5;
+    opacity: 0.4;
   }
   100% {
-    transform: scale(1);
+    transform: scale(2);
     opacity: 0;
   }
 }

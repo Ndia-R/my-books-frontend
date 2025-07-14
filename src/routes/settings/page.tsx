@@ -1,21 +1,8 @@
-import { Card, CardContent } from '@/components/ui/card';
+import ThemeCard, { ThemeCardProps } from '@/components/settings/theme-card';
 import { Separator } from '@/components/ui/separator';
 import { APP_TITLE } from '@/constants/constants';
-import { cn } from '@/lib/utils';
-import { ThemeStyle, useThemeStyle } from '@/providers/theme-style-provider';
 
-type ThemeCard = {
-  themeStyle: ThemeStyle;
-  title: string;
-  bg: string;
-  border: string;
-  primary: string;
-  secondary: string;
-  accent: string;
-  background: string;
-};
-
-const THEME_CARDS: ThemeCard[] = [
+const THEME_CARDS: ThemeCardProps[] = [
   {
     themeStyle: 'default',
     title: 'Default',
@@ -153,12 +140,6 @@ type Props = {
 };
 
 export default function Page({ title }: Props) {
-  const { themeStyle, setThemeStyle } = useThemeStyle();
-
-  const handleClick = (selectedStyle: ThemeStyle) => {
-    setThemeStyle(selectedStyle);
-  };
-
   return (
     <>
       <title>{`${title} - ${APP_TITLE}`}</title>
@@ -174,28 +155,7 @@ export default function Page({ title }: Props) {
 
         <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
           {THEME_CARDS.map((card) => (
-            <Card
-              className={cn(
-                'transition-transform duration-300 ease-out hover:-translate-y-0.5 hover:shadow-xl',
-                'border-transparent hover:cursor-pointer',
-                themeStyle === card.themeStyle && card.border,
-                card.bg
-              )}
-              key={card.themeStyle}
-              onClick={() => handleClick(card.themeStyle)}
-            >
-              <CardContent>
-                <div className="flex flex-col items-center gap-2 md:flex-row">
-                  <div className="flex gap-x-1">
-                    <div className={cn('size-3 rounded-sm', card.primary)} />
-                    <div className={cn('size-3 rounded-sm', card.secondary)} />
-                    <div className={cn('size-3 rounded-sm', card.accent)} />
-                    <div className={cn('size-3 rounded-sm', card.background)} />
-                  </div>
-                  <p className="text-nowrap">{card.title}</p>
-                </div>
-              </CardContent>
-            </Card>
+            <ThemeCard card={card} key={card.themeStyle} />
           ))}
         </div>
       </section>
