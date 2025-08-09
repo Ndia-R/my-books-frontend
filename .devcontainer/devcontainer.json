@@ -20,7 +20,8 @@
         "oderwat.indent-rainbow",
         "shardulm94.trailing-spaces",
         "mhutchie.git-graph",
-        "mosapride.zenkaku"
+        "mosapride.zenkaku",
+        "anthropic.claude-code"
       ]
     }
   },
