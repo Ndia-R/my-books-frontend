@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { createFavorite, deleteFavorite } from '@/lib/api/favorite';
+import { createFavorite, deleteFavoriteByBookId } from '@/lib/api/favorite';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { HeartIcon } from 'lucide-react';
@@ -66,7 +66,7 @@ export default function FavoriteCountIcon({
       // APIリクエストを送信する
       try {
         if (favoriteState.isFavorite) {
-          await deleteFavorite(bookId);
+          await deleteFavoriteByBookId(bookId);
         } else {
           await createFavorite({ bookId });
         }
@@ -84,7 +84,7 @@ export default function FavoriteCountIcon({
         <TooltipTrigger asChild>
           <Button
             className={cn(
-              'text-muted-foreground',
+              'text-muted-foreground hover:text-primary',
               BUTTON_SIZE[size],
               optimisticState.isFavorite && 'text-primary bg-transparent'
             )}

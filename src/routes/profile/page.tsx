@@ -88,10 +88,7 @@ export default function Page({ title }: Props) {
                     <p>{item.title}</p>
                   </div>
                   <Link
-                    className={cn(
-                      buttonVariants({ variant: 'outline' }),
-                      'bg-transparent'
-                    )}
+                    className={cn(buttonVariants({ variant: 'outline' }))}
                     to={item.linkTo}
                   >
                     {item.linkLabel}

@@ -19,9 +19,9 @@ export const VALIDATION_RULES = {
   },
 } as const;
 
-export function useFieldValidation<
+export const useFieldValidation = <
   T extends HTMLInputElement = HTMLInputElement,
->() {
+>() => {
   const ref = useRef<T | null>(null);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -109,4 +109,4 @@ export function useFieldValidation<
     },
     getValue: () => ref.current?.value || '',
   };
-}
+};

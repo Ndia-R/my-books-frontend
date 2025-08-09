@@ -21,7 +21,7 @@ export default function BooksSearch({ q, page }: Props) {
         {bookPage.totalItems}
         <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
       </p>
-      <BookList books={bookPage.books} />
+      <BookList books={bookPage.data} />
       <SearchPagination totalPages={bookPage.totalPages} />
     </div>
   );

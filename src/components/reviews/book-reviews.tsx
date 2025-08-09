@@ -9,7 +9,7 @@ import {
 import { queryKeys } from '@/constants/query-keys';
 import { getBookReviews } from '@/lib/api/books';
 import { createReview } from '@/lib/api/review';
-import { getUserReviewForBook } from '@/lib/api/user';
+import { isReviewedByUser } from '@/lib/api/user';
 import { useAuth } from '@/providers/auth-provider';
 import { Review, ReviewRequest } from '@/types';
 import {
@@ -43,8 +43,8 @@ export default function BookReviews({ bookId }: Props) {
   // ログインしていない場合は、enabledオプションを指定して
   // queryFnを呼び出さないようにする（この指定はuseSuspenseQueryでは出来ない模様）
   const { data: review } = useQuery({
-    queryKey: queryKeys.user.reviewForBook(bookId),
-    queryFn: () => getUserReviewForBook(bookId),
+    queryKey: queryKeys.user.isReviewedByUser(bookId),
+    queryFn: () => isReviewedByUser(bookId),
     enabled: isAuthenticated,
     retry: false,
   });
@@ -58,7 +58,7 @@ export default function BookReviews({ bookId }: Props) {
         queryKey: queryKeys.book.reviews(bookId, 1),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.user.reviewForBook(bookId),
+        queryKey: queryKeys.user.reviewsByBookId(bookId),
       });
       queryClient.invalidateQueries({
         queryKey: queryKeys.book.details(bookId),
@@ -72,7 +72,7 @@ export default function BookReviews({ bookId }: Props) {
   useEffect(() => {
     if (initialReviewPage) {
       setCurrentPage(1);
-      setReviews(initialReviewPage.reviews);
+      setReviews(initialReviewPage.data);
       setTotalPages(initialReviewPage.totalPages);
     }
   }, [initialReviewPage]);
@@ -81,7 +81,7 @@ export default function BookReviews({ bookId }: Props) {
     setIsLoading(true);
     const nextPage = currentPage + 1;
     const nextReviewPage = await getBookReviews(bookId, nextPage);
-    setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.reviews]);
+    setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
     setCurrentPage(nextPage);
     setIsLoading(false);
   };

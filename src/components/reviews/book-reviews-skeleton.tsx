@@ -1,6 +1,6 @@
 import { Separator } from '@/components/ui/separator';
 import { Skeleton } from '@/components/ui/skeleton';
-import { FETCH_REVIEWS_MAX_RESULTS } from '@/constants/constants';
+import { DEFAULT_REVIEWS_SIZE } from '@/constants/constants';
 
 const ReviewItemSkeleton = () => {
   return (
@@ -34,7 +34,7 @@ export default function BookReviewsSkeleton() {
         <Skeleton className="bg-muted-foreground/5 h-10 w-44" />
       </div>
       <ul className="flex flex-col p-3 sm:p-6">
-        {[...Array<number>(FETCH_REVIEWS_MAX_RESULTS)].map((_, index) => (
+        {[...Array<number>(DEFAULT_REVIEWS_SIZE)].map((_, index) => (
           <li key={index}>
             <Separator className="bg-foreground/10" />
             <ReviewItemSkeleton />

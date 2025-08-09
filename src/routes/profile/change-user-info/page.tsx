@@ -114,10 +114,7 @@ export default function Page({ title }: Props) {
               </Button>
 
               <Link
-                className={cn(
-                  buttonVariants({ variant: 'outline' }),
-                  'w-full bg-transparent'
-                )}
+                className={cn(buttonVariants({ variant: 'outline' }), 'w-full')}
                 to="/profile"
               >
                 キャンセル

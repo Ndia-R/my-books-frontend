@@ -69,7 +69,7 @@ export default function BookmarkUpdateDialog({
 
   const handleClickUpdate = () => {
     const requestBody: BookmarkRequest = {
-      bookId: bookmark.bookId,
+      bookId: bookmark.book.id,
       chapterNumber: bookmark.chapterNumber,
       pageNumber: bookmark.pageNumber,
       note,

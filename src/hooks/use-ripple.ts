@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 
-export function useRipple() {
+export const useRipple = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const createRipple = (event: React.MouseEvent) => {
@@ -34,4 +34,4 @@ export function useRipple() {
   };
 
   return { containerRef, createRipple };
-}
+};

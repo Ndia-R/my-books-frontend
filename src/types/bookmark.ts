@@ -4,21 +4,25 @@ import { UseMutationResult } from '@tanstack/react-query';
 export type Bookmark = {
   id: number;
   userId: number;
-  bookId: string;
+
   chapterNumber: number;
+  chapterTitle: string;
   pageNumber: number;
   note: string;
-  chapterTitle: string;
+
   createdAt: string;
   updatedAt: string;
   book: Book;
 };
 
 export type BookmarkPage = {
-  page: number;
+  currentPage: number; // ページ番号は1ベース
+  pageSize: number;
   totalPages: number;
   totalItems: number;
-  bookmarks: Bookmark[];
+  hasNext: boolean;
+  hasPrevious: boolean;
+  data: Bookmark[];
 };
 
 export type BookmarkRequest = {

@@ -1,15 +1,11 @@
 import {
-  FETCH_BOOKMARKS_MAX_RESULTS,
-  FETCH_FAVORITES_MAX_RESULTS,
-  FETCH_MY_REVIEWS_MAX_RESULTS,
+  DEFAULT_MY_REVIEWS_SIZE,
+  DEFAULT_MY_REVIEWS_SORT,
 } from '@/constants/constants';
 import { customFetch } from '@/lib/api/fetch-client';
 import {
-  Bookmark,
   BookmarkPage,
-  Favorite,
   FavoritePage,
-  Review,
   ReviewPage,
   UpdateUserEmail,
   UpdateUserPassword,
@@ -43,11 +39,14 @@ export const getUserProfileCounts = async () => {
 };
 
 // 自分のレビュー一覧
-export const getUserReviews = async (page: number = 0) => {
+export const getUserReviews = async (
+  page: number = 1,
+  size = DEFAULT_MY_REVIEWS_SIZE,
+  sort = DEFAULT_MY_REVIEWS_SORT
+) => {
   try {
-    const basePage = page > 0 ? page - 1 : 0;
     const endpoint = `/me/reviews`;
-    const query = `?page=${basePage}&maxResults=${FETCH_MY_REVIEWS_MAX_RESULTS}`;
+    const query = `?page=${page}&size=${size}&sort${sort}`;
     const response = await customFetch<ReviewPage>(endpoint + query);
     return response.data;
   } catch (error) {
@@ -57,11 +56,14 @@ export const getUserReviews = async (page: number = 0) => {
 };
 
 // 自分のお気に入り一覧
-export const getUserFavorites = async (page: number = 0) => {
+export const getUserFavorites = async (
+  page: number = 1,
+  size = DEFAULT_MY_REVIEWS_SIZE,
+  sort = DEFAULT_MY_REVIEWS_SORT
+) => {
   try {
-    const basePage = page > 0 ? page - 1 : 0;
     const endpoint = `/me/favorites`;
-    const query = `?page=${basePage}&maxResults=${FETCH_FAVORITES_MAX_RESULTS}`;
+    const query = `?page=${page}&size=${size}&sort${sort}`;
     const response = await customFetch<FavoritePage>(endpoint + query);
     return response.data;
   } catch (error) {
@@ -71,11 +73,14 @@ export const getUserFavorites = async (page: number = 0) => {
 };
 
 // 自分のブックマーク一覧
-export const getUserBookmarks = async (page: number = 0) => {
+export const getUserBookmarks = async (
+  page: number = 1,
+  size = DEFAULT_MY_REVIEWS_SIZE,
+  sort = DEFAULT_MY_REVIEWS_SORT
+) => {
   try {
-    const basePage = page > 0 ? page - 1 : 0;
     const endpoint = `/me/bookmarks`;
-    const query = `?page=${basePage}&maxResults=${FETCH_BOOKMARKS_MAX_RESULTS}`;
+    const query = `?page=${page}&size=${size}&sort${sort}`;
     const response = await customFetch<BookmarkPage>(endpoint + query);
     return response.data;
   } catch (error) {
@@ -85,11 +90,16 @@ export const getUserBookmarks = async (page: number = 0) => {
 };
 
 // 自分が投稿した特定の書籍のレビュー
-// （書籍１冊に対して、１つのレビューなので「単数形」）
-export const getUserReviewForBook = async (bookId: string) => {
+export const getUserReviewsByBookId = async (
+  bookId: string,
+  page: number = 1,
+  size = DEFAULT_MY_REVIEWS_SIZE,
+  sort = DEFAULT_MY_REVIEWS_SORT
+) => {
   try {
-    const endpoint = `/me/books/${bookId}/review`;
-    const response = await customFetch<Review>(endpoint);
+    const endpoint = `/me/reviews`;
+    const query = `?bookId=${bookId}&page=${page}&size=${size}&sort=${sort}`;
+    const response = await customFetch<ReviewPage>(endpoint + query);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -98,11 +108,16 @@ export const getUserReviewForBook = async (bookId: string) => {
 };
 
 // 自分の追加した特定の書籍のお気に入り
-// （書籍１冊に対して、１つのお気に入りなので「単数形」）
-export const getUserFavoriteForBook = async (bookId: string) => {
+export const getUserFavoritesByBookId = async (
+  bookId: string,
+  page: number = 1,
+  size = DEFAULT_MY_REVIEWS_SIZE,
+  sort = DEFAULT_MY_REVIEWS_SORT
+) => {
   try {
-    const endpoint = `/me/books/${bookId}/favorite`;
-    const response = await customFetch<Favorite>(endpoint);
+    const endpoint = `/me/favorites`;
+    const query = `?bookId=${bookId}&page=${page}&size=${size}&sort=${sort}`;
+    const response = await customFetch<FavoritePage>(endpoint + query);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -110,12 +125,17 @@ export const getUserFavoriteForBook = async (bookId: string) => {
   }
 };
 
-// 自分の追加した特定の書籍のブックマークリスト
-// （書籍１冊に対して、複数のブックマークなので「複数形」）
-export const getUserBookmarksForBook = async (bookId: string) => {
+// 自分の追加した特定の書籍のブックマーク
+export const getUserBookmarksByBookId = async (
+  bookId: string,
+  page: number = 1,
+  size = DEFAULT_MY_REVIEWS_SIZE,
+  sort = DEFAULT_MY_REVIEWS_SORT
+) => {
   try {
-    const endpoint = `/me/books/${bookId}/bookmarks`;
-    const response = await customFetch<Bookmark[]>(endpoint);
+    const endpoint = `/me/bookmarks`;
+    const query = `?bookId=${bookId}&page=${page}&size=${size}&sort=${sort}`;
+    const response = await customFetch<BookmarkPage>(endpoint + query);
     return response.data;
   } catch (error) {
     console.error(error);
@@ -171,12 +191,23 @@ export const updateUserPassword = async (requestBody: UpdateUserPassword) => {
   }
 };
 
+// この書籍をユーザーがレビューしているかどうか
+// （データの取得を試みてエラーなら未登録とする）
+export const isReviewedByUser = async (bookId: string) => {
+  try {
+    const response = await getUserReviewsByBookId(bookId);
+    return response.totalItems != 0 ? true : false;
+  } catch {
+    return false;
+  }
+};
+
 // この書籍をユーザーがお気に入り登録しているかどうか
 // （データの取得を試みてエラーなら未登録とする）
-export const isBookFavoritedByUser = async (bookId: string) => {
+export const isFavoritedByUser = async (bookId: string) => {
   try {
-    await getUserFavoriteForBook(bookId);
-    return true;
+    const response = await getUserFavoritesByBookId(bookId);
+    return response.totalItems != 0 ? true : false;
   } catch {
     return false;
   }

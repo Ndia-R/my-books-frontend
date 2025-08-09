@@ -24,10 +24,10 @@ export const queryKeys = {
       ] as const,
     reviews: (bookId: string, page: number) =>
       [...queryKeys.book.all, 'reviews', bookId, page] as const,
-    reviewCounts: (bookId: string) =>
-      [...queryKeys.book.all, 'reviewCounts', bookId] as const,
-    favoriteCounts: (bookId: string) =>
-      [...queryKeys.book.all, 'favoriteCounts', bookId] as const,
+    reviewStats: (bookId: string) =>
+      [...queryKeys.book.all, 'reviewStats', bookId] as const,
+    favoriteStats: (bookId: string) =>
+      [...queryKeys.book.all, 'favoriteStats', bookId] as const,
   },
 
   genre: {
@@ -56,13 +56,15 @@ export const queryKeys = {
       [...queryKeys.user.all, 'favorites', page] as const,
     bookmarks: (page: number) =>
       [...queryKeys.user.all, 'bookmarks', page] as const,
-    reviewForBook: (bookId: string) =>
-      [...queryKeys.user.all, 'reviewForBook', bookId] as const,
-    favoriteForBook: (bookId: string) =>
-      [...queryKeys.user.all, 'favoriteForBook', bookId] as const,
-    bookmarksForBook: (bookId: string) =>
-      [...queryKeys.user.all, 'bookmarksForBook', bookId] as const,
-    isBookFavoritedByUser: (bookId: string) =>
-      [...queryKeys.user.all, 'isBookFavoritedByUser', bookId] as const,
+    reviewsByBookId: (bookId: string) =>
+      [...queryKeys.user.all, 'reviewsByBookId', bookId] as const,
+    favoritesByBookId: (bookId: string) =>
+      [...queryKeys.user.all, 'favoritesByBookId', bookId] as const,
+    bookmarksByBookId: (bookId: string) =>
+      [...queryKeys.user.all, 'bookmarksByBookId', bookId] as const,
+    isReviewedByUser: (bookId: string) =>
+      [...queryKeys.user.all, 'isReviewedByUser', bookId] as const,
+    isFavoritedByUser: (bookId: string) =>
+      [...queryKeys.user.all, 'isFavoritedByUser', bookId] as const,
   },
 };

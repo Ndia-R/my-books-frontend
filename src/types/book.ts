@@ -10,13 +10,17 @@ export type Book = {
   imagePath: string;
   reviewCount: number;
   averageRating: number;
+  popularity: number;
 };
 
 export type BookPage = {
-  page: number;
+  currentPage: number; // ページ番号は1ベース
+  pageSize: number;
   totalPages: number;
   totalItems: number;
-  books: Book[];
+  hasNext: boolean;
+  hasPrevious: boolean;
+  data: Book[];
 };
 
 export type BookDetails = {
@@ -33,6 +37,7 @@ export type BookDetails = {
   imagePath: string;
   reviewCount: number;
   averageRating: number;
+  popularity: number;
 };
 
 export type BookChapter = {

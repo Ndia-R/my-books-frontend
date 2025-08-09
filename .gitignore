@@ -23,5 +23,5 @@ dist-ssr
 *.sln
 *.sw?
 
-#
+# JFrog用の設定ファイル
 .npmrc

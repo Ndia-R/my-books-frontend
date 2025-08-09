@@ -32,7 +32,7 @@ export default function FavoriteItem({ favorite }: Props) {
               </Link>
               <div className="flex items-center">
                 <FavoriteCountIcon
-                  bookId={favorite.bookId}
+                  bookId={favorite.book.id}
                   isFavorite={true}
                   count={1}
                 />

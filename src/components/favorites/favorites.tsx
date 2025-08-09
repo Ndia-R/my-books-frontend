@@ -20,7 +20,7 @@ export default function Favorites({ page }: Props) {
         {bookPage.totalItems}
         <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
       </p>
-      <FavoriteList favorites={bookPage.favorites} />
+      <FavoriteList favorites={bookPage.data} />
       <SearchPagination totalPages={bookPage.totalPages} />
     </div>
   );

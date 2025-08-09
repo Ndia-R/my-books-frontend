@@ -1,21 +1,20 @@
-FROM node:20.17-slim
+FROM node:22-slim
 
-ARG PKG="git sudo"
+RUN apt-get update && \
+    apt-get install -y git && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt-get update && apt-get install -y ${PKG}
+# rootユーザーで作業ディレクトリの所有者とグループを変更
+USER root
+WORKDIR /workspace
+RUN chown node:node /workspace
 
-WORKDIR /my-books-frontend
+# npmを最新版に更新
+RUN npm install -g npm@latest
 
-RUN chown node:node .
-RUN mkdir node_modules && chown node:node node_modules
-
-COPY --chown=node:node ./package*.json ./
-# .npmrc が存在する場合のみコピー
-RUN [ -f ./.npmrc ] && cp ./.npmrc ./ || echo ".npmrc not found, skipping copy."
-# COPY --chown=node:node ./.npmrc ./
-
+# ユーザー変更（イメージの中の既存ユーザー）
 USER node
 
-RUN npm install
-
-COPY --chown=node:node . .
+# node_modulesディレクトリはvolumeとしてバインドするので
+# そのためのディレクトリをあらかじめ作成しておく
+RUN mkdir -p node_modules

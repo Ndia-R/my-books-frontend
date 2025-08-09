@@ -16,4 +16,45 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+
+  // ビルド設定（依存ライブラリごとに分割）
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          // React 関連まとめ
+          react: ['react', 'react-dom', 'react-router'],
+
+          // Radix UI 関連まとめ
+          radix: [
+            '@radix-ui/react-avatar',
+            '@radix-ui/react-dialog',
+            '@radix-ui/react-dropdown-menu',
+            '@radix-ui/react-label',
+            '@radix-ui/react-radio-group',
+            '@radix-ui/react-select',
+            '@radix-ui/react-separator',
+            '@radix-ui/react-slot',
+            '@radix-ui/react-tooltip',
+            '@radix-ui/react-visually-hidden',
+          ],
+
+          // UI ユーティリティ
+          ui: [
+            'clsx',
+            'class-variance-authority',
+            'tailwind-merge',
+            'lucide-react',
+            'sonner',
+            'next-themes',
+            'tw-animate-css',
+            'use-debounce',
+          ],
+
+          // データフェッチ
+          query: ['@tanstack/react-query', 'react-error-boundary'],
+        },
+      },
+    },
+  },
 });

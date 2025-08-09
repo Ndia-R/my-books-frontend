@@ -47,7 +47,7 @@ export default function MyReviewItem({ review }: Props) {
     onSuccess: async () => {
       // ２ページ以降で、そのページの最後の１つを削除した場合は、１ページ戻る
       const reviewPage = await getUserReviews(page);
-      if (page >= 2 && reviewPage.reviews.length === 0) {
+      if (page >= 2 && reviewPage.data.length === 0) {
         queryClient.invalidateQueries({
           queryKey: queryKeys.user.reviews(page - 1),
         });

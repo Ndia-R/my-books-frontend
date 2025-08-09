@@ -1,6 +1,8 @@
 import {
-  FETCH_BOOKS_MAX_RESULTS,
-  FETCH_REVIEWS_MAX_RESULTS,
+  DEFAULT_BOOKS_SIZE,
+  DEFAULT_BOOKS_SORT,
+  DEFAULT_REVIEWS_SIZE,
+  DEFAULT_REVIEWS_SORT,
 } from '@/constants/constants';
 import { customFetch } from '@/lib/api/fetch-client';
 import {
@@ -8,9 +10,9 @@ import {
   BookDetails,
   BookPage,
   BookTableOfContents,
-  FavoriteCounts,
-  ReviewCounts,
+  FavoriteStats,
   ReviewPage,
+  ReviewStats,
 } from '@/types';
 
 // 最新の書籍リスト（１０冊分）
@@ -28,12 +30,13 @@ export const getLatestBooks = async () => {
 // タイトル検索
 export const searchBooksByTitleKeyword = async (
   q: string,
-  page: number = 0
+  page: number = 1,
+  size = DEFAULT_BOOKS_SIZE,
+  sort = DEFAULT_BOOKS_SORT
 ) => {
   try {
-    const basePage = page > 0 ? page - 1 : 0;
     const endpoint = `/books/search`;
-    const query = `?q=${q}&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
+    const query = `?q=${q}&page=${page}&size=${size}&sort=${sort}`;
     const response = await customFetch<BookPage>(endpoint + query);
     return response.data;
   } catch (error) {
@@ -46,12 +49,13 @@ export const searchBooksByTitleKeyword = async (
 export const searchBooksByGenre = async (
   genreIds: string,
   condition: string,
-  page: number = 0
+  page: number = 1,
+  size = DEFAULT_BOOKS_SIZE,
+  sort = DEFAULT_BOOKS_SORT
 ) => {
   try {
-    const basePage = page > 0 ? page - 1 : 0;
     const endpoint = `/books/discover`;
-    const query = `?genreIds=${genreIds}&condition=${condition}&page=${basePage}&maxResults=${FETCH_BOOKS_MAX_RESULTS}`;
+    const query = `?genreIds=${genreIds}&condition=${condition}&page=${page}&size=${size}&sort=${sort}`;
     const response = await customFetch<BookPage>(endpoint + query);
     return response.data;
   } catch (error) {
@@ -91,7 +95,7 @@ export const getBookChapterPageContent = async (
   pageNumber: number
 ) => {
   try {
-    const endpoint = `/books/${bookId}/chapters/${chapterNumber}/pages/${pageNumber}`;
+    const endpoint = `/content/books/${bookId}/chapters/${chapterNumber}/pages/${pageNumber}`;
     const response = await customFetch<BookChapterPageContent>(endpoint);
     return response.data;
   } catch (error) {
@@ -101,11 +105,15 @@ export const getBookChapterPageContent = async (
 };
 
 // 特定の書籍のレビュー一覧
-export const getBookReviews = async (bookId: string, page: number = 0) => {
+export const getBookReviews = async (
+  bookId: string,
+  page: number = 1,
+  size = DEFAULT_REVIEWS_SIZE,
+  sort = DEFAULT_REVIEWS_SORT
+) => {
   try {
-    const basePage = page > 0 ? page - 1 : 0;
     const endpoint = `/books/${bookId}/reviews`;
-    const query = `?page=${basePage}&maxResults=${FETCH_REVIEWS_MAX_RESULTS}`;
+    const query = `?page=${page}&size=${size}&sort=${sort}`;
     const response = await customFetch<ReviewPage>(endpoint + query);
     return response.data;
   } catch (error) {
@@ -114,26 +122,26 @@ export const getBookReviews = async (bookId: string, page: number = 0) => {
   }
 };
 
-// 特定の書籍のレビュー数
-export const getBookReviewCounts = async (bookId: string) => {
+// 特定の書籍のレビュー統計
+export const getBookReviewStats = async (bookId: string) => {
   try {
-    const endpoint = `/books/${bookId}/reviews/counts`;
-    const response = await customFetch<ReviewCounts>(endpoint);
+    const endpoint = `/books/${bookId}/stats/reviews`;
+    const response = await customFetch<ReviewStats>(endpoint);
     return response.data;
   } catch (error) {
     console.error(error);
-    throw new Error('レビュー数の読み込みが失敗しました。');
+    throw new Error('レビュー統計の読み込みが失敗しました。');
   }
 };
 
-// 特定の書籍のお気に入り数
-export const getBookFavoriteCounts = async (bookId: string) => {
+// 特定の書籍のお気に入り統計
+export const getBookFavoriteStats = async (bookId: string) => {
   try {
-    const endpoint = `/books/${bookId}/favorites/counts`;
-    const response = await customFetch<FavoriteCounts>(endpoint);
+    const endpoint = `/books/${bookId}/stats/favorites`;
+    const response = await customFetch<FavoriteStats>(endpoint);
     return response.data;
   } catch (error) {
     console.error(error);
-    throw new Error('お気に入り数の読み込みが失敗しました。');
+    throw new Error('お気に入り統計の読み込みが失敗しました。');
   }
 };

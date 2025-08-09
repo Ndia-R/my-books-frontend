@@ -4,24 +4,28 @@ import { UseMutationResult } from '@tanstack/react-query';
 export type Review = {
   id: number;
   userId: number;
-  bookId: string;
+
   name: string;
   avatarPath: string;
   comment: string;
   rating: number;
+
   createdAt: string;
   updatedAt: string;
   book: Book;
 };
 
 export type ReviewPage = {
-  page: number;
+  currentPage: number; // ページ番号は1ベース
+  pageSize: number;
   totalPages: number;
   totalItems: number;
-  reviews: Review[];
+  hasNext: boolean;
+  hasPrevious: boolean;
+  data: Review[];
 };
 
-export type ReviewCounts = {
+export type ReviewStats = {
   bookId: string;
   reviewCount: number;
   averageRating: number;

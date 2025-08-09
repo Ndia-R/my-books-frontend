@@ -5,8 +5,8 @@ import Rating from '@/components/rating';
 import { buttonVariants } from '@/components/ui/button';
 import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
-import { getBookDetails, getBookFavoriteCounts } from '@/lib/api/books';
-import { isBookFavoritedByUser } from '@/lib/api/user';
+import { getBookDetails, getBookFavoriteStats } from '@/lib/api/books';
+import { isFavoritedByUser } from '@/lib/api/user';
 import { cn, formatDateJP, formatIsbn, formatPrice } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useQuery, useSuspenseQueries } from '@tanstack/react-query';
@@ -19,23 +19,23 @@ type Props = {
 export default function BookDetail({ bookId }: Props) {
   const { isAuthenticated } = useAuth();
 
-  const [{ data: book }, { data: favoriteCounts }] = useSuspenseQueries({
+  const [{ data: book }, { data: favoriteStats }] = useSuspenseQueries({
     queries: [
       {
         queryKey: queryKeys.book.details(bookId),
         queryFn: () => getBookDetails(bookId),
       },
       {
-        queryKey: queryKeys.book.favoriteCounts(bookId),
-        queryFn: () => getBookFavoriteCounts(bookId),
+        queryKey: queryKeys.book.favoriteStats(bookId),
+        queryFn: () => getBookFavoriteStats(bookId),
       },
     ],
   });
 
   // 認証済みの場合のみデータを取得する
   const { data: isFavorite = false } = useQuery({
-    queryKey: queryKeys.user.isBookFavoritedByUser(bookId),
-    queryFn: () => isBookFavoritedByUser(bookId),
+    queryKey: queryKeys.user.isFavoritedByUser(bookId),
+    queryFn: () => isFavoritedByUser(bookId),
     enabled: isAuthenticated,
   });
 
@@ -59,7 +59,7 @@ export default function BookDetail({ bookId }: Props) {
               <FavoriteCountIcon
                 bookId={bookId}
                 isFavorite={isFavorite}
-                count={favoriteCounts.favoriteCount}
+                count={favoriteStats.favoriteCount}
                 showCount={true}
               />
             </div>

@@ -20,7 +20,7 @@ export default function Bookmarks({ page }: Props) {
         {bookmarkPage.totalItems}
         <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
       </p>
-      <BookmarkList bookmarks={bookmarkPage.bookmarks} />
+      <BookmarkList bookmarks={bookmarkPage.data} />
       <SearchPagination totalPages={bookmarkPage.totalPages} />
     </div>
   );

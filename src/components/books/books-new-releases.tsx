@@ -15,7 +15,7 @@ export default function BooksNewReleases() {
         {bookPage.totalItems}
         <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
       </p>
-      <BookList books={bookPage.books} />
+      <BookList books={bookPage.data} />
     </div>
   );
 }

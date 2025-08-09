@@ -17,9 +17,9 @@ import {
   getBookChapterPageContent,
   getBookTableOfContents,
 } from '@/lib/api/books';
-import { getUserBookmarksForBook } from '@/lib/api/user';
+import { getUserBookmarksByBookId } from '@/lib/api/user';
 import { chapterNumberString, cn } from '@/lib/utils';
-import { Bookmark, BookmarkRequest, BookTableOfContents } from '@/types';
+import { BookmarkPage, BookmarkRequest, BookTableOfContents } from '@/types';
 import {
   useMutation,
   useQueryClient,
@@ -163,12 +163,12 @@ export default function BookReadContent({
           getBookChapterPageContent(bookId, chapterNumber, pageNumber),
       },
       {
-        queryKey: queryKeys.user.bookmarksForBook(bookId),
-        queryFn: () => getUserBookmarksForBook(bookId),
-        select: (bookmarks: Bookmark[]) =>
-          bookmarks.find(
+        queryKey: queryKeys.user.bookmarksByBookId(bookId),
+        queryFn: () => getUserBookmarksByBookId(bookId),
+        select: (bookmarkPage: BookmarkPage) =>
+          bookmarkPage.data.find(
             (bookmark) =>
-              bookmark.bookId === bookId &&
+              bookmark.book.id === bookId &&
               bookmark.chapterNumber === chapterNumber &&
               bookmark.pageNumber === pageNumber
           ),
@@ -180,7 +180,7 @@ export default function BookReadContent({
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.user.bookmarksForBook(bookId),
+      queryKey: queryKeys.user.bookmarksByBookId(bookId),
     });
   };
 
@@ -274,7 +274,7 @@ export default function BookReadContent({
                 <TooltipTrigger asChild>
                   <Button
                     className={cn(
-                      'text-muted-foreground size-8',
+                      'text-muted-foreground hover:text-primary size-8',
                       bookmark && 'text-primary bg-transparent'
                     )}
                     variant="ghost"
@@ -295,7 +295,7 @@ export default function BookReadContent({
                   {bookmark
                     ? bookmark.note
                       ? `メモ「${bookmark.note}」`
-                      : 'ブックマークからから削除'
+                      : 'ブックマークから削除'
                     : 'ブックマークに追加'}
                 </TooltipContent>
               </Tooltip>

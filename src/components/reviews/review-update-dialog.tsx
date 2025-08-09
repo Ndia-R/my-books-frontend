@@ -73,7 +73,7 @@ export default function ReviewUpdateDialog({
 
   const handleClickUpdate = () => {
     const requestBody: ReviewRequest = {
-      bookId: review.bookId,
+      bookId: review.book.id,
       comment,
       rating,
     };

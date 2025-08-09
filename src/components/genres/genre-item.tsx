@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 import { Genre } from '@/types';
 import { useNavigate } from 'react-router';
 
@@ -21,7 +22,10 @@ export default function GenreItem({ genre, isActive = false, onClick }: Props) {
 
   return (
     <Button
-      className="text-xs sm:text-sm"
+      className={cn(
+        'dark:hover:bg-primary/20 hover:bg-primary/20 text-xs sm:text-sm',
+        isActive && 'bg-primary/20 dark:bg-primary/20 text-foreground'
+      )}
       variant={isActive ? 'outline' : 'ghost'}
       size="sm"
       onClick={() => handleClick(genre.id)}

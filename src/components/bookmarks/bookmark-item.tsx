@@ -46,7 +46,7 @@ export default function BookmarkItem({ bookmark }: Props) {
     onSuccess: async () => {
       // ２ページ以降で、そのページの最後の１つを削除した場合は、１ページ戻る
       const bookmarkPage = await getUserBookmarks(page);
-      if (page >= 2 && bookmarkPage.bookmarks.length === 0) {
+      if (page >= 2 && bookmarkPage.data.length === 0) {
         queryClient.invalidateQueries({
           queryKey: queryKeys.user.bookmarks(page - 1),
         });
@@ -70,7 +70,7 @@ export default function BookmarkItem({ bookmark }: Props) {
           <div className="flex gap-x-3 px-3 py-4 pr-0">
             <div className="flex min-w-20 justify-center sm:min-w-24">
               <Link
-                to={`/read/${bookmark.bookId}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
+                to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
                 className="size-fit"
               >
                 <img
@@ -83,7 +83,7 @@ export default function BookmarkItem({ bookmark }: Props) {
             <div className="flex w-full flex-col justify-center">
               <div className="mb-2 flex flex-col items-start gap-x-4 sm:flex-row sm:items-center">
                 <Link
-                  to={`/read/${bookmark.bookId}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
+                  to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
                   className="size-fit"
                 >
                   <h2 className="hover:text-primary text-base font-semibold sm:text-xl">

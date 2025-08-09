@@ -1,21 +1,25 @@
 import { Book } from '@/types/book';
 
 export type Favorite = {
+  id: number;
   userId: number;
-  bookId: string;
+
   createdAt: string;
   updatedAt: string;
   book: Book;
 };
 
 export type FavoritePage = {
-  page: number;
+  currentPage: number; // ページ番号は1ベース
+  pageSize: number;
   totalPages: number;
   totalItems: number;
-  favorites: Favorite[];
+  hasNext: boolean;
+  hasPrevious: boolean;
+  data: Favorite[];
 };
 
-export type FavoriteCounts = {
+export type FavoriteStats = {
   bookId: string;
   favoriteCount: number;
 };

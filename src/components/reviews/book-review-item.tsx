@@ -1,6 +1,7 @@
 import Rating from '@/components/rating';
 import ReviewUpdateDialog from '@/components/reviews/review-update-dialog';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
@@ -30,7 +31,7 @@ export default function BookReviewItem({ review }: Props) {
       queryKey: queryKeys.book.reviews(bookId, 1),
     });
     queryClient.invalidateQueries({
-      queryKey: queryKeys.user.reviewForBook(bookId),
+      queryKey: queryKeys.user.reviewsByBookId(bookId),
     });
     queryClient.invalidateQueries({
       queryKey: queryKeys.book.details(bookId),
@@ -64,16 +65,21 @@ export default function BookReviewItem({ review }: Props) {
       <div className="p-4">
         <div className="flex flex-col items-center justify-between sm:flex-row">
           <div className="flex w-full items-center gap-x-4">
-            <Avatar className="size-16">
-              <AvatarImage
-                className="bg-foreground/30"
-                src={AVATAR_IMAGE_BASE_URL + review.avatarPath}
-                alt="avatar-image"
-              />
-              <AvatarFallback className="font-semibold">
-                {review.name.slice(0, 1)}
-              </AvatarFallback>
-            </Avatar>
+            <div className="relative">
+              <Avatar className="size-16">
+                <AvatarImage
+                  className="bg-foreground/30"
+                  src={AVATAR_IMAGE_BASE_URL + review.avatarPath}
+                  alt="avatar-image"
+                />
+                <AvatarFallback className="font-semibold">
+                  {review.name.slice(0, 1)}
+                </AvatarFallback>
+              </Avatar>
+              {user?.id === review.userId && (
+                <Badge className="absolute -right-1 -bottom-1 size-5 rounded-full" />
+              )}
+            </div>
             <div>
               <p className="-mb-1 text-lg font-semibold">{review.name}</p>
               <div className="flex items-center">

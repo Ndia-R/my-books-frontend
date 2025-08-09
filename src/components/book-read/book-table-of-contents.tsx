@@ -37,10 +37,7 @@ export default function BookTableOfContents({ bookId }: Props) {
 
             {isAuthenticated && bookTableOfContents.chapters.length ? (
               <Link
-                className={cn(
-                  buttonVariants({ variant: 'outline' }),
-                  'w-44 bg-transparent'
-                )}
+                className={cn(buttonVariants({ variant: 'outline' }), 'w-44')}
                 to={`/read/${bookId}/chapter/1/page/1`}
               >
                 最初から読む
@@ -48,10 +45,7 @@ export default function BookTableOfContents({ bookId }: Props) {
             ) : (
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button
-                    className="hover:border-primary/50 w-44 cursor-default bg-transparent opacity-50 hover:bg-transparent"
-                    variant="outline"
-                  >
+                  <Button className="w-44 cursor-default" variant="outline">
                     最初から読む
                   </Button>
                 </TooltipTrigger>
