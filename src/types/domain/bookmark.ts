@@ -1,4 +1,4 @@
-import { Book } from '@/types/book';
+import { Book } from '@/types/domain/book';
 import { UseMutationResult } from '@tanstack/react-query';
 
 export type Bookmark = {

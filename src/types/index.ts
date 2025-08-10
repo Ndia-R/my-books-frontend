@@ -1,8 +1,5 @@
-export * from './api';
-export * from './auth';
-export * from './book';
-export * from './bookmark';
-export * from './favorite';
-export * from './genre';
-export * from './review';
-export * from './user';
+// ドメイン型（ビジネスロジック関連）
+export * from './domain';
+
+// インフラストラクチャ型（技術実装関連）
+export * from './infrastructure';

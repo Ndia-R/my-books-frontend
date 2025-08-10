@@ -61,7 +61,21 @@ QueryClientProvider -> AuthProvider -> UserProvider -> ThemeStyleProvider -> The
 - 一貫したエラーハンドリングとレスポンス解析
 - 環境変数によるベースURL設定（`VITE_BASE_URL`）
 
-**APIモジュール**: ドメインごとの個別ファイル（auth、books、bookmarks、favorites、reviews、users、genres）
+**APIモジュール**: ドメインごとの個別ファイル構造（シンプルで直接的）
+- `src/lib/api/auth.ts` - 認証API
+- `src/lib/api/books.ts` - 書籍API  
+- `src/lib/api/bookmarks.ts` - ブックマークAPI
+- `src/lib/api/favorite.ts` - お気に入りAPI
+- `src/lib/api/genres.ts` - ジャンルAPI
+- `src/lib/api/review.ts` - レビューAPI
+- `src/lib/api/user.ts` - ユーザーAPI
+
+**インポートパターン**: 各APIファイルを直接インポート
+```typescript
+import { getLatestBooks } from '@/lib/api/books';
+import { getUserProfile } from '@/lib/api/user';
+import { customFetch } from '@/lib/api/fetch-client';
+```
 
 ### UIアーキテクチャ
 
@@ -82,7 +96,15 @@ QueryClientProvider -> AuthProvider -> UserProvider -> ThemeStyleProvider -> The
 
 ### TypeScript構造
 
-**型定義**: `src/types/`でドメイン別に整理（api.ts、book.ts、user.tsなど）
+**型定義**: `src/types/`で階層化された構造
+- `src/types/domain/` - ビジネスドメイン型（book.ts、user.ts、review.tsなど）
+- `src/types/infrastructure/` - インフラストラクチャ型（http.ts、auth.ts）
+
+**HTTP型システム**:
+- `HttpResponse<T>` - HTTPレスポンス型
+- `HttpError` - HTTPエラークラス
+- `HttpErrorResponse` - HTTPエラーレスポンス型
+
 **パスエイリアス**: `@/*`が`src/*`にマップされ、よりクリーンなインポートが可能
 **設定**: 厳密設定でTypeScript 5.7+を使用
 

@@ -1,4 +1,4 @@
-import { Genre } from '@/types/genre';
+import { Genre } from '@/types/domain/genre';
 
 export type Book = {
   id: string;
