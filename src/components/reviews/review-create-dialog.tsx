@@ -122,7 +122,7 @@ export default function ReviewCreateDialog({
             onClick={handleClickPost}
           >
             {createMutation.isPending ? (
-              <Loader2Icon className="animate-spin" />
+              <Loader2Icon className="animate-spin" aria-label="レビュー投稿中" />
             ) : (
               '投稿'
             )}

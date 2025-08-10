@@ -38,10 +38,6 @@ export default function BookReviewItem({ review }: Props) {
     });
   };
 
-  const onError = (error: Error) => {
-    console.error(error);
-  };
-
   const updateMutation = useMutation({
     mutationFn: ({
       reviewId,
@@ -51,13 +47,11 @@ export default function BookReviewItem({ review }: Props) {
       requestBody: ReviewRequest;
     }) => updateReview(reviewId, requestBody),
     onSuccess,
-    onError,
   });
 
   const deleteMutation = useMutation({
     mutationFn: (reviewId: number) => deleteReview(reviewId),
     onSuccess,
-    onError,
   });
 
   return (

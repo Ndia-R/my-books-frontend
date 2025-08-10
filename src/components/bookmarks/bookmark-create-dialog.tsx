@@ -97,7 +97,7 @@ export default function BookmarkCreateDialog({
             onClick={handleClickCreate}
           >
             {createMutation.isPending ? (
-              <Loader2Icon className="animate-spin" />
+              <Loader2Icon className="animate-spin" aria-label="ブックマーク作成中" />
             ) : (
               '作成'
             )}

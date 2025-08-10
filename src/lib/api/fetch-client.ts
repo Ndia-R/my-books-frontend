@@ -4,6 +4,27 @@ import {
 } from '@/constants/constants';
 import { AccessToken, ApiResponse, ErrorResponse } from '@/types';
 
+// APIエラークラスの定義
+class ApiError extends Error {
+  public status: number;
+  public statusText?: string;
+  public originalError?: ErrorResponse;
+
+  constructor(
+    message: string,
+    status: number,
+    statusText?: string,
+    originalError?: ErrorResponse
+  ) {
+    super(message);
+    this.name = 'ApiError';
+    this.status = status;
+    this.statusText = statusText;
+    this.originalError = originalError;
+  }
+}
+export { ApiError };
+
 let accessToken: string | null = null;
 
 export const setAccessToken = (token: string | null) => {
@@ -53,15 +74,31 @@ export const customFetch = async <T>(
     // エラーレスポンスの場合は例外をスロー
     if (!response.ok) {
       const errorResponse = apiResponse.data as ErrorResponse;
-      throw {
-        message: errorResponse.message,
-        status: errorResponse.status,
-      };
+
+      // null安全 + 型変換
+      const errorMessage =
+        errorResponse?.message ||
+        `HTTP ${response.status}: ${response.statusText}`;
+      const errorStatus = response.status; // response.statusを使用（number型）
+
+      throw new ApiError(
+        errorMessage,
+        errorStatus,
+        response.statusText,
+        errorResponse
+      );
     }
 
     return apiResponse;
   } catch (error) {
-    console.error('API呼び出し中にエラーが発生しました:', error);
+    // ApiErrorの場合は再ログしない（既に適切な情報を持っている）
+    if (!(error instanceof ApiError)) {
+      console.error('予期しないAPI呼び出しエラー:', {
+        url,
+        method: options.method || 'GET',
+        error: error instanceof Error ? error.message : error,
+      });
+    }
     throw error;
   }
 };

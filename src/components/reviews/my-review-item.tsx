@@ -37,9 +37,6 @@ export default function MyReviewItem({ review }: Props) {
         queryKey: queryKeys.user.reviews(page),
       });
     },
-    onError: (error: Error) => {
-      console.error(error);
-    },
   });
 
   const deleteMutation = useMutation({
@@ -58,9 +55,6 @@ export default function MyReviewItem({ review }: Props) {
       queryClient.invalidateQueries({
         queryKey: queryKeys.user.reviews(page),
       });
-    },
-    onError: (error: Error) => {
-      console.error(error);
     },
   });
 

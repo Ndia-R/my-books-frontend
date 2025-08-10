@@ -31,10 +31,6 @@ export default function Page({ title }: Props) {
 
   const signupMutation = useMutation({
     mutationFn: (requestBody: SignupRequest) => signup(requestBody),
-    onSuccess: () => {},
-    onError: (error) => {
-      console.error(error);
-    },
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -120,7 +116,10 @@ export default function Page({ title }: Props) {
                 disabled={signupMutation.isPending}
               >
                 {signupMutation.isPending ? (
-                  <Loader2Icon className="animate-spin" />
+                  <Loader2Icon
+                    className="animate-spin"
+                    aria-label="新規登録中"
+                  />
                 ) : (
                   '新規登録'
                 )}

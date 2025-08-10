@@ -139,7 +139,7 @@ export default function ReviewUpdateDialog({
             onClick={handleClickDelete}
           >
             {deleteMutation.isPending ? (
-              <Loader2Icon className="animate-spin" />
+              <Loader2Icon className="animate-spin" aria-label="レビュー削除中" />
             ) : (
               '削除'
             )}
@@ -150,7 +150,7 @@ export default function ReviewUpdateDialog({
             onClick={handleClickUpdate}
           >
             {updateMutation.isPending ? (
-              <Loader2Icon className="animate-spin" />
+              <Loader2Icon className="animate-spin" aria-label="レビュー更新中" />
             ) : (
               '更新'
             )}

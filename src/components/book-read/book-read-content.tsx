@@ -184,14 +184,9 @@ export default function BookReadContent({
     });
   };
 
-  const onError = (error: Error) => {
-    console.error(error);
-  };
-
   const createMutation = useMutation({
     mutationFn: (requestBody: BookmarkRequest) => createBookmark(requestBody),
     onSuccess,
-    onError,
   });
 
   const updateMutation = useMutation({
@@ -203,13 +198,11 @@ export default function BookReadContent({
       requestBody: BookmarkRequest;
     }) => updateBookmark(bookmarkId, requestBody),
     onSuccess,
-    onError,
   });
 
   const deleteMutation = useMutation({
     mutationFn: (bookmarkId: number) => deleteBookmark(bookmarkId),
     onSuccess,
-    onError,
   });
 
   const currentPageText = getCurrentPageText(

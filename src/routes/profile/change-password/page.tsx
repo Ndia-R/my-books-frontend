@@ -33,9 +33,6 @@ export default function Page({ title }: Props) {
     onSuccess: () => {
       navigate('/profile');
     },
-    onError: (error) => {
-      console.error(error);
-    },
   });
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
@@ -121,7 +118,10 @@ export default function Page({ title }: Props) {
                 disabled={updateMutation.isPending}
               >
                 {updateMutation.isPending ? (
-                  <Loader2Icon className="animate-spin" />
+                  <Loader2Icon
+                    className="animate-spin"
+                    aria-label="パスワード変更中"
+                  />
                 ) : (
                   '変更'
                 )}

@@ -109,8 +109,13 @@ QueryClientProvider -> AuthProvider -> UserProvider -> ThemeStyleProvider -> The
 
 **コンポーネントProps**: 明確な命名のコンポーネントpropsにTypeScriptインターフェースを使用
 **API呼び出し**: サーバー状態管理にTanStack Queryフックを使用
-**エラーハンドリング**: ユーザーフレンドリーなメッセージでAPIレイヤーの一元化エラーハンドリング
-**ローディング状態**: データ読み込み中のUX向上のためスケルトンコンポーネント
+**エラーハンドリング**: 
+- APIレイヤーでの一元化エラーハンドリング
+- TanStack Query useMutationのonErrorは`mutate()`実行時のみ使用（UI特有のtoast通知など）
+- useMutation宣言時のonErrorは使用しない（オプティミスティックアップデートのロールバックが必要な場合を除く）
+**ローディング状態**: 
+- データ読み込み中のUX向上のためスケルトンコンポーネント
+- Loader2Iconには`aria-label`と`role="status"`属性を設定（アクセシビリティ対応）
 **フォーム処理**: フォーム状態管理に`use-field-validation`などのカスタムフック
 
 **ファイル命名**:

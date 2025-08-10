@@ -17,8 +17,17 @@ export default defineConfig({
     },
   },
 
-  // ビルド設定（依存ライブラリごとに分割）
+  // ビルド設定
   build: {
+    // プロダクションビルドでコンソールログを除去
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        drop_console: true,
+        drop_debugger: true,
+      },
+    },
+    // 依存ライブラリごとに分割
     rollupOptions: {
       output: {
         manualChunks: {

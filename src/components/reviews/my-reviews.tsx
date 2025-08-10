@@ -1,11 +1,12 @@
 import MyReviewList from '@/components/reviews/my-review-list';
-import { Button } from '@/components/ui/button';
 import { queryKeys } from '@/constants/query-keys';
+import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { getUserReviews } from '@/lib/api/user';
 import { Review } from '@/types';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 export default function MyReviews() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,14 +27,27 @@ export default function MyReviews() {
     }
   }, [initialReviewPage]);
 
-  const loadMoreReviews = async () => {
+  const loadMoreReviews = useCallback(async () => {
+    if (isLoading || currentPage >= totalPages) return;
+
     setIsLoading(true);
-    const nextPage = currentPage + 1;
-    const nextReviewPage = await getUserReviews(nextPage);
-    setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
-    setCurrentPage(nextPage);
-    setIsLoading(false);
-  };
+    try {
+      const nextPage = currentPage + 1;
+      const nextReviewPage = await getUserReviews(nextPage);
+      setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
+      setCurrentPage(nextPage);
+    } catch {
+      toast.error('レビューの読み込みに失敗しました', { duration: 5000 });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentPage, totalPages, isLoading]);
+
+  // 無限スクロール用のトリガー要素のref
+  const triggerRef = useIntersectionObserver(
+    loadMoreReviews,
+    currentPage < totalPages && !isLoading
+  );
 
   return (
     <div className="flex flex-col gap-y-4 pb-4">
@@ -44,19 +58,14 @@ export default function MyReviews() {
       <MyReviewList reviews={reviews} />
 
       {currentPage < totalPages && (
-        <div className="flex justify-center">
-          <Button
-            className="text-muted-foreground w-44"
-            variant="ghost"
-            disabled={isLoading}
-            onClick={loadMoreReviews}
-          >
-            {isLoading ? (
-              <Loader2Icon className="animate-spin" />
-            ) : (
-              'もっと見る'
-            )}
-          </Button>
+        <div ref={triggerRef} className="flex h-16 items-center justify-center">
+          {isLoading && (
+            <Loader2Icon 
+              className="text-muted-foreground animate-spin" 
+              aria-label="レビューを読み込み中"
+              role="status" 
+            />
+          )}
         </div>
       )}
     </div>

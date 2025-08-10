@@ -41,10 +41,6 @@ export default function UserIconButton() {
 
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
-    onSuccess: () => {},
-    onError: (error) => {
-      console.error(error);
-    },
   });
 
   const handleClickLogout = () => {

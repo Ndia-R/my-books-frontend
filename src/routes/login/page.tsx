@@ -26,10 +26,6 @@ export default function Page({ title }: Props) {
 
   const loginMutation = useMutation({
     mutationFn: (requestBody: LoginRequest) => login(requestBody),
-    onSuccess: () => {},
-    onError: (error) => {
-      console.error(error);
-    },
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -96,7 +92,10 @@ export default function Page({ title }: Props) {
                 disabled={loginMutation.isPending}
               >
                 {loginMutation.isPending ? (
-                  <Loader2Icon className="animate-spin" />
+                  <Loader2Icon
+                    className="animate-spin"
+                    aria-label="ログイン中"
+                  />
                 ) : (
                   'ログイン'
                 )}

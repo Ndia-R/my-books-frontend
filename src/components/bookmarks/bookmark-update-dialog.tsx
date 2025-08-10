@@ -129,7 +129,7 @@ export default function BookmarkUpdateDialog({
             onClick={handleClickDelete}
           >
             {deleteMutation.isPending ? (
-              <Loader2Icon className="animate-spin" />
+              <Loader2Icon className="animate-spin" aria-label="ブックマーク削除中" />
             ) : (
               '削除'
             )}
@@ -140,7 +140,7 @@ export default function BookmarkUpdateDialog({
             onClick={handleClickUpdate}
           >
             {updateMutation.isPending ? (
-              <Loader2Icon className="animate-spin" />
+              <Loader2Icon className="animate-spin" aria-label="ブックマーク更新中" />
             ) : (
               '更新'
             )}

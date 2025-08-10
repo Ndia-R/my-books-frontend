@@ -20,6 +20,7 @@ import {
 } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 type Props = {
   bookId: string;
@@ -64,9 +65,6 @@ export default function BookReviews({ bookId }: Props) {
         queryKey: queryKeys.book.details(bookId),
       });
     },
-    onError: (error: Error) => {
-      console.error(error);
-    },
   });
 
   useEffect(() => {
@@ -78,12 +76,19 @@ export default function BookReviews({ bookId }: Props) {
   }, [initialReviewPage]);
 
   const loadMoreReviews = async () => {
+    if (isLoading || currentPage >= totalPages) return;
+
     setIsLoading(true);
-    const nextPage = currentPage + 1;
-    const nextReviewPage = await getBookReviews(bookId, nextPage);
-    setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
-    setCurrentPage(nextPage);
-    setIsLoading(false);
+    try {
+      const nextPage = currentPage + 1;
+      const nextReviewPage = await getBookReviews(bookId, nextPage);
+      setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
+      setCurrentPage(nextPage);
+    } catch {
+      toast.error('レビューの読み込みに失敗しました', { duration: 5000 });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -128,7 +133,10 @@ export default function BookReviews({ bookId }: Props) {
               onClick={loadMoreReviews}
             >
               {isLoading ? (
-                <Loader2Icon className="animate-spin" />
+                <Loader2Icon
+                  className="animate-spin"
+                  aria-label="レビューを読み込み中"
+                />
               ) : (
                 'もっと見る'
               )}

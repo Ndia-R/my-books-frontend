@@ -36,9 +36,6 @@ export default function BookmarkItem({ bookmark }: Props) {
         queryKey: queryKeys.user.bookmarks(page),
       });
     },
-    onError: (error: Error) => {
-      console.error(error);
-    },
   });
 
   const deleteMutation = useMutation({
@@ -53,13 +50,9 @@ export default function BookmarkItem({ bookmark }: Props) {
         updateQueryParams({ page: page - 1 });
         return;
       }
-
       queryClient.invalidateQueries({
         queryKey: queryKeys.user.bookmarks(page),
       });
-    },
-    onError: (error: Error) => {
-      console.error(error);
     },
   });
 
