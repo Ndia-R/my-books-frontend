@@ -36,10 +36,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const response = await AuthApi.login(requestBody);
       setAccessToken(response.accessToken);
       setIsAuthenticated(true);
-    } catch (error) {
+    } catch {
       setAccessToken(null);
       setIsAuthenticated(false);
-      console.error(error);
       throw new Error('ログインに失敗しました。');
     }
   };
@@ -49,10 +48,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       const response = await AuthApi.signup(requestBody);
       setAccessToken(response.accessToken);
       setIsAuthenticated(true);
-    } catch (error) {
+    } catch {
       setAccessToken(null);
       setIsAuthenticated(false);
-      console.error(error);
       throw new Error('サインアップに失敗しました。');
     }
   };
@@ -60,8 +58,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = useCallback(async () => {
     try {
       await AuthApi.logout();
-    } catch (error) {
-      console.error(error);
+    } catch {
       throw new Error('ログアウトに失敗しました。');
     } finally {
       setAccessToken(null);
@@ -79,6 +76,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
+        // eslint-disable-next-line no-console
         console.warn('自動ログインできませんでした。');
       }
       setisLoading(false);
@@ -114,12 +112,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
   };
 
   return (
-    <AuthProviderContext.Provider value={value}>
+    <AuthProviderContext value={value}>
       {children}
-    </AuthProviderContext.Provider>
+    </AuthProviderContext>
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => {
   const context = useContext(AuthProviderContext);
 

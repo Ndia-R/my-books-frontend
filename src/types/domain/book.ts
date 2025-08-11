@@ -1,4 +1,5 @@
 import { Genre } from '@/types/domain/genre';
+import { Page } from '@/types/infrastructure';
 
 export type Book = {
   id: string;
@@ -13,15 +14,7 @@ export type Book = {
   popularity: number;
 };
 
-export type BookPage = {
-  currentPage: number; // ページ番号は1ベース
-  pageSize: number;
-  totalPages: number;
-  totalItems: number;
-  hasNext: boolean;
-  hasPrevious: boolean;
-  data: Book[];
-};
+export type BookPage = Page<Book>;
 
 export type BookDetails = {
   id: string;

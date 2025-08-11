@@ -48,12 +48,13 @@ export function UserProvider({ children }: UserProviderProps) {
   };
 
   return (
-    <UserProviderContext.Provider value={value}>
+    <UserProviderContext value={value}>
       {children}
-    </UserProviderContext.Provider>
+    </UserProviderContext>
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useUser = () => {
   const context = useContext(UserProviderContext);
 

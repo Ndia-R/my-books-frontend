@@ -75,12 +75,13 @@ export function ThemeStyleProvider({
   };
 
   return (
-    <ThemeStyleContext.Provider {...props} value={value}>
+    <ThemeStyleContext {...props} value={value}>
       {children}
-    </ThemeStyleContext.Provider>
+    </ThemeStyleContext>
   );
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useThemeStyle = () => {
   const context = useContext(ThemeStyleContext);
 

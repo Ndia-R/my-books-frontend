@@ -1,4 +1,5 @@
 import { Book } from '@/types/domain/book';
+import { Page } from '@/types/infrastructure';
 import { UseMutationResult } from '@tanstack/react-query';
 
 export type Review = {
@@ -15,15 +16,7 @@ export type Review = {
   book: Book;
 };
 
-export type ReviewPage = {
-  currentPage: number; // ページ番号は1ベース
-  pageSize: number;
-  totalPages: number;
-  totalItems: number;
-  hasNext: boolean;
-  hasPrevious: boolean;
-  data: Review[];
-};
+export type ReviewPage = Page<Review>;
 
 export type ReviewStats = {
   bookId: string;

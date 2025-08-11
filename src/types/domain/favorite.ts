@@ -1,4 +1,5 @@
 import { Book } from '@/types/domain/book';
+import { Page } from '@/types/infrastructure';
 
 export type Favorite = {
   id: number;
@@ -9,15 +10,7 @@ export type Favorite = {
   book: Book;
 };
 
-export type FavoritePage = {
-  currentPage: number; // ページ番号は1ベース
-  pageSize: number;
-  totalPages: number;
-  totalItems: number;
-  hasNext: boolean;
-  hasPrevious: boolean;
-  data: Favorite[];
-};
+export type FavoritePage = Page<Favorite>;
 
 export type FavoriteStats = {
   bookId: string;

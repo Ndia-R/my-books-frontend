@@ -1,4 +1,5 @@
 import { Book } from '@/types/domain/book';
+import { Page } from '@/types/infrastructure';
 import { UseMutationResult } from '@tanstack/react-query';
 
 export type Bookmark = {
@@ -15,15 +16,7 @@ export type Bookmark = {
   book: Book;
 };
 
-export type BookmarkPage = {
-  currentPage: number; // ページ番号は1ベース
-  pageSize: number;
-  totalPages: number;
-  totalItems: number;
-  hasNext: boolean;
-  hasPrevious: boolean;
-  data: Bookmark[];
-};
+export type BookmarkPage = Page<Bookmark>;
 
 export type BookmarkRequest = {
   bookId: string;
