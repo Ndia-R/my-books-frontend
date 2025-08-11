@@ -1,7 +1,7 @@
 import Menu from '@/components/layout/menu';
 import ThemeToggleButton from '@/components/layout/theme-toggle-button';
 import UserIconButton from '@/components/layout/user-icon-button';
-import SearchInput from '@/components/search-input';
+import SearchInput from '@/components/shared/search-input';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';

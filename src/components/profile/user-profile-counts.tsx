@@ -1,4 +1,4 @@
-import CountUpNumber from '@/components/count-up-number';
+import CountUpNumber from '@/components/shared/count-up-number';
 import { queryKeys } from '@/constants/query-keys';
 import { getUserProfileCounts } from '@/lib/api/user';
 import { useSuspenseQuery } from '@tanstack/react-query';

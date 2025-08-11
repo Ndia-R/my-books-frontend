@@ -1,4 +1,4 @@
-import FormInput from '@/components/form-input';
+import FormInput from '@/components/shared/form-input';
 import Logo from '@/components/layout/logo';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';

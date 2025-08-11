@@ -1,5 +1,5 @@
 import BookList from '@/components/books/book-list';
-import SearchPagination from '@/components/search-pagination';
+import SearchPagination from '@/components/shared/search-pagination';
 import { queryKeys } from '@/constants/query-keys';
 import { searchBooksByTitleKeyword } from '@/lib/api/books';
 import { useSuspenseQuery } from '@tanstack/react-query';

@@ -1,4 +1,4 @@
-import Pagination from '@/components/pagination';
+import Pagination from '@/components/shared/pagination';
 import { useSearchFilters } from '@/hooks/use-search-filters';
 import { useEffect, useState } from 'react';
 

@@ -1,5 +1,5 @@
 import mainVisualImage from '@/assets/main-visual.webp';
-import SearchInput from '@/components/search-input';
+import SearchInput from '@/components/shared/search-input';
 
 export default function Hero() {
   return (

@@ -1,7 +1,7 @@
 import FavoriteCountIcon from '@/components/count-icon/favorite-count-icon';
 import ReviewCountIcon from '@/components/count-icon/review-count-icon';
 import GenreList from '@/components/genres/genre-list';
-import Rating from '@/components/rating';
+import Rating from '@/components/shared/rating';
 import { buttonVariants } from '@/components/ui/button';
 import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';

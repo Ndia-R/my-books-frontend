@@ -1,4 +1,4 @@
-import Rating from '@/components/rating';
+import Rating from '@/components/shared/rating';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,

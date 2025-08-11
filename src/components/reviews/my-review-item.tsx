@@ -1,4 +1,4 @@
-import Rating from '@/components/rating';
+import Rating from '@/components/shared/rating';
 import ReviewUpdateDialog from '@/components/reviews/review-update-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';

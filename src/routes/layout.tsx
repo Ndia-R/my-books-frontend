@@ -1,4 +1,4 @@
-import ConfirmDialog from '@/components/confirm-dialog';
+import ConfirmDialog from '@/components/shared/confirm-dialog';
 import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import { Toaster } from '@/components/ui/sonner';
