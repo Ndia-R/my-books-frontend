@@ -7,6 +7,7 @@ import * as React from 'react';
 
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { Link } from 'react-router';
 
 function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   return (
@@ -39,17 +40,19 @@ function PaginationItem({ ...props }: React.ComponentProps<'li'>) {
 
 type PaginationLinkProps = {
   isActive?: boolean;
+  disabled?: boolean;
 } & Pick<React.ComponentProps<typeof Button>, 'size'> &
-  React.ComponentProps<'a'>;
+  React.ComponentProps<typeof Link>;
 
 function PaginationLink({
   className,
   isActive,
+  disabled,
   size = 'icon',
   ...props
 }: PaginationLinkProps) {
   return (
-    <a
+    <Link
       aria-current={isActive ? 'page' : undefined}
       data-slot="pagination-link"
       data-active={isActive}
@@ -58,6 +61,7 @@ function PaginationLink({
           variant: isActive ? 'outline' : 'ghost',
           size,
         }),
+        disabled && 'pointer-events-none cursor-default opacity-50',
         className
       )}
       {...props}
@@ -77,7 +81,7 @@ function PaginationPrevious({
       {...props}
     >
       <ChevronLeftIcon />
-      <span className="hidden sm:block">Previous</span>
+      {/* <span className="hidden sm:block">Previous</span> */}
     </PaginationLink>
   );
 }
@@ -93,7 +97,7 @@ function PaginationNext({
       className={cn('gap-1 px-2.5 sm:pr-2.5', className)}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
+      {/* <span className="hidden sm:block">Next</span> */}
       <ChevronRightIcon />
     </PaginationLink>
   );

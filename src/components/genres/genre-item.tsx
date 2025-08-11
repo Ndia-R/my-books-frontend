@@ -23,8 +23,9 @@ export default function GenreItem({ genre, isActive = false, onClick }: Props) {
   return (
     <Button
       className={cn(
-        'dark:hover:bg-primary/20 hover:bg-primary/20 text-xs sm:text-sm',
-        isActive && 'bg-primary/20 dark:bg-primary/20 text-foreground'
+        'text-xs sm:text-sm',
+        isActive &&
+          'bg-primary dark:bg-primary hover:bg-primary hover:dark:bg-primary text-primary-foreground hover:text-primary-foreground'
       )}
       variant={isActive ? 'outline' : 'ghost'}
       size="sm"

@@ -43,7 +43,7 @@ export default function BookDetail({ bookId }: Props) {
     <>
       <title>{`${book.title} - ${APP_TITLE}`}</title>
 
-      <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">
+      <div className="flex flex-col justify-start p-3 pt-10 sm:p-6 lg:flex-row">
         <div className="flex flex-col items-center justify-center lg:w-1/2">
           <Link to={`/read/${bookId}/table-of-contents`} className="size-fit">
             <img

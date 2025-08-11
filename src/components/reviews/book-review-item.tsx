@@ -1,5 +1,5 @@
-import Rating from '@/components/shared/rating';
 import ReviewUpdateDialog from '@/components/reviews/review-update-dialog';
+import Rating from '@/components/shared/rating';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';

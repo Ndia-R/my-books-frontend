@@ -2,18 +2,18 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 export default function BookDetailSkeleton() {
   return (
-    <div className="flex flex-col justify-center p-3 pt-10 sm:p-6 lg:flex-row">
+    <div className="flex flex-col justify-start p-3 pt-10 sm:p-6 lg:flex-row">
       <div className="flex flex-col items-center justify-center lg:w-1/2">
         <Skeleton className="bg-muted-foreground/5 h-[360px] w-[280px] rounded-xs object-cover sm:h-[480px] sm:w-[360px]" />
         <div className="mt-2 flex flex-col items-center justify-around sm:w-[440px] sm:flex-row">
-          <Skeleton className="bg-muted-foreground/5 mt-2 h-6 w-48" />
+          <Skeleton className="bg-muted-foreground/5 my-2 h-6 w-48" />
           <div className="flex justify-center gap-x-2">
-            <Skeleton className="bg-muted-foreground/5 size-8" />
-            <Skeleton className="bg-muted-foreground/5 size-8" />
+            <Skeleton className="bg-muted-foreground/5 m-2 size-6" />
+            <Skeleton className="bg-muted-foreground/5 m-2 size-6" />
           </div>
         </div>
         <div className="my-4 flex items-center">
-          <Skeleton className="bg-muted-foreground/5 h-11 w-48" />
+          <Skeleton className="bg-muted-foreground/5 h-9 w-44" />
         </div>
       </div>
 
@@ -26,8 +26,8 @@ export default function BookDetailSkeleton() {
         </div>
 
         <div className="flex gap-x-2">
-          <Skeleton className="bg-muted-foreground/5 h-9 w-24" />
-          <Skeleton className="bg-muted-foreground/5 h-9 w-24" />
+          <Skeleton className="bg-muted-foreground/5 h-8 w-24" />
+          <Skeleton className="bg-muted-foreground/5 h-8 w-24" />
         </div>
 
         <div className="my-6 md:my-10">

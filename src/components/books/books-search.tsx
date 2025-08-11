@@ -16,13 +16,23 @@ export default function BooksSearch({ q, page }: Props) {
   });
 
   return (
-    <div className="flex flex-col gap-y-4 pb-4">
-      <p className="text-right">
+    <div className="relative flex flex-col gap-y-4 pb-4">
+      <p className="mr-2 text-right sm:absolute sm:top-1.5 sm:right-2">
         {bookPage.totalItems}
-        <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
+        <span className="text-muted-foreground ml-1 text-sm">件</span>
       </p>
+
+      <SearchPagination
+        currentPage={bookPage.currentPage}
+        totalPages={bookPage.totalPages}
+      />
+
       <BookList books={bookPage.data} />
-      <SearchPagination totalPages={bookPage.totalPages} />
+
+      <SearchPagination
+        currentPage={bookPage.currentPage}
+        totalPages={bookPage.totalPages}
+      />
     </div>
   );
 }

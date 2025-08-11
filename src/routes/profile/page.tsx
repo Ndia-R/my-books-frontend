@@ -64,7 +64,7 @@ export default function Page({ title }: Props) {
                   {user?.name.slice(0, 1)}
                 </AvatarFallback>
               </Avatar>
-              <div className="w-full p-4 text-center">
+              <div className="h-20 w-full p-4 text-center">
                 <p className="text-xl font-semibold">{user?.name}</p>
                 <p className="text-sm">{user?.email}</p>
               </div>

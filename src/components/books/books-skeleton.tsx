@@ -2,10 +2,14 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { DEFAULT_BOOKS_SIZE } from '@/constants/constants';
 
-export default function BooksSkeleton() {
+type Props = {
+  withPagination?: boolean;
+};
+
+export default function BooksSkeleton({ withPagination = true }: Props) {
   return (
     <div className="flex flex-col gap-y-4 pb-4">
-      <div className="h-6" />
+      {withPagination && <div className="h-19 sm:h-9" />}
       <div className="grid grid-cols-2 justify-items-center gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 lg:grid-cols-5">
         {[...Array<number>(DEFAULT_BOOKS_SIZE)].map((_, index) => (
           <article key={index}>
