@@ -1,4 +1,5 @@
 import BookmarkList from '@/components/bookmarks/bookmark-list';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { getUserBookmarks } from '@/lib/api/user';
@@ -40,7 +41,9 @@ export default function Bookmarks() {
       ]);
       setCurrentPage(nextPage);
     } catch {
-      toast.error('ブックマークの読み込みに失敗しました', { duration: 5000 });
+      toast.error('ブックマークの読み込みに失敗しました', {
+        duration: TOAST_ERROR_DURATION,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -63,10 +66,10 @@ export default function Bookmarks() {
       {currentPage < totalPages && (
         <div ref={triggerRef} className="flex h-16 items-center justify-center">
           {isLoading && (
-            <Loader2Icon 
-              className="text-muted-foreground animate-spin" 
+            <Loader2Icon
+              className="text-muted-foreground animate-spin"
               aria-label="ブックマークを読み込み中"
-              role="status" 
+              role="status"
             />
           )}
         </div>

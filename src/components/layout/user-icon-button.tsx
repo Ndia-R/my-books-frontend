@@ -8,7 +8,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
+import {
+  AVATAR_IMAGE_BASE_URL,
+  TOAST_ERROR_DURATION,
+} from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useUser } from '@/providers/user-provider';
@@ -49,7 +52,9 @@ export default function UserIconButton() {
         toast.success('ログアウトしました');
       },
       onError: () => {
-        toast.error('ログアウトに失敗しました', { duration: 5000 });
+        toast.error('ログアウトに失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
       },
       onSettled: () => {
         setIsOpen(false);

@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import { BookmarkCreateMutation, BookmarkRequest } from '@/types';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -53,7 +54,9 @@ export default function BookmarkCreateDialog({
         toast.success('ブックマークを作成しました');
       },
       onError: () => {
-        toast.error('ブックマークの作成に失敗しました', { duration: 5000 });
+        toast.error('ブックマークの作成に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
       },
       onSettled: () => {
         setIsOpen(false);
@@ -97,7 +100,10 @@ export default function BookmarkCreateDialog({
             onClick={handleClickCreate}
           >
             {createMutation.isPending ? (
-              <Loader2Icon className="animate-spin" aria-label="ブックマーク作成中" />
+              <Loader2Icon
+                className="animate-spin"
+                aria-label="ブックマーク作成中"
+              />
             ) : (
               '作成'
             )}

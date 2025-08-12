@@ -1,3 +1,4 @@
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import ReviewList from '@/components/reviews/book-review-list';
 import ReviewCreateDialog from '@/components/reviews/review-create-dialog';
 import { Button } from '@/components/ui/button';
@@ -85,7 +86,7 @@ export default function BookReviews({ bookId }: Props) {
       setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
       setCurrentPage(nextPage);
     } catch {
-      toast.error('レビューの読み込みに失敗しました', { duration: 5000 });
+      toast.error('レビューの読み込みに失敗しました', { duration: TOAST_ERROR_DURATION });
     } finally {
       setIsLoading(false);
     }

@@ -1,5 +1,6 @@
 import MyReviewList from '@/components/reviews/my-review-list';
 import { queryKeys } from '@/constants/query-keys';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { getUserReviews } from '@/lib/api/user';
 import { Review } from '@/types';
@@ -37,7 +38,7 @@ export default function MyReviews() {
       setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
       setCurrentPage(nextPage);
     } catch {
-      toast.error('レビューの読み込みに失敗しました', { duration: 5000 });
+      toast.error('レビューの読み込みに失敗しました', { duration: TOAST_ERROR_DURATION });
     } finally {
       setIsLoading(false);
     }

@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Genre } from '@/types';
-import { useNavigate } from 'react-router';
+import { Link } from 'react-router';
 
 type Props = {
   genre: Genre;
@@ -10,28 +10,26 @@ type Props = {
 };
 
 export default function GenreItem({ genre, isActive = false, onClick }: Props) {
-  const navigate = useNavigate();
-
-  const handleClick = (genreId: number) => {
-    if (onClick) {
-      onClick(genreId);
-    } else {
-      navigate(`/discover?genreIds=${genreId}&condition=SINGLE`);
-    }
+  const buttonProps = {
+    className: cn(
+      'text-xs sm:text-sm',
+      isActive &&
+        'bg-primary dark:bg-primary hover:bg-primary hover:dark:bg-primary text-primary-foreground hover:text-primary-foreground'
+    ),
+    variant: isActive ? ('outline' as const) : ('ghost' as const),
+    size: 'sm' as const,
   };
 
-  return (
-    <Button
-      className={cn(
-        'text-xs sm:text-sm',
-        isActive &&
-          'bg-primary dark:bg-primary hover:bg-primary hover:dark:bg-primary text-primary-foreground hover:text-primary-foreground'
-      )}
-      variant={isActive ? 'outline' : 'ghost'}
-      size="sm"
-      onClick={() => handleClick(genre.id)}
-    >
+  // 基本はLinkとしての振る舞いだが、onClickが指定されていれば、ボタンとして振る舞う
+  return onClick ? (
+    <Button {...buttonProps} onClick={() => onClick(genre.id)}>
       {genre.name}
+    </Button>
+  ) : (
+    <Button {...buttonProps} asChild>
+      <Link to={`/discover?genreIds=${genre.id}&condition=SINGLE`}>
+        {genre.name}
+      </Link>
     </Button>
   );
 }

@@ -1,5 +1,6 @@
 import Rating from '@/components/shared/rating';
 import { Button } from '@/components/ui/button';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import {
   Dialog,
   DialogContent,
@@ -63,7 +64,7 @@ export default function ReviewUpdateDialog({
         toast.success('レビューを削除しました');
       },
       onError: () => {
-        toast.error('レビューの削除に失敗しました', { duration: 5000 });
+        toast.error('レビューの削除に失敗しました', { duration: TOAST_ERROR_DURATION });
       },
       onSettled: () => {
         setIsOpen(false);
@@ -85,7 +86,7 @@ export default function ReviewUpdateDialog({
           toast.success('レビューを更新しました');
         },
         onError: () => {
-          toast.error('レビューの更新に失敗しました', { duration: 5000 });
+          toast.error('レビューの更新に失敗しました', { duration: TOAST_ERROR_DURATION });
         },
         onSettled: () => {
           setIsOpen(false);

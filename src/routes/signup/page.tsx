@@ -1,11 +1,11 @@
-import FormInput from '@/components/shared/form-input';
 import Logo from '@/components/layout/logo';
 import AvatarCarousel from '@/components/profile/avatar-carousel';
+import FormInput from '@/components/shared/form-input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { APP_TITLE } from '@/constants/constants';
+import { APP_TITLE, TOAST_ERROR_DURATION } from '@/constants/constants';
 import { useFieldValidation } from '@/hooks/use-field-validation';
 import { useAuth } from '@/providers/auth-provider';
 import { SignupRequest } from '@/types';
@@ -59,7 +59,7 @@ export default function Page({ title }: Props) {
       onError: () => {
         toast.error('新規登録できませんでした', {
           description: '入力内容を確認してください。',
-          duration: 5000,
+          duration: TOAST_ERROR_DURATION,
         });
       },
     });

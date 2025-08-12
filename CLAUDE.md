@@ -62,8 +62,9 @@ QueryClientProvider -> AuthProvider -> UserProvider -> ThemeStyleProvider -> The
 - 環境変数によるベースURL設定（`VITE_BASE_URL`）
 
 **APIモジュール**: ドメインごとの個別ファイル構造（シンプルで直接的）
+
 - `src/lib/api/auth.ts` - 認証API
-- `src/lib/api/books.ts` - 書籍API  
+- `src/lib/api/books.ts` - 書籍API
 - `src/lib/api/bookmarks.ts` - ブックマークAPI
 - `src/lib/api/favorite.ts` - お気に入りAPI
 - `src/lib/api/genres.ts` - ジャンルAPI
@@ -71,6 +72,7 @@ QueryClientProvider -> AuthProvider -> UserProvider -> ThemeStyleProvider -> The
 - `src/lib/api/user.ts` - ユーザーAPI
 
 **インポートパターン**: 各APIファイルを直接インポート
+
 ```typescript
 import { getLatestBooks } from '@/lib/api/books';
 import { getUserProfile } from '@/lib/api/user';
@@ -97,10 +99,12 @@ import { customFetch } from '@/lib/api/fetch-client';
 ### TypeScript構造
 
 **型定義**: `src/types/`で階層化された構造
+
 - `src/types/domain/` - ビジネスドメイン型（book.ts、user.ts、review.tsなど）
 - `src/types/infrastructure/` - インフラストラクチャ型（http.ts、auth.ts）
 
 **HTTP型システム**:
+
 - `HttpResponse<T>` - HTTPレスポンス型
 - `HttpError` - HTTPエラークラス
 - `HttpErrorResponse` - HTTPエラーレスポンス型
@@ -131,20 +135,76 @@ import { customFetch } from '@/lib/api/fetch-client';
 
 **コンポーネントProps**: 明確な命名のコンポーネントpropsにTypeScriptインターフェースを使用
 **API呼び出し**: サーバー状態管理にTanStack Queryフックを使用
-**エラーハンドリング**: 
+**エラーハンドリング**:
+
 - APIレイヤーでの一元化エラーハンドリング
 - TanStack Query useMutationのonErrorは`mutate()`実行時のみ使用（UI特有のtoast通知など）
 - useMutation宣言時のonErrorは使用しない（オプティミスティックアップデートのロールバックが必要な場合を除く）
-**ローディング状態**: 
+  **ローディング状態**:
 - データ読み込み中のUX向上のためスケルトンコンポーネント
 - Loader2Iconには`aria-label`と`role="status"`属性を設定（アクセシビリティ対応）
-**フォーム処理**: フォーム状態管理に`use-field-validation`などのカスタムフック
+  **フォーム処理**: フォーム状態管理に`use-field-validation`などのカスタムフック
 
 **ファイル命名**:
 
 - コンポーネントファイルはkebab-case
 - コンポーネント名はPascalCase
 - コンポーネントの目的を示す説明的な名前（例：`book-detail-skeleton.tsx`）
+
+## コード品質規約
+
+### 必須事項
+
+- プロダクションコードには`console.log`を残さない（Viteの設定により自動除去されるが、開発中も意識する）
+- アクセシビリティ属性は必須
+  - ローディング表示には`aria-label`と`role="status"`を設定
+  - すべての画像には適切な`alt`属性を設定
+  - インタラクティブ要素には`aria-label`を設定
+
+### TypeScript規約
+
+- strict mode設定を維持
+- 型定義は`src/types/domain/`と`src/types/infrastructure/`に分離
+- API型は必ずジェネリクスで型安全性を確保
+
+### パフォーマンス最適化
+
+- 大きなコンポーネントは必要に応じて遅延読み込みを検討
+- Tailwindのクラス名が長くなる場合は、コンポーネント分割を検討
+
+## テスト戦略
+
+現在テストフレームワークは設定されていません。将来の実装時は以下を検討：
+
+- **単体テスト**: Vitest + React Testing Library
+- **E2Eテスト**: Playwright
+- **コンポーネントテスト**: Storybook
+
+## セキュリティガイドライン
+
+### 認証・認可
+
+- アクセストークンはインメモリ保存（既実装）
+- リフレッシュトークンはHTTP-onlyクッキー（既実装）
+- センシティブな情報はログ出力しない
+
+### API通信
+
+- すべてのAPI呼び出しは`customFetch`を経由
+- エラーハンドリングは`HttpError`クラスを使用
+- 401エラー時の自動リトライ機能を活用
+
+## デプロイメント設定
+
+### 環境変数
+
+- `VITE_BASE_URL`: APIベースURL（必須）
+- その他のセンシティブな設定は環境変数で管理
+
+### ビルド最適化
+
+- manual chunksによりバンドルサイズ最適化済み
+- terserによりプロダクションビルドでコンソールログ自動除去
 
 ## 開発メモ
 

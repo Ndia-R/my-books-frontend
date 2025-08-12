@@ -1,4 +1,7 @@
-import { AUTH_SESSION_EXPIRED_EVENT } from '@/constants/constants';
+import {
+  AUTH_SESSION_EXPIRED_EVENT,
+  TOAST_ERROR_DURATION,
+} from '@/constants/constants';
 import * as AuthApi from '@/lib/api/auth';
 import { refreshAccessToken, setAccessToken } from '@/lib/api/fetch-client';
 import { LoginRequest, SignupRequest } from '@/types';
@@ -76,8 +79,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
         setIsAuthenticated(true);
       } else {
         setIsAuthenticated(false);
-        // eslint-disable-next-line no-console
-        console.warn('自動ログインできませんでした。');
       }
       setisLoading(false);
     };
@@ -90,7 +91,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await logout();
       toast.error(
         'セッションの有効期限が切れました。再ログインしてください。',
-        { duration: 5000 }
+        { duration: TOAST_ERROR_DURATION }
       );
     };
 
@@ -111,11 +112,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     logout,
   };
 
-  return (
-    <AuthProviderContext value={value}>
-      {children}
-    </AuthProviderContext>
-  );
+  return <AuthProviderContext value={value}>{children}</AuthProviderContext>;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

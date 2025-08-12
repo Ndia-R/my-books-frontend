@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import {
   Bookmark,
@@ -59,7 +60,9 @@ export default function BookmarkUpdateDialog({
         toast.success('ブックマークを削除しました');
       },
       onError: () => {
-        toast.error('ブックマークの削除に失敗しました', { duration: 5000 });
+        toast.error('ブックマークの削除に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
       },
       onSettled: () => {
         setIsOpen(false);
@@ -82,7 +85,7 @@ export default function BookmarkUpdateDialog({
         },
         onError: () => {
           toast.error('ブックマークのメモを更新に失敗しました', {
-            duration: 5000,
+            duration: TOAST_ERROR_DURATION,
           });
         },
         onSettled: () => {
@@ -129,7 +132,10 @@ export default function BookmarkUpdateDialog({
             onClick={handleClickDelete}
           >
             {deleteMutation.isPending ? (
-              <Loader2Icon className="animate-spin" aria-label="ブックマーク削除中" />
+              <Loader2Icon
+                className="animate-spin"
+                aria-label="ブックマーク削除中"
+              />
             ) : (
               '削除'
             )}
@@ -140,7 +146,10 @@ export default function BookmarkUpdateDialog({
             onClick={handleClickUpdate}
           >
             {updateMutation.isPending ? (
-              <Loader2Icon className="animate-spin" aria-label="ブックマーク更新中" />
+              <Loader2Icon
+                className="animate-spin"
+                aria-label="ブックマーク更新中"
+              />
             ) : (
               '更新'
             )}

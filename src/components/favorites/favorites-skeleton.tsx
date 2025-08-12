@@ -14,10 +14,16 @@ export default function FavoritesSkeleton() {
               <CardContent className="p-4">
                 <div className="flex gap-x-4">
                   <div className="flex min-w-20 justify-center sm:min-w-24">
-                    <Skeleton className="bg-muted-foreground/5 h-24 w-20 rounded-xs object-cover sm:h-28" />
+                    <Skeleton
+                      className="bg-muted-foreground/5 h-24 w-20 rounded-xs object-cover sm:h-28"
+                      aria-label="お気に入り書籍の表紙を読み込み中"
+                    />
                   </div>
                   <div className="flex flex-col gap-y-2">
-                    <Skeleton className="bg-muted-foreground/5 h-6 w-32 sm:h-7 sm:w-64" />
+                    <Skeleton
+                      className="bg-muted-foreground/5 h-6 w-32 sm:h-7 sm:w-64"
+                      aria-label="書籍タイトルを読み込み中"
+                    />
                     <div className="flex flex-col gap-y-1">
                       <Skeleton className="bg-muted-foreground/5 my-1 h-4 w-48 sm:w-96" />
                       <Skeleton className="bg-muted-foreground/5 my-1 h-4 w-40 sm:w-80" />

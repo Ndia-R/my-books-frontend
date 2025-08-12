@@ -1,5 +1,6 @@
 import Rating from '@/components/shared/rating';
 import { Button } from '@/components/ui/button';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import {
   Dialog,
   DialogContent,
@@ -70,7 +71,7 @@ export default function ReviewCreateDialog({
         toast.success('レビューを投稿しました');
       },
       onError: () => {
-        toast.error('レビュー投稿に失敗しました', { duration: 5000 });
+        toast.error('レビュー投稿に失敗しました', { duration: TOAST_ERROR_DURATION });
       },
       onSettled: () => {
         setIsOpen(false);

@@ -1,8 +1,8 @@
-import FormInput from '@/components/shared/form-input';
 import Logo from '@/components/layout/logo';
+import FormInput from '@/components/shared/form-input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { APP_TITLE } from '@/constants/constants';
+import { APP_TITLE, TOAST_ERROR_DURATION } from '@/constants/constants';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { useFieldValidation } from '@/hooks/use-field-validation';
 import { updateUserPassword } from '@/lib/api/user';
@@ -72,7 +72,7 @@ export default function Page({ title }: Props) {
       onError: () => {
         toast.error('パスワードを変更できませんでした', {
           description: '入力内容を確認してください。',
-          duration: 5000,
+          duration: TOAST_ERROR_DURATION,
         });
       },
     });

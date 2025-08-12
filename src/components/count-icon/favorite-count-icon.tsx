@@ -4,11 +4,13 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import { createFavorite, deleteFavoriteByBookId } from '@/lib/api/favorite';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { HeartIcon } from 'lucide-react';
 import { startTransition, useEffect, useOptimistic, useState } from 'react';
+import { toast } from 'sonner';
 
 const BUTTON_SIZE = { sm: 'size-6', md: 'size-8' };
 const ICON_SIZE = { sm: 'size-3', md: 'size-4' };
@@ -72,8 +74,10 @@ export default function FavoriteCountIcon({
         }
         // APIリクエストが成功した場合のみ真の状態を更新する
         setFavoriteState(newFavoriteState);
-      } catch (error) {
-        console.log(error);
+      } catch {
+        toast.error('お気に入りの更新に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
       }
     });
   };
