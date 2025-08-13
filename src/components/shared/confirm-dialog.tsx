@@ -128,7 +128,7 @@ export default function ConfirmDialog() {
 
         {options.showInput && (
           <div className="mb-4 grid w-full items-center gap-1.5">
-            <p className="text-xs">{options.inputLabel}</p>
+            <p className="text-sm">{options.inputLabel}</p>
             <Textarea
               ref={refTextarea}
               className="min-h-4 resize-none"

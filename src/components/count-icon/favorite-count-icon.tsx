@@ -12,10 +12,6 @@ import { HeartIcon } from 'lucide-react';
 import { startTransition, useEffect, useOptimistic, useState } from 'react';
 import { toast } from 'sonner';
 
-const BUTTON_SIZE = { sm: 'size-6', md: 'size-8' };
-const ICON_SIZE = { sm: 'size-3', md: 'size-4' };
-const TEXT_SIZE = { sm: 'text-xs', md: 'text-sm' };
-
 type FavoriteStatus = {
   isFavorite: boolean;
   count: number;
@@ -25,16 +21,14 @@ type Props = {
   bookId: string;
   isFavorite: boolean;
   count: number;
-  size?: 'sm' | 'md';
-  showCount?: boolean;
+  hideCount?: boolean;
 };
 
 export default function FavoriteCountIcon({
   bookId,
   isFavorite,
   count,
-  size = 'md',
-  showCount = false,
+  hideCount = false,
 }: Props) {
   const { isAuthenticated } = useAuth();
 
@@ -88,8 +82,7 @@ export default function FavoriteCountIcon({
         <TooltipTrigger asChild>
           <Button
             className={cn(
-              'text-muted-foreground hover:text-primary',
-              BUTTON_SIZE[size],
+              'text-muted-foreground hover:text-primary size-8',
               optimisticState.isFavorite && 'text-primary bg-transparent'
             )}
             variant="ghost"
@@ -102,10 +95,7 @@ export default function FavoriteCountIcon({
             onClick={handleClick}
           >
             <HeartIcon
-              className={cn(
-                ICON_SIZE[size],
-                optimisticState.isFavorite && 'fill-primary'
-              )}
+              className={cn(optimisticState.isFavorite && 'fill-primary')}
             />
           </Button>
         </TooltipTrigger>
@@ -118,8 +108,8 @@ export default function FavoriteCountIcon({
         </TooltipContent>
       </Tooltip>
 
-      {showCount && (
-        <div className={cn('flex min-w-4 justify-center', TEXT_SIZE[size])}>
+      {!hideCount && (
+        <div className="flex min-w-4 justify-center text-sm">
           {optimisticState.count}
         </div>
       )}

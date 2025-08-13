@@ -7,32 +7,27 @@ import { APP_TITLE, AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { useUser } from '@/providers/user-provider';
 import ErrorElement from '@/routes/error-element';
+import { MenuItem } from '@/types';
 import { KeyRoundIcon, MailIcon, UserRoundPenIcon } from 'lucide-react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Link } from 'react-router';
 
-const CHANGE_LIST = [
+const CHANGE_LIST: MenuItem[] = [
   {
-    id: 1,
+    label: 'ユーザー情報',
+    href: '/profile/change-user-info',
     icon: UserRoundPenIcon,
-    title: 'ユーザー情報',
-    linkTo: '/profile/change-user-info',
-    linkLabel: '変更',
   },
   {
-    id: 2,
+    label: 'メールアドレス',
+    href: '/profile/change-email',
     icon: MailIcon,
-    title: 'メールアドレス',
-    linkTo: '/profile/change-email',
-    linkLabel: '変更',
   },
   {
-    id: 3,
+    label: 'パスワード',
+    href: '/profile/change-password',
     icon: KeyRoundIcon,
-    title: 'パスワード',
-    linkTo: '/profile/change-password',
-    linkLabel: '変更',
   },
 ];
 
@@ -49,7 +44,7 @@ export default function Page({ title }: Props) {
 
       <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
         <Logo size="lg" disableLink />
-        <h1 className="font-semibold">プロフィール</h1>
+        <h1 className="mt-4 text-lg font-semibold sm:text-xl">プロフィール</h1>
 
         <Card className="w-80 overflow-hidden p-0 sm:w-96">
           <CardHeader className="from-secondary/50 to-primary w-full bg-linear-to-tr p-0">
@@ -82,16 +77,19 @@ export default function Page({ title }: Props) {
           <CardContent className="relative p-6 pt-0">
             <ul className="flex flex-col gap-y-4">
               {CHANGE_LIST.map((item) => (
-                <li className="flex items-center justify-between" key={item.id}>
-                  <div className="flex gap-x-4">
-                    <item.icon />
-                    <p>{item.title}</p>
+                <li
+                  className="flex items-center justify-between"
+                  key={item.label}
+                >
+                  <div className="flex items-center gap-x-3">
+                    <item.icon className="size-4" />
+                    <p>{item.label}</p>
                   </div>
                   <Link
                     className={cn(buttonVariants({ variant: 'outline' }))}
-                    to={item.linkTo}
+                    to={item.href}
                   >
-                    {item.linkLabel}
+                    変更
                   </Link>
                 </li>
               ))}

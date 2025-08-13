@@ -19,7 +19,9 @@ export default function BooksDiscover({ genreIds, condition, page }: Props) {
   return (
     <div className="relative flex flex-col gap-y-4 pb-4">
       <p className="mr-2 text-right sm:absolute sm:top-1.5 sm:right-2">
-        {bookPage.totalItems}
+        <span className="text-lg font-semibold sm:text-xl">
+          {bookPage.totalItems}
+        </span>
         <span className="text-muted-foreground ml-1 text-sm">件</span>
       </p>
 

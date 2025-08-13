@@ -65,7 +65,7 @@ export default function BookTableOfContents({ bookId }: Props) {
                   className="w-full text-center sm:text-left"
                   key={chapter.chapterNumber}
                 >
-                  <p className="text-muted-foreground text-xs sm:text-sm">
+                  <p className="text-muted-foreground text-sm">
                     {chapterNumberString(chapter.chapterNumber)}
                   </p>
                   <Link

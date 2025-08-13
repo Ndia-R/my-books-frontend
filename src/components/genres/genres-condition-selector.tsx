@@ -34,7 +34,7 @@ export default function GenresConditionSelector() {
         >
           <RadioGroupItem value={item.value} id={item.value} />
           <Label
-            className="cursor-pointer p-2 text-xs select-none sm:text-sm"
+            className="cursor-pointer p-2 text-sm select-none"
             htmlFor={item.value}
           >
             {item.text}

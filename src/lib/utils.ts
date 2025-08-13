@@ -88,5 +88,5 @@ export const formatIsbn = (isbnString: string) => {
  * @returns 章番号を含めた文字列
  */
 export const chapterNumberString = (num: number) => {
-  return `第 ${num} 章`;
+  return `第${num}章`;
 };

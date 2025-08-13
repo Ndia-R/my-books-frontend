@@ -13,7 +13,7 @@ export default function FavoriteItem({ favorite }: Props) {
   return (
     <Card className="p-0">
       <CardContent className="p-0">
-        <div className="flex gap-x-3 px-3 py-4">
+        <div className="flex gap-x-4 p-4">
           <div className="flex min-w-20 justify-center sm:min-w-24">
             <Link to={`/book/${favorite.book.id}`} className="size-fit">
               <img
@@ -23,21 +23,25 @@ export default function FavoriteItem({ favorite }: Props) {
               />
             </Link>
           </div>
-          <div className="flex w-full flex-col justify-center">
-            <div className="mb-2 flex flex-col items-start gap-x-4 sm:flex-row sm:items-center">
-              <Link to={`/book/${favorite.book.id}`} className="size-fit">
-                <h2 className="hover:text-primary text-base font-semibold sm:text-xl">
-                  {favorite.book.title}
-                </h2>
-              </Link>
-              <div className="flex items-center">
+          <div className="flex w-full flex-col gap-y-2">
+            <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-x-2">
+                <Link to={`/book/${favorite.book.id}`} className="size-fit">
+                  <h2 className="hover:text-primary text-lg leading-8 font-semibold sm:text-xl">
+                    {favorite.book.title}
+                  </h2>
+                </Link>
                 <FavoriteCountIcon
                   bookId={favorite.book.id}
                   isFavorite={true}
                   count={1}
+                  hideCount={true}
                 />
+              </div>
+
+              <div className="flex items-center">
                 <time
-                  className="text-muted-foreground mr-2 flex gap-x-1 text-xs leading-8 tracking-wide whitespace-nowrap sm:text-sm"
+                  className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
                   dateTime={
                     Date.parse(favorite.createdAt) ? favorite.createdAt : ''
                   }
@@ -47,14 +51,12 @@ export default function FavoriteItem({ favorite }: Props) {
                 </time>
               </div>
             </div>
-            <div className="text-muted-foreground mb-4 flex w-full flex-wrap items-center gap-x-3">
-              <p className="text-xs">著者</p>
+            <p className="text-muted-foreground flex gap-x-3 text-sm">
+              <span>著者</span>
               {favorite.book.authors.map((author) => (
-                <p className="text-sm" key={author}>
-                  {author}
-                </p>
+                <span key={author}>{author}</span>
               ))}
-            </div>
+            </p>
             <p className="text-muted-foreground">{favorite.book.description}</p>
           </div>
         </div>

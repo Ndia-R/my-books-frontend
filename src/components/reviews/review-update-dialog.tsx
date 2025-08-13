@@ -1,6 +1,5 @@
 import Rating from '@/components/shared/rating';
 import { Button } from '@/components/ui/button';
-import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import {
   Dialog,
   DialogContent,
@@ -9,6 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import {
   Review,
@@ -64,7 +64,9 @@ export default function ReviewUpdateDialog({
         toast.success('レビューを削除しました');
       },
       onError: () => {
-        toast.error('レビューの削除に失敗しました', { duration: TOAST_ERROR_DURATION });
+        toast.error('レビューの削除に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
       },
       onSettled: () => {
         setIsOpen(false);
@@ -86,7 +88,9 @@ export default function ReviewUpdateDialog({
           toast.success('レビューを更新しました');
         },
         onError: () => {
-          toast.error('レビューの更新に失敗しました', { duration: TOAST_ERROR_DURATION });
+          toast.error('レビューの更新に失敗しました', {
+            duration: TOAST_ERROR_DURATION,
+          });
         },
         onSettled: () => {
           setIsOpen(false);
@@ -107,13 +111,13 @@ export default function ReviewUpdateDialog({
             <DialogTitle className="leading-10 font-semibold">
               レビュー
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-xs sm:text-sm">
-              レビュー内容を編集できます。
+            <DialogDescription className="text-muted-foreground text-sm">
+              内容を編集できます
             </DialogDescription>
           </div>
           <div>
             <Rating rating={rating} onChange={setRating} />
-            <p className="text-muted-foreground text-center text-xs sm:text-sm">
+            <p className="text-muted-foreground text-center text-sm">
               星をクリックして決定
             </p>
           </div>
@@ -140,7 +144,10 @@ export default function ReviewUpdateDialog({
             onClick={handleClickDelete}
           >
             {deleteMutation.isPending ? (
-              <Loader2Icon className="animate-spin" aria-label="レビュー削除中" />
+              <Loader2Icon
+                className="animate-spin"
+                aria-label="レビュー削除中"
+              />
             ) : (
               '削除'
             )}
@@ -151,7 +158,10 @@ export default function ReviewUpdateDialog({
             onClick={handleClickUpdate}
           >
             {updateMutation.isPending ? (
-              <Loader2Icon className="animate-spin" aria-label="レビュー更新中" />
+              <Loader2Icon
+                className="animate-spin"
+                aria-label="レビュー更新中"
+              />
             ) : (
               '更新'
             )}

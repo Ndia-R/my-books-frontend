@@ -75,7 +75,7 @@ export default function BookmarkCreateDialog({
           <DialogTitle className="leading-10 font-semibold">
             ブックマーク
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground text-xs sm:text-sm">
+          <DialogDescription className="text-muted-foreground text-sm">
             このブックマークにメモを残せます。メモが未入力でもブックマーク登録できます。
           </DialogDescription>
         </div>

@@ -238,14 +238,14 @@ export default function BookReadContent({
       <div className="animate-in fade-in-0 delay-0 duration-200">
         <div className="flex flex-col gap-y-12 px-4 pt-12 pb-6 sm:px-20">
           <div>
-            <p className="text-muted-foreground mb-2 text-xs sm:text-sm">
+            <p className="text-muted-foreground mb-2 text-sm">
               {chapterNumberString(bookChapterPageContent.chapterNumber)}
             </p>
             <div className="flex flex-wrap items-center">
               <h1 className="text-xl font-bold text-wrap sm:text-2xl">
                 {bookChapterPageContent.chapterTitle}
               </h1>
-              <p className="text-muted-foreground mr-2 ml-4 text-xs sm:text-sm">
+              <p className="text-muted-foreground mr-2 ml-4 text-sm">
                 {currentPageText}
               </p>
               <Tooltip>
@@ -258,7 +258,7 @@ export default function BookReadContent({
                     to={`/read/${bookId}/table-of-contents`}
                     aria-label="目次に戻る"
                   >
-                    <TableOfContentsIcon className="size-4" />
+                    <TableOfContentsIcon />
                   </Link>
                 </TooltipTrigger>
                 <TooltipContent>目次に戻る</TooltipContent>
@@ -279,16 +279,14 @@ export default function BookReadContent({
                         : () => setIsOpenCreateDialog(true)
                     }
                   >
-                    <BookmarkIcon
-                      className={cn('size-4', bookmark && 'fill-primary')}
-                    />
+                    <BookmarkIcon className={cn(bookmark && 'fill-primary')} />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
                   {bookmark
                     ? bookmark.note
                       ? `メモ「${bookmark.note}」`
-                      : 'ブックマークから削除'
+                      : 'ブックマークを編集'
                     : 'ブックマークに追加'}
                 </TooltipContent>
               </Tooltip>

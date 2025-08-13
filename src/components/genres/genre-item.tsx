@@ -12,7 +12,6 @@ type Props = {
 export default function GenreItem({ genre, isActive = false, onClick }: Props) {
   const buttonProps = {
     className: cn(
-      'text-xs sm:text-sm',
       isActive &&
         'bg-primary dark:bg-primary hover:bg-primary hover:dark:bg-primary text-primary-foreground hover:text-primary-foreground'
     ),

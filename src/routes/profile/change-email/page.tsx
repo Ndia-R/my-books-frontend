@@ -82,8 +82,10 @@ export default function Page({ title }: Props) {
 
       <div className="my-6 flex flex-col place-items-center gap-y-3 sm:my-16">
         <Logo size="lg" disableLink />
-        <h1 className="font-semibold">メールアドレス変更</h1>
-        <Card className="w-80 sm:w-96">
+        <h1 className="mt-4 text-lg font-semibold sm:text-xl">
+          メールアドレス変更
+        </h1>
+        <Card className="w-80 p-0 sm:w-96">
           <CardContent className="p-6 sm:px-10">
             <form
               className="flex w-full flex-col gap-y-4"

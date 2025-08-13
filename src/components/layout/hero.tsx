@@ -25,7 +25,7 @@ export default function Hero() {
           </h1>
         </div>
         <div className="animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both delay-150 duration-500">
-          <p className="text-muted-foreground text-sm">
+          <p className="text-muted-foreground text-sm sm:text-base">
             本の探索サイトへようこそ。多様なコレクションから、新しい知識を発見しましょう。厳選された書籍で、あなたの次の読書を見つけてください。知識の旅に一緒に出かけましょう。
           </p>
         </div>

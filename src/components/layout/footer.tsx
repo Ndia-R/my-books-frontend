@@ -1,6 +1,7 @@
 import Logo from '@/components/layout/logo';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { MenuItem } from '@/types';
 import {
   FacebookIcon,
   InstagramIcon,
@@ -9,11 +10,27 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router';
 
-const SNS_LIST = [
-  { label: 'Youtube', icon: YoutubeIcon, url: 'https://www.youtube.com' },
-  { label: 'Twitter', icon: TwitterIcon, url: 'https://x.com' },
-  { label: 'Instagram', icon: InstagramIcon, url: 'https://www.instagram.com' },
-  { label: 'Facebook', icon: FacebookIcon, url: 'https://www.facebook.com' },
+const SNS_LIST: MenuItem[] = [
+  {
+    label: 'Youtube',
+    href: 'https://www.youtube.com',
+    icon: YoutubeIcon,
+  },
+  {
+    label: 'Twitter',
+    href: 'https://x.com',
+    icon: TwitterIcon,
+  },
+  {
+    label: 'Instagram',
+    href: 'https://www.instagram.com',
+    icon: InstagramIcon,
+  },
+  {
+    label: 'Facebook',
+    href: 'https://www.facebook.com',
+    icon: FacebookIcon,
+  },
 ];
 
 type Props = {
@@ -23,24 +40,26 @@ type Props = {
 export default function Footer({ className }: Props) {
   return (
     <footer className={cn('bg-card', className)}>
-      <div className="mx-auto max-w-7xl px-3 sm:px-6">
+      <div className="mx-auto max-w-7xl sm:px-6">
         <div className="flex flex-col items-center justify-between py-4 sm:flex-row">
           <ul className="flex">
             {SNS_LIST.map((item) => (
               <li key={item.label}>
                 <Link
                   className={buttonVariants({ variant: 'ghost', size: 'icon' })}
-                  to={item.url}
+                  to={item.href}
                   aria-label={item.label}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <item.icon className="size-4" />
+                  <item.icon />
                 </Link>
               </li>
             ))}
           </ul>
-          <p className="flex h-7 items-center text-sm">© 2025 Xxxxx, Inc.</p>
+          <p className="flex items-center text-sm leading-7">
+            © 2025 Xxxxx, Inc.
+          </p>
           <Logo size="sm" />
         </div>
       </div>

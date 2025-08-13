@@ -106,7 +106,7 @@ export default function BookmarkUpdateDialog({
           <DialogTitle className="leading-10 font-semibold">
             ブックマーク
           </DialogTitle>
-          <DialogDescription className="text-muted-foreground text-xs sm:text-sm">
+          <DialogDescription className="text-muted-foreground text-sm">
             メモを編集できます。メモが未入力でもブックマーク登録は消えません。
           </DialogDescription>
         </div>

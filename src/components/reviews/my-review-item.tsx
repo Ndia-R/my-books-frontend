@@ -1,5 +1,5 @@
-import Rating from '@/components/shared/rating';
 import ReviewUpdateDialog from '@/components/reviews/review-update-dialog';
+import Rating from '@/components/shared/rating';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
@@ -62,7 +62,7 @@ export default function MyReviewItem({ review }: Props) {
     <>
       <Card className="p-0">
         <CardContent className="p-0">
-          <div className="flex gap-x-3 px-3 py-4">
+          <div className="flex gap-x-4 p-4">
             <div className="flex min-w-20 justify-center sm:min-w-24">
               <Link to={`/book/${review.book.id}`} className="size-fit">
                 <img
@@ -73,18 +73,15 @@ export default function MyReviewItem({ review }: Props) {
               </Link>
             </div>
             <div className="flex w-full flex-col justify-center">
-              <Link to={`/book/${review.book.id}`} className="size-fit">
-                <h2 className="hover:text-primary text-base font-semibold sm:text-xl">
-                  {review.book.title}
-                </h2>
-              </Link>
-              <div className="mb-2 flex flex-col items-start sm:flex-row sm:items-center">
-                <div className="mr-2">
-                  <Rating rating={review.rating} readOnly />
-                </div>
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                <Link to={`/book/${review.book.id}`} className="size-fit">
+                  <h2 className="hover:text-primary text-lg leading-8 font-semibold sm:text-xl">
+                    {review.book.title}
+                  </h2>
+                </Link>
                 <div className="flex flex-wrap items-center">
                   <time
-                    className="text-muted-foreground mr-2 flex gap-x-1 text-xs leading-8 tracking-wide whitespace-nowrap sm:text-sm"
+                    className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
                     dateTime={
                       Date.parse(review.createdAt) ? review.createdAt : ''
                     }
@@ -92,16 +89,19 @@ export default function MyReviewItem({ review }: Props) {
                     <span>{formatDateJP(review.createdAt)}</span>
                     <span>{formatTime(review.createdAt)}</span>
                   </time>
-                  <Button
-                    className="text-muted-foreground size-8"
-                    variant="ghost"
-                    size="icon"
-                    aria-label="レビューを編集"
-                    onClick={() => setIsOpen(true)}
-                  >
-                    <SquarePenIcon className="size-4" />
-                  </Button>
                 </div>
+              </div>
+              <div className="flex flex-row items-center">
+                <Rating rating={review.rating} readOnly />
+                <Button
+                  className="text-muted-foreground size-8"
+                  variant="ghost"
+                  size="icon"
+                  aria-label="レビューを編集"
+                  onClick={() => setIsOpen(true)}
+                >
+                  <SquarePenIcon />
+                </Button>
               </div>
               <p className="text-muted-foreground">{review.comment}</p>
             </div>

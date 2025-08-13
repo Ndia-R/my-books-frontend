@@ -15,7 +15,7 @@ export default function UserProfileCounts() {
       <div className="animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both delay-0 duration-500">
         <Link to="/favorites">
           <div className="w-24 text-center">
-            <p className="text-xl font-bold">
+            <p className="text-lg font-bold sm:text-xl">
               <CountUpNumber
                 end={userProfileCounts.favoriteCount}
                 delay={300}
@@ -28,7 +28,7 @@ export default function UserProfileCounts() {
       <div className="animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both delay-100 duration-500">
         <Link to="/bookmarks">
           <div className="w-24 text-center">
-            <p className="text-xl font-bold">
+            <p className="text-lg font-bold sm:text-xl">
               <CountUpNumber
                 end={userProfileCounts.bookmarkCount}
                 delay={400}
@@ -41,7 +41,7 @@ export default function UserProfileCounts() {
       <div className="animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both delay-200 duration-500">
         <Link to="/my-reviews">
           <div className="w-24 text-center">
-            <p className="text-xl font-bold">
+            <p className="text-lg font-bold sm:text-xl">
               <CountUpNumber end={userProfileCounts.reviewCount} delay={500} />
             </p>
             <p className="text-sm">マイレビュー</p>

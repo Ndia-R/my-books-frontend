@@ -74,11 +74,13 @@ export default function BookReviewItem({ review }: Props) {
                 <Badge className="absolute -right-1 -bottom-1 size-5 rounded-full" />
               )}
             </div>
-            <div>
-              <p className="-mb-1 text-lg font-semibold">{review.name}</p>
+            <div className="flex flex-col gap-y-1">
+              <p className="-mb-1 text-lg leading-8 font-semibold sm:text-xl">
+                {review.name}
+              </p>
               <div className="flex items-center">
                 <time
-                  className="text-muted-foreground mr-2 flex gap-x-1 text-sm leading-8 tracking-wide whitespace-nowrap"
+                  className="text-muted-foreground mr-2 flex gap-x-1 text-sm"
                   dateTime={
                     Date.parse(review.createdAt) ? review.createdAt : ''
                   }
@@ -94,7 +96,7 @@ export default function BookReviewItem({ review }: Props) {
                     aria-label="レビューを編集"
                     onClick={() => setIsOpen(true)}
                   >
-                    <SquarePenIcon className="size-4" />
+                    <SquarePenIcon />
                   </Button>
                 )}
               </div>
@@ -102,7 +104,9 @@ export default function BookReviewItem({ review }: Props) {
           </div>
           <Rating rating={review.rating} readOnly />
         </div>
-        <p className="text-muted-foreground mt-2 sm:pl-20">{review.comment}</p>
+        <p className="text-muted-foreground mt-2 text-sm sm:pl-20 sm:text-base">
+          {review.comment}
+        </p>
       </div>
 
       <ReviewUpdateDialog

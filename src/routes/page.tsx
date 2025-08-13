@@ -16,7 +16,7 @@ export default function Page() {
       </section>
 
       <section className="mb-6 flex flex-col sm:mb-16">
-        <h2 className="font-bold">ジャンル</h2>
+        <h2 className="text-lg font-bold sm:text-xl">ジャンル</h2>
 
         <Separator className="bg-foreground/10 my-4" />
 
@@ -28,7 +28,7 @@ export default function Page() {
       </section>
 
       <section className="flex flex-col">
-        <h2 className="font-bold">ニューリリース</h2>
+        <h2 className="text-lg font-bold sm:text-xl">ニューリリース</h2>
 
         <Separator className="bg-foreground/10 mt-4 mb-8" />
 

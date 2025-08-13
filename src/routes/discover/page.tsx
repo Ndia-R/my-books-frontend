@@ -21,8 +21,8 @@ export default function Page({ title }: Props) {
     <>
       <title>{`${title} - ${APP_TITLE}`}</title>
 
-      <div className="m-4 flex h-10 items-center justify-between">
-        <h1 className="font-bold">ジャンル</h1>
+      <div className="m-4 flex min-h-10 items-center justify-between">
+        <h1 className="text-lg font-bold sm:text-xl">ジャンル</h1>
         <GenresConditionSelector />
       </div>
 

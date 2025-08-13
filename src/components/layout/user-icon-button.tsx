@@ -15,6 +15,7 @@ import {
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useUser } from '@/providers/user-provider';
+import { MenuItem } from '@/types';
 import { useMutation } from '@tanstack/react-query';
 import {
   BookmarkIcon,
@@ -27,11 +28,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { toast } from 'sonner';
 
-const MENU_LIST = [
-  { href: '/favorites', title: 'お気に入り', icon: HeartIcon },
-  { href: '/bookmarks', title: 'ブックマーク', icon: BookmarkIcon },
-  { href: '/my-reviews', title: 'マイレビュー', icon: MessageSquareIcon },
-  { href: '/profile', title: 'プロフィール', icon: UserRoundIcon },
+const MENU_LIST: MenuItem[] = [
+  { label: 'お気に入り', href: '/favorites', icon: HeartIcon },
+  { label: 'ブックマーク', href: '/bookmarks', icon: BookmarkIcon },
+  { label: 'マイレビュー', href: '/my-reviews', icon: MessageSquareIcon },
+  { label: 'プロフィール', href: '/profile', icon: UserRoundIcon },
 ];
 
 export default function UserIconButton() {
@@ -88,7 +89,7 @@ export default function UserIconButton() {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-48 p-2" side="bottom" align="end">
+      <DropdownMenuContent className="w-56 p-2 px-4" side="bottom" align="end">
         <DropdownMenuLabel>
           <div className="flex items-center gap-x-2">
             <Avatar className="size-8">
@@ -102,8 +103,8 @@ export default function UserIconButton() {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 overflow-hidden">
-              <p className="truncate">{user?.name}</p>
-              <p className="text-muted-foreground truncate text-xs font-normal">
+              <p className="truncate text-lg">{user?.name}</p>
+              <p className="text-muted-foreground truncate text-sm font-normal">
                 {user?.email}
               </p>
             </div>
@@ -117,11 +118,11 @@ export default function UserIconButton() {
                 item.href.includes(location.pathname) &&
                 'text-primary'
             )}
-            key={item.href}
+            key={item.label}
             onClick={() => handleClickMenuItem(item.href)}
           >
             <item.icon className="mr-1" />
-            {item.title}
+            {item.label}
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />

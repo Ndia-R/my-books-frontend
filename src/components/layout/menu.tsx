@@ -30,7 +30,7 @@ export default function Menu() {
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
             <Button variant="ghost" size="icon" aria-label="メニュー">
-              <MenuIcon className="size-4" />
+              <MenuIcon />
             </Button>
           </SheetTrigger>
           <SheetContent className="w-fit gap-y-10 p-8" side="left">

@@ -1,15 +1,20 @@
 import BookmarkUpdateDialog from '@/components/bookmarks/bookmark-update-dialog';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import { useSearchFilters } from '@/hooks/use-search-filters';
 import { deleteBookmark, updateBookmark } from '@/lib/api/bookmarks';
 import { getUserBookmarks } from '@/lib/api/user';
-import { chapterNumberString, formatDateJP, formatTime } from '@/lib/utils';
+import { chapterNumberString, cn, formatDateJP, formatTime } from '@/lib/utils';
 import { Bookmark, BookmarkRequest } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { BookmarkIcon, SquarePenIcon } from 'lucide-react';
+import { BookmarkIcon } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router';
 
@@ -60,7 +65,7 @@ export default function BookmarkItem({ bookmark }: Props) {
     <>
       <Card className="p-0">
         <CardContent className="p-0">
-          <div className="flex gap-x-3 px-3 py-4 pr-0">
+          <div className="flex gap-x-4 p-4">
             <div className="flex min-w-20 justify-center sm:min-w-24">
               <Link
                 to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
@@ -73,22 +78,41 @@ export default function BookmarkItem({ bookmark }: Props) {
                 />
               </Link>
             </div>
-            <div className="flex w-full flex-col justify-center">
-              <div className="mb-2 flex flex-col items-start gap-x-4 sm:flex-row sm:items-center">
-                <Link
-                  to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
-                  className="size-fit"
-                >
-                  <h2 className="hover:text-primary text-base font-semibold sm:text-xl">
-                    {bookmark.book.title}
-                  </h2>
-                </Link>
-                <div className="flex flex-wrap items-center">
-                  <div className="flex size-8 items-center justify-center">
-                    <BookmarkIcon className="text-primary fill-primary size-4" />
-                  </div>
+            <div className="flex w-full flex-col gap-y-2">
+              <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex items-center gap-x-2">
+                  <Link
+                    to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
+                    className="size-fit"
+                  >
+                    <h2 className="hover:text-primary text-lg leading-8 font-semibold sm:text-xl">
+                      {bookmark.book.title}
+                    </h2>
+                  </Link>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        className={cn(
+                          'text-muted-foreground hover:text-primary size-8',
+                          bookmark && 'text-primary bg-transparent'
+                        )}
+                        variant="ghost"
+                        size="icon"
+                        aria-label="ブックマーク"
+                        onClick={() => setIsOpen(true)}
+                      >
+                        <BookmarkIcon
+                          className={cn(bookmark && 'fill-primary')}
+                        />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>ブックマークを編集</TooltipContent>
+                  </Tooltip>
+                </div>
+
+                <div className="flex items-center">
                   <time
-                    className="text-muted-foreground mr-2 flex gap-x-1 text-xs leading-8 tracking-wide whitespace-nowrap sm:text-sm"
+                    className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
                     dateTime={
                       Date.parse(bookmark.createdAt) ? bookmark.createdAt : ''
                     }
@@ -96,20 +120,10 @@ export default function BookmarkItem({ bookmark }: Props) {
                     <span>{formatDateJP(bookmark.createdAt)}</span>
                     <span>{formatTime(bookmark.createdAt)}</span>
                   </time>
-                  <Button
-                    className="text-muted-foreground size-8"
-                    variant="ghost"
-                    size="icon"
-                    aria-label="ブックマークを編集"
-                    onClick={() => setIsOpen(true)}
-                  >
-                    <SquarePenIcon className="size-4" />
-                  </Button>
                 </div>
               </div>
-              <p className="text-muted-foreground mb-4 text-xs sm:text-sm">
-                {`${chapterNumberString(bookmark.chapterNumber)} : ${bookmark.chapterTitle}（
-                ${bookmark.pageNumber}ページ目）`}
+              <p className="text-muted-foreground text-sm">
+                {`${chapterNumberString(bookmark.chapterNumber)}:${bookmark.chapterTitle}(${bookmark.pageNumber}ページ目)`}
               </p>
               <p className="text-muted-foreground">
                 {bookmark.note && <span>{bookmark.note}</span>}

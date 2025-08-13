@@ -1,6 +1,5 @@
 import Rating from '@/components/shared/rating';
 import { Button } from '@/components/ui/button';
-import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import {
   Dialog,
   DialogContent,
@@ -9,6 +8,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import { ReviewCreateMutation, ReviewRequest } from '@/types';
 import { Loader2Icon } from 'lucide-react';
@@ -71,7 +71,9 @@ export default function ReviewCreateDialog({
         toast.success('レビューを投稿しました');
       },
       onError: () => {
-        toast.error('レビュー投稿に失敗しました', { duration: TOAST_ERROR_DURATION });
+        toast.error('レビュー投稿に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
       },
       onSettled: () => {
         setIsOpen(false);
@@ -91,13 +93,13 @@ export default function ReviewCreateDialog({
             <DialogTitle className="leading-10 font-semibold">
               レビュー
             </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-xs sm:text-sm">
+            <DialogDescription className="text-muted-foreground text-sm">
               素敵な感想を伝えましょう！
             </DialogDescription>
           </div>
           <div>
             <Rating rating={rating} onChange={setRating} />
-            <p className="text-muted-foreground text-center text-xs sm:text-sm">
+            <p className="text-muted-foreground text-center text-sm">
               星をクリックして決定
             </p>
           </div>
@@ -123,7 +125,10 @@ export default function ReviewCreateDialog({
             onClick={handleClickPost}
           >
             {createMutation.isPending ? (
-              <Loader2Icon className="animate-spin" aria-label="レビュー投稿中" />
+              <Loader2Icon
+                className="animate-spin"
+                aria-label="レビュー投稿中"
+              />
             ) : (
               '投稿'
             )}

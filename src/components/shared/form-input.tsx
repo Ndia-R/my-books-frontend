@@ -31,7 +31,7 @@ export default function FormInput({
 
   return (
     <div>
-      <Label className="text-xs" htmlFor={inputId}>
+      <Label className="text-sm" htmlFor={inputId}>
         {label}
       </Label>
       <div className="relative">
@@ -58,17 +58,13 @@ export default function FormInput({
             type="button"
             onClick={() => setIsShownPassword(!isShownPassword)}
           >
-            {isShownPassword ? (
-              <EyeIcon className="size-4" />
-            ) : (
-              <EyeOffIcon className="size-4" />
-            )}
+            {isShownPassword ? <EyeIcon /> : <EyeOffIcon />}
           </Button>
         )}
       </div>
 
       {errorMessage && (
-        <p className="text-destructive text-xs">{errorMessage}</p>
+        <p className="text-destructive text-sm">{errorMessage}</p>
       )}
     </div>
   );

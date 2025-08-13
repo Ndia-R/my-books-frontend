@@ -96,7 +96,7 @@ export default function AvatarCarousel({ value, onChange }: Props) {
         aria-label="前へ"
         onClick={handlePrev}
       >
-        <ChevronLeft className="size-4" />
+        <ChevronLeft />
       </Button>
 
       <div
@@ -153,7 +153,7 @@ export default function AvatarCarousel({ value, onChange }: Props) {
         aria-label="次へ"
         onClick={handleNext}
       >
-        <ChevronRight className="size-4" />
+        <ChevronRight />
       </Button>
     </div>
   );

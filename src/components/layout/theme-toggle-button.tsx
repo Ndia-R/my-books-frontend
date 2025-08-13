@@ -18,11 +18,7 @@ export default function ThemeToggleButton() {
       }
       onClick={handleClick}
     >
-      {theme === 'light' ? (
-        <MoonIcon className="size-4" />
-      ) : (
-        <SunIcon className="size-4" />
-      )}
+      {theme === 'light' ? <MoonIcon /> : <SunIcon />}
     </Button>
   );
 }

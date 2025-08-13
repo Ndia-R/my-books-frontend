@@ -55,12 +55,11 @@ export default function BookDetail({ bookId }: Props) {
           <div className="mt-2 flex flex-col items-center justify-around sm:w-[440px] sm:flex-row">
             <Rating rating={book.averageRating} readOnly />
             <div className="flex justify-center gap-x-2">
-              <ReviewCountIcon reviewCount={book.reviewCount} />
+              <ReviewCountIcon count={book.reviewCount} />
               <FavoriteCountIcon
                 bookId={bookId}
                 isFavorite={isFavorite}
                 count={favoriteStats.favoriteCount}
-                showCount={true}
               />
             </div>
           </div>
