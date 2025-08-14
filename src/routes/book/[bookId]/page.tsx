@@ -1,5 +1,5 @@
-import BookDetail from '@/components/book-detail/book-detail';
-import BookDetailSkeleton from '@/components/book-detail/book-detail-skeleton';
+import BookDetail from '@/components/books/detail/book-detail';
+import BookDetailSkeleton from '@/components/books/detail/book-detail-skeleton';
 import BookReviews from '@/components/reviews/book-reviews';
 import BookReviewsSkeleton from '@/components/reviews/book-reviews-skeleton';
 import ErrorElement from '@/routes/error-element';

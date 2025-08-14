@@ -41,19 +41,6 @@ export default function ReviewCreateDialog({
     }
   }, [isOpen]);
 
-  const handleClickCancel = async () => {
-    if (comment) {
-      const { isCancel } = await confirmDialog({
-        icon: 'question',
-        title: 'キャンセルして閉じますか？',
-        message: 'コメントはまだ投稿していません。',
-        persistent: true,
-      });
-      if (isCancel) return;
-    }
-    setIsOpen(false);
-  };
-
   const handleClickPost = async () => {
     if (rating === 0) {
       const { isCancel } = await confirmDialog({
@@ -65,7 +52,12 @@ export default function ReviewCreateDialog({
       if (isCancel) return;
     }
 
-    const requestBody: ReviewRequest = { bookId, comment, rating };
+    const requestBody: ReviewRequest = {
+      bookId,
+      comment,
+      rating,
+    };
+
     createMutation.mutate(requestBody, {
       onSuccess: () => {
         toast.success('レビューを投稿しました');
@@ -81,6 +73,19 @@ export default function ReviewCreateDialog({
     });
   };
 
+  const handleClickCancel = async () => {
+    if (comment) {
+      const { isCancel } = await confirmDialog({
+        icon: 'question',
+        title: 'キャンセルして閉じますか？',
+        message: 'コメントはまだ投稿していません。',
+        persistent: true,
+      });
+      if (isCancel) return;
+    }
+    setIsOpen(false);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
@@ -88,21 +93,17 @@ export default function ReviewCreateDialog({
         onEscapeKeyDown={handleClickCancel}
         onPointerDownOutside={handleClickCancel}
       >
-        <div className="flex items-start justify-between">
-          <div>
-            <DialogTitle className="leading-10 font-semibold">
-              レビュー
-            </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-sm">
-              素敵な感想を伝えましょう！
-            </DialogDescription>
-          </div>
-          <div>
-            <Rating rating={rating} onChange={setRating} />
-            <p className="text-muted-foreground text-center text-sm">
-              星をクリックして決定
-            </p>
-          </div>
+        <DialogTitle className="font-semibold">レビュー</DialogTitle>
+
+        <DialogDescription className="text-muted-foreground text-sm">
+          素敵な感想を伝えましょう！
+        </DialogDescription>
+
+        <div className="absolute top-2 right-4 sm:top-4 sm:right-6">
+          <Rating rating={rating} onChange={setRating} />
+          <p className="text-muted-foreground text-center text-sm">
+            星をクリックして決定
+          </p>
         </div>
 
         <Textarea
@@ -119,6 +120,7 @@ export default function ReviewCreateDialog({
           >
             キャンセル
           </Button>
+
           <Button
             className="min-w-24"
             disabled={comment === '' || createMutation.isPending}

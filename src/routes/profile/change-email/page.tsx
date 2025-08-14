@@ -62,10 +62,8 @@ export default function Page({ title }: Props) {
     };
 
     updateMutation.mutate(requestBody, {
-      onSuccess: async () => {
-        toast.success('メールアドレスを変更し、ログアウトしました', {
-          duration: TOAST_ERROR_DURATION,
-        });
+      onSuccess: () => {
+        toast.success('メールアドレスを変更し、ログアウトしました');
       },
       onError: () => {
         toast.error('メールアドレスを変更できませんでした', {

@@ -1,9 +1,9 @@
 import Logo from '@/components/layout/logo';
-import AvatarCarousel from '@/components/profile/avatar-carousel';
 import FormInput from '@/components/shared/form-input';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+import AvatarCarousel from '@/components/user/avatar-carousel';
 import { APP_TITLE, TOAST_ERROR_DURATION } from '@/constants/constants';
 import { useFieldValidation } from '@/hooks/use-field-validation';
 import { updateUserProfile } from '@/lib/api/user';

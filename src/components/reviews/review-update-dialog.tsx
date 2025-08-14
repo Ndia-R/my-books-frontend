@@ -15,6 +15,7 @@ import {
   ReviewDeleteMutation,
   ReviewRequest,
   ReviewUpdateMutation,
+  ReviewUpdateParams,
 } from '@/types';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -46,8 +47,30 @@ export default function ReviewUpdateDialog({
     }
   }, [isOpen, review.comment, review.rating]);
 
-  const handleClickCancel = async () => {
-    setIsOpen(false);
+  const handleClickUpdate = () => {
+    const requestBody: ReviewRequest = {
+      bookId: review.book.id,
+      comment,
+      rating,
+    };
+    const updateParams: ReviewUpdateParams = {
+      reviewId: review.id,
+      requestBody,
+    };
+
+    updateMutation.mutate(updateParams, {
+      onSuccess: () => {
+        toast.success('レビューを更新しました');
+      },
+      onError: () => {
+        toast.error('レビューの更新に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
+      },
+      onSettled: () => {
+        setIsOpen(false);
+      },
+    });
   };
 
   const handleClickDelete = async () => {
@@ -74,29 +97,8 @@ export default function ReviewUpdateDialog({
     });
   };
 
-  const handleClickUpdate = () => {
-    const requestBody: ReviewRequest = {
-      bookId: review.book.id,
-      comment,
-      rating,
-    };
-
-    updateMutation.mutate(
-      { reviewId: review.id, requestBody },
-      {
-        onSuccess: () => {
-          toast.success('レビューを更新しました');
-        },
-        onError: () => {
-          toast.error('レビューの更新に失敗しました', {
-            duration: TOAST_ERROR_DURATION,
-          });
-        },
-        onSettled: () => {
-          setIsOpen(false);
-        },
-      }
-    );
+  const handleClickCancel = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -106,21 +108,17 @@ export default function ReviewUpdateDialog({
         onEscapeKeyDown={handleClickCancel}
         onPointerDownOutside={handleClickCancel}
       >
-        <div className="flex items-start justify-between">
-          <div>
-            <DialogTitle className="leading-10 font-semibold">
-              レビュー
-            </DialogTitle>
-            <DialogDescription className="text-muted-foreground text-sm">
-              内容を編集できます
-            </DialogDescription>
-          </div>
-          <div>
-            <Rating rating={rating} onChange={setRating} />
-            <p className="text-muted-foreground text-center text-sm">
-              星をクリックして決定
-            </p>
-          </div>
+        <DialogTitle className="font-semibold">レビュー</DialogTitle>
+
+        <DialogDescription className="text-muted-foreground text-sm">
+          内容を編集できます
+        </DialogDescription>
+
+        <div className="absolute top-2 right-4 sm:top-4 sm:right-6">
+          <Rating rating={rating} onChange={setRating} />
+          <p className="text-muted-foreground text-center text-sm">
+            星をクリックして決定
+          </p>
         </div>
 
         <Textarea
@@ -137,6 +135,7 @@ export default function ReviewUpdateDialog({
           >
             キャンセル
           </Button>
+
           <Button
             className="min-w-24"
             variant="outline"
@@ -152,6 +151,7 @@ export default function ReviewUpdateDialog({
               '削除'
             )}
           </Button>
+
           <Button
             className="min-w-24"
             disabled={comment === '' || updateMutation.isPending}

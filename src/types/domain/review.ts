@@ -41,13 +41,14 @@ export type ReviewCreateMutation = UseMutationResult<
   unknown
 >;
 
+export type ReviewUpdateParams = {
+  reviewId: number;
+  requestBody: ReviewRequest;
+};
 export type ReviewUpdateMutation = UseMutationResult<
   void,
   Error,
-  {
-    reviewId: number;
-    requestBody: ReviewRequest;
-  },
+  ReviewUpdateParams,
   unknown
 >;
 

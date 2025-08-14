@@ -4,11 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
-import { useSearchFilters } from '@/hooks/use-search-filters';
 import { deleteReview, updateReview } from '@/lib/api/review';
-import { getUserReviews } from '@/lib/api/user';
 import { formatDateJP, formatTime } from '@/lib/utils';
-import { Review, ReviewRequest } from '@/types';
+import { Review, ReviewUpdateParams } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SquarePenIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -20,42 +18,23 @@ type Props = {
 
 export default function MyReviewItem({ review }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const { page, updateQueryParams } = useSearchFilters();
   const queryClient = useQueryClient();
 
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.user.reviews(1),
+    });
+  };
+
   const updateMutation = useMutation({
-    mutationFn: ({
-      reviewId,
-      requestBody,
-    }: {
-      reviewId: number;
-      requestBody: ReviewRequest;
-    }) => updateReview(reviewId, requestBody),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.user.reviews(page),
-      });
-    },
+    mutationFn: ({ reviewId, requestBody }: ReviewUpdateParams) =>
+      updateReview(reviewId, requestBody),
+    onSuccess,
   });
 
   const deleteMutation = useMutation({
     mutationFn: (reviewId: number) => deleteReview(reviewId),
-    onSuccess: async () => {
-      // ２ページ以降で、そのページの最後の１つを削除した場合は、１ページ戻る
-      const reviewPage = await getUserReviews(page);
-      if (page >= 2 && reviewPage.data.length === 0) {
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.user.reviews(page - 1),
-        });
-        updateQueryParams({ page: page - 1 });
-        return;
-      }
-
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.user.reviews(page),
-      });
-    },
+    onSuccess,
   });
 
   return (
@@ -72,6 +51,7 @@ export default function MyReviewItem({ review }: Props) {
                 />
               </Link>
             </div>
+
             <div className="flex w-full flex-col justify-center">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <Link to={`/book/${review.book.id}`} className="size-fit">
@@ -79,18 +59,18 @@ export default function MyReviewItem({ review }: Props) {
                     {review.book.title}
                   </h2>
                 </Link>
-                <div className="flex flex-wrap items-center">
-                  <time
-                    className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
-                    dateTime={
-                      Date.parse(review.createdAt) ? review.createdAt : ''
-                    }
-                  >
-                    <span>{formatDateJP(review.createdAt)}</span>
-                    <span>{formatTime(review.createdAt)}</span>
-                  </time>
-                </div>
+
+                <time
+                  className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
+                  dateTime={
+                    Date.parse(review.createdAt) ? review.createdAt : ''
+                  }
+                >
+                  <span>{formatDateJP(review.createdAt)}</span>
+                  <span>{formatTime(review.createdAt)}</span>
+                </time>
               </div>
+
               <div className="flex flex-row items-center">
                 <Rating rating={review.rating} readOnly />
                 <Button
@@ -103,6 +83,7 @@ export default function MyReviewItem({ review }: Props) {
                   <SquarePenIcon />
                 </Button>
               </div>
+
               <p className="text-muted-foreground">{review.comment}</p>
             </div>
           </div>

@@ -1,5 +1,5 @@
-import BooksDiscover from '@/components/books/books-discover';
 import BooksSkeleton from '@/components/books/books-skeleton';
+import BooksDiscover from '@/components/books/discovery/books-discover';
 import GenresConditionSelector from '@/components/genres/genres-condition-selector';
 import GenresSelector from '@/components/genres/genres-selector';
 import GenresSkeleton from '@/components/genres/genres-skeleton';

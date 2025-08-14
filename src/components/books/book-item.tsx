@@ -1,5 +1,5 @@
-import AverageRatingIcon from '@/components/count-icon/average-rating-icon';
-import ReviewCountIcon from '@/components/count-icon/review-count-icon';
+import AverageRatingIcon from '@/components/books/stats/average-rating-icon';
+import ReviewCountIcon from '@/components/books/stats/review-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { formatDateJP } from '@/lib/utils';

@@ -1,4 +1,3 @@
-import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import ReviewList from '@/components/reviews/book-review-list';
 import ReviewCreateDialog from '@/components/reviews/review-create-dialog';
 import { Button } from '@/components/ui/button';
@@ -7,6 +6,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
+import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import { getBookReviews } from '@/lib/api/books';
 import { createReview } from '@/lib/api/review';
@@ -37,7 +37,7 @@ export default function BookReviews({ bookId }: Props) {
 
   const { isAuthenticated } = useAuth();
 
-  const { data: initialReviewPage } = useSuspenseQuery({
+  const { data: firstPageData } = useSuspenseQuery({
     queryKey: queryKeys.book.reviews(bookId, 1),
     queryFn: () => getBookReviews(bookId, 1),
   });
@@ -69,12 +69,12 @@ export default function BookReviews({ bookId }: Props) {
   });
 
   useEffect(() => {
-    if (initialReviewPage) {
+    if (firstPageData) {
       setCurrentPage(1);
-      setReviews(initialReviewPage.data);
-      setTotalPages(initialReviewPage.totalPages);
+      setReviews(firstPageData.data);
+      setTotalPages(firstPageData.totalPages);
     }
-  }, [initialReviewPage]);
+  }, [firstPageData]);
 
   const loadMoreReviews = async () => {
     if (isLoading || currentPage >= totalPages) return;
@@ -86,7 +86,9 @@ export default function BookReviews({ bookId }: Props) {
       setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
       setCurrentPage(nextPage);
     } catch {
-      toast.error('レビューの読み込みに失敗しました', { duration: TOAST_ERROR_DURATION });
+      toast.error('レビューの読み込みに失敗しました', {
+        duration: TOAST_ERROR_DURATION,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -96,7 +98,7 @@ export default function BookReviews({ bookId }: Props) {
     <>
       <div className="mx-auto w-full pb-4 lg:w-3/4">
         <div className="flex flex-col-reverse items-center justify-end gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
-          <p>レビュー {initialReviewPage.totalItems} 件</p>
+          <p>レビュー {firstPageData.totalItems} 件</p>
           {isAuthenticated ? (
             <Button
               className="w-44 bg-transparent"

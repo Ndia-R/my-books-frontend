@@ -8,11 +8,9 @@ import {
 } from '@/components/ui/tooltip';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
-import { useSearchFilters } from '@/hooks/use-search-filters';
 import { deleteBookmark, updateBookmark } from '@/lib/api/bookmarks';
-import { getUserBookmarks } from '@/lib/api/user';
 import { chapterNumberString, cn, formatDateJP, formatTime } from '@/lib/utils';
-import { Bookmark, BookmarkRequest } from '@/types';
+import { Bookmark, BookmarkUpdateParams } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BookmarkIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -24,41 +22,23 @@ type Props = {
 
 export default function BookmarkItem({ bookmark }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-
-  const { page, updateQueryParams } = useSearchFilters();
   const queryClient = useQueryClient();
 
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.user.bookmarks(1),
+    });
+  };
+
   const updateMutation = useMutation({
-    mutationFn: ({
-      bookmarkId,
-      requestBody,
-    }: {
-      bookmarkId: number;
-      requestBody: BookmarkRequest;
-    }) => updateBookmark(bookmarkId, requestBody),
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.user.bookmarks(page),
-      });
-    },
+    mutationFn: ({ bookmarkId, requestBody }: BookmarkUpdateParams) =>
+      updateBookmark(bookmarkId, requestBody),
+    onSuccess,
   });
 
   const deleteMutation = useMutation({
     mutationFn: (bookmarkId: number) => deleteBookmark(bookmarkId),
-    onSuccess: async () => {
-      // ２ページ以降で、そのページの最後の１つを削除した場合は、１ページ戻る
-      const bookmarkPage = await getUserBookmarks(page);
-      if (page >= 2 && bookmarkPage.data.length === 0) {
-        queryClient.invalidateQueries({
-          queryKey: queryKeys.user.bookmarks(page - 1),
-        });
-        updateQueryParams({ page: page - 1 });
-        return;
-      }
-      queryClient.invalidateQueries({
-        queryKey: queryKeys.user.bookmarks(page),
-      });
-    },
+    onSuccess,
   });
 
   return (
@@ -78,6 +58,7 @@ export default function BookmarkItem({ bookmark }: Props) {
                 />
               </Link>
             </div>
+
             <div className="flex w-full flex-col gap-y-2">
               <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-x-2">
@@ -89,6 +70,7 @@ export default function BookmarkItem({ bookmark }: Props) {
                       {bookmark.book.title}
                     </h2>
                   </Link>
+
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
@@ -110,21 +92,21 @@ export default function BookmarkItem({ bookmark }: Props) {
                   </Tooltip>
                 </div>
 
-                <div className="flex items-center">
-                  <time
-                    className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
-                    dateTime={
-                      Date.parse(bookmark.createdAt) ? bookmark.createdAt : ''
-                    }
-                  >
-                    <span>{formatDateJP(bookmark.createdAt)}</span>
-                    <span>{formatTime(bookmark.createdAt)}</span>
-                  </time>
-                </div>
+                <time
+                  className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
+                  dateTime={
+                    Date.parse(bookmark.createdAt) ? bookmark.createdAt : ''
+                  }
+                >
+                  <span>{formatDateJP(bookmark.createdAt)}</span>
+                  <span>{formatTime(bookmark.createdAt)}</span>
+                </time>
               </div>
+
               <p className="text-muted-foreground text-sm">
                 {`${chapterNumberString(bookmark.chapterNumber)}:${bookmark.chapterTitle}(${bookmark.pageNumber}ページ目)`}
               </p>
+
               <p className="text-muted-foreground">
                 {bookmark.note && <span>{bookmark.note}</span>}
               </p>

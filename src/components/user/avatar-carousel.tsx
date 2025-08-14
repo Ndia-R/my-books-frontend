@@ -1,6 +1,6 @@
-import SwipeArea from '@/components/profile/swipe-area';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
+import SwipeArea from '@/components/user/swipe-area';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';

@@ -32,13 +32,14 @@ export type BookmarkCreateMutation = UseMutationResult<
   unknown
 >;
 
+export type BookmarkUpdateParams = {
+  bookmarkId: number;
+  requestBody: BookmarkRequest;
+};
 export type BookmarkUpdateMutation = UseMutationResult<
   void,
   Error,
-  {
-    bookmarkId: number;
-    requestBody: BookmarkRequest;
-  },
+  BookmarkUpdateParams,
   unknown
 >;
 

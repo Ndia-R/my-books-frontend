@@ -1,4 +1,4 @@
-import FavoriteCountIcon from '@/components/count-icon/favorite-count-icon';
+import FavoriteCountIcon from '@/components/books/stats/favorite-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { formatDateJP, formatTime } from '@/lib/utils';
@@ -23,6 +23,7 @@ export default function FavoriteItem({ favorite }: Props) {
               />
             </Link>
           </div>
+
           <div className="flex w-full flex-col gap-y-2">
             <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-x-2">
@@ -31,6 +32,7 @@ export default function FavoriteItem({ favorite }: Props) {
                     {favorite.book.title}
                   </h2>
                 </Link>
+
                 <FavoriteCountIcon
                   bookId={favorite.book.id}
                   isFavorite={true}
@@ -39,24 +41,24 @@ export default function FavoriteItem({ favorite }: Props) {
                 />
               </div>
 
-              <div className="flex items-center">
-                <time
-                  className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
-                  dateTime={
-                    Date.parse(favorite.createdAt) ? favorite.createdAt : ''
-                  }
-                >
-                  <span>{formatDateJP(favorite.createdAt)}</span>
-                  <span>{formatTime(favorite.createdAt)}</span>
-                </time>
-              </div>
+              <time
+                className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
+                dateTime={
+                  Date.parse(favorite.createdAt) ? favorite.createdAt : ''
+                }
+              >
+                <span>{formatDateJP(favorite.createdAt)}</span>
+                <span>{formatTime(favorite.createdAt)}</span>
+              </time>
             </div>
+
             <p className="text-muted-foreground flex gap-x-3 text-sm">
               <span>著者</span>
               {favorite.book.authors.map((author) => (
                 <span key={author}>{author}</span>
               ))}
             </p>
+
             <p className="text-muted-foreground">{favorite.book.description}</p>
           </div>
         </div>

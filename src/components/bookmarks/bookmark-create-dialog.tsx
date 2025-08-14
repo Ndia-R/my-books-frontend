@@ -38,10 +38,6 @@ export default function BookmarkCreateDialog({
     }
   }, [isOpen]);
 
-  const handleClickCancel = () => {
-    setIsOpen(false);
-  };
-
   const handleClickCreate = () => {
     const requestBody: BookmarkRequest = {
       bookId,
@@ -49,6 +45,7 @@ export default function BookmarkCreateDialog({
       pageNumber,
       note,
     };
+
     createMutation.mutate(requestBody, {
       onSuccess: () => {
         toast.success('ブックマークを作成しました');
@@ -64,6 +61,10 @@ export default function BookmarkCreateDialog({
     });
   };
 
+  const handleClickCancel = () => {
+    setIsOpen(false);
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
@@ -71,14 +72,11 @@ export default function BookmarkCreateDialog({
         onEscapeKeyDown={handleClickCancel}
         onPointerDownOutside={handleClickCancel}
       >
-        <div>
-          <DialogTitle className="leading-10 font-semibold">
-            ブックマーク
-          </DialogTitle>
-          <DialogDescription className="text-muted-foreground text-sm">
-            このブックマークにメモを残せます。メモが未入力でもブックマーク登録できます。
-          </DialogDescription>
-        </div>
+        <DialogTitle className="font-semibold">ブックマーク</DialogTitle>
+
+        <DialogDescription className="text-muted-foreground text-sm">
+          このブックマークにメモを残せます。メモが未入力でもブックマーク登録できます。
+        </DialogDescription>
 
         <Textarea
           spellCheck={false}
@@ -94,6 +92,7 @@ export default function BookmarkCreateDialog({
           >
             キャンセル
           </Button>
+
           <Button
             className="min-w-24"
             disabled={createMutation.isPending}

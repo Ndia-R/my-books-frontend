@@ -1,5 +1,5 @@
-import BooksSearch from '@/components/books/books-search';
 import BooksSkeleton from '@/components/books/books-skeleton';
+import BooksSearch from '@/components/books/discovery/books-search';
 import { Separator } from '@/components/ui/separator';
 import { APP_TITLE } from '@/constants/constants';
 import { useSearchFilters } from '@/hooks/use-search-filters';

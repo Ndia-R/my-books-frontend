@@ -1,5 +1,5 @@
-import FavoriteCountIcon from '@/components/count-icon/favorite-count-icon';
-import ReviewCountIcon from '@/components/count-icon/review-count-icon';
+import FavoriteCountIcon from '@/components/books/stats/favorite-count-icon';
+import ReviewCountIcon from '@/components/books/stats/review-count-icon';
 import GenreList from '@/components/genres/genre-list';
 import Rating from '@/components/shared/rating';
 import { buttonVariants } from '@/components/ui/button';
@@ -52,6 +52,7 @@ export default function BookDetail({ bookId }: Props) {
               alt={book.title}
             />
           </Link>
+
           <div className="mt-2 flex flex-col items-center justify-around sm:w-[440px] sm:flex-row">
             <Rating rating={book.averageRating} readOnly />
             <div className="flex justify-center gap-x-2">
@@ -63,6 +64,7 @@ export default function BookDetail({ bookId }: Props) {
               />
             </div>
           </div>
+
           <div className="my-4 flex items-center">
             <Link
               className={cn(buttonVariants({ variant: 'outline' }), 'w-44')}

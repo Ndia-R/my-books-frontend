@@ -14,6 +14,7 @@ import {
   BookmarkDeleteMutation,
   BookmarkRequest,
   BookmarkUpdateMutation,
+  BookmarkUpdateParams,
 } from '@/types';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect, useState } from 'react';
@@ -43,8 +44,31 @@ export default function BookmarkUpdateDialog({
     }
   }, [isOpen, bookmark.note]);
 
-  const handleClickCancel = () => {
-    setIsOpen(false);
+  const handleClickUpdate = () => {
+    const requestBody: BookmarkRequest = {
+      bookId: bookmark.book.id,
+      chapterNumber: bookmark.chapterNumber,
+      pageNumber: bookmark.pageNumber,
+      note,
+    };
+    const updateParams: BookmarkUpdateParams = {
+      bookmarkId: bookmark.id,
+      requestBody,
+    };
+
+    updateMutation.mutate(updateParams, {
+      onSuccess: () => {
+        toast.success('ブックマークのメモを更新しました');
+      },
+      onError: () => {
+        toast.error('ブックマークのメモを更新に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
+      },
+      onSettled: () => {
+        setIsOpen(false);
+      },
+    });
   };
 
   const handleClickDelete = async () => {
@@ -70,29 +94,8 @@ export default function BookmarkUpdateDialog({
     });
   };
 
-  const handleClickUpdate = () => {
-    const requestBody: BookmarkRequest = {
-      bookId: bookmark.book.id,
-      chapterNumber: bookmark.chapterNumber,
-      pageNumber: bookmark.pageNumber,
-      note,
-    };
-    updateMutation.mutate(
-      { bookmarkId: bookmark.id, requestBody },
-      {
-        onSuccess: () => {
-          toast.success('ブックマークのメモを更新しました');
-        },
-        onError: () => {
-          toast.error('ブックマークのメモを更新に失敗しました', {
-            duration: TOAST_ERROR_DURATION,
-          });
-        },
-        onSettled: () => {
-          setIsOpen(false);
-        },
-      }
-    );
+  const handleClickCancel = () => {
+    setIsOpen(false);
   };
 
   return (
@@ -102,14 +105,11 @@ export default function BookmarkUpdateDialog({
         onEscapeKeyDown={handleClickCancel}
         onPointerDownOutside={handleClickCancel}
       >
-        <div>
-          <DialogTitle className="leading-10 font-semibold">
-            ブックマーク
-          </DialogTitle>
-          <DialogDescription className="text-muted-foreground text-sm">
-            メモを編集できます。メモが未入力でもブックマーク登録は消えません。
-          </DialogDescription>
-        </div>
+        <DialogTitle className="font-semibold">ブックマーク</DialogTitle>
+
+        <DialogDescription className="text-muted-foreground text-sm">
+          メモを編集できます。メモが未入力でもブックマーク登録は消えません。
+        </DialogDescription>
 
         <Textarea
           spellCheck={false}
@@ -125,6 +125,7 @@ export default function BookmarkUpdateDialog({
           >
             キャンセル
           </Button>
+
           <Button
             className="min-w-24"
             variant="outline"
@@ -140,6 +141,7 @@ export default function BookmarkUpdateDialog({
               '削除'
             )}
           </Button>
+
           <Button
             className="min-w-24"
             disabled={updateMutation.isPending}

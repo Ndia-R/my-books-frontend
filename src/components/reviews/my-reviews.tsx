@@ -1,6 +1,6 @@
 import MyReviewList from '@/components/reviews/my-review-list';
-import { queryKeys } from '@/constants/query-keys';
 import { TOAST_ERROR_DURATION } from '@/constants/constants';
+import { queryKeys } from '@/constants/query-keys';
 import { useIntersectionObserver } from '@/hooks/use-intersection-observer';
 import { getUserReviews } from '@/lib/api/user';
 import { Review } from '@/types';
@@ -15,18 +15,18 @@ export default function MyReviews() {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: initialReviewPage } = useSuspenseQuery({
+  const { data: firstPageData } = useSuspenseQuery({
     queryKey: queryKeys.user.reviews(1),
     queryFn: () => getUserReviews(1),
   });
 
   useEffect(() => {
-    if (initialReviewPage) {
+    if (firstPageData) {
       setCurrentPage(1);
-      setReviews(initialReviewPage.data);
-      setTotalPages(initialReviewPage.totalPages);
+      setReviews(firstPageData.data);
+      setTotalPages(firstPageData.totalPages);
     }
-  }, [initialReviewPage]);
+  }, [firstPageData]);
 
   const loadMoreReviews = useCallback(async () => {
     if (isLoading || currentPage >= totalPages) return;
@@ -38,7 +38,9 @@ export default function MyReviews() {
       setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
       setCurrentPage(nextPage);
     } catch {
-      toast.error('レビューの読み込みに失敗しました', { duration: TOAST_ERROR_DURATION });
+      toast.error('レビューの読み込みに失敗しました', {
+        duration: TOAST_ERROR_DURATION,
+      });
     } finally {
       setIsLoading(false);
     }
@@ -53,18 +55,19 @@ export default function MyReviews() {
   return (
     <div className="flex flex-col gap-y-4 pb-4">
       <p className="text-right">
-        {initialReviewPage.totalItems}
+        {firstPageData.totalItems}
         <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
       </p>
+
       <MyReviewList reviews={reviews} />
 
       {currentPage < totalPages && (
         <div ref={triggerRef} className="flex h-16 items-center justify-center">
           {isLoading && (
-            <Loader2Icon 
-              className="text-muted-foreground animate-spin" 
+            <Loader2Icon
+              className="text-muted-foreground animate-spin"
               aria-label="レビューを読み込み中"
-              role="status" 
+              role="status"
             />
           )}
         </div>

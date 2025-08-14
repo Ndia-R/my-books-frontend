@@ -15,18 +15,18 @@ export default function Bookmarks() {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: initialBookmarkPage } = useSuspenseQuery({
+  const { data: firstPageData } = useSuspenseQuery({
     queryKey: queryKeys.user.bookmarks(1),
     queryFn: () => getUserBookmarks(1),
   });
 
   useEffect(() => {
-    if (initialBookmarkPage) {
+    if (firstPageData) {
       setCurrentPage(1);
-      setBookmarks(initialBookmarkPage.data);
-      setTotalPages(initialBookmarkPage.totalPages);
+      setBookmarks(firstPageData.data);
+      setTotalPages(firstPageData.totalPages);
     }
-  }, [initialBookmarkPage]);
+  }, [firstPageData]);
 
   const loadMoreBookmarks = useCallback(async () => {
     if (isLoading || currentPage >= totalPages) return;
@@ -58,9 +58,10 @@ export default function Bookmarks() {
   return (
     <div className="flex flex-col gap-y-4 pb-4">
       <p className="text-right">
-        {initialBookmarkPage.totalItems}
+        {firstPageData.totalItems}
         <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
       </p>
+
       <BookmarkList bookmarks={bookmarks} />
 
       {currentPage < totalPages && (

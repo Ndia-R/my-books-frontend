@@ -15,18 +15,18 @@ export default function Favorites() {
   const [totalPages, setTotalPages] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: initialFavoritePage } = useSuspenseQuery({
+  const { data: firstPageData } = useSuspenseQuery({
     queryKey: queryKeys.user.favorites(1),
     queryFn: () => getUserFavorites(1),
   });
 
   useEffect(() => {
-    if (initialFavoritePage) {
+    if (firstPageData) {
       setCurrentPage(1);
-      setFavorites(initialFavoritePage.data);
-      setTotalPages(initialFavoritePage.totalPages);
+      setFavorites(firstPageData.data);
+      setTotalPages(firstPageData.totalPages);
     }
-  }, [initialFavoritePage]);
+  }, [firstPageData]);
 
   const loadMoreFavorites = useCallback(async () => {
     if (isLoading || currentPage >= totalPages) return;
@@ -58,9 +58,10 @@ export default function Favorites() {
   return (
     <div className="flex flex-col gap-y-4 pb-4">
       <p className="text-right">
-        {initialFavoritePage.totalItems}
+        {firstPageData.totalItems}
         <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
       </p>
+
       <FavoriteList favorites={favorites} />
 
       {currentPage < totalPages && (

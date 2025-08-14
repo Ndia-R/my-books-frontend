@@ -8,7 +8,7 @@ import { queryKeys } from '@/constants/query-keys';
 import { deleteReview, updateReview } from '@/lib/api/review';
 import { formatDateJP, formatTime } from '@/lib/utils';
 import { useUser } from '@/providers/user-provider';
-import { Review, ReviewRequest } from '@/types';
+import { Review, ReviewUpdateParams } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SquarePenIcon } from 'lucide-react';
 import { useState } from 'react';
@@ -20,11 +20,10 @@ type Props = {
 
 export default function BookReviewItem({ review }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const { user } = useUser();
-  const params = useParams();
-  const bookId = params.bookId || '';
-
   const queryClient = useQueryClient();
+
+  const { user } = useUser();
+  const bookId = useParams().bookId || '';
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
@@ -39,13 +38,8 @@ export default function BookReviewItem({ review }: Props) {
   };
 
   const updateMutation = useMutation({
-    mutationFn: ({
-      reviewId,
-      requestBody,
-    }: {
-      reviewId: number;
-      requestBody: ReviewRequest;
-    }) => updateReview(reviewId, requestBody),
+    mutationFn: ({ reviewId, requestBody }: ReviewUpdateParams) =>
+      updateReview(reviewId, requestBody),
     onSuccess,
   });
 

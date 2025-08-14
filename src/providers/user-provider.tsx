@@ -47,11 +47,7 @@ export function UserProvider({ children }: UserProviderProps) {
     setCurrentUser,
   };
 
-  return (
-    <UserProviderContext value={value}>
-      {children}
-    </UserProviderContext>
-  );
+  return <UserProviderContext value={value}>{children}</UserProviderContext>;
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

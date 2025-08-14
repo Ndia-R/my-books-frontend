@@ -1,5 +1,5 @@
-import BooksNewReleases from '@/components/books/books-new-releases';
 import BooksSkeleton from '@/components/books/books-skeleton';
+import BooksNewReleases from '@/components/books/discovery/books-new-releases';
 import GenresSkeleton from '@/components/genres/genres-skeleton';
 import GenresTopPage from '@/components/genres/genres-top-page';
 import Hero from '@/components/layout/hero';

@@ -84,7 +84,15 @@ import { customFetch } from '@/lib/api/fetch-client';
 **コンポーネント構成**:
 
 - `src/components/ui/` - shadcn/uiベースコンポーネント
-- `src/components/` - ドメイン別に整理された機能固有コンポーネント（books/、bookmarks/、reviews/など）
+- `src/components/` - ドメイン機能別に整理された機能固有コンポーネント
+  - `books/` - 書籍関連コンポーネント（discovery/、detail/、reading/、stats/を含む）
+  - `reviews/` - レビュー機能
+  - `bookmarks/` - ブックマーク機能
+  - `favorites/` - お気に入り機能
+  - `genres/` - ジャンル機能
+  - `user/` - ユーザー関連機能
+  - `layout/` - アプリケーションレイアウト
+  - `shared/` - 横断的共通コンポーネント
 - `src/routes/` - ファイルベースルーティング構造に従ったページコンポーネント
 
 **スタイリング**:
@@ -150,6 +158,12 @@ import { customFetch } from '@/lib/api/fetch-client';
 - コンポーネントファイルはkebab-case
 - コンポーネント名はPascalCase
 - コンポーネントの目的を示す説明的な名前（例：`book-detail-skeleton.tsx`）
+
+**ディレクトリ構成原則**:
+
+- **ドメイン機能別分類**: 書籍、レビュー、ブックマークなど機能領域で分割
+- **コロケーション**: 関連ファイル（skeleton、テストなど）は対応するコンポーネントの近くに配置
+- **適度な階層**: 過度に深い階層構造は避け、実用性を重視
 
 ## コード品質規約
 

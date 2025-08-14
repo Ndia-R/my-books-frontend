@@ -1,5 +1,5 @@
-import BookReadBackground from '@/components/book-read/book-read-background';
-import BookReadContent from '@/components/book-read/book-read-content';
+import BookReadBackground from '@/components/books/reading/book-read-background';
+import BookReadContent from '@/components/books/reading/book-read-content';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
