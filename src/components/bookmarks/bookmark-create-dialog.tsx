@@ -68,7 +68,7 @@ export default function BookmarkCreateDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
-        className="w-3/4 max-w-[600px] min-w-[360px] p-4 sm:p-6"
+        className="w-3/4 max-w-[600px] min-w-[360px]"
         onEscapeKeyDown={handleClickCancel}
         onPointerDownOutside={handleClickCancel}
       >

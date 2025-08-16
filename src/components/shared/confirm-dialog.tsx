@@ -110,7 +110,7 @@ export default function ConfirmDialog() {
         onPointerDownOutside={handleCloseDialog}
       >
         <DialogHeader>
-          <DialogTitle className="my-2 flex items-center">
+          <DialogTitle className="flex items-center">
             <IconComponent
               className={cn(
                 'mr-3 min-w-fit',

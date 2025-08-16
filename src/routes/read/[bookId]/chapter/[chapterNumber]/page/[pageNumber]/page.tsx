@@ -1,5 +1,6 @@
 import BookReadBackground from '@/components/books/reading/book-read-background';
 import BookReadContent from '@/components/books/reading/book-read-content';
+import BookReadContentSkeleton from '@/components/books/reading/book-read-content-skeleton';
 import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
@@ -20,7 +21,7 @@ export default function Page() {
       </ErrorBoundary>
 
       <ErrorBoundary fallback={<ErrorElement />}>
-        <Suspense fallback={null}>
+        <Suspense fallback={<BookReadContentSkeleton />}>
           <BookReadContent
             bookId={bookId}
             chapterNumber={chapterNumber}

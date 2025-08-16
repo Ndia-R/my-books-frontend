@@ -36,7 +36,7 @@ export type BookDetails = {
 export type BookChapter = {
   chapterNumber: number;
   chapterTitle: string;
-  pageNumbers: number[];
+  totalPages: number;
 };
 
 export type BookTableOfContents = {
@@ -50,5 +50,6 @@ export type BookChapterPageContent = {
   chapterNumber: number;
   chapterTitle: string;
   pageNumber: number;
+  totalPagesInChapter: number;
   content: string;
 };

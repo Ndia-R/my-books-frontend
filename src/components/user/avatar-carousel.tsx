@@ -128,7 +128,7 @@ export default function AvatarCarousel({ value, onChange }: Props) {
                   )}
                 >
                   <AvatarImage
-                    className="bg-foreground/30"
+                    className="bg-foreground/20"
                     src={AVATAR_IMAGE_BASE_URL + avatarPath}
                     alt="avatar-image"
                     draggable={false}

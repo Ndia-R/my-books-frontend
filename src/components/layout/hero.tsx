@@ -7,7 +7,7 @@ export default function Hero() {
       <div className="absolute top-10 right-0 overflow-hidden sm:right-8">
         <div className="animate-in fade-in-0 slide-in-from-right-10 fill-mode-both delay-500 duration-500">
           <img
-            className="w-[400px] opacity-25 lg:w-[450px] lg:opacity-100"
+            className="w-[400px] opacity-50 lg:w-[450px] lg:opacity-80"
             src={mainVisualImage}
             alt="main-visual-image"
           />

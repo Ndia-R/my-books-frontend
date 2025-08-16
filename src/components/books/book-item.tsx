@@ -12,7 +12,7 @@ type Props = {
 
 export default function BookItem({ book }: Props) {
   return (
-    <Card className="border-card-foreground/5 bg-card/70 px-2 py-3 sm:px-3 sm:py-4">
+    <Card className="px-2 py-3 sm:px-3 sm:py-4">
       <CardContent className="flex w-38 flex-col items-center gap-y-0 p-0 sm:w-44">
         <Link to={`/book/${book.id}`} className="size-fit">
           <img

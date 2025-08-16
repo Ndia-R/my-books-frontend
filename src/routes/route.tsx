@@ -13,7 +13,7 @@ import ChangeUserInfoPage from '@/routes/profile/change-user-info/page';
 import ProfilePage from '@/routes/profile/page';
 import ProtectedRoute from '@/routes/protected-route';
 import RankingPage from '@/routes/ranking/page';
-import BookReadPage from '@/routes/read/[bookId]/chapter/[chapterNumber]/page';
+import BookReadPage from '@/routes/read/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
 import BookReadTableOfContentsPage from '@/routes/read/[bookId]/table-of-contents/page';
 import SearchPage from '@/routes/search/page';
 import SettingsPage from '@/routes/settings/page';

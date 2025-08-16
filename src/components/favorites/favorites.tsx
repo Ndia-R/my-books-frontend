@@ -57,9 +57,11 @@ export default function Favorites() {
 
   return (
     <div className="flex flex-col gap-y-4 pb-4">
-      <p className="text-right">
-        {firstPageData.totalItems}
-        <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
+      <p className="h-6 space-x-1 text-right">
+        <span className="text-lg font-semibold sm:text-xl">
+          {firstPageData.totalItems}
+        </span>
+        <span className="text-muted-foreground text-sm">件</span>
       </p>
 
       <FavoriteList favorites={favorites} />

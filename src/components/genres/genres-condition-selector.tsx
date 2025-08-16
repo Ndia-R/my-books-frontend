@@ -23,7 +23,7 @@ export default function GenresConditionSelector() {
 
   return (
     <RadioGroup
-      className="flex gap-x-4"
+      className="flex gap-x-1 sm:gap-x-4"
       value={currentCondition}
       onValueChange={handleChange}
     >

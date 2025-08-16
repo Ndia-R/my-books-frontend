@@ -51,7 +51,7 @@ export default function Page({ title }: Props) {
             <div className="flex flex-col items-center pt-12">
               <Avatar className="size-24">
                 <AvatarImage
-                  className="bg-foreground/30"
+                  className="bg-foreground/20"
                   src={AVATAR_IMAGE_BASE_URL + user?.avatarPath}
                   alt="avatar-image"
                 />

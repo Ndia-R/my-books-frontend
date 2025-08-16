@@ -7,8 +7,12 @@ import { Outlet, ScrollRestoration } from 'react-router';
 export default function Layout() {
   return (
     <>
-      <div className="from-primary/5 via-background to-secondary/10 fixed inset-0 -z-50 min-h-dvh bg-gradient-to-br via-70%"></div>
-
+      <div
+        className="fixed inset-0 -z-50 opacity-30"
+        style={{
+          backgroundImage: `radial-gradient(circle at 70% 30%, var(--primary), transparent 50%)`,
+        }}
+      />
       <div className="min-h-dvh">
         <Header className="sticky top-0 z-50 w-full" />
         <main className="mx-auto max-w-7xl px-3 sm:px-6">

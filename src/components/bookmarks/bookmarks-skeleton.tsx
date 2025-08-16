@@ -4,9 +4,7 @@ import { Skeleton } from '@/components/ui/skeleton';
 export default function BookmarksSkeleton() {
   return (
     <div className="flex flex-col gap-y-4 pb-4">
-      <p className="text-right">
-        <span className="text-muted-foreground mr-4 ml-1 text-sm">件</span>
-      </p>
+      <p className="h-6"></p>
       <ul className="flex flex-col gap-y-2">
         {[...Array<number>(5)].map((_, index) => (
           <li key={index}>

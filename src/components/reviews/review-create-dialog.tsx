@@ -89,7 +89,7 @@ export default function ReviewCreateDialog({
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent
-        className="w-3/4 max-w-[600px] min-w-[360px] p-4 sm:p-6"
+        className="w-3/4 max-w-[600px] min-w-[360px]"
         onEscapeKeyDown={handleClickCancel}
         onPointerDownOutside={handleClickCancel}
       >
@@ -99,9 +99,9 @@ export default function ReviewCreateDialog({
           素敵な感想を伝えましょう！
         </DialogDescription>
 
-        <div className="absolute top-2 right-4 sm:top-4 sm:right-6">
+        <div className="absolute top-4 right-6">
           <Rating rating={rating} onChange={setRating} />
-          <p className="text-muted-foreground text-center text-sm">
+          <p className="text-muted-foreground mt-0.5 text-center text-sm">
             星をクリックして決定
           </p>
         </div>

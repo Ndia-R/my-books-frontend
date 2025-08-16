@@ -30,7 +30,7 @@ export default function BookReviewItem({ review }: Props) {
       queryKey: queryKeys.book.reviews(bookId, 1),
     });
     queryClient.invalidateQueries({
-      queryKey: queryKeys.user.reviewsByBookId(bookId),
+      queryKey: queryKeys.user.isReviewedByUser(bookId),
     });
     queryClient.invalidateQueries({
       queryKey: queryKeys.book.details(bookId),
@@ -56,7 +56,7 @@ export default function BookReviewItem({ review }: Props) {
             <div className="relative">
               <Avatar className="size-16">
                 <AvatarImage
-                  className="bg-foreground/30"
+                  className="bg-foreground/20"
                   src={AVATAR_IMAGE_BASE_URL + review.avatarPath}
                   alt="avatar-image"
                 />

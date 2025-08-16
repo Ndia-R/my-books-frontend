@@ -60,7 +60,7 @@ export default function BookReviews({ bookId }: Props) {
         queryKey: queryKeys.book.reviews(bookId, 1),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.user.reviewsByBookId(bookId),
+        queryKey: queryKeys.user.isReviewedByUser(bookId),
       });
       queryClient.invalidateQueries({
         queryKey: queryKeys.book.details(bookId),
@@ -98,7 +98,13 @@ export default function BookReviews({ bookId }: Props) {
     <>
       <div className="mx-auto w-full pb-4 lg:w-3/4">
         <div className="flex flex-col-reverse items-center justify-end gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
-          <p>レビュー {firstPageData.totalItems} 件</p>
+          <p className="space-x-1">
+            <span className="text-muted-foreground">レビュー</span>
+            <span className="text-lg font-semibold sm:text-xl">
+              {firstPageData.totalItems}
+            </span>
+            <span className="text-muted-foreground text-sm">件</span>
+          </p>
           {isAuthenticated ? (
             <Button
               className="w-44 bg-transparent"

@@ -11,10 +11,14 @@ export default function Page({ title }: Props) {
       <title>{`${title} - ${APP_TITLE}`}</title>
 
       <div className="m-4 flex h-10 items-center">
-        <h1>特集</h1>
+        <h1 className="text-lg font-bold sm:text-xl">特集</h1>
       </div>
 
       <Separator className="bg-foreground/10 my-4" />
+
+      <section className="p-4">
+        <p>準備中...</p>
+      </section>
     </>
   );
 }
