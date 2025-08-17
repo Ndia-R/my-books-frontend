@@ -163,14 +163,12 @@
   --shadow-2xl: var(--shadow-2xl);
 }
 
-/* ロゴとタイトルのフォント */
+/* タイトルのフォント */
 :root {
-  --font-logo: 'Alfa Slab One';
-  --font-title: 'Inter';
+  --font-title: 'Poetsen One';
 }
 
 @theme inline {
-  --font-logo: var(--font-logo);
   --font-title: var(--font-title);
 }
 

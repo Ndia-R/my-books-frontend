@@ -14,7 +14,7 @@ export default function Page() {
     <>
       <title>{`${q} - ${APP_TITLE}`}</title>
 
-      <div className="m-4 flex min-h-10 items-center">
+      <div className="my-4 flex min-h-10 items-center">
         <h1>
           <span className="text-lg font-bold sm:text-xl">「 {q} 」</span>
           <span className="text-muted-foreground text-sm">の検索結果</span>

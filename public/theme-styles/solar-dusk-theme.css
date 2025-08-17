@@ -1,9 +1,3 @@
-/* ロゴとタイトルのフォント */
-:root {
-  --font-logo: 'Oxanium';
-  --font-title: 'Oxanium';
-}
-
 /* 以下は https://tweakcn.com/ で作成 */
 :root {
   --background: oklch(0.99 0.01 84.57);

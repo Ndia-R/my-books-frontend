@@ -2,6 +2,7 @@ import CountUpNumber from '@/components/shared/count-up-number';
 import { queryKeys } from '@/constants/query-keys';
 import { getUserProfileCounts } from '@/lib/api/user';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { motion } from 'motion/react';
 import { Link } from 'react-router';
 
 export default function UserProfileCounts() {
@@ -12,7 +13,11 @@ export default function UserProfileCounts() {
 
   return (
     <div className="flex justify-between">
-      <div className="animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both delay-0 duration-500">
+      <motion.div
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 100 }}
+        transition={{ duration: 0.5, delay: 0 }}
+      >
         <Link to="/favorites">
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
@@ -24,8 +29,13 @@ export default function UserProfileCounts() {
             <p className="text-sm">お気に入り</p>
           </div>
         </Link>
-      </div>
-      <div className="animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both delay-100 duration-500">
+      </motion.div>
+
+      <motion.div
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 100 }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+      >
         <Link to="/bookmarks">
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
@@ -37,8 +47,13 @@ export default function UserProfileCounts() {
             <p className="text-sm">ブックマーク</p>
           </div>
         </Link>
-      </div>
-      <div className="animate-in fade-in-0 slide-in-from-bottom-10 fill-mode-both delay-200 duration-500">
+      </motion.div>
+
+      <motion.div
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 100 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <Link to="/my-reviews">
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
@@ -47,7 +62,7 @@ export default function UserProfileCounts() {
             <p className="text-sm">マイレビュー</p>
           </div>
         </Link>
-      </div>
+      </motion.div>
     </div>
   );
 }

@@ -86,8 +86,8 @@ export default function Page({ title }: Props) {
               onSubmit={handleSubmit}
             >
               <FormInput
-                label="ユーザー名"
                 ref={name.ref}
+                label="ユーザー名"
                 errorMessage={name.errorMessage}
                 autoComplete="off"
                 spellCheck="false"

@@ -1,9 +1,3 @@
-/* ロゴとタイトルのフォント */
-:root {
-  --font-logo: 'Lilita One';
-  --font-title: 'Luckiest Guy';
-}
-
 /* 以下は https://tweakcn.com/ で作成 */
 :root {
   --background: oklch(0.98 0.01 325.64);

@@ -1,9 +1,3 @@
-/* ロゴとタイトルのフォント */
-:root {
-  --font-logo: 'Noto Serif JP';
-  --font-title: 'Noto Serif JP';
-}
-
 /* 以下は https://tweakcn.com/ で作成 */
 :root {
   --background: oklch(0.98 0.01 95.1);

@@ -5,6 +5,7 @@ import SearchInput from '@/components/shared/search-input';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
+import { motion } from 'motion/react';
 import { Link, useLocation } from 'react-router';
 
 type Props = {
@@ -18,7 +19,11 @@ export default function Header({ className }: Props) {
   return (
     <header className={cn('backdrop-blur-sm', className)}>
       <div className="mx-auto max-w-7xl px-3 sm:px-6">
-        <div className="animate-in fade-in-0 slide-in-from-top-10 fill-mode-both delay-0 duration-500">
+        <motion.div
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 100 }}
+          transition={{ duration: 0.5, delay: 0 }}
+        >
           <div className="flex h-16 w-full items-center justify-between sm:gap-x-2">
             <Menu />
             <div className="flex sm:gap-x-2">
@@ -38,7 +43,7 @@ export default function Header({ className }: Props) {
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </header>
   );

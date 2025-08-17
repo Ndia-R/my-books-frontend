@@ -72,16 +72,16 @@ export default function Page({ title }: Props) {
               onSubmit={handleSubmit}
             >
               <FormInput
-                label="メールアドレス"
                 ref={email.ref}
+                label="メールアドレス"
                 errorMessage={email.errorMessage}
                 autoComplete="off"
                 spellCheck="false"
               />
 
               <FormInput
-                label="パスワード"
                 ref={password.ref}
+                label="パスワード"
                 errorMessage={password.errorMessage}
                 type="password"
               />

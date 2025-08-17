@@ -15,7 +15,7 @@ export default function Page({ title }: Props) {
     <>
       <title>{`${title} - ${APP_TITLE}`}</title>
 
-      <div className="m-4 flex h-10 items-center">
+      <div className="my-4 flex h-10 items-center">
         <h1 className="text-lg font-bold sm:text-xl">マイレビュー</h1>
       </div>
 

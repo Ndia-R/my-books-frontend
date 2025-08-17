@@ -94,22 +94,22 @@ export default function Page({ title }: Props) {
               onSubmit={handleSubmit}
             >
               <FormInput
-                label="現在のパスワード"
                 ref={currentPassword.ref}
+                label="現在のパスワード"
                 errorMessage={currentPassword.errorMessage}
                 type="password"
               />
 
               <FormInput
-                label="新しいパスワード"
                 ref={newPassword.ref}
+                label="新しいパスワード"
                 errorMessage={newPassword.errorMessage}
                 type="password"
               />
 
               <FormInput
-                label="新しいパスワード（確認用）"
                 ref={confirmPassword.ref}
+                label="新しいパスワード（確認用）"
                 errorMessage={confirmPassword.errorMessage}
                 type="password"
               />

@@ -1,11 +1,31 @@
-import ThemeCard, { ThemeCardProps } from '@/components/settings/theme-card';
+import Hero from '@/components/layout/hero';
+import ThemeCard from '@/components/settings/theme-card';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { APP_TITLE } from '@/constants/constants';
+import { ThemeStyle, useThemeStyle } from '@/providers/theme-style-provider';
+import { motion } from 'motion/react';
+import { useState } from 'react';
+
+export type ThemeCardProps = {
+  themeStyle: ThemeStyle;
+  themeName: string;
+  baseFont: string;
+  titleFont: string;
+  bg: string;
+  border: string;
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+};
 
 const THEME_CARDS: ThemeCardProps[] = [
   {
     themeStyle: 'default',
-    title: 'Default',
+    themeName: 'Default',
+    baseFont: 'Noto Sans JP',
+    titleFont: 'Poetsen One',
     bg: 'bg-[oklch(0.52_0.13_144.17)]/20 dark:bg-[oklch(0.75_0.17_144.65)]/20',
     border:
       'border-[oklch(0.52_0.13_144.17)] dark:border-[oklch(0.75_0.17_144.65)]',
@@ -16,7 +36,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'claude',
-    title: 'Claude',
+    themeName: 'Claude',
+    baseFont: 'Noto Serif JP',
+    titleFont: 'Noto Serif JP',
     bg: 'bg-[oklch(0.62_0.14_39.04)]/20 dark:bg-[oklch(0.67_0.13_38.76)]/20',
     border:
       'border-[oklch(0.62_0.14_39.04)] dark:border-[oklch(0.67_0.13_38.76)]',
@@ -27,7 +49,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 't3-chat',
-    title: 'T3 Chat',
+    themeName: 'T3 Chat',
+    baseFont: 'Noto Sans JP',
+    titleFont: 'Luckiest Guy',
     bg: 'bg-[oklch(0.53_0.14_355.2)]/20 dark:bg-[oklch(0.46_0.19_4.1)]/20',
     border:
       'border-[oklch(0.53_0.14_355.2)] dark:border-[oklch(0.46_0.19_4.1)]',
@@ -39,7 +63,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'claymorphism',
-    title: 'Claymorphism',
+    themeName: 'Claymorphism',
+    baseFont: 'Kiwi Maru',
+    titleFont: 'Lilita One',
     bg: 'bg-[oklch(0.59_0.2_277.12)]/20 dark:bg-[oklch(0.68_0.16_276.93)]/20',
     border:
       'border-[oklch(0.59_0.2_277.12)] dark:border-[oklch(0.68_0.16_276.93)]',
@@ -50,7 +76,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'solar-dusk',
-    title: 'Solar dusk',
+    themeName: 'Solar dusk',
+    baseFont: 'Kosugi Maru',
+    titleFont: 'Oxanium',
     bg: 'bg-[oklch(0.56_0.15_49)]/20 dark:bg-[oklch(0.7_0.19_47.6)]/20',
     border: 'border-[oklch(0.56_0.15_49)] dark:border-[oklch(0.7_0.19_47.6)]',
     primary: 'bg-[oklch(0.56_0.15_49)] dark:bg-[oklch(0.7_0.19_47.6)]',
@@ -60,7 +88,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'notebook',
-    title: 'Notebook',
+    themeName: 'Notebook',
+    baseFont: 'Yusei Magic',
+    titleFont: 'Architects Daughter',
     bg: 'bg-[oklch(0.49_0_0)]/20 dark:bg-[oklch(0.76_0_0)]/20',
     border: 'border-[oklch(0.49_0_0)] dark:border-[oklch(0.76_0_0)]',
     primary: 'bg-[oklch(0.49_0_0)] dark:bg-[oklch(0.76_0_0)]',
@@ -70,7 +100,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'perpetuity',
-    title: 'perpetuity',
+    themeName: 'perpetuity',
+    baseFont: 'DotGothic16',
+    titleFont: 'Tiny5',
     bg: 'bg-[oklch(0.56_0.09_203.28)]/20 dark:bg-[oklch(0.85_0.13_195.04)]/20',
     border:
       'border-[oklch(0.56_0.09_203.28)] dark:border-[oklch(0.85_0.13_195.04)]',
@@ -82,7 +114,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'vintage-paper',
-    title: 'Vintage Paper',
+    themeName: 'Vintage Paper',
+    baseFont: 'Noto Serif JP',
+    titleFont: 'Pattaya',
     bg: 'bg-[oklch(0.62_0.08_65.54)]/20 dark:bg-[oklch(0.73_0.06_66.7)]/20',
     border:
       'border-[oklch(0.62_0.08_65.54)] dark:border-[oklch(0.73_0.06_66.7)]',
@@ -93,7 +127,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'candyland',
-    title: 'Candyland',
+    themeName: 'Candyland',
+    baseFont: 'Kaisei Decol',
+    titleFont: 'Ribeye',
     bg: 'bg-[oklch(0.87_0.07_7.09)]/20 dark:bg-[oklch(0.8_0.14_349.23)]/20',
     border:
       'border-[oklch(0.87_0.07_7.09)] dark:border-[oklch(0.8_0.14_349.23)]',
@@ -104,7 +140,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'supabase',
-    title: 'supabase',
+    themeName: 'supabase',
+    baseFont: 'Noto Sans JP',
+    titleFont: 'Outfit',
     bg: 'bg-[oklch(0.83_0.13_160.91)]/20 dark:bg-[oklch(0.44_0.1_156.76)]/20',
     border:
       'border-[oklch(0.83_0.13_160.91)] dark:border-[oklch(0.44_0.1_156.76)]',
@@ -115,7 +153,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'twitter',
-    title: 'Twitter',
+    themeName: 'Twitter',
+    baseFont: 'Noto Sans JP',
+    titleFont: 'Alfa Slab One',
     bg: 'bg-[oklch(0.67_0.16_245)]/20 dark:bg-[oklch(0.67_0.16_245)]/20',
     border: 'border-[oklch(0.67_0.16_245)] dark:border-[oklch(0.67_0.16_245)]',
     primary: 'bg-[oklch(0.67_0.16_245)] dark:bg-[oklch(0.67_0.16_245)]',
@@ -125,7 +165,9 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
   {
     themeStyle: 'vercel',
-    title: 'Vercel',
+    themeName: 'Vercel',
+    baseFont: 'Noto Sans JP',
+    titleFont: 'Inter',
     bg: 'bg-[oklch(0_0_0)]/20 dark:bg-[oklch(1_0_0)]/20',
     border: 'border-[oklch(0_0_0)] dark:border-[oklch(1_0_0)]',
     primary: 'bg-[oklch(0_0_0)] dark:bg-[oklch(1_0_0)]',
@@ -135,30 +177,161 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
 ];
 
+const FONT_TYPES = [
+  { name: 'Noto Sans JP' },
+  { name: 'Noto Serif JP' },
+  { name: 'Kaisei Decol' },
+  { name: 'Kiwi Maru' },
+  { name: 'Yusei Magic' },
+  { name: 'DotGothic16' },
+  { name: 'Kosugi Maru' },
+];
+
+const TITLE_TYPES = [
+  { name: 'Poetsen One' },
+  { name: 'Noto Serif JP' },
+  { name: 'Luckiest Guy' },
+  { name: 'Lilita One' },
+  { name: 'Oxanium' },
+  { name: 'Architects Daughter' },
+  { name: 'Tiny5' },
+  { name: 'Pattaya' },
+  { name: 'Ribeye' },
+  { name: 'Outfit' },
+  { name: 'Alfa Slab One' },
+  { name: 'Inter' },
+];
+
 type Props = {
   title: string;
 };
 
 export default function Page({ title }: Props) {
+  const { themeStyle, setThemeStyle } = useThemeStyle();
+
+  const [baseFont, setBaseFont] = useState(
+    document.documentElement.style.getPropertyValue('--font-sans')
+  );
+  const [titleFont, setTitleFont] = useState(
+    document.documentElement.style.getPropertyValue('--font-title')
+  );
+
+  const handleClick = (property: string, fontName: string) => {
+    document.documentElement.style.setProperty(property, fontName);
+    setBaseFont(fontName);
+  };
+
+  const handleThemeCardClick = (card: ThemeCardProps) => {
+    setThemeStyle(card.themeStyle);
+
+    document.documentElement.style.removeProperty('--font-sans');
+    document.documentElement.style.removeProperty('--font-title');
+    document.documentElement.style.setProperty('--font-sans', card.baseFont);
+    document.documentElement.style.setProperty('--font-title', card.titleFont);
+    setBaseFont(card.baseFont);
+    setTitleFont(card.titleFont);
+  };
+
   return (
     <>
       <title>{`${title} - ${APP_TITLE}`}</title>
 
-      <div className="m-4 flex h-10 items-center">
+      <div className="my-4 flex h-10 items-center">
         <h1 className="text-lg font-bold sm:text-xl">設定</h1>
       </div>
 
       <Separator className="bg-foreground/10 my-4" />
 
-      <section className="p-4">
-        <h2 className="mb-4">テーマ</h2>
+      <div className="mb-4 flex flex-col gap-y-4">
+        <section>
+          <h2>テーマ</h2>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
-          {THEME_CARDS.map((card) => (
-            <ThemeCard card={card} key={card.themeStyle} />
-          ))}
-        </div>
-      </section>
+          <div className="relative my-4">
+            <div className="sm:1/3 w-2/5 pr-2">
+              <div className="grid grid-cols-2 content-start gap-2 md:grid-cols-3">
+                {THEME_CARDS.map((card) => (
+                  <motion.div
+                    key={card.themeStyle}
+                    initial={{ y: 0 }}
+                    whileHover={{ y: -2 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ThemeCard
+                      card={card}
+                      isActive={card.themeStyle === themeStyle}
+                      onClick={() => handleThemeCardClick(card)}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-foreground/10 sm:2/3 pointer-events-none absolute top-0 right-0 h-full w-3/5 rounded-xl border">
+              <p className="text-muted-foreground px-4 py-2 text-right text-sm">
+                プレビュー
+              </p>
+            </div>
+
+            <div
+              className="sm:2/3 absolute top-0 right-0 h-full w-3/5 overflow-hidden"
+              style={{
+                maskImage: `
+              linear-gradient(to right, black 0%, black 85%, transparent 100%),
+              linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%)
+            `,
+                WebkitMaskImage: `
+              linear-gradient(to right, black 0%, black 85%, transparent 100%),
+              linear-gradient(to bottom, transparent 0%, black 25%, black 75%, transparent 100%)
+            `,
+                maskComposite: 'intersect',
+                WebkitMaskComposite: 'source-in',
+              }}
+            >
+              <div className="origin-top scale-80 md:scale-80">
+                <Hero />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <h2>タイトルフォント</h2>
+
+          <ul className="flex flex-wrap py-2">
+            {TITLE_TYPES.map((font) => (
+              <li key={font.name}>
+                <Button
+                  style={{ fontFamily: `${font.name}` }}
+                  variant={titleFont === font.name ? 'outline' : 'ghost'}
+                  onClick={() => {
+                    handleClick('--font-title', font.name);
+                  }}
+                >
+                  {font.name}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </section>
+
+        <section>
+          <h2>本文フォント</h2>
+
+          <ul className="flex flex-wrap py-2">
+            {FONT_TYPES.map((font) => (
+              <li key={font.name}>
+                <Button
+                  style={{ fontFamily: `${font.name}` }}
+                  variant={baseFont === font.name ? 'outline' : 'ghost'}
+                  onClick={() => handleClick('--font-sans', font.name)}
+                >
+                  {font.name}
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      </div>
     </>
   );
 }

@@ -96,16 +96,16 @@ export default function Page({ title }: Props) {
               />
 
               <FormInput
-                label="新しいメールアドレス"
                 ref={email.ref}
+                label="新しいメールアドレス"
                 errorMessage={email.errorMessage}
                 autoComplete="off"
                 spellCheck="false"
               />
 
               <FormInput
-                label="現在のパスワード"
                 ref={password.ref}
+                label="現在のパスワード"
                 errorMessage={password.errorMessage}
                 type="password"
               />

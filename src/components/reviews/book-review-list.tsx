@@ -1,6 +1,7 @@
 import BookReviewItem from '@/components/reviews/book-review-item';
 import { Separator } from '@/components/ui/separator';
 import { Review } from '@/types';
+import { motion } from 'motion/react';
 
 type Props = {
   reviews: Review[];
@@ -12,9 +13,15 @@ export default function BookReviewList({ reviews }: Props) {
       {reviews.map((review) => (
         <li key={review.id}>
           <Separator className="bg-foreground/10" />
-          <article className="animate-in fade-in-0 slide-in-from-top-2 fill-mode-both delay-0 duration-500">
-            <BookReviewItem review={review} />
-          </article>
+          <motion.div
+            initial={{ y: -8, opacity: 0 }}
+            animate={{ y: 0, opacity: 100 }}
+            transition={{ duration: 0.5, delay: 0 }}
+          >
+            <article>
+              <BookReviewItem review={review} />
+            </article>
+          </motion.div>
         </li>
       ))}
     </ul>

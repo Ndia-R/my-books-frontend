@@ -1,9 +1,3 @@
-/* ロゴとタイトルのフォント */
-:root {
-  --font-logo: 'Outfit';
-  --font-title: 'Outfit';
-}
-
 /* 以下は https://tweakcn.com/ で作成 */
 :root {
   --background: oklch(0.99 0 0);
@@ -169,8 +163,4 @@
   --tracking-wide: calc(var(--tracking-normal) + 0.025em);
   --tracking-wider: calc(var(--tracking-normal) + 0.05em);
   --tracking-widest: calc(var(--tracking-normal) + 0.1em);
-}
-
-body {
-  letter-spacing: var(--tracking-normal);
 }

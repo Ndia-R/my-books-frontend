@@ -1,9 +1,3 @@
-/* ロゴとタイトルのフォント */
-:root {
-  --font-logo: 'Alfa Slab One';
-  --font-title: 'Inter';
-}
-
 /* 以下は https://tweakcn.com/ で作成 */
 :root {
   --background: oklch(0.97 0.01 80.72);

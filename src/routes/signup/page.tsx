@@ -81,16 +81,16 @@ export default function Page({ title }: Props) {
               onSubmit={handleSubmit}
             >
               <FormInput
-                label="メールアドレス"
                 ref={email.ref}
+                label="メールアドレス"
                 errorMessage={email.errorMessage}
                 autoComplete="off"
                 spellCheck="false"
               />
 
               <FormInput
-                label="パスワード"
                 ref={password.ref}
+                label="パスワード"
                 errorMessage={password.errorMessage}
                 type="password"
               />
@@ -98,8 +98,8 @@ export default function Page({ title }: Props) {
               <Separator className="bg-foreground/10 mt-6 mb-2" />
 
               <FormInput
-                label="ユーザー名"
                 ref={name.ref}
+                label="ユーザー名"
                 errorMessage={name.errorMessage}
                 autoComplete="off"
                 spellCheck="false"
