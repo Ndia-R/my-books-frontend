@@ -1,7 +1,9 @@
 import { buttonVariants } from '@/components/ui/button';
+import usePrefetch from '@/hooks/use-prefetch';
 import { cn } from '@/lib/utils';
 import { BookTableOfContents } from '@/types';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
+import { useEffect } from 'react';
 import { Link } from 'react-router';
 
 const getPageNavigation = (
@@ -68,6 +70,14 @@ export default function BookReadNavigation({
     chapterNumber,
     pageNumber
   );
+
+  const { prefetchBookReadContent } = usePrefetch();
+
+  useEffect(() => {
+    if (!isLastPage) {
+      prefetchBookReadContent(bookId, next.chapter, next.page);
+    }
+  }, [bookId, isLastPage, next.chapter, next.page, prefetchBookReadContent]);
 
   return (
     <div className="flex justify-between">

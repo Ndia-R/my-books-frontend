@@ -1,6 +1,7 @@
 import FavoriteCountIcon from '@/components/books/stats/favorite-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
+import usePrefetch from '@/hooks/use-prefetch';
 import { formatDateJP, formatTime } from '@/lib/utils';
 import { Favorite } from '@/types';
 import { Link } from 'react-router';
@@ -10,12 +11,24 @@ type Props = {
 };
 
 export default function FavoriteItem({ favorite }: Props) {
+  const { prefetchBookDetail } = usePrefetch();
+
+  const handlePrefetch = () => {
+    prefetchBookDetail(favorite.book.id);
+  };
+
   return (
     <Card className="p-0">
       <CardContent className="p-0">
         <div className="flex gap-x-4 p-4">
           <div className="flex min-w-20 justify-center sm:min-w-24">
-            <Link to={`/book/${favorite.book.id}`} className="size-fit">
+            <Link
+              className="size-fit"
+              to={`/book/${favorite.book.id}`}
+              aria-label={`${favorite.book.title}の詳細ページへ移動`}
+              onMouseEnter={handlePrefetch}
+              onFocus={handlePrefetch}
+            >
               <img
                 className="h-24 rounded-xs object-cover sm:h-28"
                 src={BOOK_IMAGE_BASE_URL + favorite.book.imagePath}
@@ -27,7 +40,13 @@ export default function FavoriteItem({ favorite }: Props) {
           <div className="flex w-full flex-col gap-y-2">
             <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-x-2">
-                <Link to={`/book/${favorite.book.id}`} className="size-fit">
+                <Link
+                  className="size-fit"
+                  to={`/book/${favorite.book.id}`}
+                  aria-label={`${favorite.book.title}の詳細ページへ移動`}
+                  onMouseEnter={handlePrefetch}
+                  onFocus={handlePrefetch}
+                >
                   <h2 className="hover:text-primary text-lg leading-8 font-semibold sm:text-xl">
                     {favorite.book.title}
                   </h2>

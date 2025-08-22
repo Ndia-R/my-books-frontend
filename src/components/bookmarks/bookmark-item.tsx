@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/tooltip';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
+import usePrefetch from '@/hooks/use-prefetch';
 import { deleteBookmark, updateBookmark } from '@/lib/api/bookmarks';
 import { chapterNumberString, cn, formatDateJP, formatTime } from '@/lib/utils';
 import { Bookmark, BookmarkUpdateParams } from '@/types';
@@ -41,6 +42,16 @@ export default function BookmarkItem({ bookmark }: Props) {
     onSuccess,
   });
 
+  const { prefetchBookReadContent } = usePrefetch();
+
+  const handlePrefetch = () => {
+    prefetchBookReadContent(
+      bookmark.book.id,
+      bookmark.chapterNumber,
+      bookmark.pageNumber
+    );
+  };
+
   return (
     <>
       <Card className="p-0">
@@ -48,8 +59,11 @@ export default function BookmarkItem({ bookmark }: Props) {
           <div className="flex gap-x-4 p-4">
             <div className="flex min-w-20 justify-center sm:min-w-24">
               <Link
-                to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
                 className="size-fit"
+                to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
+                aria-label={`${bookmark.book.title}のブックマークページへ移動`}
+                onMouseEnter={handlePrefetch}
+                onFocus={handlePrefetch}
               >
                 <img
                   className="h-24 rounded-xs object-cover sm:h-28"
@@ -63,8 +77,11 @@ export default function BookmarkItem({ bookmark }: Props) {
               <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-x-2">
                   <Link
-                    to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
                     className="size-fit"
+                    to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
+                    aria-label={`${bookmark.book.title}のブックマークページへ移動`}
+                    onMouseEnter={handlePrefetch}
+                    onFocus={handlePrefetch}
                   >
                     <h2 className="hover:text-primary text-lg leading-8 font-semibold sm:text-xl">
                       {bookmark.book.title}

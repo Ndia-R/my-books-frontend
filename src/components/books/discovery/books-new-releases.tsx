@@ -1,12 +1,12 @@
 import BookList from '@/components/books/book-list';
 import { queryKeys } from '@/constants/query-keys';
-import { getLatestBooks } from '@/lib/api/books';
+import { getBooksNewReleases } from '@/lib/api/books';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function BooksNewReleases() {
   const { data: bookPage } = useSuspenseQuery({
-    queryKey: queryKeys.book.latestBooks(),
-    queryFn: () => getLatestBooks(),
+    queryKey: queryKeys.book.newReleases(),
+    queryFn: () => getBooksNewReleases(),
   });
 
   return (

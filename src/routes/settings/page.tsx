@@ -1,29 +1,16 @@
 import Hero from '@/components/layout/hero';
-import ThemeCard from '@/components/settings/theme-card';
+import ThemeCard, { ThemeCardProps } from '@/components/settings/theme-card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { APP_TITLE } from '@/constants/constants';
-import { ThemeStyle, useThemeStyle } from '@/providers/theme-style-provider';
+import { cn } from '@/lib/utils';
+import { BaseFont, TitleFont, useTheme } from '@/providers/theme-provider';
 import { motion } from 'motion/react';
-import { useState } from 'react';
-
-export type ThemeCardProps = {
-  themeStyle: ThemeStyle;
-  themeName: string;
-  baseFont: string;
-  titleFont: string;
-  bg: string;
-  border: string;
-  primary: string;
-  secondary: string;
-  accent: string;
-  background: string;
-};
 
 const THEME_CARDS: ThemeCardProps[] = [
   {
-    themeStyle: 'default',
-    themeName: 'Default',
+    id: 0,
+    themeColor: 'default',
     baseFont: 'Noto Sans JP',
     titleFont: 'Poetsen One',
     bg: 'bg-[oklch(0.52_0.13_144.17)]/20 dark:bg-[oklch(0.75_0.17_144.65)]/20',
@@ -35,8 +22,8 @@ const THEME_CARDS: ThemeCardProps[] = [
     background: 'bg-[oklch(0.97_0.01_80.72)] dark:bg-[oklch(0.3_0.02_232.02)]',
   },
   {
-    themeStyle: 'claude',
-    themeName: 'Claude',
+    id: 1,
+    themeColor: 'claude',
     baseFont: 'Noto Serif JP',
     titleFont: 'Noto Serif JP',
     bg: 'bg-[oklch(0.62_0.14_39.04)]/20 dark:bg-[oklch(0.67_0.13_38.76)]/20',
@@ -48,8 +35,8 @@ const THEME_CARDS: ThemeCardProps[] = [
     background: 'bg-[oklch(0.98_0.01_95.1)] dark:bg-[oklch(0.27_0_106.64)]',
   },
   {
-    themeStyle: 't3-chat',
-    themeName: 'T3 Chat',
+    id: 2,
+    themeColor: 't3-chat',
     baseFont: 'Noto Sans JP',
     titleFont: 'Luckiest Guy',
     bg: 'bg-[oklch(0.53_0.14_355.2)]/20 dark:bg-[oklch(0.46_0.19_4.1)]/20',
@@ -62,8 +49,8 @@ const THEME_CARDS: ThemeCardProps[] = [
       'bg-[oklch(0.98_0.01_325.64)] dark:bg-[oklch(0.24_0.02_307.53)]',
   },
   {
-    themeStyle: 'claymorphism',
-    themeName: 'Claymorphism',
+    id: 3,
+    themeColor: 'claymorphism',
     baseFont: 'Kiwi Maru',
     titleFont: 'Lilita One',
     bg: 'bg-[oklch(0.59_0.2_277.12)]/20 dark:bg-[oklch(0.68_0.16_276.93)]/20',
@@ -75,8 +62,8 @@ const THEME_CARDS: ThemeCardProps[] = [
     background: 'bg-[oklch(0.92_0_48.72)] dark:bg-[oklch(0.22_0.01_67.44)]',
   },
   {
-    themeStyle: 'solar-dusk',
-    themeName: 'Solar dusk',
+    id: 4,
+    themeColor: 'solar-dusk',
     baseFont: 'Kosugi Maru',
     titleFont: 'Oxanium',
     bg: 'bg-[oklch(0.56_0.15_49)]/20 dark:bg-[oklch(0.7_0.19_47.6)]/20',
@@ -87,8 +74,8 @@ const THEME_CARDS: ThemeCardProps[] = [
     background: 'bg-[oklch(0.99_0.01_84.57)] dark:bg-[oklch(0.22_0.01_56.04)]',
   },
   {
-    themeStyle: 'notebook',
-    themeName: 'Notebook',
+    id: 5,
+    themeColor: 'notebook',
     baseFont: 'Yusei Magic',
     titleFont: 'Architects Daughter',
     bg: 'bg-[oklch(0.49_0_0)]/20 dark:bg-[oklch(0.76_0_0)]/20',
@@ -99,8 +86,8 @@ const THEME_CARDS: ThemeCardProps[] = [
     background: 'bg-[oklch(0.98_0_0)] dark:bg-[oklch(0.29_0_0)]',
   },
   {
-    themeStyle: 'perpetuity',
-    themeName: 'perpetuity',
+    id: 6,
+    themeColor: 'perpetuity',
     baseFont: 'DotGothic16',
     titleFont: 'Tiny5',
     bg: 'bg-[oklch(0.56_0.09_203.28)]/20 dark:bg-[oklch(0.85_0.13_195.04)]/20',
@@ -113,8 +100,8 @@ const THEME_CARDS: ThemeCardProps[] = [
       'bg-[oklch(0.95_0.01_197.01)] dark:bg-[oklch(0.21_0.02_224.45)]',
   },
   {
-    themeStyle: 'vintage-paper',
-    themeName: 'Vintage Paper',
+    id: 7,
+    themeColor: 'vintage-paper',
     baseFont: 'Noto Serif JP',
     titleFont: 'Pattaya',
     bg: 'bg-[oklch(0.62_0.08_65.54)]/20 dark:bg-[oklch(0.73_0.06_66.7)]/20',
@@ -126,8 +113,8 @@ const THEME_CARDS: ThemeCardProps[] = [
     background: 'bg-[oklch(0.96_0.02_90.24)] dark:bg-[oklch(0.27_0.01_57.65)]',
   },
   {
-    themeStyle: 'candyland',
-    themeName: 'Candyland',
+    id: 8,
+    themeColor: 'candyland',
     baseFont: 'Kaisei Decol',
     titleFont: 'Ribeye',
     bg: 'bg-[oklch(0.87_0.07_7.09)]/20 dark:bg-[oklch(0.8_0.14_349.23)]/20',
@@ -139,8 +126,8 @@ const THEME_CARDS: ThemeCardProps[] = [
     background: 'bg-[oklch(0.98_0_228.78)] dark:bg-[oklch(0.23_0.01_264.29)]',
   },
   {
-    themeStyle: 'supabase',
-    themeName: 'supabase',
+    id: 9,
+    themeColor: 'supabase',
     baseFont: 'Noto Sans JP',
     titleFont: 'Outfit',
     bg: 'bg-[oklch(0.83_0.13_160.91)]/20 dark:bg-[oklch(0.44_0.1_156.76)]/20',
@@ -152,8 +139,8 @@ const THEME_CARDS: ThemeCardProps[] = [
     background: 'bg-[oklch(0.99_0_0)] dark:bg-[oklch(0.18_0_0)]',
   },
   {
-    themeStyle: 'twitter',
-    themeName: 'Twitter',
+    id: 10,
+    themeColor: 'twitter',
     baseFont: 'Noto Sans JP',
     titleFont: 'Alfa Slab One',
     bg: 'bg-[oklch(0.67_0.16_245)]/20 dark:bg-[oklch(0.67_0.16_245)]/20',
@@ -164,8 +151,8 @@ const THEME_CARDS: ThemeCardProps[] = [
     background: 'bg-[oklch(1_0_0)] dark:bg-[oklch(0_0_0)]',
   },
   {
-    themeStyle: 'vercel',
-    themeName: 'Vercel',
+    id: 11,
+    themeColor: 'vercel',
     baseFont: 'Noto Sans JP',
     titleFont: 'Inter',
     bg: 'bg-[oklch(0_0_0)]/20 dark:bg-[oklch(1_0_0)]/20',
@@ -177,29 +164,29 @@ const THEME_CARDS: ThemeCardProps[] = [
   },
 ];
 
-const FONT_TYPES = [
-  { name: 'Noto Sans JP' },
-  { name: 'Noto Serif JP' },
-  { name: 'Kaisei Decol' },
-  { name: 'Kiwi Maru' },
-  { name: 'Yusei Magic' },
-  { name: 'DotGothic16' },
-  { name: 'Kosugi Maru' },
+const BASE_FONT_TYPES: BaseFont[] = [
+  'Noto Sans JP',
+  'Noto Serif JP',
+  'Kaisei Decol',
+  'Kiwi Maru',
+  'Yusei Magic',
+  'DotGothic16',
+  'Kosugi Maru',
 ];
 
-const TITLE_TYPES = [
-  { name: 'Poetsen One' },
-  { name: 'Noto Serif JP' },
-  { name: 'Luckiest Guy' },
-  { name: 'Lilita One' },
-  { name: 'Oxanium' },
-  { name: 'Architects Daughter' },
-  { name: 'Tiny5' },
-  { name: 'Pattaya' },
-  { name: 'Ribeye' },
-  { name: 'Outfit' },
-  { name: 'Alfa Slab One' },
-  { name: 'Inter' },
+const TITLE_FONT_TYPES: TitleFont[] = [
+  'Poetsen One',
+  'Noto Serif JP',
+  'Luckiest Guy',
+  'Lilita One',
+  'Oxanium',
+  'Architects Daughter',
+  'Tiny5',
+  'Pattaya',
+  'Ribeye',
+  'Outfit',
+  'Alfa Slab One',
+  'Inter',
 ];
 
 type Props = {
@@ -207,27 +194,17 @@ type Props = {
 };
 
 export default function Page({ title }: Props) {
-  const { themeStyle, setThemeStyle } = useThemeStyle();
-
-  const [baseFont, setBaseFont] = useState(
-    document.documentElement.style.getPropertyValue('--font-sans')
-  );
-  const [titleFont, setTitleFont] = useState(
-    document.documentElement.style.getPropertyValue('--font-title')
-  );
-
-  const handleClick = (property: string, fontName: string) => {
-    document.documentElement.style.setProperty(property, fontName);
-    setBaseFont(fontName);
-  };
+  const {
+    themeColor,
+    baseFont,
+    titleFont,
+    setThemeColor,
+    setBaseFont,
+    setTitleFont,
+  } = useTheme();
 
   const handleThemeCardClick = (card: ThemeCardProps) => {
-    setThemeStyle(card.themeStyle);
-
-    document.documentElement.style.removeProperty('--font-sans');
-    document.documentElement.style.removeProperty('--font-title');
-    document.documentElement.style.setProperty('--font-sans', card.baseFont);
-    document.documentElement.style.setProperty('--font-title', card.titleFont);
+    setThemeColor(card.themeColor);
     setBaseFont(card.baseFont);
     setTitleFont(card.titleFont);
   };
@@ -244,21 +221,21 @@ export default function Page({ title }: Props) {
 
       <div className="mb-4 flex flex-col gap-y-4">
         <section>
-          <h2>テーマ</h2>
+          <h2>テーマカラー</h2>
 
           <div className="relative my-4">
             <div className="sm:1/3 w-2/5 pr-2">
               <div className="grid grid-cols-2 content-start gap-2 md:grid-cols-3">
                 {THEME_CARDS.map((card) => (
                   <motion.div
-                    key={card.themeStyle}
+                    key={card.id}
                     initial={{ y: 0 }}
                     whileHover={{ y: -2 }}
                     transition={{ duration: 0.3 }}
                   >
                     <ThemeCard
                       card={card}
-                      isActive={card.themeStyle === themeStyle}
+                      isActive={card.themeColor === themeColor}
                       onClick={() => handleThemeCardClick(card)}
                     />
                   </motion.div>
@@ -297,17 +274,19 @@ export default function Page({ title }: Props) {
         <section>
           <h2>タイトルフォント</h2>
 
-          <ul className="flex flex-wrap py-2">
-            {TITLE_TYPES.map((font) => (
-              <li key={font.name}>
+          <ul className="flex flex-wrap gap-1 py-2">
+            {TITLE_FONT_TYPES.map((font) => (
+              <li key={font}>
                 <Button
-                  style={{ fontFamily: `${font.name}` }}
-                  variant={titleFont === font.name ? 'outline' : 'ghost'}
-                  onClick={() => {
-                    handleClick('--font-title', font.name);
-                  }}
+                  className={cn(
+                    titleFont === font &&
+                      'bg-primary dark:bg-primary hover:bg-primary hover:dark:bg-primary text-primary-foreground hover:text-primary-foreground'
+                  )}
+                  style={{ fontFamily: `${font}` }}
+                  variant="ghost"
+                  onClick={() => setTitleFont(font)}
                 >
-                  {font.name}
+                  {font}
                 </Button>
               </li>
             ))}
@@ -317,15 +296,19 @@ export default function Page({ title }: Props) {
         <section>
           <h2>本文フォント</h2>
 
-          <ul className="flex flex-wrap py-2">
-            {FONT_TYPES.map((font) => (
-              <li key={font.name}>
+          <ul className="flex flex-wrap gap-1 py-2">
+            {BASE_FONT_TYPES.map((font) => (
+              <li key={font}>
                 <Button
-                  style={{ fontFamily: `${font.name}` }}
-                  variant={baseFont === font.name ? 'outline' : 'ghost'}
-                  onClick={() => handleClick('--font-sans', font.name)}
+                  className={cn(
+                    baseFont === font &&
+                      'bg-primary dark:bg-primary hover:bg-primary hover:dark:bg-primary text-primary-foreground hover:text-primary-foreground'
+                  )}
+                  style={{ fontFamily: `${font}` }}
+                  variant="ghost"
+                  onClick={() => setBaseFont(font)}
                 >
-                  {font.name}
+                  {font}
                 </Button>
               </li>
             ))}

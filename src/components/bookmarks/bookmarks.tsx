@@ -18,6 +18,8 @@ export default function Bookmarks() {
   const { data: firstPageData } = useSuspenseQuery({
     queryKey: queryKeys.user.bookmarks(1),
     queryFn: () => getUserBookmarks(1),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   useEffect(() => {

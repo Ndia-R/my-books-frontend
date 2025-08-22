@@ -106,7 +106,7 @@ export default function Page({ title }: Props) {
               <p className="text-muted-foreground">
                 アカウントをお持ちでない方はこちら
               </p>
-              <Link to="/signup" className="text-primary hover:underline">
+              <Link className="text-primary hover:underline" to="/signup">
                 新規登録
               </Link>
             </div>

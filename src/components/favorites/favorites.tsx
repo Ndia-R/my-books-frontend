@@ -18,6 +18,8 @@ export default function Favorites() {
   const { data: firstPageData } = useSuspenseQuery({
     queryKey: queryKeys.user.favorites(1),
     queryFn: () => getUserFavorites(1),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   useEffect(() => {

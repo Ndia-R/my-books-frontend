@@ -18,7 +18,8 @@ export default function BookReadBackground({ bookId }: Props) {
       <img
         className="w-full max-w-7xl object-cover opacity-5"
         src={BOOK_IMAGE_BASE_URL + book.imagePath}
-        alt="bg-image"
+        alt=""
+        aria-hidden="true"
       />
     </div>
   );

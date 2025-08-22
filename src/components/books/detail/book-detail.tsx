@@ -5,6 +5,7 @@ import Rating from '@/components/shared/rating';
 import { buttonVariants } from '@/components/ui/button';
 import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
+import usePrefetch from '@/hooks/use-prefetch';
 import { getBookDetails, getBookFavoriteStats } from '@/lib/api/books';
 import { isFavoritedByUser } from '@/lib/api/user';
 import { cn, formatDateJP, formatIsbn, formatPrice } from '@/lib/utils';
@@ -39,13 +40,25 @@ export default function BookDetail({ bookId }: Props) {
     enabled: isAuthenticated,
   });
 
+  const { prefetchBookTableOfContents } = usePrefetch();
+
+  const handlePrefetch = () => {
+    prefetchBookTableOfContents(bookId);
+  };
+
   return (
     <>
       <title>{`${book.title} - ${APP_TITLE}`}</title>
 
       <div className="flex flex-col justify-start p-3 pt-10 sm:p-6 lg:flex-row">
         <div className="flex flex-col items-center justify-center lg:w-1/2">
-          <Link to={`/read/${bookId}/table-of-contents`} className="size-fit">
+          <Link
+            className="size-fit"
+            to={`/read/${bookId}/table-of-contents`}
+            aria-label={`${book.title}の目次ページへ移動`}
+            onMouseEnter={handlePrefetch}
+            onFocus={handlePrefetch}
+          >
             <img
               className="h-[360px] rounded-xs object-cover sm:h-[480px]"
               src={BOOK_IMAGE_BASE_URL + book.imagePath}
@@ -69,6 +82,9 @@ export default function BookDetail({ bookId }: Props) {
             <Link
               className={cn(buttonVariants({ variant: 'outline' }), 'w-44')}
               to={`/read/${bookId}/table-of-contents`}
+              aria-label={`${book.title}の目次ページへ移動`}
+              onMouseEnter={handlePrefetch}
+              onFocus={handlePrefetch}
             >
               目次を見る
             </Link>

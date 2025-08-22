@@ -1,7 +1,7 @@
 export const queryKeys = {
   book: {
     all: ['book'] as const,
-    latestBooks: () => [...queryKeys.book.all, 'latestBooks'] as const,
+    newReleases: () => [...queryKeys.book.all, 'newReleases'] as const,
     byTitleKeyword: (q: string, page: number) =>
       [...queryKeys.book.all, 'byTitleKeyword', q, page] as const,
     byGenre: (genreIds: string, condition: string, page: number) =>

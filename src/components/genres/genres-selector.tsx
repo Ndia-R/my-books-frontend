@@ -11,6 +11,8 @@ export default function GenresSelector() {
   const { data: genres } = useSuspenseQuery({
     queryKey: queryKeys.genre.all,
     queryFn: () => getGenres(),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   const [selectedGenreIds, isSelectedGenreIds] = useState<number[]>([]);

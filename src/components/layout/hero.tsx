@@ -14,7 +14,8 @@ export default function Hero() {
           <img
             className="w-[400px] opacity-30 md:opacity-50 lg:w-[450px] lg:opacity-80"
             src={mainVisualImage}
-            alt="main-visual-image"
+            alt=""
+            aria-hidden="true"
           />
         </motion.div>
       </div>

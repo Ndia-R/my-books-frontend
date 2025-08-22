@@ -32,7 +32,7 @@ export default function Logo({
         className
       )}
       to="/"
-      aria-label="タイトルロゴ"
+      aria-label="トップページへ移動"
       aria-disabled={disableLink}
       onClick={onClick}
     >

@@ -41,14 +41,14 @@ export default function Footer({ className }: Props) {
   return (
     <footer className={cn('bg-card', className)}>
       <div className="mx-auto max-w-7xl sm:px-6">
-        <div className="flex flex-col items-center justify-between py-4 sm:flex-row">
+        <div className="flex flex-col items-center justify-between py-4 sm:grid sm:grid-cols-3">
           <ul className="flex">
             {SNS_LIST.map((item) => (
               <li key={item.label}>
                 <Link
                   className={buttonVariants({ variant: 'ghost', size: 'icon' })}
                   to={item.href}
-                  aria-label={item.label}
+                  aria-label={`${item.label}のホームページ`}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -57,10 +57,12 @@ export default function Footer({ className }: Props) {
               </li>
             ))}
           </ul>
-          <p className="flex items-center text-sm leading-7">
+          <p className="flex items-center justify-center text-sm leading-7">
             © 2025 Xxxxx, Inc.
           </p>
-          <Logo size="sm" />
+          <div className="flex items-center justify-end">
+            <Logo size="sm" />
+          </div>
         </div>
       </div>
     </footer>

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
+import usePrefetch from '@/hooks/use-prefetch';
 import { deleteReview, updateReview } from '@/lib/api/review';
 import { formatDateJP, formatTime } from '@/lib/utils';
 import { Review, ReviewUpdateParams } from '@/types';
@@ -37,13 +38,25 @@ export default function MyReviewItem({ review }: Props) {
     onSuccess,
   });
 
+  const { prefetchBookDetail } = usePrefetch();
+
+  const handlePrefetch = () => {
+    prefetchBookDetail(review.book.id);
+  };
+
   return (
     <>
       <Card className="p-0">
         <CardContent className="p-0">
           <div className="flex gap-x-4 p-4">
             <div className="flex min-w-20 justify-center sm:min-w-24">
-              <Link to={`/book/${review.book.id}`} className="size-fit">
+              <Link
+                className="size-fit"
+                to={`/book/${review.book.id}`}
+                aria-label={`${review.book.title}の詳細ページへ移動`}
+                onMouseEnter={handlePrefetch}
+                onFocus={handlePrefetch}
+              >
                 <img
                   className="h-24 rounded-xs object-cover sm:h-28"
                   src={BOOK_IMAGE_BASE_URL + review.book.imagePath}
@@ -54,7 +67,13 @@ export default function MyReviewItem({ review }: Props) {
 
             <div className="flex w-full flex-col justify-center">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                <Link to={`/book/${review.book.id}`} className="size-fit">
+                <Link
+                  className="size-fit"
+                  to={`/book/${review.book.id}`}
+                  aria-label={`${review.book.title}の詳細ページへ移動`}
+                  onMouseEnter={handlePrefetch}
+                  onFocus={handlePrefetch}
+                >
                   <h2 className="hover:text-primary text-lg leading-8 font-semibold sm:text-xl">
                     {review.book.title}
                   </h2>

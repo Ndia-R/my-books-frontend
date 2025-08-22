@@ -1,14 +1,28 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { useRipple } from '@/hooks/use-ripple';
 import { cn } from '@/lib/utils';
-import { ThemeCardProps } from '@/routes/settings/page';
+import { BaseFont, ThemeColor, TitleFont } from '@/providers/theme-provider';
 import React from 'react';
+
+export type ThemeCardProps = {
+  id: number;
+  themeColor: ThemeColor;
+  baseFont: BaseFont;
+  titleFont: TitleFont;
+  bg: string;
+  border: string;
+  primary: string;
+  secondary: string;
+  accent: string;
+  background: string;
+};
 
 type Props = {
   card: ThemeCardProps;
   isActive: boolean;
   onClick: () => void;
 };
+
 export default function ThemeCard({ card, isActive, onClick }: Props) {
   const { containerRef, createRipple } = useRipple();
 
@@ -39,7 +53,7 @@ export default function ThemeCard({ card, isActive, onClick }: Props) {
               className={cn('size-2 rounded-sm sm:size-3', card.background)}
             />
           </div>
-          <p className="hidden text-nowrap md:block">{card.themeName}</p>
+          <p className="hidden text-nowrap md:block">{card.themeColor}</p>
         </div>
       </CardContent>
     </Card>

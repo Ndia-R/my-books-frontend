@@ -16,7 +16,7 @@ import {
 } from '@/types';
 
 // 最新の書籍リスト（１０冊分）
-export const getLatestBooks = async () => {
+export const getBooksNewReleases = async () => {
   const endpoint = `/books/new-releases`;
   const response = await customFetch<BookPage>(endpoint);
   return response.data;

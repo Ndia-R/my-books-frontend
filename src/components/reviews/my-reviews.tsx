@@ -18,6 +18,8 @@ export default function MyReviews() {
   const { data: firstPageData } = useSuspenseQuery({
     queryKey: queryKeys.user.reviews(1),
     queryFn: () => getUserReviews(1),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import {
 } from '@/components/ui/tooltip';
 import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
+import usePrefetch from '@/hooks/use-prefetch';
 import { getBookTableOfContents } from '@/lib/api/books';
 import { chapterNumberString, cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
@@ -24,6 +25,14 @@ export default function BookTableOfContents({ bookId }: Props) {
     queryFn: () => getBookTableOfContents(bookId),
   });
 
+  const { prefetchBookReadContent } = usePrefetch();
+
+  const handlePrefetch = (bookId: string, chapterNumber: number) => {
+    if (isAuthenticated) {
+      prefetchBookReadContent(bookId, chapterNumber);
+    }
+  };
+
   return (
     <>
       <title>{`${bookTableOfContents.title} - ${APP_TITLE}`}</title>
@@ -38,6 +47,8 @@ export default function BookTableOfContents({ bookId }: Props) {
             <Link
               className={cn(buttonVariants({ variant: 'outline' }), 'w-44')}
               to={`/read/${bookId}/chapter/1/page/1`}
+              onMouseEnter={() => handlePrefetch(bookId, 1)}
+              onFocus={() => handlePrefetch(bookId, 1)}
             >
               最初から読む
             </Link>
@@ -68,11 +79,16 @@ export default function BookTableOfContents({ bookId }: Props) {
                   {chapterNumberString(chapter.chapterNumber)}
                 </p>
                 <Link
-                  to={`/read/${bookId}/chapter/${chapter.chapterNumber}/page/1`}
                   className={cn(
                     'hover:text-primary text-base font-semibold sm:text-xl',
                     !isAuthenticated && 'pointer-events-none'
                   )}
+                  to={`/read/${bookId}/chapter/${chapter.chapterNumber}/page/1`}
+                  aria-label={`${chapter.chapterTitle}のページへ移動`}
+                  onMouseEnter={() =>
+                    handlePrefetch(bookId, chapter.chapterNumber)
+                  }
+                  onFocus={() => handlePrefetch(bookId, chapter.chapterNumber)}
                 >
                   {chapter.chapterTitle}
                 </Link>

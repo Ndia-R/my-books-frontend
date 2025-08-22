@@ -7,6 +7,8 @@ export default function GenresTopPage() {
   const { data: genres } = useSuspenseQuery({
     queryKey: queryKeys.genre.all,
     queryFn: () => getGenres(),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 
   return <GenreList genres={genres} />;

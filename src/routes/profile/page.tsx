@@ -88,6 +88,7 @@ export default function Page({ title }: Props) {
                   <Link
                     className={cn(buttonVariants({ variant: 'outline' }))}
                     to={item.href}
+                    aria-label={`${item.label}の変更`}
                   >
                     変更
                   </Link>

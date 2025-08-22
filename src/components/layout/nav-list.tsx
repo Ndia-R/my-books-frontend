@@ -34,6 +34,7 @@ export default function NavList({ onClick }: Props) {
                   'text-primary'
               )}
               href={item.href}
+              aria-label={`${item.label}のページへ移動`}
               onClick={onClick}
             >
               {item.label}

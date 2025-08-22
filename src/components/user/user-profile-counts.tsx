@@ -18,7 +18,7 @@ export default function UserProfileCounts() {
         animate={{ y: 0, opacity: 100 }}
         transition={{ duration: 0.5, delay: 0 }}
       >
-        <Link to="/favorites">
+        <Link to="/favorites" aria-label="お気に入りページへ移動">
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
               <CountUpNumber
@@ -36,7 +36,7 @@ export default function UserProfileCounts() {
         animate={{ y: 0, opacity: 100 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        <Link to="/bookmarks">
+        <Link to="/bookmarks" aria-label="ブックマークページへ移動">
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
               <CountUpNumber
@@ -54,7 +54,7 @@ export default function UserProfileCounts() {
         animate={{ y: 0, opacity: 100 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <Link to="/my-reviews">
+        <Link to="/my-reviews" aria-label="マイレビューページへ移動">
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
               <CountUpNumber end={userProfileCounts.reviewCount} delay={500} />

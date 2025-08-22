@@ -1,8 +1,10 @@
 import BookList from '@/components/books/book-list';
 import SearchPagination from '@/components/shared/search-pagination';
 import { queryKeys } from '@/constants/query-keys';
+import usePrefetch from '@/hooks/use-prefetch';
 import { searchBooksByGenre } from '@/lib/api/books';
 import { useSuspenseQuery } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 type Props = {
   genreIds: string;
@@ -15,6 +17,14 @@ export default function BooksDiscover({ genreIds, condition, page }: Props) {
     queryKey: queryKeys.book.byGenre(genreIds, condition, page),
     queryFn: () => searchBooksByGenre(genreIds, condition, page),
   });
+
+  const { prefetchBookDiscover } = usePrefetch();
+
+  useEffect(() => {
+    if (bookPage.hasNext) {
+      prefetchBookDiscover(genreIds, condition, page + 1);
+    }
+  }, [bookPage.hasNext, condition, genreIds, page, prefetchBookDiscover]);
 
   return (
     <div className="relative flex flex-col gap-y-4 pb-4">
