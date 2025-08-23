@@ -33,6 +33,7 @@ export default function UserProfileCounts() {
               <CountUpNumber
                 end={userProfileCounts.favoriteCount}
                 delay={300}
+                ease="easeOut"
               />
             </p>
             <p className="text-sm">お気に入り</p>
@@ -56,6 +57,7 @@ export default function UserProfileCounts() {
               <CountUpNumber
                 end={userProfileCounts.bookmarkCount}
                 delay={400}
+                ease="easeOut"
               />
             </p>
             <p className="text-sm">ブックマーク</p>
@@ -76,7 +78,11 @@ export default function UserProfileCounts() {
         >
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
-              <CountUpNumber end={userProfileCounts.reviewCount} delay={500} />
+              <CountUpNumber
+                end={userProfileCounts.reviewCount}
+                delay={500}
+                ease="easeOut"
+              />
             </p>
             <p className="text-sm">マイレビュー</p>
           </div>
