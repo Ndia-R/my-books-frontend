@@ -7,7 +7,13 @@ import {
   searchBooksByGenre,
   searchBooksByTitleKeyword,
 } from '@/lib/api/books';
-import { getUserBookmarksByBookId } from '@/lib/api/user';
+import {
+  getUserBookmarks,
+  getUserBookmarksByBookId,
+  getUserFavorites,
+  getUserProfileCounts,
+  getUserReviews,
+} from '@/lib/api/user';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function usePrefetch() {
@@ -89,11 +95,51 @@ export default function usePrefetch() {
     });
   };
 
+  // ユーザーのお気に入り一覧
+  const prefetchUserFavorites = () => {
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.getUserFavorites(1),
+      queryFn: () => getUserFavorites(1),
+      staleTime: 1000 * 60,
+    });
+  };
+
+  // ユーザーのブックマーク一覧
+  const prefetchUserBookmarks = () => {
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.getUserBookmarks(1),
+      queryFn: () => getUserBookmarks(1),
+      staleTime: 1000 * 60,
+    });
+  };
+
+  // ユーザーのレビュー一覧
+  const prefetchUserReviews = () => {
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.getUserReviews(1),
+      queryFn: () => getUserReviews(1),
+      staleTime: 1000 * 60,
+    });
+  };
+
+  // ユーザーのプロフィール
+  const prefetchUserProfile = () => {
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.getUserProfileCounts(),
+      queryFn: () => getUserProfileCounts(),
+      staleTime: 1000 * 60,
+    });
+  };
+
   return {
     prefetchBookSearch,
     prefetchBookDiscover,
     prefetchBookDetail,
     prefetchBookTableOfContents,
     prefetchBookReadContent,
+    prefetchUserFavorites,
+    prefetchUserBookmarks,
+    prefetchUserReviews,
+    prefetchUserProfile,
   };
 }

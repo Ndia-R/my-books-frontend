@@ -1,5 +1,6 @@
 import CountUpNumber from '@/components/shared/count-up-number';
 import { queryKeys } from '@/constants/query-keys';
+import usePrefetch from '@/hooks/use-prefetch';
 import { getUserProfileCounts } from '@/lib/api/user';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
@@ -11,6 +12,9 @@ export default function UserProfileCounts() {
     queryFn: () => getUserProfileCounts(),
   });
 
+  const { prefetchUserFavorites, prefetchUserBookmarks, prefetchUserReviews } =
+    usePrefetch();
+
   return (
     <div className="flex justify-between">
       <motion.div
@@ -18,7 +22,12 @@ export default function UserProfileCounts() {
         animate={{ y: 0, opacity: 100 }}
         transition={{ duration: 0.5, delay: 0 }}
       >
-        <Link to="/favorites" aria-label="お気に入りページへ移動">
+        <Link
+          to="/favorites"
+          aria-label="お気に入りページへ移動"
+          onMouseEnter={prefetchUserFavorites}
+          onFocus={prefetchUserFavorites}
+        >
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
               <CountUpNumber
@@ -36,7 +45,12 @@ export default function UserProfileCounts() {
         animate={{ y: 0, opacity: 100 }}
         transition={{ duration: 0.5, delay: 0.1 }}
       >
-        <Link to="/bookmarks" aria-label="ブックマークページへ移動">
+        <Link
+          to="/bookmarks"
+          aria-label="ブックマークページへ移動"
+          onMouseEnter={prefetchUserBookmarks}
+          onFocus={prefetchUserBookmarks}
+        >
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
               <CountUpNumber
@@ -54,7 +68,12 @@ export default function UserProfileCounts() {
         animate={{ y: 0, opacity: 100 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <Link to="/my-reviews" aria-label="マイレビューページへ移動">
+        <Link
+          to="/my-reviews"
+          aria-label="マイレビューページへ移動"
+          onMouseEnter={prefetchUserReviews}
+          onFocus={prefetchUserReviews}
+        >
           <div className="w-24 text-center">
             <p className="text-lg font-bold sm:text-xl">
               <CountUpNumber end={userProfileCounts.reviewCount} delay={500} />

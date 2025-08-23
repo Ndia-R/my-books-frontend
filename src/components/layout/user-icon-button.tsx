@@ -12,6 +12,7 @@ import {
   AVATAR_IMAGE_BASE_URL,
   TOAST_ERROR_DURATION,
 } from '@/constants/constants';
+import usePrefetch from '@/hooks/use-prefetch';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useUser } from '@/providers/user-provider';
@@ -42,6 +43,12 @@ export default function UserIconButton() {
 
   const { logout } = useAuth();
   const { user } = useUser();
+  const {
+    prefetchUserFavorites,
+    prefetchUserBookmarks,
+    prefetchUserReviews,
+    prefetchUserProfile,
+  } = usePrefetch();
 
   const logoutMutation = useMutation({
     mutationFn: () => logout(),
@@ -66,6 +73,25 @@ export default function UserIconButton() {
   const handleClickMenuItem = (href: string) => {
     setIsOpen(false);
     navigate(href);
+  };
+
+  const handlePrefetch = (href: string) => {
+    switch (href) {
+      case '/favorites':
+        prefetchUserFavorites();
+        break;
+      case '/bookmarks':
+        prefetchUserBookmarks();
+        break;
+      case '/my-reviews':
+        prefetchUserReviews();
+        break;
+      case '/profile':
+        prefetchUserProfile();
+        break;
+      default:
+        break;
+    }
   };
 
   return (
@@ -120,6 +146,8 @@ export default function UserIconButton() {
             )}
             key={item.label}
             onClick={() => handleClickMenuItem(item.href)}
+            onMouseEnter={() => handlePrefetch(item.href)}
+            onFocus={() => handlePrefetch(item.href)}
           >
             <item.icon className="mr-1" />
             {item.label}
