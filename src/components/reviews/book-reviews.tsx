@@ -38,14 +38,14 @@ export default function BookReviews({ bookId }: Props) {
   const { isAuthenticated } = useAuth();
 
   const { data: firstPageData } = useSuspenseQuery({
-    queryKey: queryKeys.book.reviews(bookId, 1),
+    queryKey: queryKeys.getBookReviews(bookId, 1),
     queryFn: () => getBookReviews(bookId, 1),
   });
 
   // ログインしていない場合は、enabledオプションを指定して
   // queryFnを呼び出さないようにする（この指定はuseSuspenseQueryでは出来ない模様）
   const { data: review } = useQuery({
-    queryKey: queryKeys.user.isReviewedByUser(bookId),
+    queryKey: queryKeys.isReviewedByUser(bookId),
     queryFn: () => isReviewedByUser(bookId),
     enabled: isAuthenticated,
     retry: false,
@@ -57,13 +57,13 @@ export default function BookReviews({ bookId }: Props) {
     mutationFn: (requestBody: ReviewRequest) => createReview(requestBody),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.book.reviews(bookId, 1),
+        queryKey: queryKeys.getBookReviews(bookId, 1),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.user.isReviewedByUser(bookId),
+        queryKey: queryKeys.isReviewedByUser(bookId),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.book.details(bookId),
+        queryKey: queryKeys.getBookDetails(bookId),
       });
     },
   });

@@ -16,7 +16,7 @@ export default function usePrefetch() {
   // タイトル検索
   const prefetchBookSearch = (q: string, page: number = 1) => {
     queryClient.prefetchQuery({
-      queryKey: queryKeys.book.byTitleKeyword(q, page),
+      queryKey: queryKeys.searchBooksByTitleKeyword(q, page),
       queryFn: () => searchBooksByTitleKeyword(q, page),
       staleTime: 1000 * 60,
     });
@@ -29,7 +29,7 @@ export default function usePrefetch() {
     page: number = 1
   ) => {
     queryClient.prefetchQuery({
-      queryKey: queryKeys.book.byGenre(genreIds, condition, page),
+      queryKey: queryKeys.searchBooksByGenre(genreIds, condition, page),
       queryFn: () => searchBooksByGenre(genreIds, condition, page),
       staleTime: 1000 * 60,
     });
@@ -38,13 +38,13 @@ export default function usePrefetch() {
   // 書籍の詳細
   const prefetchBookDetail = (bookId: string) => {
     queryClient.prefetchQuery({
-      queryKey: queryKeys.book.details(bookId),
+      queryKey: queryKeys.getBookDetails(bookId),
       queryFn: () => getBookDetails(bookId),
       staleTime: 1000 * 60,
     });
 
     queryClient.prefetchQuery({
-      queryKey: queryKeys.book.favoriteStats(bookId),
+      queryKey: queryKeys.getBookFavoriteStats(bookId),
       queryFn: () => getBookFavoriteStats(bookId),
       staleTime: 1000 * 60,
     });
@@ -53,7 +53,7 @@ export default function usePrefetch() {
   // 書籍の目次
   const prefetchBookTableOfContents = (bookId: string) => {
     queryClient.prefetchQuery({
-      queryKey: queryKeys.book.tableOfContents(bookId),
+      queryKey: queryKeys.getBookTableOfContents(bookId),
       queryFn: () => getBookTableOfContents(bookId),
       staleTime: Infinity,
     });
@@ -66,13 +66,13 @@ export default function usePrefetch() {
     pageNumber: number = 1
   ) => {
     queryClient.prefetchQuery({
-      queryKey: queryKeys.book.tableOfContents(bookId),
+      queryKey: queryKeys.getBookTableOfContents(bookId),
       queryFn: () => getBookTableOfContents(bookId),
       staleTime: Infinity,
     });
 
     queryClient.prefetchQuery({
-      queryKey: queryKeys.book.chapterPageContent(
+      queryKey: queryKeys.getBookChapterPageContent(
         bookId,
         chapterNumber,
         pageNumber
@@ -83,7 +83,7 @@ export default function usePrefetch() {
     });
 
     queryClient.prefetchQuery({
-      queryKey: queryKeys.user.bookmarksByBookId(bookId),
+      queryKey: queryKeys.getUserBookmarksByBookId(bookId),
       queryFn: () => getUserBookmarksByBookId(bookId),
       staleTime: 1000 * 60,
     });

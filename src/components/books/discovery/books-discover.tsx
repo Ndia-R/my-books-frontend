@@ -14,7 +14,7 @@ type Props = {
 
 export default function BooksDiscover({ genreIds, condition, page }: Props) {
   const { data: bookPage } = useSuspenseQuery({
-    queryKey: queryKeys.book.byGenre(genreIds, condition, page),
+    queryKey: queryKeys.searchBooksByGenre(genreIds, condition, page),
     queryFn: () => searchBooksByGenre(genreIds, condition, page),
   });
 

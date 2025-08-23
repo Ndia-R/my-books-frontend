@@ -21,7 +21,7 @@ export default function BookTableOfContents({ bookId }: Props) {
   const { isAuthenticated } = useAuth();
 
   const { data: bookTableOfContents } = useSuspenseQuery({
-    queryKey: queryKeys.book.tableOfContents(bookId),
+    queryKey: queryKeys.getBookTableOfContents(bookId),
     queryFn: () => getBookTableOfContents(bookId),
   });
 

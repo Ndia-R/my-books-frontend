@@ -27,7 +27,7 @@ export default function BookmarkItem({ bookmark }: Props) {
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.user.bookmarks(1),
+      queryKey: queryKeys.getUserBookmarks(1),
     });
   };
 

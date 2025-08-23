@@ -27,13 +27,13 @@ export default function BookReviewItem({ review }: Props) {
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.book.reviews(bookId, 1),
+      queryKey: queryKeys.getBookReviews(bookId, 1),
     });
     queryClient.invalidateQueries({
-      queryKey: queryKeys.user.isReviewedByUser(bookId),
+      queryKey: queryKeys.isReviewedByUser(bookId),
     });
     queryClient.invalidateQueries({
-      queryKey: queryKeys.book.details(bookId),
+      queryKey: queryKeys.getBookDetails(bookId),
     });
   };
 

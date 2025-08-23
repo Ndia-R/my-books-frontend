@@ -40,7 +40,7 @@ export default function BookReadBookmarkButton({
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.user.bookmarksByBookId(bookId),
+      queryKey: queryKeys.getUserBookmarksByBookId(bookId),
     });
   };
 

@@ -16,7 +16,7 @@ export default function Bookmarks() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: firstPageData } = useSuspenseQuery({
-    queryKey: queryKeys.user.bookmarks(1),
+    queryKey: queryKeys.getUserBookmarks(1),
     queryFn: () => getUserBookmarks(1),
     staleTime: Infinity,
     gcTime: Infinity,

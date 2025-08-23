@@ -13,7 +13,7 @@ type Props = {
 
 export default function BooksSearch({ q, page }: Props) {
   const { data: bookPage } = useSuspenseQuery({
-    queryKey: queryKeys.book.byTitleKeyword(q, page),
+    queryKey: queryKeys.searchBooksByTitleKeyword(q, page),
     queryFn: () => searchBooksByTitleKeyword(q, page),
   });
 

@@ -16,7 +16,7 @@ export default function Favorites() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: firstPageData } = useSuspenseQuery({
-    queryKey: queryKeys.user.favorites(1),
+    queryKey: queryKeys.getUserFavorites(1),
     queryFn: () => getUserFavorites(1),
     staleTime: Infinity,
     gcTime: Infinity,

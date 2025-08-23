@@ -7,7 +7,7 @@ import { Link } from 'react-router';
 
 export default function UserProfileCounts() {
   const { data: userProfileCounts } = useSuspenseQuery({
-    queryKey: queryKeys.user.profileCounts(),
+    queryKey: queryKeys.getUserProfileCounts(),
     queryFn: () => getUserProfileCounts(),
   });
 

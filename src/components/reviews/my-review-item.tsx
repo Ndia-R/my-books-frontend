@@ -23,7 +23,7 @@ export default function MyReviewItem({ review }: Props) {
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.user.reviews(1),
+      queryKey: queryKeys.getUserReviews(1),
     });
   };
 

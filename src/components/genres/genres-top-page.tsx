@@ -5,7 +5,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function GenresTopPage() {
   const { data: genres } = useSuspenseQuery({
-    queryKey: queryKeys.genre.all,
+    queryKey: queryKeys.getGenres(),
     queryFn: () => getGenres(),
     staleTime: Infinity,
     gcTime: Infinity,

@@ -9,7 +9,7 @@ export default function GenresSelector() {
   const { genreIds, condition, updateQueryParams } = useSearchFilters();
 
   const { data: genres } = useSuspenseQuery({
-    queryKey: queryKeys.genre.all,
+    queryKey: queryKeys.getGenres(),
     queryFn: () => getGenres(),
     staleTime: Infinity,
     gcTime: Infinity,

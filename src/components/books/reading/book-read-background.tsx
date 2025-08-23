@@ -9,7 +9,7 @@ type Props = {
 
 export default function BookReadBackground({ bookId }: Props) {
   const { data: book } = useSuspenseQuery({
-    queryKey: queryKeys.book.details(bookId),
+    queryKey: queryKeys.getBookDetails(bookId),
     queryFn: () => getBookDetails(bookId),
   });
 

@@ -5,7 +5,7 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function BooksNewReleases() {
   const { data: bookPage } = useSuspenseQuery({
-    queryKey: queryKeys.book.newReleases(),
+    queryKey: queryKeys.getBooksNewReleases(),
     queryFn: () => getBooksNewReleases(),
   });
 

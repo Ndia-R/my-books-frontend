@@ -23,11 +23,11 @@ export default function BookDetail({ bookId }: Props) {
   const [{ data: book }, { data: favoriteStats }] = useSuspenseQueries({
     queries: [
       {
-        queryKey: queryKeys.book.details(bookId),
+        queryKey: queryKeys.getBookDetails(bookId),
         queryFn: () => getBookDetails(bookId),
       },
       {
-        queryKey: queryKeys.book.favoriteStats(bookId),
+        queryKey: queryKeys.getBookFavoriteStats(bookId),
         queryFn: () => getBookFavoriteStats(bookId),
       },
     ],
@@ -35,7 +35,7 @@ export default function BookDetail({ bookId }: Props) {
 
   // 認証済みの場合のみデータを取得する
   const { data: isFavorite = false } = useQuery({
-    queryKey: queryKeys.user.isFavoritedByUser(bookId),
+    queryKey: queryKeys.isFavoritedByUser(bookId),
     queryFn: () => isFavoritedByUser(bookId),
     enabled: isAuthenticated,
   });

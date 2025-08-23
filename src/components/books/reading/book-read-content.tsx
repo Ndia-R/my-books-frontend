@@ -30,11 +30,11 @@ export default function BookReadContent({
   ] = useSuspenseQueries({
     queries: [
       {
-        queryKey: queryKeys.book.tableOfContents(bookId),
+        queryKey: queryKeys.getBookTableOfContents(bookId),
         queryFn: () => getBookTableOfContents(bookId),
       },
       {
-        queryKey: queryKeys.book.chapterPageContent(
+        queryKey: queryKeys.getBookChapterPageContent(
           bookId,
           chapterNumber,
           pageNumber
@@ -43,7 +43,7 @@ export default function BookReadContent({
           getBookChapterPageContent(bookId, chapterNumber, pageNumber),
       },
       {
-        queryKey: queryKeys.user.bookmarksByBookId(bookId),
+        queryKey: queryKeys.getUserBookmarksByBookId(bookId),
         queryFn: () => getUserBookmarksByBookId(bookId),
         select: (bookmarkPage: BookmarkPage) =>
           bookmarkPage.data.find(

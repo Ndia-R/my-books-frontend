@@ -16,7 +16,7 @@ export default function MyReviews() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: firstPageData } = useSuspenseQuery({
-    queryKey: queryKeys.user.reviews(1),
+    queryKey: queryKeys.getUserReviews(1),
     queryFn: () => getUserReviews(1),
     staleTime: Infinity,
     gcTime: Infinity,
