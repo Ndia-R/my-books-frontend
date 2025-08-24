@@ -50,12 +50,13 @@ export default defineConfig({
 
           // UI ユーティリティ
           ui: [
-            'clsx',
             'class-variance-authority',
-            'tailwind-merge',
+            'clsx',
             'lucide-react',
-            'sonner',
+            'motion',
             'next-themes',
+            'sonner',
+            'tailwind-merge',
             'tw-animate-css',
             'use-debounce',
           ],

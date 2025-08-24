@@ -163,16 +163,12 @@
   --shadow-2xl: var(--shadow-2xl);
 }
 
-/* タイトルのフォント */
-:root {
-  --font-title: 'Poetsen One';
-}
-
 @theme inline {
   --font-title: var(--font-title);
 }
 
 @layer base {
+  /* リセット・ベーススタイル（shadcn/uiの初期化時に自動的に作成される） */
   * {
     @apply border-border outline-ring/50;
   }
@@ -180,22 +176,21 @@
     @apply bg-background text-foreground;
   }
 
-  /* デフォルトの<button>のカーソル */
+  /* タイトルフォント */
+  :root {
+    --font-title: 'Poetsen One';
+  }
+
+  /* <button>のカーソルスタイル */
   button:not(:disabled),
   [role='button']:not(:disabled) {
     cursor: pointer;
   }
 
-  /* デフォルトの<input>のプレースホルダー */
-  input::placeholder,
-  textarea::placeholder {
-    font-size: var(--text-sm);
-  }
-
   /* スクロールバー */
   ::-webkit-scrollbar-track {
     cursor: default;
-    background-color: var(--background);
+    background-color: hsl(from var(--primary) h s l / 0.1);
   }
   ::-webkit-scrollbar {
     width: 8px;
