@@ -28,7 +28,8 @@ export const DEFAULT_MY_REVIEWS_SORT = ReviewSortOrder.UpdatedAtDesc;
 export const DEFAULT_MY_FAVORITES_SORT = FavoriteSortOrder.UpdatedAtDesc;
 export const DEFAULT_MY_BOOKMARKS_SORT = BookmarkSortOrder.UpdatedAtDesc;
 
+// セッション期限切れ用カスタムイベント
 export const AUTH_SESSION_EXPIRED_EVENT = 'auth-session-expired';
 
-// Toast通知の表示時間（ミリ秒）
+// Toastでエラー通知時の表示時間（ミリ秒）
 export const TOAST_ERROR_DURATION = 5000;

@@ -210,19 +210,3 @@
     background-color: hsl(from var(--foreground) h s l / 0.3);
   }
 }
-
-/* useRipple 波紋アニメーション用 */
-@keyframes ripple {
-  0% {
-    transform: scale(0);
-    opacity: 0.4;
-  }
-  100% {
-    transform: scale(2);
-    opacity: 0;
-  }
-}
-
-.animate-ripple {
-  animation: ripple 0.6s ease-out forwards;
-}

@@ -35,7 +35,8 @@ export default function ThemeCard({ card, isActive, onClick }: Props) {
     <Card
       ref={containerRef}
       className={cn(
-        'relative overflow-hidden border-transparent hover:cursor-pointer hover:shadow-xl',
+        'relative overflow-hidden', // 重要: useRipple()使う場合、relative と overflow-hidden が必須
+        'border-transparent hover:cursor-pointer hover:shadow-xl',
         isActive && card.border,
         card.bg
       )}
