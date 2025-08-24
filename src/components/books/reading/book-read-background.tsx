@@ -8,7 +8,7 @@ type Props = {
 };
 
 export default function BookReadBackground({ bookId }: Props) {
-  const { data: book } = useSuspenseQuery({
+  const { data: bookDetails } = useSuspenseQuery({
     queryKey: queryKeys.getBookDetails(bookId),
     queryFn: () => getBookDetails(bookId),
   });
@@ -17,7 +17,7 @@ export default function BookReadBackground({ bookId }: Props) {
     <div className="fixed inset-0 -z-10 flex justify-center">
       <img
         className="w-full max-w-7xl object-cover opacity-5"
-        src={BOOK_IMAGE_BASE_URL + book.imagePath}
+        src={BOOK_IMAGE_BASE_URL + bookDetails.imagePath}
         alt=""
         aria-hidden="true"
       />

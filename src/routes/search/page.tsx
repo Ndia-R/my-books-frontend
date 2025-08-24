@@ -1,5 +1,5 @@
 import BooksSkeleton from '@/components/books/books-skeleton';
-import BooksSearch from '@/components/books/discovery/books-search';
+import BookSearch from '@/components/books/discovery/book-search';
 import { Separator } from '@/components/ui/separator';
 import { APP_TITLE } from '@/constants/constants';
 import { useSearchFilters } from '@/hooks/use-search-filters';
@@ -25,7 +25,7 @@ export default function Page() {
 
       <ErrorBoundary fallback={<ErrorElement />}>
         <Suspense fallback={<BooksSkeleton />}>
-          <BooksSearch q={q} page={page} />
+          <BookSearch q={q} page={page} />
         </Suspense>
       </ErrorBoundary>
     </>

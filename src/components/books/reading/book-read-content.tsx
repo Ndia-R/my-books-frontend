@@ -3,10 +3,7 @@ import BookReadNavigation from '@/components/books/reading/book-read-navigation'
 import BookReadTocButton from '@/components/books/reading/book-read-toc-button';
 import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
-import {
-  getBookChapterPageContent,
-  getBookTableOfContents,
-} from '@/lib/api/books';
+import { getBookChapterPageContent, getBookToc } from '@/lib/api/books';
 import { getUserBookmarksByBookId } from '@/lib/api/user';
 import { chapterNumberString } from '@/lib/utils';
 import { BookmarkPage } from '@/types';
@@ -24,14 +21,14 @@ export default function BookReadContent({
   pageNumber,
 }: Props) {
   const [
-    { data: bookTableOfContents },
+    { data: bookToc },
     { data: bookChapterPageContent },
     { data: bookmark },
   ] = useSuspenseQueries({
     queries: [
       {
-        queryKey: queryKeys.getBookTableOfContents(bookId),
-        queryFn: () => getBookTableOfContents(bookId),
+        queryKey: queryKeys.getBookToc(bookId),
+        queryFn: () => getBookToc(bookId),
       },
       {
         queryKey: queryKeys.getBookChapterPageContent(
@@ -83,7 +80,7 @@ export default function BookReadContent({
         <p className="whitespace-pre-wrap">{bookChapterPageContent.content}</p>
 
         <BookReadNavigation
-          bookTableOfContents={bookTableOfContents}
+          bookToc={bookToc}
           chapterNumber={chapterNumber}
           pageNumber={pageNumber}
         />

@@ -6,42 +6,31 @@ import { getUserBookmarks } from '@/lib/api/user';
 import { Bookmark } from '@/types';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function Bookmarks() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { data: firstPageData } = useSuspenseQuery({
+  const { data: firstPage } = useSuspenseQuery({
     queryKey: queryKeys.getUserBookmarks(1),
     queryFn: () => getUserBookmarks(1),
     staleTime: Infinity,
     gcTime: Infinity,
   });
 
-  useEffect(() => {
-    if (firstPageData) {
-      setCurrentPage(1);
-      setBookmarks(firstPageData.data);
-      setTotalPages(firstPageData.totalPages);
-    }
-  }, [firstPageData]);
+  const [bookmarks, setBookmarks] = useState<Bookmark[]>(firstPage.data);
+  const [currentPage, setCurrentPage] = useState(firstPage.currentPage);
+  const [hasNext, setHasNext] = useState(firstPage.hasNext);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const loadMoreBookmarks = useCallback(async () => {
-    if (isLoading || currentPage >= totalPages) return;
+  const loadMore = useCallback(async () => {
+    if (isLoading || !hasNext) return;
 
     setIsLoading(true);
     try {
-      const nextPage = currentPage + 1;
-      const nextBookmarkPage = await getUserBookmarks(nextPage);
-      setBookmarks((prevBookmarks) => [
-        ...prevBookmarks,
-        ...nextBookmarkPage.data,
-      ]);
-      setCurrentPage(nextPage);
+      const newPage = await getUserBookmarks(currentPage + 1);
+      setBookmarks((prevBookmarks) => [...prevBookmarks, ...newPage.data]);
+      setCurrentPage(newPage.currentPage);
+      setHasNext(newPage.hasNext);
     } catch {
       toast.error('ブックマークの読み込みに失敗しました', {
         duration: TOAST_ERROR_DURATION,
@@ -49,26 +38,23 @@ export default function Bookmarks() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, totalPages, isLoading]);
+  }, [currentPage, hasNext, isLoading]);
 
   // 無限スクロール用のトリガー要素のref
-  const triggerRef = useIntersectionObserver(
-    loadMoreBookmarks,
-    currentPage < totalPages && !isLoading
-  );
+  const triggerRef = useIntersectionObserver(loadMore, hasNext && !isLoading);
 
   return (
     <div className="flex flex-col gap-y-4 pb-4">
       <p className="h-6 space-x-1 text-right">
         <span className="text-lg font-semibold sm:text-xl">
-          {firstPageData.totalItems}
+          {firstPage.totalItems}
         </span>
         <span className="text-muted-foreground text-sm">件</span>
       </p>
 
       <BookmarkList bookmarks={bookmarks} />
 
-      {currentPage < totalPages && (
+      {hasNext && (
         <div ref={triggerRef} className="flex h-16 items-center justify-center">
           {isLoading && (
             <Loader2Icon

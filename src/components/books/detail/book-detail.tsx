@@ -40,10 +40,10 @@ export default function BookDetail({ bookId }: Props) {
     enabled: isAuthenticated,
   });
 
-  const { prefetchBookTableOfContents } = usePrefetch();
+  const { prefetchBookToc } = usePrefetch();
 
   const handlePrefetch = () => {
-    prefetchBookTableOfContents(bookId);
+    prefetchBookToc(bookId);
   };
 
   return (

@@ -35,7 +35,8 @@ const createPageNumbers = (page: number, total: number) => {
 
   pages.push(1); // 最初のページは常に表示
 
-  if (page <= 4) {
+  const PAGINATION_THRESHOLD = 4;
+  if (page <= PAGINATION_THRESHOLD) {
     // 現在ページが前方（1〜4）の場合
     pages.push(2, 3, 4, 5);
     pages.push(0); // 省略

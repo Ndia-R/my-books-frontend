@@ -1,6 +1,6 @@
 import { Skeleton } from '@/components/ui/skeleton';
 
-export default function BookTableOfContentsSkeleton() {
+export default function BookTocSkeleton() {
   return (
     <>
       <div className="flex flex-col gap-y-12 px-4 py-12 sm:px-20">

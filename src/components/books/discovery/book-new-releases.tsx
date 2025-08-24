@@ -3,7 +3,7 @@ import { queryKeys } from '@/constants/query-keys';
 import { getBooksNewReleases } from '@/lib/api/books';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
-export default function BooksNewReleases() {
+export default function BookNewReleases() {
   const { data: bookPage } = useSuspenseQuery({
     queryKey: queryKeys.getBooksNewReleases(),
     queryFn: () => getBooksNewReleases(),

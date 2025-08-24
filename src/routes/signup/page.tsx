@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import AvatarCarousel from '@/components/user/avatar-carousel';
+import AvatarCarousel from '@/components/users/avatar-carousel';
 import { APP_TITLE, TOAST_ERROR_DURATION } from '@/constants/constants';
 import { useFieldValidation } from '@/hooks/use-field-validation';
 import { useAuth } from '@/providers/auth-provider';

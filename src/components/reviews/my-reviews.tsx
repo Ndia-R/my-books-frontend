@@ -6,39 +6,31 @@ import { getUserReviews } from '@/lib/api/user';
 import { Review } from '@/types';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function MyReviews() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { data: firstPageData } = useSuspenseQuery({
+  const { data: firstPage } = useSuspenseQuery({
     queryKey: queryKeys.getUserReviews(1),
     queryFn: () => getUserReviews(1),
     staleTime: Infinity,
     gcTime: Infinity,
   });
 
-  useEffect(() => {
-    if (firstPageData) {
-      setCurrentPage(1);
-      setReviews(firstPageData.data);
-      setTotalPages(firstPageData.totalPages);
-    }
-  }, [firstPageData]);
+  const [reviews, setReviews] = useState<Review[]>(firstPage.data);
+  const [currentPage, setCurrentPage] = useState(firstPage.currentPage);
+  const [hasNext, setHasNext] = useState(firstPage.hasNext);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const loadMoreReviews = useCallback(async () => {
-    if (isLoading || currentPage >= totalPages) return;
+  const loadMore = useCallback(async () => {
+    if (isLoading || !hasNext) return;
 
     setIsLoading(true);
     try {
-      const nextPage = currentPage + 1;
-      const nextReviewPage = await getUserReviews(nextPage);
-      setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
-      setCurrentPage(nextPage);
+      const newPage = await getUserReviews(currentPage + 1);
+      setReviews((prevReviews) => [...prevReviews, ...newPage.data]);
+      setCurrentPage(newPage.currentPage);
+      setHasNext(newPage.hasNext);
     } catch {
       toast.error('レビューの読み込みに失敗しました', {
         duration: TOAST_ERROR_DURATION,
@@ -46,26 +38,23 @@ export default function MyReviews() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, totalPages, isLoading]);
+  }, [currentPage, hasNext, isLoading]);
 
   // 無限スクロール用のトリガー要素のref
-  const triggerRef = useIntersectionObserver(
-    loadMoreReviews,
-    currentPage < totalPages && !isLoading
-  );
+  const triggerRef = useIntersectionObserver(loadMore, hasNext && !isLoading);
 
   return (
     <div className="flex flex-col gap-y-4 pb-4">
       <p className="h-6 space-x-1 text-right">
         <span className="text-lg font-semibold sm:text-xl">
-          {firstPageData.totalItems}
+          {firstPage.totalItems}
         </span>
         <span className="text-muted-foreground text-sm">件</span>
       </p>
 
       <MyReviewList reviews={reviews} />
 
-      {currentPage < totalPages && (
+      {hasNext && (
         <div ref={triggerRef} className="flex h-16 items-center justify-center">
           {isLoading && (
             <Loader2Icon

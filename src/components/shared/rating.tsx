@@ -18,7 +18,7 @@ export default function Rating({
   // 現在の評価点と表示上の評価点は別で管理
   // 表示上の評価点はマウスでホバーしたときに変化する値として使用する
   const [currentRating, setCurrentRating] = useState(0);
-  const [dispRating, setDispRating] = useState(0);
+  const [displayRating, setDispRating] = useState(0);
 
   useEffect(() => {
     const initRating = rating > max ? max : rating;
@@ -51,7 +51,7 @@ export default function Rating({
       <div
         className={cn(
           'w-8',
-          currentRating !== dispRating
+          currentRating !== displayRating
             ? 'text-muted-foreground/50'
             : 'text-muted-foreground',
           !readOnly && 'cursor-pointer'
@@ -60,7 +60,7 @@ export default function Rating({
         onMouseEnter={() => handleMouseEnter(0)}
         onMouseLeave={() => handleMouseLeave()}
       >
-        {dispRating.toFixed(1)}
+        {displayRating.toFixed(1)}
       </div>
 
       <div className="relative">
@@ -75,14 +75,14 @@ export default function Rating({
         </div>
 
         <div className="absolute top-0 left-0 flex">
-          {[...Array<number>(Math.floor(dispRating))].map((_, index) => (
+          {[...Array<number>(Math.floor(displayRating))].map((_, index) => (
             <StarIcon
               className="fill-primary size-5"
               key={index}
               strokeWidth={0}
             />
           ))}
-          {dispRating % 1 >= 0.5 && (
+          {displayRating % 1 >= 0.5 && (
             <StarHalfIcon className="fill-primary size-5" strokeWidth={0} />
           )}
         </div>

@@ -1,5 +1,5 @@
 import BooksSkeleton from '@/components/books/books-skeleton';
-import BooksNewReleases from '@/components/books/discovery/books-new-releases';
+import BookNewReleases from '@/components/books/discovery/book-new-releases';
 import GenresSkeleton from '@/components/genres/genres-skeleton';
 import GenresTopPage from '@/components/genres/genres-top-page';
 import Hero from '@/components/layout/hero';
@@ -34,7 +34,7 @@ export default function Page() {
 
         <ErrorBoundary fallback={<ErrorElement />}>
           <Suspense fallback={<BooksSkeleton withPagination={false} />}>
-            <BooksNewReleases />
+            <BookNewReleases />
           </Suspense>
         </ErrorBoundary>
       </section>

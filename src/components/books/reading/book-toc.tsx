@@ -7,7 +7,7 @@ import {
 import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
-import { getBookTableOfContents } from '@/lib/api/books';
+import { getBookToc } from '@/lib/api/books';
 import { chapterNumberString, cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -17,14 +17,13 @@ type Props = {
   bookId: string;
 };
 
-export default function BookTableOfContents({ bookId }: Props) {
-  const { isAuthenticated } = useAuth();
-
-  const { data: bookTableOfContents } = useSuspenseQuery({
-    queryKey: queryKeys.getBookTableOfContents(bookId),
-    queryFn: () => getBookTableOfContents(bookId),
+export default function BookToc({ bookId }: Props) {
+  const { data: bookToc } = useSuspenseQuery({
+    queryKey: queryKeys.getBookToc(bookId),
+    queryFn: () => getBookToc(bookId),
   });
 
+  const { isAuthenticated } = useAuth();
   const { prefetchBookReadContent } = usePrefetch();
 
   const handlePrefetch = (bookId: string, chapterNumber: number) => {
@@ -35,15 +34,15 @@ export default function BookTableOfContents({ bookId }: Props) {
 
   return (
     <>
-      <title>{`${bookTableOfContents.title} - ${APP_TITLE}`}</title>
+      <title>{`${bookToc.title} - ${APP_TITLE}`}</title>
 
       <div className="flex flex-col gap-y-12 px-4 py-12 sm:px-20">
         <div className="flex flex-col items-center gap-y-6 sm:items-start">
           <h1 className="text-3xl font-bold sm:text-5xl">
-            {bookTableOfContents.title}
+            {bookToc.title}
           </h1>
 
-          {isAuthenticated && bookTableOfContents.chapters.length ? (
+          {isAuthenticated && bookToc.chapters.length ? (
             <Link
               className={cn(buttonVariants({ variant: 'outline' }), 'w-44')}
               to={`/read/${bookId}/chapter/1/page/1`}
@@ -59,7 +58,7 @@ export default function BookTableOfContents({ bookId }: Props) {
                   最初から読む
                 </Button>
               </TooltipTrigger>
-              {bookTableOfContents.chapters.length ? (
+              {bookToc.chapters.length ? (
                 <TooltipContent>
                   ログインしてこの本を読みましょう
                 </TooltipContent>
@@ -68,9 +67,9 @@ export default function BookTableOfContents({ bookId }: Props) {
           )}
         </div>
 
-        {bookTableOfContents.chapters.length ? (
+        {bookToc.chapters.length ? (
           <ul className="flex flex-col gap-y-8">
-            {bookTableOfContents.chapters.map((chapter) => (
+            {bookToc.chapters.map((chapter) => (
               <li
                 className="flex flex-col items-center sm:items-start"
                 key={chapter.chapterNumber}

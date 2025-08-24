@@ -9,7 +9,7 @@ import {
   BookChapterPageContent,
   BookDetails,
   BookPage,
-  BookTableOfContents,
+  BookToc,
   FavoriteStats,
   ReviewPage,
   ReviewStats,
@@ -56,10 +56,10 @@ export const getBookDetails = async (bookId: string) => {
   return response.data;
 };
 
-// 特定の書籍の詳細
-export const getBookTableOfContents = async (bookId: string) => {
+// 特定の書籍の目次
+export const getBookToc = async (bookId: string) => {
   const endpoint = `/books/${bookId}/toc`;
-  const response = await customFetch<BookTableOfContents>(endpoint);
+  const response = await customFetch<BookToc>(endpoint);
   return response.data;
 };
 

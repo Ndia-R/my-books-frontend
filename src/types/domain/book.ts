@@ -39,7 +39,7 @@ export type BookChapter = {
   totalPages: number;
 };
 
-export type BookTableOfContents = {
+export type BookToc = {
   bookId: string;
   title: string;
   chapters: BookChapter[];

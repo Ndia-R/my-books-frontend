@@ -3,7 +3,7 @@ import {
   getBookChapterPageContent,
   getBookDetails,
   getBookFavoriteStats,
-  getBookTableOfContents,
+  getBookToc,
   searchBooksByGenre,
   searchBooksByTitleKeyword,
 } from '@/lib/api/books';
@@ -57,10 +57,10 @@ export default function usePrefetch() {
   };
 
   // 書籍の目次
-  const prefetchBookTableOfContents = (bookId: string) => {
+  const prefetchBookToc = (bookId: string) => {
     queryClient.prefetchQuery({
-      queryKey: queryKeys.getBookTableOfContents(bookId),
-      queryFn: () => getBookTableOfContents(bookId),
+      queryKey: queryKeys.getBookToc(bookId),
+      queryFn: () => getBookToc(bookId),
       staleTime: Infinity,
     });
   };
@@ -72,8 +72,8 @@ export default function usePrefetch() {
     pageNumber: number = 1
   ) => {
     queryClient.prefetchQuery({
-      queryKey: queryKeys.getBookTableOfContents(bookId),
-      queryFn: () => getBookTableOfContents(bookId),
+      queryKey: queryKeys.getBookToc(bookId),
+      queryFn: () => getBookToc(bookId),
       staleTime: Infinity,
     });
 
@@ -135,7 +135,7 @@ export default function usePrefetch() {
     prefetchBookSearch,
     prefetchBookDiscover,
     prefetchBookDetail,
-    prefetchBookTableOfContents,
+    prefetchBookToc,
     prefetchBookReadContent,
     prefetchUserFavorites,
     prefetchUserBookmarks,

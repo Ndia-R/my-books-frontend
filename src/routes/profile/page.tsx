@@ -2,7 +2,7 @@ import Logo from '@/components/layout/logo';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import UserProfileCounts from '@/components/user/user-profile-counts';
+import UserProfileCounts from '@/components/users/user-profile-counts';
 import { APP_TITLE, AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { useUser } from '@/providers/user-provider';

@@ -13,10 +13,10 @@ type Props = {
 };
 
 export default function BookReadTocButton({ bookId }: Props) {
-  const { prefetchBookTableOfContents } = usePrefetch();
+  const { prefetchBookToc } = usePrefetch();
 
   const handlePrefetch = () => {
-    prefetchBookTableOfContents(bookId);
+    prefetchBookToc(bookId);
   };
 
   return (

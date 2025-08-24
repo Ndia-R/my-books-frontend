@@ -20,7 +20,7 @@ import {
   useSuspenseQuery,
 } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
 type Props = {
@@ -28,22 +28,20 @@ type Props = {
 };
 
 export default function BookReviews({ bookId }: Props) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const [reviews, setReviews] = useState<Review[]>([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { isAuthenticated } = useAuth();
-
-  const { data: firstPageData } = useSuspenseQuery({
+  const { data: firstPage } = useSuspenseQuery({
     queryKey: queryKeys.getBookReviews(bookId, 1),
     queryFn: () => getBookReviews(bookId, 1),
   });
 
-  // ログインしていない場合は、enabledオプションを指定して
-  // queryFnを呼び出さないようにする（この指定はuseSuspenseQueryでは出来ない模様）
+  const [reviews, setReviews] = useState<Review[]>(firstPage.data);
+  const [currentPage, setCurrentPage] = useState(firstPage.currentPage);
+  const [hasNext, setHasNext] = useState(firstPage.hasNext);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const { isAuthenticated } = useAuth();
+
+  // ログインしていない場合は、enabledオプションを指定してqueryFnを呼び出さないようにする
   const { data: review } = useQuery({
     queryKey: queryKeys.isReviewedByUser(bookId),
     queryFn: () => isReviewedByUser(bookId),
@@ -68,23 +66,15 @@ export default function BookReviews({ bookId }: Props) {
     },
   });
 
-  useEffect(() => {
-    if (firstPageData) {
-      setCurrentPage(1);
-      setReviews(firstPageData.data);
-      setTotalPages(firstPageData.totalPages);
-    }
-  }, [firstPageData]);
-
-  const loadMoreReviews = async () => {
-    if (isLoading || currentPage >= totalPages) return;
+  const loadMore = async () => {
+    if (isLoading || !hasNext) return;
 
     setIsLoading(true);
     try {
-      const nextPage = currentPage + 1;
-      const nextReviewPage = await getBookReviews(bookId, nextPage);
-      setReviews((prevReviews) => [...prevReviews, ...nextReviewPage.data]);
-      setCurrentPage(nextPage);
+      const newPage = await getBookReviews(bookId, currentPage + 1);
+      setReviews((prevReviews) => [...prevReviews, ...newPage.data]);
+      setCurrentPage(newPage.currentPage);
+      setHasNext(newPage.hasNext);
     } catch {
       toast.error('レビューの読み込みに失敗しました', {
         duration: TOAST_ERROR_DURATION,
@@ -101,7 +91,7 @@ export default function BookReviews({ bookId }: Props) {
           <p className="space-x-1">
             <span className="text-muted-foreground">レビュー</span>
             <span className="text-lg font-semibold sm:text-xl">
-              {firstPageData.totalItems}
+              {firstPage.totalItems}
             </span>
             <span className="text-muted-foreground text-sm">件</span>
           </p>
@@ -133,13 +123,13 @@ export default function BookReviews({ bookId }: Props) {
 
         <ReviewList reviews={reviews} />
 
-        {currentPage < totalPages && (
+        {hasNext && (
           <div className="flex justify-center">
             <Button
               className="text-muted-foreground w-44"
               variant="ghost"
               disabled={isLoading}
-              onClick={loadMoreReviews}
+              onClick={loadMore}
             >
               {isLoading ? (
                 <Loader2Icon

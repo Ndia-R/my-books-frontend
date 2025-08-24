@@ -6,8 +6,6 @@ import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
 export default function GenresSelector() {
-  const { genreIds, condition, updateQueryParams } = useSearchFilters();
-
   const { data: genres } = useSuspenseQuery({
     queryKey: queryKeys.getGenres(),
     queryFn: () => getGenres(),
@@ -15,6 +13,7 @@ export default function GenresSelector() {
     gcTime: Infinity,
   });
 
+  const { genreIds, condition, updateQueryParams } = useSearchFilters();
   const [selectedGenreIds, isSelectedGenreIds] = useState<number[]>([]);
 
   useEffect(() => {

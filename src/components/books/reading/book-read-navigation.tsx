@@ -1,16 +1,12 @@
 import { buttonVariants } from '@/components/ui/button';
 import usePrefetch from '@/hooks/use-prefetch';
 import { cn } from '@/lib/utils';
-import { BookTableOfContents } from '@/types';
+import { BookToc } from '@/types';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link } from 'react-router';
 
-const getPageNavigation = (
-  toc: BookTableOfContents,
-  chapter: number,
-  page: number
-) => {
+const getPageNavigation = (toc: BookToc, chapter: number, page: number) => {
   const chapters = toc.chapters;
   const currentChapter = chapters.find((c) => c.chapterNumber === chapter);
 
@@ -55,18 +51,18 @@ const getPageNavigation = (
 };
 
 type Props = {
-  bookTableOfContents: BookTableOfContents;
+  bookToc: BookToc;
   chapterNumber: number;
   pageNumber: number;
 };
 
 export default function BookReadNavigation({
-  bookTableOfContents,
+  bookToc,
   chapterNumber,
   pageNumber,
 }: Props) {
   const { bookId, isFirstPage, isLastPage, next, prev } = getPageNavigation(
-    bookTableOfContents,
+    bookToc,
     chapterNumber,
     pageNumber
   );

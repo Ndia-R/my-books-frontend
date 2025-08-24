@@ -6,42 +6,31 @@ import { getUserFavorites } from '@/lib/api/user';
 import { Favorite } from '@/types';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
 export default function Favorites() {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [favorites, setFavorites] = useState<Favorite[]>([]);
-  const [totalPages, setTotalPages] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const { data: firstPageData } = useSuspenseQuery({
+  const { data: firstPage } = useSuspenseQuery({
     queryKey: queryKeys.getUserFavorites(1),
     queryFn: () => getUserFavorites(1),
     staleTime: Infinity,
     gcTime: Infinity,
   });
 
-  useEffect(() => {
-    if (firstPageData) {
-      setCurrentPage(1);
-      setFavorites(firstPageData.data);
-      setTotalPages(firstPageData.totalPages);
-    }
-  }, [firstPageData]);
+  const [favorites, setFavorites] = useState<Favorite[]>(firstPage.data);
+  const [currentPage, setCurrentPage] = useState(firstPage.currentPage);
+  const [hasNext, setHasNext] = useState(firstPage.hasNext);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const loadMoreFavorites = useCallback(async () => {
-    if (isLoading || currentPage >= totalPages) return;
+  const loadMore = useCallback(async () => {
+    if (isLoading || !hasNext) return;
 
     setIsLoading(true);
     try {
-      const nextPage = currentPage + 1;
-      const nextFavoritePage = await getUserFavorites(nextPage);
-      setFavorites((prevFavorites) => [
-        ...prevFavorites,
-        ...nextFavoritePage.data,
-      ]);
-      setCurrentPage(nextPage);
+      const newPage = await getUserFavorites(currentPage + 1);
+      setFavorites((prevFavorites) => [...prevFavorites, ...newPage.data]);
+      setCurrentPage(newPage.currentPage);
+      setHasNext(newPage.hasNext);
     } catch {
       toast.error('お気に入りの読み込みに失敗しました', {
         duration: TOAST_ERROR_DURATION,
@@ -49,26 +38,23 @@ export default function Favorites() {
     } finally {
       setIsLoading(false);
     }
-  }, [currentPage, totalPages, isLoading]);
+  }, [currentPage, hasNext, isLoading]);
 
   // 無限スクロール用のトリガー要素のref
-  const triggerRef = useIntersectionObserver(
-    loadMoreFavorites,
-    currentPage < totalPages && !isLoading
-  );
+  const triggerRef = useIntersectionObserver(loadMore, hasNext && !isLoading);
 
   return (
     <div className="flex flex-col gap-y-4 pb-4">
       <p className="h-6 space-x-1 text-right">
         <span className="text-lg font-semibold sm:text-xl">
-          {firstPageData.totalItems}
+          {firstPage.totalItems}
         </span>
         <span className="text-muted-foreground text-sm">件</span>
       </p>
 
       <FavoriteList favorites={favorites} />
 
-      {currentPage < totalPages && (
+      {hasNext && (
         <div ref={triggerRef} className="flex h-16 items-center justify-center">
           {isLoading && (
             <Loader2Icon
