@@ -36,7 +36,7 @@ export type TitleFont =
   | 'Pattaya'
   | 'Ribeye'
   | 'Outfit'
-  | 'Alfa Slab One' //
+  | 'Alfa Slab One'
   | 'Inter';
 
 type ThemeProviderProps = {
