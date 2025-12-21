@@ -1,0 +1,113 @@
+import ReviewUpdateDialog from '@/components/reviews/review-update-dialog';
+import Rating from '@/components/shared/rating';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
+import { queryKeys } from '@/constants/query-keys';
+import { deleteReview, updateReview } from '@/lib/api/review';
+import { formatDateJP, formatTime } from '@/lib/utils';
+import { useAuth } from '@/providers/auth-provider';
+import type { Review, ReviewUpdateParams } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { SquarePenIcon } from 'lucide-react';
+import { useState } from 'react';
+
+type Props = {
+  review: Review;
+};
+
+export default function BookReviewItem({ review }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
+  const { userProfile } = useAuth();
+
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getBookReviewsInfinite(review.book.id),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.isReviewedByUser(review.book.id),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getBookDetails(review.book.id),
+    });
+  };
+
+  const updateMutation = useMutation({
+    mutationFn: ({ reviewId, requestBody }: ReviewUpdateParams) =>
+      updateReview(reviewId, requestBody),
+    onSuccess,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (reviewId: number) => deleteReview(reviewId),
+    onSuccess,
+  });
+
+  return (
+    <>
+      <div className="p-4">
+        <div className="flex flex-col items-center justify-between sm:flex-row">
+          <div className="flex w-full items-center gap-x-4">
+            <div className="relative">
+              <Avatar className="size-16">
+                <AvatarImage
+                  className="bg-foreground/20"
+                  src={AVATAR_IMAGE_BASE_URL + review.avatarPath}
+                  alt="avatar-image"
+                />
+                <AvatarFallback className="font-semibold">
+                  {review.displayName.slice(0, 1)}
+                </AvatarFallback>
+              </Avatar>
+              {userProfile?.id === review.userId && (
+                <Badge className="absolute -right-1 -bottom-1 size-5 rounded-full" />
+              )}
+            </div>
+            <div className="flex flex-col gap-y-1">
+              <p className="-mb-1 text-lg leading-8 font-semibold sm:text-xl">
+                {review.displayName}
+              </p>
+              <div className="flex items-center">
+                <time
+                  className="text-muted-foreground mr-2 flex gap-x-1 text-sm"
+                  dateTime={
+                    Date.parse(review.createdAt) ? review.createdAt : ''
+                  }
+                >
+                  <span>{formatDateJP(review.createdAt)}</span>
+                  <span>{formatTime(review.createdAt)}</span>
+                </time>
+                {userProfile?.id === review.userId && (
+                  <Button
+                    className="text-muted-foreground size-8"
+                    variant="ghost"
+                    size="icon"
+                    aria-label="レビューを編集"
+                    onClick={() => setIsOpen(true)}
+                  >
+                    <SquarePenIcon />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </div>
+          <Rating rating={review.rating} readOnly />
+        </div>
+        <p className="text-muted-foreground mt-2 text-sm sm:pl-20 sm:text-base">
+          {review.comment}
+        </p>
+      </div>
+
+      <ReviewUpdateDialog
+        review={review}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        updateMutation={updateMutation}
+        deleteMutation={deleteMutation}
+      />
+    </>
+  );
+}

@@ -1,0 +1,322 @@
+# CLAUDE.md
+
+このファイルは、このリポジトリでClaude Code (claude.ai/code) が作業する際のガイダンスを提供します。
+
+## 重要: コミュニケーション言語
+
+**このプロジェクトの開発者は日本人です。基本的なやり取りは日本語で行ってください。**
+
+## プロジェクト概要
+
+**My Books** - React 19 + TypeScript + Vite で構築された日本語の書籍発見・読書プラットフォーム。書籍の閲覧、レビュー、お気に入り、しおり、認証済みユーザー機能を提供。
+
+## 開発コマンド
+
+### コアコマンド
+```bash
+# 開発サーバーを起動 (Docker/ネットワークアクセス用のhostフラグ付き)
+npm run dev
+
+# 本番用ビルド (TypeScriptコンパイラ + Viteビルドを実行)
+npm run build
+
+# コードベースをLint
+npm run lint
+
+# 本番ビルドをプレビュー
+npm run preview
+```
+
+### コードフォーマット
+```bash
+# Prettierでコードをフォーマット (Tailwindクラスの並び替え設定済み)
+npx prettier --write .
+```
+
+## アーキテクチャ概要
+
+### 技術スタック
+- **フロントエンド**: React 19, TypeScript, Vite
+- **ルーティング**: React Router v7 (ファイルベースルーティングパターン)
+- **状態管理**:
+  - サーバー状態: TanStack Query v5 (React Query)
+  - クライアント状態: Context API (認証、テーマ)
+  - URL状態: React Router search params
+- **スタイリング**: Tailwind CSS v4, Radix UI (ヘッドレスコンポーネント), CVA (バリアント管理)
+- **テーマ**: next-themes, 動的カラーテーマ, カスタムフォントシステム
+- **アニメーション**: Motion (Framer Motion), カスタムリップルエフェクト
+- **アイコン**: Lucide React
+- **通知**: Sonner (トーストライブラリ)
+
+### プロジェクト構造
+
+```
+/src
+├── assets/              # 静的アセット
+├── components/          # 機能別に整理されたReactコンポーネント
+│   ├── books/          # 書籍検索、詳細、読書インターフェース
+│   ├── bookmarks/      # しおり管理
+│   ├── favorites/      # お気に入りUI
+│   ├── genres/         # ジャンル選択
+│   ├── layout/         # Header, Footer, Menu
+│   ├── reviews/        # レビュー作成・表示
+│   ├── settings/       # ユーザー設定
+│   ├── shared/         # 再利用可能なコンポーネント
+│   ├── ui/             # ベースUIコンポーネント (shadcn/uiパターン)
+│   └── users/          # ユーザープロフィールコンポーネント
+├── constants/          # アプリ定数、クエリキー、ソートタイプ
+├── hooks/              # カスタムフック (usePrefetch, useSearchFilters等)
+├── lib/
+│   ├── api/           # ドメイン別APIクライアント関数
+│   └── utils.ts       # ユーティリティ関数
+├── providers/         # コンテキストプロバイダー (認証、テーマ)
+├── routes/            # ページレベルコンポーネント
+└── types/
+    ├── domain/        # ビジネスロジック型 (Book, User, Review等)
+    └── infrastructure/# 技術的な型 (HTTP, Pagination)
+```
+
+### パスエイリアス
+`@/*` を使用して `/src/*` からインポート:
+```typescript
+import { Button } from '@/components/ui/button';
+import { useAuth } from '@/providers/auth-provider';
+```
+
+## 主要なアーキテクチャパターン
+
+### 1. TanStack Queryによるデータフェッチ
+
+**クエリキー**: `/src/constants/query-keys.ts` で一元管理し、型安全性とキャッシュ管理を実現。
+
+**Suspenseパターン** (推奨):
+```typescript
+const { data } = useSuspenseQuery({
+  queryKey: queryKeys.getBookDetail(bookId),
+  queryFn: () => fetchBookDetail(bookId),
+});
+```
+
+**無限クエリパターン** (ページネーション用):
+```typescript
+const { data, fetchNextPage, hasNextPage } = useSuspenseInfiniteQuery({
+  queryKey: queryKeys.getBookReviewsInfinite(bookId),
+  queryFn: ({ pageParam }) => fetchBookReviews(bookId, pageParam),
+  initialPageParam: 1,
+  getNextPageParam: (lastPage) =>
+    lastPage.hasNext ? lastPage.currentPage + 1 : undefined,
+});
+```
+
+**キャッシュの無効化**:
+```typescript
+queryClient.invalidateQueries({
+  queryKey: queryKeys.getBookReviewsInfinite(bookId),
+});
+```
+
+**プリフェッチ** (`usePrefetch()` フックを使用):
+```typescript
+const { prefetchBookDetail } = usePrefetch();
+
+<Link
+  onMouseEnter={() => prefetchBookDetail(bookId)}
+  onFocus={() => prefetchBookDetail(bookId)}
+>
+```
+
+### 2. エラーハンドリングとローディング状態
+
+**Suspense + Error Boundaryパターン**:
+```typescript
+<ErrorBoundary fallback={<ErrorElement />}>
+  <Suspense fallback={<SkeletonLoader />}>
+    <DataComponent />
+  </Suspense>
+</ErrorBoundary>
+```
+
+`useSuspenseQuery` を使用するコンポーネントは、ローディング/エラー状態を管理する必要がありません - バウンダリにスローします。
+
+### 3. 認証
+
+**認証フロー**:
+- 保護されたルートは `useAuth()` 経由で `isAuthenticated` をチェック
+- ログインはBFFにリダイレクト: `/bff/auth/login`
+- ログアウトはセッションをクリアしてホームにリダイレクト
+- ミューテーションにはCookieからのCSRFトークンを使用
+
+**保護されたルート**:
+```typescript
+<ProtectedRoute>
+  <UserSpecificPage />
+</ProtectedRoute>
+```
+
+### 4. API統合
+
+**カスタムFetchクライアント** (`/src/lib/api/fetch-client.ts`):
+- `HttpError` クラスによる統一されたエラーハンドリング
+- `getCsrfToken()` によるCSRFトークン管理
+- 自動コンテンツタイプ検出
+- すべてのリクエストに認証情報を含む
+
+**API組織** (`/src/lib/api/`):
+- `books.ts` - 書籍検索、詳細、目次、コンテンツ、レビュー
+- `user.ts` - プロフィール、お気に入り、しおり、ユーザーレビュー
+- `review.ts` - レビューの作成、更新、削除
+- `favorite.ts` - お気に入りの追加/削除
+- `bookmarks.ts` - しおりのCRUD
+- `genres.ts` - ジャンル一覧
+
+**環境設定**:
+```typescript
+BOOKS_API_BASE_URL = `${VITE_BASE_URL}/api/my-books`
+BFF_BASE_URL = `${VITE_BASE_URL}/bff/auth`
+IMAGE_BASE_URL = `https://vsv-crystal.skygroup.local/assets/images`
+```
+
+### 5. CSRF保護付きミューテーション
+
+```typescript
+const options: RequestInit = {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'X-XSRF-TOKEN': getCsrfToken(), // CookieからのCSRFトークン
+  },
+  body: JSON.stringify(requestBody),
+};
+await customFetch(endpoint, options);
+```
+
+### 6. ルーティングとナビゲーション
+
+**ルート構造**:
+- 公開: `/`, `/book/:bookId`, `/search`, `/discover`, `/ranking`, `/special-features`, `/settings`
+- 保護: `/favorites`, `/bookmarks`, `/my-reviews`, `/profile`, `/read/:bookId/...`
+
+**ファイルベースパターン**: 各ルートに `page.tsx` ファイル (例: `/routes/search/page.tsx`)
+
+**検索フィルター**: URLクエリパラメータ管理には `useSearchFilters()` フックを使用
+
+### 7. テーマ設定
+
+**テーマシステム**:
+- `next-themes` によるダーク/ライトモード
+- `/theme-styles/{themeColor}-theme.css` から動的に読み込まれるカスタムカラーテーマ
+- 日本語フォントシステム (Noto Sans JP, Noto Serif JP等)
+- `/src/index.css` のCSS カスタムプロパティ
+
+**使用方法**:
+```typescript
+const { theme, setTheme, themeColor, setThemeColor } = useTheme();
+```
+
+### 8. コンポーネントパターン
+
+**UIコンポーネント** (`/src/components/ui/`):
+- Radix UI プリミティブを使用したshadcn/uiパターンに基づく
+- Tailwind CSSでスタイリング
+- CVA (Class Variance Authority) でバリアント管理
+
+**再利用可能なパターン**:
+- 確認ダイアログ: グローバルイベントシステム付き `useConfirmDialog()` フック
+- ウィンドウサイズトラッキング: `useWindowSize()`
+- リップルエフェクト: `useRipple()`
+
+## 重要な実装詳細
+
+### TypeScript設定
+- パスマッピング: `@/*` → `./src/*`
+- Strictモード有効
+- アプリとnode用の個別設定
+
+### React Compiler
+自動パフォーマンス最適化のため、Vite設定でReact Compilerが有効になっています。これは開発/ビルドパフォーマンスに影響する可能性があります。
+
+### Prettier設定
+- JS/TSはシングルクォート (JSXはダブルクォート)
+- トレーリングカンマ (ES5互換)
+- セミコロン有効
+- `prettier-plugin-tailwindcss` による自動Tailwindクラス並び替え
+
+### パフォーマンス最適化
+- ホバー/フォーカス時のデータプリフェッチ
+- Suspenseベースの遅延読み込み
+- TanStack Queryによる無限スクロール
+- React Compiler有効化
+
+### ローカライゼーション
+- 日本語ファーストUI (すべてのテキストは日本語)
+- 日付フォーマット: `Intl.DateTimeFormat('ja-JP')`
+- カスタムユーティリティ: `formatDateJP()`, `chapterNumberString()` (第X章)
+
+## 共通ユーティリティ関数
+
+`/src/lib/utils.ts` に配置:
+- `cn()` - Tailwindクラスのマージ (clsx + tailwind-merge)
+- `formatDateJP()` - 日本語の日付フォーマット
+- `formatDate()` - yyyy/MM/dd形式
+- `formatTime()` - H:mm形式
+- `formatPrice()` - カンマ区切りと「円」を追加
+- `formatIsbn()` - ハイフン付きISBNフォーマット
+- `chapterNumberString()` - 第X章形式にフォーマット
+- `sleep()` - Promiseベースの遅延
+
+## データ型
+
+### コアドメイン型
+- `Book`, `BookDetails` - 書籍情報
+- `BookToc`, `BookChapterPageContent` - 読書インターフェース
+- `UserProfile`, `UserProfileCounts` - ユーザーデータ
+- `Review`, `ReviewRequest` - レビューシステム
+- `Favorite`, `Bookmark` - ユーザーコレクション
+- `Genre` - 書籍カテゴリー
+
+### インフラストラクチャ型
+- `Page<T>` - メタデータ付きページネーションラッパー
+- `HttpResponse<T>` - 標準APIレスポンス
+- `HttpError` - ステータスコード付きカスタムエラークラス
+
+## 重要な定数
+
+`/src/constants/constants.ts` より:
+```typescript
+DEFAULT_BOOKS_SIZE = 20
+DEFAULT_REVIEWS_SIZE = 3
+DEFAULT_MY_REVIEWS_SIZE = 5
+DEFAULT_MY_FAVORITES_SIZE = 5
+DEFAULT_MY_BOOKMARKS_SIZE = 5
+TOAST_ERROR_DURATION = 5000
+```
+
+## 開発ノート
+
+### 新機能を追加する際
+1. `/src/types/domain/` または `/src/types/infrastructure/` で型を定義
+2. `/src/lib/api/` にAPI関数を作成
+3. `/src/constants/query-keys.ts` にクエリキーを追加
+4. 必要に応じて `/src/hooks/` にカスタムフックを作成
+5. 適切な機能ディレクトリにUIコンポーネントを構築
+6. データフェッチにはSuspense + Error Boundaryパターンを使用
+
+### フォームを扱う際
+- Radix UIフォームコンポーネント (Label, Input, Select等) を使用
+- Tailwindでスタイリング
+- TanStack Queryの `useMutation` でミューテーション処理
+- ミューテーション成功後に関連クエリを無効化
+- Sonnerでトースト通知を表示
+
+### ナビゲーションを扱う際
+- React Routerの `Link` コンポーネントを使用
+- UX向上のためホバー/フォーカス時にプリフェッチを追加
+- URLサーチパラメータでフィルター/ページネーションを管理
+- 検索ページには `useSearchFilters()` フックを使用
+
+### スタイリングガイドライン
+- Tailwind CSSクラスを使用
+- `/src/components/ui/` の既存コンポーネントパターンに従う
+- コンポーネントバリアントにはCVAを使用
+- アニメーションにはmotionライブラリを使用
+- テーマシステム (CSSカスタムプロパティ) を尊重

@@ -1,0 +1,50 @@
+import BooksSkeleton from '@/components/books/books-skeleton';
+import BookDiscovery from '@/components/books/discovery/book-discovery';
+import GenresConditionSelector from '@/components/genres/genres-condition-selector';
+import GenresSelector from '@/components/genres/genres-selector';
+import GenresSkeleton from '@/components/genres/genres-skeleton';
+import { Separator } from '@/components/ui/separator';
+import { APP_TITLE } from '@/constants/constants';
+import { useSearchFilters } from '@/hooks/use-search-filters';
+import ErrorElement from '@/routes/error-element';
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+
+type Props = {
+  title: string;
+};
+
+export default function Page({ title }: Props) {
+  const { genreIds, condition, page } = useSearchFilters();
+
+  return (
+    <>
+      <title>{`${title} - ${APP_TITLE}`}</title>
+
+      <div className="my-4 flex min-h-10 items-center justify-between">
+        <h1 className="text-lg font-bold sm:text-xl">ジャンル</h1>
+        <GenresConditionSelector />
+      </div>
+
+      <Separator className="bg-foreground/10 my-4" />
+
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={<GenresSkeleton />}>
+          <GenresSelector />
+        </Suspense>
+      </ErrorBoundary>
+
+      <Separator className="bg-foreground/10 my-4" />
+
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={<BooksSkeleton />}>
+          <BookDiscovery
+            genreIds={genreIds}
+            condition={condition}
+            page={page}
+          />
+        </Suspense>
+      </ErrorBoundary>
+    </>
+  );
+}

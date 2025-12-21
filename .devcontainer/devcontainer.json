@@ -1,0 +1,30 @@
+{
+  "name": "my-books-frontend",
+  "dockerComposeFile": "../docker-compose.yml",
+  "service": "my-books-frontend",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-ceintl.vscode-language-pack-ja",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "dsznajder.es7-react-js-snippets",
+        "xabikos.javascriptsnippets",
+        "bradlc.vscode-tailwindcss",
+        "formulahendry.auto-rename-tag",
+        "ecmel.vscode-html-css",
+        "christian-kohler.path-intellisense",
+        "streetsidesoftware.code-spell-checker",
+        "oderwat.indent-rainbow",
+        "shardulm94.trailing-spaces",
+        "mhutchie.git-graph",
+        "mosapride.zenkaku",
+        "anthropic.claude-code",
+        "Google.gemini-cli-vscode-ide-companion"
+      ]
+    }
+  },
+  "postCreateCommand": "npm install && sudo chown -R node:node /home/node/.claude && sudo chown -R node:node /home/node/.gemini"
+}
