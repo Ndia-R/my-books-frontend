@@ -4,7 +4,7 @@ import BookReadTocButton from '@/components/books/reading/book-read-toc-button';
 import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import { getBookChapterPageContent, getBookToc } from '@/lib/api/books';
-import { getUserBookmarksByBookId } from '@/lib/api/user';
+import { getUserBookmarksByBookId } from '@/lib/api/users';
 import { chapterNumberString } from '@/lib/utils';
 import type { BookmarkPage } from '@/types';
 import { useSuspenseQueries } from '@tanstack/react-query';

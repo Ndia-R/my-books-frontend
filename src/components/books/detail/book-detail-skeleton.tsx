@@ -14,8 +14,8 @@ export default function BookDetailSkeleton() {
             aria-label="著者名を読み込み中"
           />
           <div className="flex justify-center gap-x-2">
-            <Skeleton className="bg-muted-foreground/5 m-2 size-6" />
-            <Skeleton className="bg-muted-foreground/5 m-2 size-6" />
+            {/* <Skeleton className="bg-muted-foreground/5 m-2 size-6" /> */}
+            {/* <Skeleton className="bg-muted-foreground/5 m-2 size-6" /> */}
           </div>
         </div>
         <div className="my-4 flex items-center">

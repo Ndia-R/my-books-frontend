@@ -1,16 +1,65 @@
-import FavoriteCountIcon from '@/components/books/stats/favorite-count-icon';
+import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import {
+  BOOK_IMAGE_BASE_URL,
+  TOAST_ERROR_DURATION,
+} from '@/constants/constants';
+import { queryKeys } from '@/constants/query-keys';
+import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import usePrefetch from '@/hooks/use-prefetch';
-import { formatDateJP, formatTime } from '@/lib/utils';
+import { deleteFavoriteByBookId } from '@/lib/api/favorites';
+import { cn, formatDateJP, formatTime } from '@/lib/utils';
 import type { Favorite } from '@/types';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { HeartIcon } from 'lucide-react';
 import { Link } from 'react-router';
+import { toast } from 'sonner';
 
 type Props = {
   favorite: Favorite;
 };
 
 export default function FavoriteItem({ favorite }: Props) {
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getUserFavoritesInfinite(),
+    });
+  };
+
+  const deleteMutation = useMutation({
+    mutationFn: (bookId: string) => deleteFavoriteByBookId(bookId),
+    onSuccess,
+  });
+
+  const { confirmDialog } = useConfirmDialog();
+
+  const handleClickDelete = async () => {
+    const { isCancel } = await confirmDialog({
+      icon: 'warning',
+      title: 'このお気に入りを削除しますか？',
+      message: 'お気に入りリストから削除されます。',
+    });
+    if (isCancel) return;
+
+    deleteMutation.mutate(favorite.book.id, {
+      onSuccess: () => {
+        toast.success('お気に入りリストから削除しました');
+      },
+      onError: () => {
+        toast.error('お気に入りの削除に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
+      },
+    });
+  };
+
   const { prefetchBookDetail } = usePrefetch();
 
   const handlePrefetch = async () => {
@@ -52,12 +101,23 @@ export default function FavoriteItem({ favorite }: Props) {
                   </h2>
                 </Link>
 
-                <FavoriteCountIcon
-                  bookId={favorite.book.id}
-                  isFavorite={true}
-                  count={1}
-                  hideCount={true}
-                />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className={cn(
+                        'text-muted-foreground hover:text-primary size-8',
+                        'text-primary bg-transparent'
+                      )}
+                      variant="ghost"
+                      size="icon"
+                      aria-label="お気に入り"
+                      onClick={() => handleClickDelete()}
+                    >
+                      <HeartIcon className="fill-primary" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>お気に入りから削除</TooltipContent>
+                </Tooltip>
               </div>
 
               <time

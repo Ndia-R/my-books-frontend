@@ -2,7 +2,8 @@ import {
   DEFAULT_MY_REVIEWS_SIZE,
   DEFAULT_MY_REVIEWS_SORT,
 } from '@/constants/constants';
-import { customFetch, getCsrfToken } from '@/lib/api/fetch-client';
+import { fetchBooksApi } from '@/lib/api/fetch';
+import { getCsrfToken } from '@/lib/utils';
 import type {
   BookmarkPage,
   FavoritePage,
@@ -15,14 +16,14 @@ import type {
 // 自分のプロフィール情報
 export const getUserProfile = async () => {
   const endpoint = `/me/profile`;
-  const response = await customFetch<UserProfile>(endpoint);
+  const response = await fetchBooksApi<UserProfile>(endpoint);
   return response.data;
 };
 
 // 自分のレビュー、お気に入り、ブックマークの数
 export const getUserProfileCounts = async () => {
   const endpoint = `/me/profile-counts`;
-  const response = await customFetch<UserProfileCounts>(endpoint);
+  const response = await fetchBooksApi<UserProfileCounts>(endpoint);
   return response.data;
 };
 
@@ -34,7 +35,7 @@ export const getUserReviews = async (
 ) => {
   const endpoint = `/me/reviews`;
   const query = `?page=${page}&size=${size}&sort=${sort}`;
-  const response = await customFetch<ReviewPage>(endpoint + query);
+  const response = await fetchBooksApi<ReviewPage>(endpoint + query);
   return response.data;
 };
 
@@ -46,7 +47,7 @@ export const getUserFavorites = async (
 ) => {
   const endpoint = `/me/favorites`;
   const query = `?page=${page}&size=${size}&sort=${sort}`;
-  const response = await customFetch<FavoritePage>(endpoint + query);
+  const response = await fetchBooksApi<FavoritePage>(endpoint + query);
   return response.data;
 };
 
@@ -58,7 +59,7 @@ export const getUserBookmarks = async (
 ) => {
   const endpoint = `/me/bookmarks`;
   const query = `?page=${page}&size=${size}&sort=${sort}`;
-  const response = await customFetch<BookmarkPage>(endpoint + query);
+  const response = await fetchBooksApi<BookmarkPage>(endpoint + query);
   return response.data;
 };
 
@@ -71,7 +72,7 @@ export const getUserReviewsByBookId = async (
 ) => {
   const endpoint = `/me/reviews`;
   const query = `?bookId=${bookId}&page=${page}&size=${size}&sort=${sort}`;
-  const response = await customFetch<ReviewPage>(endpoint + query);
+  const response = await fetchBooksApi<ReviewPage>(endpoint + query);
   return response.data;
 };
 
@@ -84,7 +85,7 @@ export const getUserFavoritesByBookId = async (
 ) => {
   const endpoint = `/me/favorites`;
   const query = `?bookId=${bookId}&page=${page}&size=${size}&sort=${sort}`;
-  const response = await customFetch<FavoritePage>(endpoint + query);
+  const response = await fetchBooksApi<FavoritePage>(endpoint + query);
   return response.data;
 };
 
@@ -97,7 +98,7 @@ export const getUserBookmarksByBookId = async (
 ) => {
   const endpoint = `/me/bookmarks`;
   const query = `?bookId=${bookId}&page=${page}&size=${size}&sort=${sort}`;
-  const response = await customFetch<BookmarkPage>(endpoint + query);
+  const response = await fetchBooksApi<BookmarkPage>(endpoint + query);
   return response.data;
 };
 
@@ -112,7 +113,7 @@ export const updateUserProfile = async (requestBody: UpdateUserProfile) => {
     },
     body: JSON.stringify(requestBody),
   };
-  await customFetch(endpoint, options);
+  await fetchBooksApi(endpoint, options);
 };
 
 // この書籍をユーザーがレビューしているかどうか

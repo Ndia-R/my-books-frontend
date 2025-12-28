@@ -32,13 +32,6 @@ export default function BookmarkCreateDialog({
 }: Props) {
   const [note, setNote] = useState('');
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (!open) {
-      setNote('');
-    }
-  };
-
   const handleClickCreate = () => {
     const requestBody: BookmarkRequest = {
       bookId,
@@ -66,6 +59,12 @@ export default function BookmarkCreateDialog({
   const handleClickCancel = () => {
     setIsOpen(false);
     setNote('');
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      handleClickCancel();
+    }
   };
 
   return (

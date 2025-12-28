@@ -8,8 +8,8 @@ import {
 } from '@/components/ui/tooltip';
 import { queryKeys } from '@/constants/query-keys';
 import { getBookReviews } from '@/lib/api/books';
-import { createReview } from '@/lib/api/review';
-import { isReviewedByUser } from '@/lib/api/user';
+import { createReview } from '@/lib/api/reviews';
+import { isReviewedByUser } from '@/lib/api/users';
 import { useAuth } from '@/providers/auth-provider';
 import type { ReviewPage, ReviewRequest } from '@/types';
 import {

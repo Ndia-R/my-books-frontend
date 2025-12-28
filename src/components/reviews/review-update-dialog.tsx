@@ -40,14 +40,6 @@ export default function ReviewUpdateDialog({
   const [comment, setComment] = useState(review.comment);
   const { confirmDialog } = useConfirmDialog();
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (open) {
-      setRating(review.rating);
-      setComment(review.comment);
-    }
-  };
-
   const handleClickUpdate = () => {
     const requestBody: ReviewRequest = {
       bookId: review.book.id,
@@ -70,8 +62,8 @@ export default function ReviewUpdateDialog({
       },
       onSettled: () => {
         setIsOpen(false);
-        setRating(review.rating);
-        setComment(review.comment);
+        setRating(rating);
+        setComment(comment);
       },
     });
   };
@@ -106,6 +98,12 @@ export default function ReviewUpdateDialog({
     setIsOpen(false);
     setRating(review.rating);
     setComment(review.comment);
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      handleClickCancel();
+    }
   };
 
   return (

@@ -33,14 +33,6 @@ export default function ReviewCreateDialog({
 
   const { confirmDialog } = useConfirmDialog();
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (!open) {
-      setRating(0);
-      setComment('');
-    }
-  };
-
   const handleClickPost = async () => {
     if (rating === 0) {
       const { isCancel } = await confirmDialog({
@@ -88,6 +80,12 @@ export default function ReviewCreateDialog({
     setIsOpen(false);
     setRating(0);
     setComment('');
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      handleClickCancel();
+    }
   };
 
   return (

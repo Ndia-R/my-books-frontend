@@ -1,4 +1,5 @@
-import { customFetch, getCsrfToken } from '@/lib/api/fetch-client';
+import { fetchBooksApi } from '@/lib/api/fetch';
+import { getCsrfToken } from '@/lib/utils';
 import type { BookmarkRequest } from '@/types';
 
 // ブックマーク追加
@@ -12,7 +13,7 @@ export const createBookmark = async (requestBody: BookmarkRequest) => {
     },
     body: JSON.stringify(requestBody),
   };
-  await customFetch(endpoint, options);
+  await fetchBooksApi(endpoint, options);
 };
 
 // ブックマーク更新
@@ -29,7 +30,7 @@ export const updateBookmark = async (
     },
     body: JSON.stringify(requestBody),
   };
-  await customFetch(endpoint, options);
+  await fetchBooksApi(endpoint, options);
 };
 
 // ブックマーク削除
@@ -41,5 +42,5 @@ export const deleteBookmark = async (bookmarkId: number) => {
       'X-XSRF-TOKEN': getCsrfToken(),
     },
   };
-  await customFetch(endpoint, options);
+  await fetchBooksApi(endpoint, options);
 };

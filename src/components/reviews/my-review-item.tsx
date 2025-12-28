@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
-import { deleteReview, updateReview } from '@/lib/api/review';
+import { deleteReview, updateReview } from '@/lib/api/reviews';
 import { formatDateJP, formatTime } from '@/lib/utils';
 import type { Review, ReviewUpdateParams } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -91,7 +91,7 @@ export default function MyReviewItem({ review }: Props) {
               </div>
 
               <div className="flex flex-row items-center">
-                <Rating rating={review.rating} readOnly />
+                <Rating rating={review.rating} key={review.rating} readOnly />
                 <Button
                   className="text-muted-foreground size-8"
                   variant="ghost"

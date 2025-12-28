@@ -1,9 +1,9 @@
-import { customFetch } from '@/lib/api/fetch-client';
+import { fetchBooksApi } from '@/lib/api/fetch';
 import type { Genre } from '@/types';
 
 // すべてのジャンル取得
 export const getGenres = async () => {
   const endpoint = `/genres`;
-  const response = await customFetch<Genre[]>(endpoint);
+  const response = await fetchBooksApi<Genre[]>(endpoint);
   return response.data;
 };

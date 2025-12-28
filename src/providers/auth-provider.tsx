@@ -1,5 +1,6 @@
 import { BFF_BASE_URL } from '@/constants/constants';
-import { customFetch, getCsrfToken } from '@/lib/api/fetch-client';
+import { logoutUser } from '@/lib/api/auth';
+import { getUserProfile } from '@/lib/api/users';
 import type { UserProfile } from '@/types';
 import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
@@ -12,7 +13,7 @@ type AuthProviderState = {
   isAuthenticated: boolean;
   userProfile: UserProfile | null;
   setUserProfile: (userProfile: UserProfile) => void;
-  login: () => void;
+  login: (redirectTo?: string) => void;
   logout: () => Promise<void>;
 };
 
@@ -21,41 +22,23 @@ const AuthProviderContext = createContext<AuthProviderState | undefined>(
 );
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
-  const login = () => {
-    window.location.href = `${BFF_BASE_URL}/login`;
+  // ログイン処理（BFFログイン画面へリダイレクト）
+  const login = (redirectTo?: string) => {
+    const loginUrl = redirectTo
+      ? `${BFF_BASE_URL}/login?return_to=${encodeURIComponent(redirectTo)}`
+      : `${BFF_BASE_URL}/login`;
+    window.location.href = loginUrl;
   };
 
   // 完全ログアウト（BFFセッション + Keycloakセッションクリア）
   const logout = async () => {
-    console.log('Complete logout!!!');
-
     try {
-      const url = `${BFF_BASE_URL}/logout?complete=true`;
-      const options: RequestInit = {
-        method: 'POST',
-        headers: {
-          'X-XSRF-TOKEN': getCsrfToken(),
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      };
-      const response = await fetch(url, options);
-
-      if (response.ok) {
-        const result = await response.json();
-        console.log('Complete logout successful:', result.message);
-
-        setUserProfile(null);
-
-        // 🎯 重要：完全ログアウト後は明示的にログイン画面へリダイレクト
-        // これにより次回ログイン時に確実にKeycloak認証画面が表示される
-        window.location.href = '/';
-      } else {
-        console.error('Complete logout failed with status:', response.status);
-      }
+      await logoutUser();
+      setUserProfile(null);
+      window.location.href = '/';
     } catch (error) {
       console.error('Complete logout failed:', error);
     }
@@ -67,8 +50,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const initializeAuth = async () => {
       setIsLoading(true);
       try {
-        const res = await customFetch<UserProfile>('/me/profile');
-        setUserProfile(res.data);
+        const profile = await getUserProfile();
+        setUserProfile(profile);
       } catch (e) {
         console.error('Error fetching profile:', e);
       } finally {

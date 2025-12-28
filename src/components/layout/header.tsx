@@ -2,21 +2,19 @@ import Menu from '@/components/layout/menu';
 import ThemeToggleButton from '@/components/layout/theme-toggle-button';
 import UserIconButton from '@/components/layout/user-icon-button';
 import SearchInput from '@/components/shared/search-input';
-import { Button } from '@/components/ui/button';
+import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { motion } from 'motion/react';
+import { Link, useLocation } from 'react-router';
 
 type Props = {
   className?: string;
 };
 
 export default function Header({ className }: Props) {
-  const { isAuthenticated, login } = useAuth();
-
-  const handleClickLogin = () => {
-    login();
-  };
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
 
   return (
     <header className={cn('backdrop-blur-sm', className)}>
@@ -35,9 +33,13 @@ export default function Header({ className }: Props) {
               {isAuthenticated ? (
                 <UserIconButton />
               ) : (
-                <Button variant="ghost" onClick={handleClickLogin}>
+                <Link
+                  className={buttonVariants({ variant: 'ghost' })}
+                  to="/login"
+                  state={{ redirectTo: location.pathname + location.search }}
+                >
                   ログイン
-                </Button>
+                </Link>
               )}
             </div>
           </div>

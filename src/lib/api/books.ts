@@ -4,7 +4,7 @@ import {
   DEFAULT_REVIEWS_SIZE,
   DEFAULT_REVIEWS_SORT,
 } from '@/constants/constants';
-import { customFetch } from '@/lib/api/fetch-client';
+import { fetchBooksApi } from '@/lib/api/fetch';
 import type {
   BookChapterPageContent,
   BookDetails,
@@ -18,7 +18,7 @@ import type {
 // 最新の書籍リスト（１０冊分）
 export const getBooksNewReleases = async () => {
   const endpoint = `/books/new-releases`;
-  const response = await customFetch<BookPage>(endpoint);
+  const response = await fetchBooksApi<BookPage>(endpoint);
   return response.data;
 };
 
@@ -31,7 +31,7 @@ export const searchBooksByTitleKeyword = async (
 ) => {
   const endpoint = `/books/search`;
   const query = `?q=${q}&page=${page}&size=${size}&sort=${sort}`;
-  const response = await customFetch<BookPage>(endpoint + query);
+  const response = await fetchBooksApi<BookPage>(endpoint + query);
   return response.data;
 };
 
@@ -45,21 +45,21 @@ export const searchBooksByGenre = async (
 ) => {
   const endpoint = `/books/discover`;
   const query = `?genreIds=${genreIds}&condition=${condition}&page=${page}&size=${size}&sort=${sort}`;
-  const response = await customFetch<BookPage>(endpoint + query);
+  const response = await fetchBooksApi<BookPage>(endpoint + query);
   return response.data;
 };
 
 // 特定の書籍の詳細
 export const getBookDetails = async (bookId: string) => {
   const endpoint = `/books/${bookId}`;
-  const response = await customFetch<BookDetails>(endpoint);
+  const response = await fetchBooksApi<BookDetails>(endpoint);
   return response.data;
 };
 
 // 特定の書籍の目次
 export const getBookToc = async (bookId: string) => {
   const endpoint = `/books/${bookId}/toc`;
-  const response = await customFetch<BookToc>(endpoint);
+  const response = await fetchBooksApi<BookToc>(endpoint);
   return response.data;
 };
 
@@ -70,7 +70,7 @@ export const getBookChapterPageContent = async (
   pageNumber: number
 ) => {
   const endpoint = `/book-content/books/${bookId}/chapters/${chapterNumber}/pages/${pageNumber}`;
-  const response = await customFetch<BookChapterPageContent>(endpoint);
+  const response = await fetchBooksApi<BookChapterPageContent>(endpoint);
   return response.data;
 };
 
@@ -83,20 +83,20 @@ export const getBookReviews = async (
 ) => {
   const endpoint = `/books/${bookId}/reviews`;
   const query = `?page=${page}&size=${size}&sort=${sort}`;
-  const response = await customFetch<ReviewPage>(endpoint + query);
+  const response = await fetchBooksApi<ReviewPage>(endpoint + query);
   return response.data;
 };
 
 // 特定の書籍のレビュー統計
 export const getBookReviewStats = async (bookId: string) => {
   const endpoint = `/books/${bookId}/stats/reviews`;
-  const response = await customFetch<ReviewStats>(endpoint);
+  const response = await fetchBooksApi<ReviewStats>(endpoint);
   return response.data;
 };
 
 // 特定の書籍のお気に入り統計
 export const getBookFavoriteStats = async (bookId: string) => {
   const endpoint = `/books/${bookId}/stats/favorites`;
-  const response = await customFetch<FavoriteStats>(endpoint);
+  const response = await fetchBooksApi<FavoriteStats>(endpoint);
   return response.data;
 };

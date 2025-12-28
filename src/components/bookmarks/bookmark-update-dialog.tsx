@@ -38,13 +38,6 @@ export default function BookmarkUpdateDialog({
   const [note, setNote] = useState(bookmark.note);
   const { confirmDialog } = useConfirmDialog();
 
-  const handleOpenChange = (open: boolean) => {
-    setIsOpen(open);
-    if (open) {
-      setNote(bookmark.note);
-    }
-  };
-
   const handleClickUpdate = () => {
     const requestBody: BookmarkRequest = {
       bookId: bookmark.book.id,
@@ -68,7 +61,7 @@ export default function BookmarkUpdateDialog({
       },
       onSettled: () => {
         setIsOpen(false);
-        setNote(bookmark.note);
+        setNote(note);
       },
     });
   };
@@ -100,6 +93,12 @@ export default function BookmarkUpdateDialog({
   const handleClickCancel = () => {
     setIsOpen(false);
     setNote(bookmark.note);
+  };
+
+  const handleOpenChange = (isOpen: boolean) => {
+    if (!isOpen) {
+      handleClickCancel();
+    }
   };
 
   return (

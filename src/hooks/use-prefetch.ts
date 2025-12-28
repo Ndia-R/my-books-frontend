@@ -13,7 +13,7 @@ import {
   getUserFavorites,
   getUserProfileCounts,
   getUserReviews,
-} from '@/lib/api/user';
+} from '@/lib/api/users';
 import type { BookmarkPage, FavoritePage, ReviewPage } from '@/types';
 import { useQueryClient } from '@tanstack/react-query';
 

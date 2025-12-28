@@ -1,6 +1,6 @@
 import BookmarkList from '@/components/bookmarks/bookmark-list';
 import { queryKeys } from '@/constants/query-keys';
-import { getUserBookmarks } from '@/lib/api/user';
+import { getUserBookmarks } from '@/lib/api/users';
 import type { BookmarkPage } from '@/types';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';

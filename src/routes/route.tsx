@@ -4,6 +4,7 @@ import BookmarksPage from '@/routes/bookmarks/page';
 import DiscoverPage from '@/routes/discover/page';
 import FavoritesPage from '@/routes/favorites/page';
 import RootLayout from '@/routes/layout';
+import LoginPage from '@/routes/login/page';
 import MyReviewsPage from '@/routes/my-reviews/page';
 import NotFoundPage from '@/routes/not-found';
 import RootPage from '@/routes/page';
@@ -28,6 +29,7 @@ export const router = createBrowserRouter(
       <Route path="/" element={<RootLayout />}>
         <Route index element={<RootPage />} />
 
+        <Route path="login" element={<LoginPage />} />
         <Route path="auth-callback" element={<AuthCallbackPage />} />
 
         <Route path="book">

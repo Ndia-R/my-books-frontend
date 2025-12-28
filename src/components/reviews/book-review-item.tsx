@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
-import { deleteReview, updateReview } from '@/lib/api/review';
+import { deleteReview, updateReview } from '@/lib/api/reviews';
 import { formatDateJP, formatTime } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import type { Review, ReviewUpdateParams } from '@/types';

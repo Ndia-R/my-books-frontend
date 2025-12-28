@@ -5,7 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AvatarCarousel from '@/components/users/avatar-carousel';
 import { APP_TITLE, TOAST_ERROR_DURATION } from '@/constants/constants';
-import { updateUserProfile } from '@/lib/api/user';
+import { updateUserProfile } from '@/lib/api/users';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import type { UpdateUserProfile } from '@/types';

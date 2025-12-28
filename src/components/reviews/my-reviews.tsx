@@ -1,6 +1,6 @@
 import MyReviewList from '@/components/reviews/my-review-list';
 import { queryKeys } from '@/constants/query-keys';
-import { getUserReviews } from '@/lib/api/user';
+import { getUserReviews } from '@/lib/api/users';
 import type { ReviewPage } from '@/types';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';

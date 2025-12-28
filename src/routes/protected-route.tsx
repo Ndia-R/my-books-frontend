@@ -7,8 +7,16 @@ export default function ProtectedRoute() {
 
   if (isLoading) return null;
 
-  if (!isAuthenticated)
-    return <Navigate to="/login" state={{ from: location }} replace />;
+  if (!isAuthenticated) {
+    // ログイン後に戻るべきURL（クエリパラメータ含む）をstateで渡す
+    return (
+      <Navigate
+        to="/login"
+        state={{ redirectTo: location.pathname + location.search }}
+        replace
+      />
+    );
+  }
 
   return <Outlet />;
 }

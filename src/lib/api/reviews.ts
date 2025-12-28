@@ -1,4 +1,5 @@
-import { customFetch, getCsrfToken } from '@/lib/api/fetch-client';
+import { fetchBooksApi } from '@/lib/api/fetch';
+import { getCsrfToken } from '@/lib/utils';
 import type { ReviewRequest } from '@/types';
 
 // レビュー作成
@@ -12,7 +13,7 @@ export const createReview = async (requestBody: ReviewRequest) => {
     },
     body: JSON.stringify(requestBody),
   };
-  await customFetch(endpoint, options);
+  await fetchBooksApi(endpoint, options);
 };
 
 // レビュー更新
@@ -29,7 +30,7 @@ export const updateReview = async (
     },
     body: JSON.stringify(requestBody),
   };
-  await customFetch(endpoint, options);
+  await fetchBooksApi(endpoint, options);
 };
 
 // レビュー削除
@@ -41,5 +42,5 @@ export const deleteReview = async (reviewId: number) => {
       'X-XSRF-TOKEN': getCsrfToken(),
     },
   };
-  await customFetch(endpoint, options);
+  await fetchBooksApi(endpoint, options);
 };

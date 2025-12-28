@@ -1,7 +1,7 @@
 import CountUpNumber from '@/components/shared/count-up-number';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
-import { getUserProfileCounts } from '@/lib/api/user';
+import { getUserProfileCounts } from '@/lib/api/users';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';

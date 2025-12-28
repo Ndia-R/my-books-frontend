@@ -6,11 +6,9 @@ import { buttonVariants } from '@/components/ui/button';
 import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
-import { getBookDetails, getBookFavoriteStats } from '@/lib/api/books';
-import { isFavoritedByUser } from '@/lib/api/user';
+import { getBookDetails } from '@/lib/api/books';
 import { cn, formatDateJP, formatIsbn, formatPrice } from '@/lib/utils';
-import { useAuth } from '@/providers/auth-provider';
-import { useQuery, useSuspenseQueries } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 
 type Props = {
@@ -18,26 +16,9 @@ type Props = {
 };
 
 export default function BookDetail({ bookId }: Props) {
-  const [{ data: book }, { data: favoriteStats }] = useSuspenseQueries({
-    queries: [
-      {
-        queryKey: queryKeys.getBookDetails(bookId),
-        queryFn: () => getBookDetails(bookId),
-      },
-      {
-        queryKey: queryKeys.getBookFavoriteStats(bookId),
-        queryFn: () => getBookFavoriteStats(bookId),
-      },
-    ],
-  });
-
-  const { isAuthenticated } = useAuth();
-
-  // 認証済みの場合のみデータを取得する
-  const { data: isFavorite = false } = useQuery({
-    queryKey: queryKeys.isFavoritedByUser(bookId),
-    queryFn: () => isFavoritedByUser(bookId),
-    enabled: isAuthenticated,
+  const { data: book } = useSuspenseQuery({
+    queryKey: queryKeys.getBookDetails(bookId),
+    queryFn: () => getBookDetails(bookId),
   });
 
   const { prefetchBookToc } = usePrefetch();
@@ -70,11 +51,7 @@ export default function BookDetail({ bookId }: Props) {
             <Rating rating={book.averageRating} readOnly />
             <div className="flex justify-center gap-x-2">
               <ReviewCountIcon count={book.reviewCount} />
-              <FavoriteCountIcon
-                bookId={bookId}
-                isFavorite={isFavorite}
-                count={favoriteStats.favoriteCount}
-              />
+              <FavoriteCountIcon bookId={bookId} />
             </div>
           </div>
 
