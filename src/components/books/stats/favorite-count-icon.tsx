@@ -147,7 +147,7 @@ export default function FavoriteCountIcon({
             <AnimatePresence mode="popLayout">
               {animationKey > 0 &&
                 displayState.isFavorite &&
-                [...Array(3)].map((_, i) => {
+                Array.from({ length: 3 }, (_, i) => {
                   const angles = [-120, -90, -60]; // 角度の配列
                   const angle = angles[i] * (Math.PI / 180); // ラジアンに変換
                   return (

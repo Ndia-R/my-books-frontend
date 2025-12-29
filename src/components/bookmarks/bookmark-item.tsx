@@ -10,7 +10,13 @@ import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { deleteBookmark, updateBookmark } from '@/lib/api/bookmarks';
-import { chapterNumberString, cn, formatDateJP, formatTime } from '@/lib/utils';
+import {
+  buildPath,
+  chapterNumberString,
+  cn,
+  formatDateJP,
+  formatTime,
+} from '@/lib/utils';
 import type { Bookmark, BookmarkUpdateParams } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BookmarkIcon } from 'lucide-react';
@@ -52,6 +58,15 @@ export default function BookmarkItem({ bookmark }: Props) {
     );
   };
 
+  const bookReadPath = buildPath(
+    '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
+    {
+      bookId: bookmark.book.id,
+      chapterNumber: bookmark.chapterNumber,
+      pageNumber: bookmark.pageNumber,
+    }
+  );
+
   return (
     <>
       <Card className="p-0">
@@ -60,7 +75,7 @@ export default function BookmarkItem({ bookmark }: Props) {
             <div className="flex min-w-20 justify-center sm:min-w-24">
               <Link
                 className="size-fit"
-                to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
+                to={bookReadPath}
                 aria-label={`${bookmark.book.title}のブックマークページへ移動`}
                 onMouseEnter={handlePrefetch}
                 onFocus={handlePrefetch}
@@ -78,7 +93,7 @@ export default function BookmarkItem({ bookmark }: Props) {
                 <div className="flex items-center gap-x-2">
                   <Link
                     className="size-fit"
-                    to={`/read/${bookmark.book.id}/chapter/${bookmark.chapterNumber}/page/${bookmark.pageNumber}`}
+                    to={bookReadPath}
                     aria-label={`${bookmark.book.title}のブックマークページへ移動`}
                     onMouseEnter={handlePrefetch}
                     onFocus={handlePrefetch}

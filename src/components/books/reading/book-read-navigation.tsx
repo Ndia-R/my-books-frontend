@@ -1,6 +1,6 @@
 import { buttonVariants } from '@/components/ui/button';
 import usePrefetch from '@/hooks/use-prefetch';
-import { cn } from '@/lib/utils';
+import { buildPath, cn } from '@/lib/utils';
 import type { BookToc } from '@/types';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useEffect } from 'react';
@@ -75,6 +75,24 @@ export default function BookReadNavigation({
     }
   }, [bookId, isLastPage, next.chapter, next.page, prefetchBookReadContent]);
 
+  const prevPagePath = buildPath(
+    '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
+    {
+      bookId,
+      chapterNumber: prev.chapter,
+      pageNumber: prev.page,
+    }
+  );
+
+  const nextPagePath = buildPath(
+    '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
+    {
+      bookId,
+      chapterNumber: next.chapter,
+      pageNumber: next.page,
+    }
+  );
+
   return (
     <div className="flex justify-between">
       <Link
@@ -83,7 +101,7 @@ export default function BookReadNavigation({
           isFirstPage && 'pointer-events-none opacity-50',
           buttonVariants({ variant: 'ghost' })
         )}
-        to={`/read/${bookId}/chapter/${prev.chapter}/page/${prev.page}`}
+        to={prevPagePath}
       >
         <ChevronLeftIcon />
         <span>前のページへ</span>
@@ -95,7 +113,7 @@ export default function BookReadNavigation({
           isLastPage && 'pointer-events-none opacity-50',
           buttonVariants({ variant: 'ghost' })
         )}
-        to={`/read/${bookId}/chapter/${next.chapter}/page/${next.page}`}
+        to={nextPagePath}
       >
         <span>次のページへ</span>
         <ChevronRightIcon />

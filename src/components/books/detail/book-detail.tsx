@@ -7,7 +7,7 @@ import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { getBookDetails } from '@/lib/api/books';
-import { cn, formatDateJP, formatIsbn, formatPrice } from '@/lib/utils';
+import { buildPath, cn, formatDateJP, formatIsbn, formatPrice } from '@/lib/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 
@@ -27,6 +27,8 @@ export default function BookDetail({ bookId }: Props) {
     await prefetchBookToc(bookId);
   };
 
+  const bookTocPath = buildPath('/read/:bookId/table-of-contents', { bookId });
+
   return (
     <>
       <title>{`${book.title} - ${APP_TITLE}`}</title>
@@ -35,7 +37,7 @@ export default function BookDetail({ bookId }: Props) {
         <div className="flex flex-col items-center justify-center lg:w-1/2">
           <Link
             className="size-fit"
-            to={`/read/${bookId}/table-of-contents`}
+            to={bookTocPath}
             aria-label={`${book.title}の目次ページへ移動`}
             onMouseEnter={handlePrefetch}
             onFocus={handlePrefetch}
@@ -58,7 +60,7 @@ export default function BookDetail({ bookId }: Props) {
           <div className="my-4 flex items-center">
             <Link
               className={cn(buttonVariants({ variant: 'outline' }), 'w-44')}
-              to={`/read/${bookId}/table-of-contents`}
+              to={bookTocPath}
               aria-label={`${book.title}の目次ページへ移動`}
               onMouseEnter={handlePrefetch}
               onFocus={handlePrefetch}

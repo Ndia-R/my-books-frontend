@@ -34,7 +34,7 @@ export default function BookReviewsSkeleton() {
         <Skeleton className="bg-muted-foreground/5 h-10 w-44" />
       </div>
       <ul className="flex flex-col p-3 sm:p-6">
-        {[...Array<number>(DEFAULT_REVIEWS_SIZE)].map((_, index) => (
+        {Array.from({ length: DEFAULT_REVIEWS_SIZE }, (_, index) => (
           <li key={index}>
             <Separator className="bg-foreground/10" />
             <ReviewItemSkeleton />

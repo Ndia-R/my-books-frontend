@@ -1,14 +1,18 @@
 import { Input } from '@/components/ui/input';
 import { useSearchFilters } from '@/hooks/use-search-filters';
+import { buildQueryString } from '@/lib/utils';
 import { Search } from 'lucide-react';
 import { type FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function SearchInput() {
-  const { q, updateQueryParams } = useSearchFilters();
+  const { q } = useSearchFilters();
   const navigate = useNavigate();
+
   const [query, setQuery] = useState(q);
 
+  // URLパラメータが変わったら、入力欄も同期
+  // 複数のSearchInputが存在する場合（ヘッダーとヒーローエリア）の同期に必要
   useEffect(() => {
     setQuery(q);
   }, [q]);
@@ -17,14 +21,16 @@ export default function SearchInput() {
     e.preventDefault();
 
     const newQuery = query.trim();
-    if (!newQuery) return;
 
-    // `/search` 以外のページなら遷移する。それ以外はクエリパラメータだけ更新
-    if (location.pathname !== '/search') {
-      navigate(`/search?q=${encodeURIComponent(newQuery)}`);
-    } else {
-      updateQueryParams({ q: newQuery, page: 1 });
+    if (!newQuery) {
+      navigate('/');
+      return;
     }
+
+    const queryString = buildQueryString({ q: newQuery, page: 1 });
+    const searchUrl = '/search' + queryString;
+
+    navigate(searchUrl);
   };
 
   return (

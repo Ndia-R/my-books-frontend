@@ -6,7 +6,7 @@ export default function FavoritesSkeleton() {
     <div className="flex flex-col gap-y-4 pb-4">
       <p className="h-6"></p>
       <ul className="flex flex-col gap-y-2">
-        {[...Array<number>(5)].map((_, index) => (
+        {Array.from({ length: 5 }, (_, index) => (
           <li key={index}>
             <Card className="p-0">
               <CardContent className="p-4">

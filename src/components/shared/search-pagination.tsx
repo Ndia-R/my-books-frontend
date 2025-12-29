@@ -8,7 +8,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { cn } from '@/lib/utils';
+import { buildQueryString, cn } from '@/lib/utils';
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 
@@ -70,12 +70,14 @@ export default function SearchPagination({ currentPage, totalPages }: Props) {
 
   const createPageQuery = useCallback(
     (page: number) => {
-      if (page < 1) page = 1;
-      if (page > totalPages) page = totalPages;
+      // ページ番号を範囲内に制限
+      const validPage = Math.max(1, Math.min(page, totalPages));
 
-      const params = new URLSearchParams(searchParams);
-      params.set('page', String(page));
-      return params.toString();
+      // 既存のsearchParamsをオブジェクトに変換してpageを更新
+      const params = Object.fromEntries(searchParams.entries());
+      params.page = String(validPage);
+
+      return buildQueryString(params);
     },
     [totalPages, searchParams]
   );
@@ -87,7 +89,7 @@ export default function SearchPagination({ currentPage, totalPages }: Props) {
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
-            to={`?${createPageQuery(currentPage - 1)}`}
+            to={createPageQuery(currentPage - 1)}
             disabled={currentPage - 1 < 1}
           />
         </PaginationItem>
@@ -100,7 +102,7 @@ export default function SearchPagination({ currentPage, totalPages }: Props) {
                   currentPage === pageNumber &&
                     'bg-primary dark:bg-primary hover:bg-primary hover:dark:bg-primary text-primary-foreground hover:text-primary-foreground'
                 )}
-                to={`?${createPageQuery(pageNumber)}`}
+                to={createPageQuery(pageNumber)}
               >
                 {pageNumber}
               </PaginationLink>
@@ -112,7 +114,7 @@ export default function SearchPagination({ currentPage, totalPages }: Props) {
 
         <PaginationItem>
           <PaginationNext
-            to={`?${createPageQuery(currentPage + 1)}`}
+            to={createPageQuery(currentPage + 1)}
             disabled={currentPage + 1 > totalPages}
           />
         </PaginationItem>

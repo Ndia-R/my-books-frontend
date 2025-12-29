@@ -10,6 +10,12 @@ export const IMAGE_BASE_URL = `https://vsv-crystal.skygroup.local/assets/images`
 export const BOOK_IMAGE_BASE_URL = `${IMAGE_BASE_URL}/my-books`;
 export const AVATAR_IMAGE_BASE_URL = `${IMAGE_BASE_URL}/avatars`;
 
+// アバター画像
+export const AVATAR_PATHS = Array.from({ length: 41 }, (_, index) =>
+  `/avatar${String(index).padStart(2, '0')}.png`
+);
+export const DEFAULT_AVATAR_PATH = AVATAR_PATHS[0];
+
 // 書籍検索系
 export const DEFAULT_BOOKS_SIZE = 20;
 export const DEFAULT_BOOKS_SORT = BookSortOrder.PopularityDesc;

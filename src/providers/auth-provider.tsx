@@ -23,6 +23,7 @@ type AuthProviderState = {
   login: (returnTo?: string) => void;
   logout: () => Promise<void>;
   checkAuthStatus: () => Promise<void>;
+  setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
 };
 
 const AuthProviderContext = createContext<AuthProviderState | undefined>(
@@ -80,6 +81,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login,
     logout,
     checkAuthStatus,
+    setUserProfile,
   };
 
   return <AuthProviderContext value={value}>{children}</AuthProviderContext>;

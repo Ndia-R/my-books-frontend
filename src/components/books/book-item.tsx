@@ -3,7 +3,7 @@ import ReviewCountIcon from '@/components/books/stats/review-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import usePrefetch from '@/hooks/use-prefetch';
-import { formatDateJP } from '@/lib/utils';
+import { buildPath, formatDateJP } from '@/lib/utils';
 import type { Book } from '@/types';
 import { Link } from 'react-router';
 
@@ -18,12 +18,14 @@ export default function BookItem({ book }: Props) {
     await prefetchBookDetail(book.id);
   };
 
+  const bookDetailPath = buildPath('/book/:bookId', { bookId: book.id });
+
   return (
     <Card className="px-2 py-3 sm:px-3 sm:py-4">
       <CardContent className="flex w-38 flex-col items-center gap-y-0 p-0 sm:w-44">
         <Link
           className="size-fit"
-          to={`/book/${book.id}`}
+          to={bookDetailPath}
           aria-label={`${book.title}の詳細ページへ移動`}
           onMouseEnter={handlePrefetch}
           onFocus={handlePrefetch}
@@ -36,7 +38,7 @@ export default function BookItem({ book }: Props) {
         </Link>
         <Link
           className="hover:text-primary flex h-10 items-center justify-center text-sm font-semibold sm:h-12 sm:text-base"
-          to={`/book/${book.id}`}
+          to={bookDetailPath}
           aria-label={`${book.title}の詳細ページへ移動`}
           onMouseEnter={handlePrefetch}
           onFocus={handlePrefetch}

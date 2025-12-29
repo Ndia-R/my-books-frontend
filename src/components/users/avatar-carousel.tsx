@@ -1,14 +1,13 @@
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import SwipeArea from '@/components/users/swipe-area';
-import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
+import {
+  AVATAR_IMAGE_BASE_URL,
+  AVATAR_PATHS,
+} from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
-
-const AVATAR_PATHS = [...Array(41)].map(
-  (_, index) => `/avatar${String(index).padStart(2, '0')}.png`
-);
+import { useRef, useState } from 'react';
 
 type Props = {
   value: string;
@@ -45,11 +44,6 @@ export default function AvatarCarousel({ value, onChange }: Props) {
   const [isScrolling, setIsScrolling] = useState(false);
   const carouselRef = useRef<HTMLUListElement>(null);
 
-  // デフォルトのアバターをセット
-  useEffect(() => {
-    onChange(AVATAR_PATHS[currentIndex]);
-  }, [currentIndex, onChange]);
-
   const handlePrev = () => {
     if (isScrolling) return;
     setIsScrolling(true);
@@ -71,19 +65,19 @@ export default function AvatarCarousel({ value, onChange }: Props) {
     onChange(AVATAR_PATHS[nextIndex]);
   };
 
-  const handleTransitonEnd = () => {
-    setIsScrolling(false);
+  const handleTransitionEnd = () => {
     setInnerIndex(currentIndex);
 
     // 循環スクロールのために、先頭から終端などに座標を変化させるとスクロールの
     // ちらつきが発生してしまうので、切れ目の変化ではアニメーションをいったんOffにする
     if (currentIndex === 0 || currentIndex === AVATAR_PATHS.length - 1) {
-      setIsScrolling(true);
       carouselRef.current!.style.transitionProperty = 'none';
       setTimeout(() => {
         carouselRef.current!.style.transitionProperty = 'transform';
         setIsScrolling(false);
       }, 75);
+    } else {
+      setIsScrolling(false);
     }
   };
 
@@ -110,7 +104,7 @@ export default function AvatarCarousel({ value, onChange }: Props) {
             transform: `translateX(-${(innerIndex + paddingItem) * itemWidth}px)`,
             marginLeft: `${marginLeft}px`,
           }}
-          onTransitionEnd={handleTransitonEnd}
+          onTransitionEnd={handleTransitionEnd}
         >
           {extendedAvatarPaths.map((avatarPath, index) => (
             <li

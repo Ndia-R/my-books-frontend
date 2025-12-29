@@ -4,7 +4,11 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AvatarCarousel from '@/components/users/avatar-carousel';
-import { APP_TITLE, TOAST_ERROR_DURATION } from '@/constants/constants';
+import {
+  APP_TITLE,
+  DEFAULT_AVATAR_PATH,
+  TOAST_ERROR_DURATION,
+} from '@/constants/constants';
 import { updateUserProfile } from '@/lib/api/users';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
@@ -26,12 +30,19 @@ export default function Page({ title }: Props) {
   const [displayName, setDisplayName] = useState(
     userProfile?.displayName || ''
   );
-  const [avatarPath, setAvatarPath] = useState(userProfile?.avatarPath || '');
+  const [avatarPath, setAvatarPath] = useState(
+    userProfile?.avatarPath || DEFAULT_AVATAR_PATH
+  );
 
   const updateMutation = useMutation({
     mutationFn: (requestBody: UpdateUserProfile) =>
       updateUserProfile(requestBody),
     onSuccess: () => {
+      setUserProfile({
+        ...userProfile!,
+        displayName: displayName.trim(),
+        avatarPath,
+      });
       navigate('/profile');
     },
   });
@@ -46,11 +57,6 @@ export default function Page({ title }: Props) {
 
     updateMutation.mutate(requestBody, {
       onSuccess: () => {
-        setUserProfile({
-          ...userProfile!,
-          displayName: displayName.trim(),
-          avatarPath,
-        });
         toast.success('ユーザー情報を変更しました');
       },
       onError: () => {

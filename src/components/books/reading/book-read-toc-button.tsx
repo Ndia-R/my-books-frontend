@@ -5,6 +5,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import usePrefetch from '@/hooks/use-prefetch';
+import { buildPath } from '@/lib/utils';
 import { TableOfContentsIcon } from 'lucide-react';
 import { Link } from 'react-router';
 
@@ -19,6 +20,8 @@ export default function BookReadTocButton({ bookId }: Props) {
     await prefetchBookToc(bookId);
   };
 
+  const bookTocPath = buildPath('/read/:bookId/table-of-contents', { bookId });
+
   return (
     <Tooltip>
       <TooltipTrigger asChild>
@@ -27,7 +30,7 @@ export default function BookReadTocButton({ bookId }: Props) {
             variant: 'ghost',
             size: 'icon',
           })}
-          to={`/read/${bookId}/table-of-contents`}
+          to={bookTocPath}
           aria-label="目次に戻る"
           onMouseEnter={handlePrefetch}
           onFocus={handlePrefetch}

@@ -19,7 +19,7 @@ export default function BookTocSkeleton() {
         </div>
 
         <ul className="flex flex-col gap-y-8">
-          {[...Array<number>(5)].map((_, index) => (
+          {Array.from({ length: 5 }, (_, index) => (
             <li
               className="flex flex-col items-center sm:items-start"
               key={index}

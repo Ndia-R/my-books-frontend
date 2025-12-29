@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import usePrefetch from '@/hooks/use-prefetch';
-import { cn } from '@/lib/utils';
+import { buildQueryString, cn } from '@/lib/utils';
 import type { Genre } from '@/types';
 import { Link } from 'react-router';
 
@@ -26,6 +26,11 @@ export default function GenreItem({ genre, isActive = false, onClick }: Props) {
     size: 'sm' as const,
   };
 
+  const queryString = buildQueryString({
+    genreIds: genre.id,
+    condition: 'SINGLE',
+  });
+
   // 基本はLinkとしての振る舞いだが、onClickが指定されていれば、ボタンとして振る舞う
   return onClick ? (
     <Button {...buttonProps} onClick={() => onClick(genre.id)}>
@@ -39,7 +44,7 @@ export default function GenreItem({ genre, isActive = false, onClick }: Props) {
       asChild
     >
       <Link
-        to={`/discover?genreIds=${genre.id}&condition=SINGLE`}
+        to={'/discover' + queryString}
         aria-label={`${genre.name}のジャンルページへ移動`}
       >
         {genre.name}

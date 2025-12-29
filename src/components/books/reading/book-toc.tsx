@@ -8,7 +8,7 @@ import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { getBookToc } from '@/lib/api/books';
-import { chapterNumberString, cn } from '@/lib/utils';
+import { buildPath, chapterNumberString, cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
@@ -33,6 +33,15 @@ export default function BookToc({ bookId }: Props) {
     }
   };
 
+  const firstChapterPath = buildPath(
+    '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
+    {
+      bookId,
+      chapterNumber: 1,
+      pageNumber: 1,
+    }
+  );
+
   return (
     <>
       <title>{`${bookToc.title} - ${APP_TITLE}`}</title>
@@ -44,7 +53,7 @@ export default function BookToc({ bookId }: Props) {
           {isAuthenticated && bookToc.chapters.length ? (
             <Link
               className={cn(buttonVariants({ variant: 'outline' }), 'w-44')}
-              to={`/read/${bookId}/chapter/1/page/1`}
+              to={firstChapterPath}
               onMouseEnter={() => handlePrefetch(bookId, 1)}
               onFocus={() => handlePrefetch(bookId, 1)}
             >
@@ -68,21 +77,30 @@ export default function BookToc({ bookId }: Props) {
 
         {bookToc.chapters.length ? (
           <ul className="flex flex-col gap-y-8">
-            {bookToc.chapters.map((chapter) => (
-              <li
-                className="flex flex-col items-center sm:items-start"
-                key={chapter.chapterNumber}
-              >
-                <p className="text-muted-foreground text-sm">
-                  {chapterNumberString(chapter.chapterNumber)}
-                </p>
-                <Link
-                  className={cn(
-                    'hover:text-primary text-base font-semibold sm:text-xl',
-                    !isAuthenticated && 'pointer-events-none'
-                  )}
-                  to={`/read/${bookId}/chapter/${chapter.chapterNumber}/page/1`}
-                  aria-label={`${chapter.chapterTitle}のページへ移動`}
+            {bookToc.chapters.map((chapter) => {
+              const chapterPath = buildPath(
+                '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
+                {
+                  bookId,
+                  chapterNumber: chapter.chapterNumber,
+                  pageNumber: 1,
+                }
+              );
+              return (
+                <li
+                  className="flex flex-col items-center sm:items-start"
+                  key={chapter.chapterNumber}
+                >
+                  <p className="text-muted-foreground text-sm">
+                    {chapterNumberString(chapter.chapterNumber)}
+                  </p>
+                  <Link
+                    className={cn(
+                      'hover:text-primary text-base font-semibold sm:text-xl',
+                      !isAuthenticated && 'pointer-events-none'
+                    )}
+                    to={chapterPath}
+                    aria-label={`${chapter.chapterTitle}のページへ移動`}
                   onMouseEnter={() =>
                     handlePrefetch(bookId, chapter.chapterNumber)
                   }
@@ -91,7 +109,8 @@ export default function BookToc({ bookId }: Props) {
                   {chapter.chapterTitle}
                 </Link>
               </li>
-            ))}
+              );
+            })}
           </ul>
         ) : (
           <p className="text-center sm:text-start">目次がありません</p>

@@ -6,7 +6,7 @@ import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { deleteReview, updateReview } from '@/lib/api/reviews';
-import { formatDateJP, formatTime } from '@/lib/utils';
+import { buildPath, formatDateJP, formatTime } from '@/lib/utils';
 import type { Review, ReviewUpdateParams } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SquarePenIcon } from 'lucide-react';
@@ -44,6 +44,10 @@ export default function MyReviewItem({ review }: Props) {
     await prefetchBookDetail(review.book.id);
   };
 
+  const bookDetailPath = buildPath('/book/:bookId', {
+    bookId: review.book.id,
+  });
+
   return (
     <>
       <Card className="p-0">
@@ -52,7 +56,7 @@ export default function MyReviewItem({ review }: Props) {
             <div className="flex min-w-20 justify-center sm:min-w-24">
               <Link
                 className="size-fit"
-                to={`/book/${review.book.id}`}
+                to={bookDetailPath}
                 aria-label={`${review.book.title}の詳細ページへ移動`}
                 onMouseEnter={handlePrefetch}
                 onFocus={handlePrefetch}
@@ -69,7 +73,7 @@ export default function MyReviewItem({ review }: Props) {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
                 <Link
                   className="size-fit"
-                  to={`/book/${review.book.id}`}
+                  to={bookDetailPath}
                   aria-label={`${review.book.title}の詳細ページへ移動`}
                   onMouseEnter={handlePrefetch}
                   onFocus={handlePrefetch}

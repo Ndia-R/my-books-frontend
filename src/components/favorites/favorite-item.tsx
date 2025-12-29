@@ -13,7 +13,7 @@ import { queryKeys } from '@/constants/query-keys';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import usePrefetch from '@/hooks/use-prefetch';
 import { deleteFavoriteByBookId } from '@/lib/api/favorites';
-import { cn, formatDateJP, formatTime } from '@/lib/utils';
+import { buildPath, cn, formatDateJP, formatTime } from '@/lib/utils';
 import type { Favorite } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
@@ -66,6 +66,10 @@ export default function FavoriteItem({ favorite }: Props) {
     await prefetchBookDetail(favorite.book.id);
   };
 
+  const bookDetailPath = buildPath('/book/:bookId', {
+    bookId: favorite.book.id,
+  });
+
   return (
     <Card className="p-0">
       <CardContent className="p-0">
@@ -73,7 +77,7 @@ export default function FavoriteItem({ favorite }: Props) {
           <div className="flex min-w-20 justify-center sm:min-w-24">
             <Link
               className="size-fit"
-              to={`/book/${favorite.book.id}`}
+              to={bookDetailPath}
               aria-label={`${favorite.book.title}の詳細ページへ移動`}
               onMouseEnter={handlePrefetch}
               onFocus={handlePrefetch}
@@ -91,7 +95,7 @@ export default function FavoriteItem({ favorite }: Props) {
               <div className="flex items-center gap-x-2">
                 <Link
                   className="size-fit"
-                  to={`/book/${favorite.book.id}`}
+                  to={bookDetailPath}
                   aria-label={`${favorite.book.title}の詳細ページへ移動`}
                   onMouseEnter={handlePrefetch}
                   onFocus={handlePrefetch}

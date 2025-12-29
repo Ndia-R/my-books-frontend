@@ -62,7 +62,7 @@ export default function Rating({
 
       <div className="relative">
         <div className="flex">
-          {[...Array<number>(max)].map((_, index) => (
+          {Array.from({ length: max }, (_, index) => (
             <StarIcon
               className="fill-muted-foreground/20 size-5"
               key={index}
@@ -72,7 +72,7 @@ export default function Rating({
         </div>
 
         <div className="absolute top-0 left-0 flex">
-          {[...Array<number>(Math.floor(displayRating))].map((_, index) => (
+          {Array.from({ length: Math.floor(displayRating) }, (_, index) => (
             <StarIcon
               className="fill-primary size-5"
               key={index}
@@ -85,7 +85,7 @@ export default function Rating({
         </div>
 
         <div className="absolute top-0 left-0 flex">
-          {[...Array<number>(max)].map((_, index) => (
+          {Array.from({ length: max }, (_, index) => (
             <div className="flex" key={index}>
               <div
                 className={cn(
