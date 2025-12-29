@@ -54,31 +54,50 @@ npx prettier --write .
 
 ### プロジェクト構造
 
+このプロジェクトは **Next.js App Router風のディレクトリ構造** を採用しています（Vite + React Routerで実装）。
+
 ```
 /src
-├── assets/              # 静的アセット
-├── components/          # 機能別に整理されたReactコンポーネント
-│   ├── books/          # 書籍検索、詳細、読書インターフェース
-│   ├── bookmarks/      # しおり管理
-│   ├── favorites/      # お気に入りUI
-│   ├── genres/         # ジャンル選択
-│   ├── layout/         # Header, Footer, Menu
-│   ├── reviews/        # レビュー作成・表示
-│   ├── settings/       # ユーザー設定
-│   ├── shared/         # 再利用可能なコンポーネント
-│   ├── ui/             # ベースUIコンポーネント (shadcn/uiパターン)
-│   └── users/          # ユーザープロフィールコンポーネント
-├── constants/          # アプリ定数、クエリキー、ソートタイプ
-├── hooks/              # カスタムフック (usePrefetch, useSearchFilters等)
+├── app/                 # ページコンポーネント（Next.js App Router風）
+│   ├── layout.tsx      # ルートレイアウト（Header, Footer含む）
+│   ├── page.tsx        # トップページ (/)
+│   ├── not-found.tsx   # 404ページ
+│   ├── [feature]/      # 各機能のディレクトリ
+│   │   └── page.tsx    # ページコンポーネント
+│   └── [feature]/[id]/ # 動的ルート（[param]はパラメータ）
+│       └── page.tsx
+├── routes/             # ルーティング設定
+│   ├── route.tsx       # React Routerのルート定義
+│   └── protected-route.tsx # 認証保護HOC
+├── components/         # 機能別に整理されたReactコンポーネント
+│   ├── books/         # 書籍検索、詳細、読書インターフェース
+│   ├── bookmarks/     # しおり管理
+│   ├── favorites/     # お気に入りUI
+│   ├── genres/        # ジャンル選択
+│   ├── layout/        # Header, Footer, Menu
+│   ├── reviews/       # レビュー作成・表示
+│   ├── settings/      # ユーザー設定
+│   ├── shared/        # 再利用可能なコンポーネント
+│   ├── ui/            # ベースUIコンポーネント (shadcn/uiパターン)
+│   └── users/         # ユーザープロフィールコンポーネント
+├── constants/         # アプリ定数、クエリキー、ソートタイプ
+├── hooks/             # カスタムフック (usePrefetch, useSearchFilters等)
 ├── lib/
-│   ├── api/           # ドメイン別APIクライアント関数
-│   └── utils.ts       # ユーティリティ関数
-├── providers/         # コンテキストプロバイダー (認証、テーマ)
-├── routes/            # ページレベルコンポーネント
+│   ├── api/          # ドメイン別APIクライアント関数
+│   └── utils.ts      # ユーティリティ関数
+├── providers/        # コンテキストプロバイダー (認証、テーマ)
 └── types/
-    ├── domain/        # ビジネスロジック型 (Book, User, Review等)
+    ├── domain/       # ビジネスロジック型 (Book, User, Review等)
     └── infrastructure/# 技術的な型 (HTTP, Pagination)
 ```
+
+**ディレクトリ規約**:
+- `app/` - ページコンポーネントを配置（Next.js App Router風）
+  - `page.tsx` - ページコンポーネント（必須）
+  - `layout.tsx` - レイアウトコンポーネント
+  - `[param]/` - 動的ルートパラメータ（例: `[bookId]`）
+- `routes/` - React Routerのルート定義とルーティングロジック
+- `components/` - 再利用可能なUIコンポーネント
 
 ### パスエイリアス
 `@/*` を使用して `/src/*` からインポート:
@@ -217,7 +236,39 @@ await fetchBooksApi(path, options);
 - 公開: `/`, `/book/:bookId`, `/search`, `/discover`, `/ranking`, `/special-features`, `/settings`
 - 保護: `/favorites`, `/bookmarks`, `/my-reviews`, `/profile`, `/read/:bookId/...`
 
-**ファイルベースパターン**: 各ルートに `page.tsx` ファイル (例: `/routes/search/page.tsx`)
+**App Router風のディレクトリ規約**:
+
+このプロジェクトは **Next.js App Router風のディレクトリ構造** を採用していますが、**React Routerを使用**しているため、以下の違いがあります:
+
+**ディレクトリ構造とURLの対応**:
+```
+/src/app/search/page.tsx              → /search
+/src/app/book/[bookId]/page.tsx       → /book/:bookId
+/src/app/read/[bookId]/chapter/       → /read/:bookId/chapter/:chapterNumber/
+  [chapterNumber]/page/[pageNumber]/     page/:pageNumber
+  page.tsx
+```
+
+**Next.jsとの主な違い**:
+- ✅ ディレクトリ構造は同じ（`page.tsx`, `layout.tsx`, `[param]`）
+- ⚠️ ルート定義は **手動** で `/src/routes/route.tsx` に記述が必要
+- ⚠️ 自動ルート生成機能はなし（React Routerの制約）
+
+**新しいページを追加する手順**:
+1. `/src/app/` に対応するディレクトリを作成
+2. `page.tsx` ファイルを作成
+3. `/src/routes/route.tsx` にルート定義を追加（重要！）
+
+**動的パラメータの取得**:
+```typescript
+import { useParams } from 'react-router';
+
+export default function Page() {
+  const params = useParams();
+  const bookId = params.bookId || '';
+  // ...
+}
+```
 
 **検索フィルター**: URLクエリパラメータ管理には `useSearchFilters()` フックを使用
 
@@ -327,6 +378,56 @@ TOAST_ERROR_DURATION = 5000  // エラー通知の表示時間（ミリ秒）
 
 ## 開発ノート
 
+### 新しいページを追加する際
+
+このプロジェクトはNext.js App Router風の構造を採用していますが、React Routerを使用しているため手動でルート定義が必要です。
+
+**手順**:
+1. `/src/app/` にディレクトリを作成
+   ```bash
+   # 例: 新しい「about」ページを作成
+   mkdir -p src/app/about
+   ```
+
+2. `page.tsx` を作成
+   ```typescript
+   // src/app/about/page.tsx
+   export default function Page() {
+     return <div>About Page</div>;
+   }
+   ```
+
+3. `/src/routes/route.tsx` にルート定義を追加（重要！）
+   ```typescript
+   import AboutPage from '@/app/about/page';
+
+   export const router = createBrowserRouter(
+     createRoutesFromElements(
+       <Route path="/" element={<RootLayout />}>
+         {/* 既存のルート... */}
+         <Route path="about" element={<AboutPage />} />
+       </Route>
+     )
+   );
+   ```
+
+4. 動的ルートの場合は `[param]` ディレクトリを使用
+   ```bash
+   # 例: /product/:productId
+   mkdir -p src/app/product/[productId]
+   ```
+
+   ```typescript
+   // src/app/product/[productId]/page.tsx
+   import { useParams } from 'react-router';
+
+   export default function Page() {
+     const params = useParams();
+     const productId = params.productId || '';
+     return <div>Product: {productId}</div>;
+   }
+   ```
+
 ### 新機能を追加する際
 1. `/src/types/domain/` または `/src/types/infrastructure/` で型を定義
 2. `/src/lib/api/` にAPI関数を作成
@@ -335,8 +436,10 @@ TOAST_ERROR_DURATION = 5000  // エラー通知の表示時間（ミリ秒）
    - 変数名は `path` を使用（`endpoint` ではない）
 3. `/src/constants/query-keys.ts` にクエリキーを追加
 4. 必要に応じて `/src/hooks/` にカスタムフックを作成
-5. 適切な機能ディレクトリにUIコンポーネントを構築
-6. データフェッチにはSuspense + Error Boundaryパターンを使用
+5. `/src/components/` に再利用可能なUIコンポーネントを構築
+6. `/src/app/` にページコンポーネントを作成
+7. `/src/routes/route.tsx` にルート定義を追加
+8. データフェッチにはSuspense + Error Boundaryパターンを使用
 
 ### フォームを扱う際
 - Radix UIフォームコンポーネント (Label, Input, Select等) を使用

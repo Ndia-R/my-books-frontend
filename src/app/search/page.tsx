@@ -1,9 +1,9 @@
 import BooksSkeleton from '@/components/books/books-skeleton';
 import BookSearch from '@/components/books/discovery/book-search';
+import ErrorElement from '@/components/shared/error-element';
 import { Separator } from '@/components/ui/separator';
 import { APP_TITLE } from '@/constants/constants';
 import { useSearchFilters } from '@/hooks/use-search-filters';
-import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 

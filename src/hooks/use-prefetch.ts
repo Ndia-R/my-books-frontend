@@ -1,3 +1,4 @@
+import { CACHE_TIME } from '@/constants/cache-time';
 import { queryKeys } from '@/constants/query-keys';
 import {
   getBookChapterPageContent,
@@ -25,7 +26,7 @@ export default function usePrefetch() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.searchBooksByTitleKeyword(q, page),
       queryFn: () => searchBooksByTitleKeyword(q, page),
-      staleTime: 1000 * 60,
+      staleTime: CACHE_TIME.SHORT,
     });
   };
 
@@ -38,7 +39,7 @@ export default function usePrefetch() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.searchBooksByGenre(genreIds, condition, page),
       queryFn: () => searchBooksByGenre(genreIds, condition, page),
-      staleTime: 1000 * 60,
+      staleTime: CACHE_TIME.SHORT,
     });
   };
 
@@ -48,13 +49,13 @@ export default function usePrefetch() {
       queryClient.prefetchQuery({
         queryKey: queryKeys.getBookDetails(bookId),
         queryFn: () => getBookDetails(bookId),
-        staleTime: 1000 * 60,
+        staleTime: CACHE_TIME.LONG,
       }),
 
       queryClient.prefetchQuery({
         queryKey: queryKeys.getBookFavoriteStats(bookId),
         queryFn: () => getBookFavoriteStats(bookId),
-        staleTime: 1000 * 60,
+        staleTime: CACHE_TIME.SHORT,
       }),
     ]);
   };
@@ -64,7 +65,7 @@ export default function usePrefetch() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.getBookToc(bookId),
       queryFn: () => getBookToc(bookId),
-      staleTime: Infinity,
+      staleTime: CACHE_TIME.FOREVER,
     });
   };
 
@@ -78,7 +79,7 @@ export default function usePrefetch() {
       queryClient.prefetchQuery({
         queryKey: queryKeys.getBookToc(bookId),
         queryFn: () => getBookToc(bookId),
-        staleTime: Infinity,
+        staleTime: CACHE_TIME.FOREVER,
       }),
       queryClient.prefetchQuery({
         queryKey: queryKeys.getBookChapterPageContent(
@@ -88,12 +89,12 @@ export default function usePrefetch() {
         ),
         queryFn: () =>
           getBookChapterPageContent(bookId, chapterNumber, pageNumber),
-        staleTime: Infinity,
+        staleTime: CACHE_TIME.FOREVER,
       }),
       queryClient.prefetchQuery({
         queryKey: queryKeys.getUserBookmarksByBookId(bookId),
         queryFn: () => getUserBookmarksByBookId(bookId),
-        staleTime: 1000 * 60,
+        staleTime: CACHE_TIME.MEDIUM,
       }),
     ]);
   };
@@ -103,7 +104,7 @@ export default function usePrefetch() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.getUserFavorites(page),
       queryFn: () => getUserFavorites(page),
-      staleTime: 1000 * 60,
+      staleTime: CACHE_TIME.MEDIUM,
     });
   };
   const prefetchUserFavoritesInfinite = async () => {
@@ -113,8 +114,8 @@ export default function usePrefetch() {
       initialPageParam: 1,
       getNextPageParam: (lastPage: FavoritePage) =>
         lastPage.hasNext ? lastPage.currentPage + 1 : undefined,
-      staleTime: Infinity,
-      gcTime: Infinity,
+      staleTime: CACHE_TIME.MEDIUM,
+      gcTime: CACHE_TIME.MEDIUM,
     });
   };
 
@@ -123,7 +124,7 @@ export default function usePrefetch() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.getUserBookmarks(page),
       queryFn: () => getUserBookmarks(page),
-      staleTime: 1000 * 60,
+      staleTime: CACHE_TIME.MEDIUM,
     });
   };
   const prefetchUserBookmarksInfinite = async () => {
@@ -133,8 +134,8 @@ export default function usePrefetch() {
       initialPageParam: 1,
       getNextPageParam: (lastPage: BookmarkPage) =>
         lastPage.hasNext ? lastPage.currentPage + 1 : undefined,
-      staleTime: Infinity,
-      gcTime: Infinity,
+      staleTime: CACHE_TIME.MEDIUM,
+      gcTime: CACHE_TIME.MEDIUM,
     });
   };
 
@@ -143,7 +144,7 @@ export default function usePrefetch() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.getUserReviews(page),
       queryFn: () => getUserReviews(page),
-      staleTime: 1000 * 60,
+      staleTime: CACHE_TIME.MEDIUM,
     });
   };
   const prefetchUserReviewsInfinite = async () => {
@@ -153,8 +154,8 @@ export default function usePrefetch() {
       initialPageParam: 1,
       getNextPageParam: (lastPage: ReviewPage) =>
         lastPage.hasNext ? lastPage.currentPage + 1 : undefined,
-      staleTime: Infinity,
-      gcTime: Infinity,
+      staleTime: CACHE_TIME.MEDIUM,
+      gcTime: CACHE_TIME.MEDIUM,
     });
   };
 
@@ -163,7 +164,7 @@ export default function usePrefetch() {
     await queryClient.prefetchQuery({
       queryKey: queryKeys.getUserProfileCounts(),
       queryFn: () => getUserProfileCounts(),
-      staleTime: 1000 * 60,
+      staleTime: CACHE_TIME.MEDIUM,
     });
   };
 

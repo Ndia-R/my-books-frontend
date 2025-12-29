@@ -84,27 +84,45 @@ VITE_BASE_URL=http://localhost:8080
 
 ## プロジェクト構造
 
+このプロジェクトは **Next.js App Router風のディレクトリ構造** を採用しています（Vite + React Routerで実装）。
+
 ```
 /src
-├── assets/              # 静的アセット
-├── components/          # 機能別に整理されたReactコンポーネント
-│   ├── books/          # 書籍検索、詳細、読書インターフェース
-│   ├── bookmarks/      # しおり管理
-│   ├── favorites/      # お気に入りUI
-│   ├── reviews/        # レビュー作成・表示
-│   ├── layout/         # Header, Footer, Menu
-│   └── ui/             # 再利用可能なベースUIコンポーネント
-├── constants/          # アプリ定数、クエリキー、ソートタイプ
-├── hooks/              # カスタムフック
+├── app/                # ページコンポーネント（Next.js App Router風）
+│   ├── layout.tsx     # ルートレイアウト
+│   ├── page.tsx       # 各ページコンポーネント
+│   ├── [feature]/     # 機能別ディレクトリ
+│   │   └── page.tsx   # ページファイル
+│   └── [param]/       # 動的ルート（例: [bookId]）
+├── routes/            # ルーティング設定
+│   ├── route.tsx      # React Routerのルート定義
+│   └── protected-route.tsx # 認証保護
+├── components/        # 機能別に整理されたReactコンポーネント
+│   ├── books/        # 書籍検索、詳細、読書インターフェース
+│   ├── bookmarks/    # しおり管理
+│   ├── favorites/    # お気に入りUI
+│   ├── reviews/      # レビュー作成・表示
+│   ├── layout/       # Header, Footer, Menu
+│   └── ui/           # 再利用可能なベースUIコンポーネント
+├── constants/        # アプリ定数、クエリキー、ソートタイプ
+├── hooks/            # カスタムフック
 ├── lib/
-│   ├── api/           # ドメイン別APIクライアント関数
-│   └── utils.ts       # ユーティリティ関数
-├── providers/         # コンテキストプロバイダー（認証、テーマ）
-├── routes/            # ページレベルコンポーネント
+│   ├── api/         # ドメイン別APIクライアント関数
+│   └── utils.ts     # ユーティリティ関数
+├── providers/       # コンテキストプロバイダー（認証、テーマ）
 └── types/
-    ├── domain/        # ビジネスロジック型
-    └── infrastructure/# 技術的な型
+    ├── domain/      # ビジネスロジック型
+    └── infrastructure/ # 技術的な型
 ```
+
+**ディレクトリ規約**:
+- `app/` - ページコンポーネント（`page.tsx`, `layout.tsx`）
+- `routes/` - React Routerのルート定義（手動設定が必要）
+- `components/` - 再利用可能なUIコンポーネント
+
+**Next.jsとの違い**:
+- ディレクトリ構造は同じですが、ルートは `/src/routes/route.tsx` で手動定義が必要です
+- 自動ルート生成機能はありません（React Routerの制約）
 
 ## コーディング規約
 

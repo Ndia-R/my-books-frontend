@@ -22,7 +22,6 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { toast } from 'sonner';
 
 const MENU_LIST: MenuItem[] = [
   { label: 'お気に入り', href: '/favorites', icon: HeartIcon },
@@ -40,8 +39,6 @@ export default function UserIconButton() {
 
   const handleClickLogout = () => {
     logout();
-    toast.success('ログアウトしました');
-    setIsOpen(false);
   };
 
   const handleClickMenuItem = (href: string) => {

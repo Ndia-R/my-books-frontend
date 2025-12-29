@@ -3,8 +3,8 @@ import BookNewReleases from '@/components/books/discovery/book-new-releases';
 import GenresSkeleton from '@/components/genres/genres-skeleton';
 import GenresTopPage from '@/components/genres/genres-top-page';
 import Hero from '@/components/layout/hero';
+import ErrorElement from '@/components/shared/error-element';
 import { Separator } from '@/components/ui/separator';
-import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 

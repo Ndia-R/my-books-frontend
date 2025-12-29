@@ -3,10 +3,10 @@ import BookDiscovery from '@/components/books/discovery/book-discovery';
 import GenresConditionSelector from '@/components/genres/genres-condition-selector';
 import GenresSelector from '@/components/genres/genres-selector';
 import GenresSkeleton from '@/components/genres/genres-skeleton';
+import ErrorElement from '@/components/shared/error-element';
 import { Separator } from '@/components/ui/separator';
 import { APP_TITLE } from '@/constants/constants';
 import { useSearchFilters } from '@/hooks/use-search-filters';
-import ErrorElement from '@/routes/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 

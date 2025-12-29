@@ -1,4 +1,5 @@
 import Logo from '@/components/layout/logo';
+import ErrorElement from '@/components/shared/error-element';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
@@ -6,7 +7,6 @@ import UserProfileCounts from '@/components/users/user-profile-counts';
 import { APP_TITLE, AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
-import ErrorElement from '@/routes/error-element';
 import type { MenuItem } from '@/types';
 import { PaletteIcon, UserRoundPenIcon } from 'lucide-react';
 import { Suspense } from 'react';
