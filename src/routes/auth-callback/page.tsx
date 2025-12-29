@@ -1,32 +1,32 @@
-import { httpFetch } from '@/lib/api/fetch';
-import type { UserProfile } from '@/types';
+import { useAuth } from '@/providers/auth-provider';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 
-export default function Page() {
+export default function AuthCallbackPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const { checkAuthStatus } = useAuth();
 
   useEffect(() => {
-    const initializeAuth = async () => {
+    const handleAuthCallback = async () => {
       try {
-        const res = await httpFetch<UserProfile>('/me/profile');
-        console.log('認証成功:', res.data);
+        // AuthProviderに認証状態のチェックと更新を依頼
+        await checkAuthStatus();
 
         // BFFから渡されたreturn_toパラメータから復帰先URLを取得
         const redirectTo = searchParams.get('return_to');
 
-        console.log('復帰先URL:', redirectTo);
-
         // 復帰先に遷移（なければトップページ）
-        navigate(redirectTo || '/');
+        navigate(redirectTo || '/', { replace: true });
       } catch (e) {
-        console.error('Error fetching profile:', e);
+        console.error('Error during auth callback:', e);
+        // エラー時はログインページに戻る
+        navigate('/login', { replace: true });
       }
     };
 
-    initializeAuth();
-  }, [navigate, searchParams]);
+    handleAuthCallback();
+  }, [navigate, searchParams, checkAuthStatus]);
 
   return <div></div>;
 }
