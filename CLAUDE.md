@@ -159,19 +159,20 @@ const { prefetchBookDetail } = usePrefetch();
 
 ### 4. API統合
 
-**カスタムFetchクライアント** (`/src/lib/api/fetch-client.ts`):
+**カスタムHTTPクライアント** (`/src/lib/api/fetch.ts`):
 - `HttpError` クラスによる統一されたエラーハンドリング
 - `getCsrfToken()` によるCSRFトークン管理
 - 自動コンテンツタイプ検出
 - すべてのリクエストに認証情報を含む
 
 **API組織** (`/src/lib/api/`):
-- `books.ts` - 書籍検索、詳細、目次、コンテンツ、レビュー
-- `user.ts` - プロフィール、お気に入り、しおり、ユーザーレビュー
-- `review.ts` - レビューの作成、更新、削除
-- `favorite.ts` - お気に入りの追加/削除
+- `books.ts` - 書籍検索、詳細、目次、コンテンツ、レビュー、統計
+- `users.ts` - プロフィール、お気に入り、しおり、ユーザーレビュー
+- `reviews.ts` - レビューの作成、更新、削除
+- `favorites.ts` - お気に入りの追加/削除
 - `bookmarks.ts` - しおりのCRUD
 - `genres.ts` - ジャンル一覧
+- `auth.ts` - ログアウト処理
 
 **環境設定**:
 ```typescript
@@ -180,18 +181,34 @@ BFF_BASE_URL = `${VITE_BASE_URL}/bff/auth`
 IMAGE_BASE_URL = `https://vsv-crystal.skygroup.local/assets/images`
 ```
 
-### 5. CSRF保護付きミューテーション
+### 5. URL構築とセキュリティ
 
+**安全なURL構築**:
 ```typescript
+// クエリ文字列の構築（自動エンコード、undefined/null除外）
+const queryString = buildQueryString({ q: '本', page: 1, size: 20 });
+// => '?q=%E6%9C%AC&page=1&size=20'
+
+// パスパラメータの構築（自動エンコード、必須パラメータ検証）
+const path = buildPath('/books/:bookId/reviews', { bookId });
+// => '/books/123/reviews'
+
+// 組み合わせ
+const response = await fetchBooksApi<ReviewPage>(path + queryString);
+```
+
+**CSRF保護付きミューテーション**:
+```typescript
+const path = buildPath('/reviews/:reviewId', { reviewId });
 const options: RequestInit = {
-  method: 'POST',
+  method: 'PUT',
   headers: {
     'Content-Type': 'application/json',
     'X-XSRF-TOKEN': getCsrfToken(), // CookieからのCSRFトークン
   },
   body: JSON.stringify(requestBody),
 };
-await customFetch(endpoint, options);
+await fetchBooksApi(path, options);
 ```
 
 ### 6. ルーティングとナビゲーション
@@ -259,13 +276,22 @@ const { theme, setTheme, themeColor, setThemeColor } = useTheme();
 ## 共通ユーティリティ関数
 
 `/src/lib/utils.ts` に配置:
+
+### URL構築
+- `buildQueryString()` - URLクエリ文字列の安全な構築 (自動エンコード、undefined/null除外)
+- `buildPath()` - パスパラメータの安全な構築 (自動エンコード、必須パラメータ検証)
+
+### フォーマット
 - `cn()` - Tailwindクラスのマージ (clsx + tailwind-merge)
-- `formatDateJP()` - 日本語の日付フォーマット
+- `formatDateJP()` - 日本語の日付フォーマット (yyyy年M月d日)
 - `formatDate()` - yyyy/MM/dd形式
 - `formatTime()` - H:mm形式
 - `formatPrice()` - カンマ区切りと「円」を追加
 - `formatIsbn()` - ハイフン付きISBNフォーマット
 - `chapterNumberString()` - 第X章形式にフォーマット
+
+### その他
+- `getCsrfToken()` - CookieからCSRFトークンを取得
 - `sleep()` - Promiseベースの遅延
 
 ## データ型
@@ -287,12 +313,16 @@ const { theme, setTheme, themeColor, setThemeColor } = useTheme();
 
 `/src/constants/constants.ts` より:
 ```typescript
+// ページサイズとソート順
 DEFAULT_BOOKS_SIZE = 20
+DEFAULT_BOOKS_SORT = BookSortOrder.PopularityDesc
 DEFAULT_REVIEWS_SIZE = 3
-DEFAULT_MY_REVIEWS_SIZE = 5
-DEFAULT_MY_FAVORITES_SIZE = 5
-DEFAULT_MY_BOOKMARKS_SIZE = 5
-TOAST_ERROR_DURATION = 5000
+DEFAULT_REVIEWS_SORT = ReviewSortOrder.UpdatedAtDesc
+DEFAULT_MY_PAGE_SIZE = 5  // マイページ系コンテンツ（レビュー、お気に入り、ブックマーク）共通
+DEFAULT_MY_PAGE_SORT = ReviewSortOrder.UpdatedAtDesc
+
+// その他
+TOAST_ERROR_DURATION = 5000  // エラー通知の表示時間（ミリ秒）
 ```
 
 ## 開発ノート
@@ -300,6 +330,9 @@ TOAST_ERROR_DURATION = 5000
 ### 新機能を追加する際
 1. `/src/types/domain/` または `/src/types/infrastructure/` で型を定義
 2. `/src/lib/api/` にAPI関数を作成
+   - URLパスには `buildPath()` を使用してパラメータを安全にエンコード
+   - クエリ文字列には `buildQueryString()` を使用
+   - 変数名は `path` を使用（`endpoint` ではない）
 3. `/src/constants/query-keys.ts` にクエリキーを追加
 4. 必要に応じて `/src/hooks/` にカスタムフックを作成
 5. 適切な機能ディレクトリにUIコンポーネントを構築

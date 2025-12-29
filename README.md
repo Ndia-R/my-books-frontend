@@ -1,75 +1,151 @@
-# React + TypeScript + Vite
+# My Books
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React 19 + TypeScript + Vite で構築された日本語の書籍発見・読書プラットフォーム。
 
-Currently, two official plugins are available:
+## 概要
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+My Booksは、書籍の閲覧、レビュー、お気に入り、しおり機能を提供する認証済みユーザー向けWebアプリケーションです。
 
-## React Compiler
+### 主な機能
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+- 📚 書籍の検索・閲覧（タイトル検索、ジャンル検索）
+- 📖 オンライン読書インターフェース（目次、ページ送り）
+- ⭐ レビューの投稿・閲覧・管理
+- ❤️ お気に入り登録
+- 🔖 しおり機能
+- 👤 ユーザープロフィール管理
+- 🌓 ダークモード対応
+- 🎨 カスタムテーマカラー
 
-Note: This will impact Vite dev & build performances.
+## 技術スタック
 
-## Expanding the ESLint configuration
+### コア
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **React 19** - UIライブラリ
+- **TypeScript** - 型安全性
+- **Vite** - 高速なビルドツール
+- **React Router v7** - ファイルベースルーティング
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### 状態管理・データフェッチ
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- **TanStack Query v5** - サーバー状態管理
+- **Context API** - クライアント状態管理（認証、テーマ）
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### UI・スタイリング
+
+- **Tailwind CSS v4** - ユーティリティファーストCSS
+- **Radix UI** - アクセシブルなヘッドレスコンポーネント
+- **CVA** - バリアント管理
+- **Motion** - アニメーション
+- **Lucide React** - アイコン
+- **next-themes** - テーマ管理
+
+### その他
+
+- **React Compiler** - 自動パフォーマンス最適化
+- **Prettier** - コードフォーマッター（Tailwindクラス並び替え対応）
+
+## 開発環境のセットアップ
+
+### 必要要件
+
+- Node.js 18以上
+- npm または yarn
+
+### インストール
+
+```bash
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
+npm run dev
+
+# 本番用ビルド
+npm run build
+
+# ビルドのプレビュー
+npm run preview
+
+# コードのLint
+npm run lint
+
+# コードのフォーマット
+npx prettier --write .
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### 環境変数
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+`.env`ファイルを作成し、以下の環境変数を設定してください：
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```env
+VITE_BASE_URL=http://localhost:8080
 ```
+
+## プロジェクト構造
+
+```
+/src
+├── assets/              # 静的アセット
+├── components/          # 機能別に整理されたReactコンポーネント
+│   ├── books/          # 書籍検索、詳細、読書インターフェース
+│   ├── bookmarks/      # しおり管理
+│   ├── favorites/      # お気に入りUI
+│   ├── reviews/        # レビュー作成・表示
+│   ├── layout/         # Header, Footer, Menu
+│   └── ui/             # 再利用可能なベースUIコンポーネント
+├── constants/          # アプリ定数、クエリキー、ソートタイプ
+├── hooks/              # カスタムフック
+├── lib/
+│   ├── api/           # ドメイン別APIクライアント関数
+│   └── utils.ts       # ユーティリティ関数
+├── providers/         # コンテキストプロバイダー（認証、テーマ）
+├── routes/            # ページレベルコンポーネント
+└── types/
+    ├── domain/        # ビジネスロジック型
+    └── infrastructure/# 技術的な型
+```
+
+## コーディング規約
+
+### URL構築
+
+セキュリティとメンテナンス性のため、URL構築にはヘルパー関数を使用してください：
+
+```typescript
+// クエリ文字列の構築
+const queryString = buildQueryString({ q: '本', page: 1, size: 20 });
+
+// パスパラメータの構築
+const path = buildPath('/books/:bookId/reviews', { bookId });
+
+// 組み合わせ
+const response = await fetchBooksApi<ReviewPage>(path + queryString);
+```
+
+### 変数命名
+
+- URLパスを格納する変数は `path` を使用（`endpoint` ではない）
+- クエリ文字列を格納する変数は `queryString` を使用
+
+### データフェッチ
+
+- サーバー状態管理には TanStack Query の `useSuspenseQuery` を使用
+- ローディング/エラー状態は Suspense + Error Boundary で処理
+- 無限スクロールには `useSuspenseInfiniteQuery` を使用
+
+## ドキュメント
+
+詳細な開発ガイドは [CLAUDE.md](./CLAUDE.md) を参照してください。以下の情報が含まれています：
+
+- アーキテクチャ詳細
+- TanStack Queryのパターン
+- 認証フロー
+- API統合方法
+- ユーティリティ関数リファレンス
+- コンポーネントパターン
+- ベストプラクティス
+
+## ライセンス
+
+このプロジェクトはプライベートプロジェクトです。

@@ -4,7 +4,9 @@ import {
   DEFAULT_REVIEWS_SIZE,
   DEFAULT_REVIEWS_SORT,
 } from '@/constants/constants';
+import type { BookSortOrder, ReviewSortOrder } from '@/constants/sort-types';
 import { fetchBooksApi } from '@/lib/api/fetch';
+import { buildPath, buildQueryString } from '@/lib/utils';
 import type {
   BookChapterPageContent,
   BookDetails,
@@ -17,8 +19,8 @@ import type {
 
 // 最新の書籍リスト（１０冊分）
 export const getBooksNewReleases = async () => {
-  const endpoint = `/books/new-releases`;
-  const response = await fetchBooksApi<BookPage>(endpoint);
+  const path = `/books/new-releases`;
+  const response = await fetchBooksApi<BookPage>(path);
   return response.data;
 };
 
@@ -26,12 +28,12 @@ export const getBooksNewReleases = async () => {
 export const searchBooksByTitleKeyword = async (
   q: string,
   page: number = 1,
-  size = DEFAULT_BOOKS_SIZE,
-  sort = DEFAULT_BOOKS_SORT
+  size: number = DEFAULT_BOOKS_SIZE,
+  sort: BookSortOrder = DEFAULT_BOOKS_SORT
 ) => {
-  const endpoint = `/books/search`;
-  const query = `?q=${q}&page=${page}&size=${size}&sort=${sort}`;
-  const response = await fetchBooksApi<BookPage>(endpoint + query);
+  const path = `/books/search`;
+  const queryString = buildQueryString({ q, page, size, sort });
+  const response = await fetchBooksApi<BookPage>(path + queryString);
   return response.data;
 };
 
@@ -40,26 +42,32 @@ export const searchBooksByGenre = async (
   genreIds: string,
   condition: string,
   page: number = 1,
-  size = DEFAULT_BOOKS_SIZE,
-  sort = DEFAULT_BOOKS_SORT
+  size: number = DEFAULT_BOOKS_SIZE,
+  sort: BookSortOrder = DEFAULT_BOOKS_SORT
 ) => {
-  const endpoint = `/books/discover`;
-  const query = `?genreIds=${genreIds}&condition=${condition}&page=${page}&size=${size}&sort=${sort}`;
-  const response = await fetchBooksApi<BookPage>(endpoint + query);
+  const path = `/books/discover`;
+  const queryString = buildQueryString({
+    genreIds,
+    condition,
+    page,
+    size,
+    sort,
+  });
+  const response = await fetchBooksApi<BookPage>(path + queryString);
   return response.data;
 };
 
 // 特定の書籍の詳細
 export const getBookDetails = async (bookId: string) => {
-  const endpoint = `/books/${bookId}`;
-  const response = await fetchBooksApi<BookDetails>(endpoint);
+  const path = buildPath('/books/:bookId', { bookId });
+  const response = await fetchBooksApi<BookDetails>(path);
   return response.data;
 };
 
 // 特定の書籍の目次
 export const getBookToc = async (bookId: string) => {
-  const endpoint = `/books/${bookId}/toc`;
-  const response = await fetchBooksApi<BookToc>(endpoint);
+  const path = buildPath('/books/:bookId/toc', { bookId });
+  const response = await fetchBooksApi<BookToc>(path);
   return response.data;
 };
 
@@ -69,8 +77,11 @@ export const getBookChapterPageContent = async (
   chapterNumber: number,
   pageNumber: number
 ) => {
-  const endpoint = `/book-content/books/${bookId}/chapters/${chapterNumber}/pages/${pageNumber}`;
-  const response = await fetchBooksApi<BookChapterPageContent>(endpoint);
+  const path = buildPath(
+    '/book-content/books/:bookId/chapters/:chapterNumber/pages/:pageNumber',
+    { bookId, chapterNumber, pageNumber }
+  );
+  const response = await fetchBooksApi<BookChapterPageContent>(path);
   return response.data;
 };
 
@@ -78,25 +89,26 @@ export const getBookChapterPageContent = async (
 export const getBookReviews = async (
   bookId: string,
   page: number = 1,
-  size = DEFAULT_REVIEWS_SIZE,
-  sort = DEFAULT_REVIEWS_SORT
+  size: number = DEFAULT_REVIEWS_SIZE,
+  sort: ReviewSortOrder = DEFAULT_REVIEWS_SORT
 ) => {
-  const endpoint = `/books/${bookId}/reviews`;
-  const query = `?page=${page}&size=${size}&sort=${sort}`;
-  const response = await fetchBooksApi<ReviewPage>(endpoint + query);
+  const path = buildPath('/books/:bookId/reviews', { bookId });
+  const queryString = buildQueryString({ page, size, sort });
+  const response = await fetchBooksApi<ReviewPage>(path + queryString);
   return response.data;
 };
 
 // 特定の書籍のレビュー統計
+// 注: この関数は現在未使用ですが、将来的にレビュー統計表示機能を実装する際に使用予定
 export const getBookReviewStats = async (bookId: string) => {
-  const endpoint = `/books/${bookId}/stats/reviews`;
-  const response = await fetchBooksApi<ReviewStats>(endpoint);
+  const path = buildPath('/books/:bookId/stats/reviews', { bookId });
+  const response = await fetchBooksApi<ReviewStats>(path);
   return response.data;
 };
 
 // 特定の書籍のお気に入り統計
 export const getBookFavoriteStats = async (bookId: string) => {
-  const endpoint = `/books/${bookId}/stats/favorites`;
-  const response = await fetchBooksApi<FavoriteStats>(endpoint);
+  const path = buildPath('/books/:bookId/stats/favorites', { bookId });
+  const response = await fetchBooksApi<FavoriteStats>(path);
   return response.data;
 };

@@ -13,12 +13,8 @@ export const queryKeys = {
     pageNumber: number
   ) =>
     ['getBookChapterPageContent', bookId, chapterNumber, pageNumber] as const,
-  getBookReviews: (bookId: string, page: number) =>
-    ['getBookReviews', bookId, page] as const,
   getBookReviewsInfinite: (bookId: string) =>
     ['getBookReviewsInfinite', bookId] as const,
-  getBookReviewStats: (bookId: string) =>
-    ['getBookReviewStats', bookId] as const,
   getBookFavoriteStats: (bookId: string) =>
     ['getBookFavoriteStats', bookId] as const,
 
@@ -34,10 +30,6 @@ export const queryKeys = {
   getUserFavoritesInfinite: () => ['getUserFavoritesInfinite'] as const,
   getUserBookmarks: (page: number) => ['getUserBookmarks', page] as const,
   getUserBookmarksInfinite: () => ['getUserBookmarksInfinite'] as const,
-  getUserReviewsByBookId: (bookId: string) =>
-    ['getUserReviewsByBookId', bookId] as const,
-  getUserFavoritesByBookId: (bookId: string) =>
-    ['getUserFavoritesByBookId', bookId] as const,
   getUserBookmarksByBookId: (bookId: string) =>
     ['getUserBookmarksByBookId', bookId] as const,
   isReviewedByUser: (bookId: string) => ['isReviewedByUser', bookId] as const,

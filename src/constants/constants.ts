@@ -1,9 +1,4 @@
-import {
-  BookmarkSortOrder,
-  BookSortOrder,
-  FavoriteSortOrder,
-  ReviewSortOrder,
-} from '@/constants/sort-types';
+import { BookSortOrder, ReviewSortOrder } from '@/constants/sort-types';
 
 export const TITLE_LOGO = 'My Books';
 export const APP_TITLE = 'My Books';
@@ -15,22 +10,17 @@ export const IMAGE_BASE_URL = `https://vsv-crystal.skygroup.local/assets/images`
 export const BOOK_IMAGE_BASE_URL = `${IMAGE_BASE_URL}/my-books`;
 export const AVATAR_IMAGE_BASE_URL = `${IMAGE_BASE_URL}/avatars`;
 
+// 書籍検索系
 export const DEFAULT_BOOKS_SIZE = 20;
-export const DEFAULT_REVIEWS_SIZE = 3;
-
 export const DEFAULT_BOOKS_SORT = BookSortOrder.PopularityDesc;
+
+// 書籍レビュー表示
+export const DEFAULT_REVIEWS_SIZE = 3;
 export const DEFAULT_REVIEWS_SORT = ReviewSortOrder.UpdatedAtDesc;
 
-export const DEFAULT_MY_REVIEWS_SIZE = 5;
-export const DEFAULT_MY_FAVORITES_SIZE = 5;
-export const DEFAULT_MY_BOOKMARKS_SIZE = 5;
-
-export const DEFAULT_MY_REVIEWS_SORT = ReviewSortOrder.UpdatedAtDesc;
-export const DEFAULT_MY_FAVORITES_SORT = FavoriteSortOrder.UpdatedAtDesc;
-export const DEFAULT_MY_BOOKMARKS_SORT = BookmarkSortOrder.UpdatedAtDesc;
-
-// セッション期限切れ用カスタムイベント
-export const AUTH_SESSION_EXPIRED_EVENT = 'auth-session-expired';
+// マイページ系コンテンツ（レビュー、お気に入り、ブックマーク）の共通設定
+export const DEFAULT_MY_PAGE_SIZE = 5;
+export const DEFAULT_MY_PAGE_SORT = ReviewSortOrder.UpdatedAtDesc;
 
 // Toastでエラー通知時の表示時間（ミリ秒）
 export const TOAST_ERROR_DURATION = 5000;

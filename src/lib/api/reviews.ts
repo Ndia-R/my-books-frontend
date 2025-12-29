@@ -1,10 +1,10 @@
 import { fetchBooksApi } from '@/lib/api/fetch';
-import { getCsrfToken } from '@/lib/utils';
+import { buildPath, getCsrfToken } from '@/lib/utils';
 import type { ReviewRequest } from '@/types';
 
 // レビュー作成
 export const createReview = async (requestBody: ReviewRequest) => {
-  const endpoint = `/reviews`;
+  const path = `/reviews`;
   const options: RequestInit = {
     method: 'POST',
     headers: {
@@ -13,7 +13,7 @@ export const createReview = async (requestBody: ReviewRequest) => {
     },
     body: JSON.stringify(requestBody),
   };
-  await fetchBooksApi(endpoint, options);
+  await fetchBooksApi(path, options);
 };
 
 // レビュー更新
@@ -21,7 +21,7 @@ export const updateReview = async (
   reviewId: number,
   requestBody: ReviewRequest
 ) => {
-  const endpoint = `/reviews/${reviewId}`;
+  const path = buildPath('/reviews/:reviewId', { reviewId });
   const options: RequestInit = {
     method: 'PUT',
     headers: {
@@ -30,17 +30,17 @@ export const updateReview = async (
     },
     body: JSON.stringify(requestBody),
   };
-  await fetchBooksApi(endpoint, options);
+  await fetchBooksApi(path, options);
 };
 
 // レビュー削除
 export const deleteReview = async (reviewId: number) => {
-  const endpoint = `/reviews/${reviewId}`;
+  const path = buildPath('/reviews/:reviewId', { reviewId });
   const options: RequestInit = {
     method: 'DELETE',
     headers: {
       'X-XSRF-TOKEN': getCsrfToken(),
     },
   };
-  await fetchBooksApi(endpoint, options);
+  await fetchBooksApi(path, options);
 };

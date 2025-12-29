@@ -1,3 +1,6 @@
+/**
+ * 書籍検索のソート順定義
+ */
 export const BookSortOrder = {
   TitleAsc: 'title.asc',
   TitleDesc: 'title.desc',
@@ -13,6 +16,9 @@ export const BookSortOrder = {
 
 export type BookSortOrder = (typeof BookSortOrder)[keyof typeof BookSortOrder];
 
+/**
+ * レビュー、お気に入り、ブックマークのソート順定義（共通）
+ */
 export const ReviewSortOrder = {
   UpdatedAtAsc: 'updatedAt.asc',
   UpdatedAtDesc: 'updatedAt.desc',
@@ -24,23 +30,3 @@ export const ReviewSortOrder = {
 
 export type ReviewSortOrder =
   (typeof ReviewSortOrder)[keyof typeof ReviewSortOrder];
-
-export const FavoriteSortOrder = {
-  UpdatedAtAsc: 'updatedAt.asc',
-  UpdatedAtDesc: 'updatedAt.desc',
-  CreatedAtAsc: 'createdAt.asc',
-  CreatedAtDesc: 'createdAt.desc',
-} as const;
-
-export type FavoriteSortOrder =
-  (typeof FavoriteSortOrder)[keyof typeof FavoriteSortOrder];
-
-export const BookmarkSortOrder = {
-  UpdatedAtAsc: 'updatedAt.asc',
-  UpdatedAtDesc: 'updatedAt.desc',
-  CreatedAtAsc: 'createdAt.asc',
-  CreatedAtDesc: 'createdAt.desc',
-} as const;
-
-export type BookmarkSortOrder =
-  (typeof BookmarkSortOrder)[keyof typeof BookmarkSortOrder];
