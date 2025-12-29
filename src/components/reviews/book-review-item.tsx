@@ -94,7 +94,7 @@ export default function BookReviewItem({ review }: Props) {
               </div>
             </div>
           </div>
-          <Rating rating={review.rating} readOnly />
+          <Rating rating={review.rating} key={review.rating} readOnly />
         </div>
         <p className="text-muted-foreground mt-2 text-sm sm:pl-20 sm:text-base">
           {review.comment}

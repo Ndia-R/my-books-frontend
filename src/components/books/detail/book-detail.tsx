@@ -7,7 +7,13 @@ import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { getBookDetails } from '@/lib/api/books';
-import { buildPath, cn, formatDateJP, formatIsbn, formatPrice } from '@/lib/utils';
+import {
+  buildPath,
+  cn,
+  formatDateJP,
+  formatIsbn,
+  formatPrice,
+} from '@/lib/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 
@@ -50,7 +56,11 @@ export default function BookDetail({ bookId }: Props) {
           </Link>
 
           <div className="mt-2 flex flex-col items-center justify-around sm:w-110 sm:flex-row">
-            <Rating rating={book.averageRating} readOnly />
+            <Rating
+              rating={book.averageRating}
+              key={book.averageRating}
+              readOnly
+            />
             <div className="flex justify-center gap-x-2">
               <ReviewCountIcon count={book.reviewCount} />
               <FavoriteCountIcon bookId={bookId} />
