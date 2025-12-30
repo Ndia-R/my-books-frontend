@@ -87,5 +87,11 @@ export const router = createBrowserRouter(
         <Route path="*" element={<NotFoundPage title="404" />} />
       </Route>
     </Route>
-  )
+  ),
+  {
+    // ベースパス設定: nginxのプロキシ設定と合わせる
+    // すべてのルーティングが /my-books 配下になる
+    // 例: / → /my-books/, /search → /my-books/search
+    basename: '/my-books',
+  }
 );

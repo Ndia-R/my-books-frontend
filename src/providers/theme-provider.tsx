@@ -151,7 +151,7 @@ export function ThemeProvider({
     const link = document.createElement('link');
     link.id = 'theme-stylesheet';
     link.rel = 'stylesheet';
-    link.href = `/theme-styles/${themeColor}-theme.css`;
+    link.href = `${import.meta.env.BASE_URL}theme-styles/${themeColor}-theme.css`;
 
     document.head.appendChild(link);
   }, [themeColor]);

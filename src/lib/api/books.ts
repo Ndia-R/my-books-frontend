@@ -14,7 +14,6 @@ import type {
   BookToc,
   FavoriteStats,
   ReviewPage,
-  ReviewStats,
 } from '@/types';
 
 // 最新の書籍リスト（１０冊分）
@@ -95,14 +94,6 @@ export const getBookReviews = async (
   const path = buildPath('/books/:bookId/reviews', { bookId });
   const queryString = buildQueryString({ page, size, sort });
   const response = await fetchBooksApi<ReviewPage>(path + queryString);
-  return response.data;
-};
-
-// 特定の書籍のレビュー統計
-// 注: この関数は現在未使用ですが、将来的にレビュー統計表示機能を実装する際に使用予定
-export const getBookReviewStats = async (bookId: string) => {
-  const path = buildPath('/books/:bookId/stats/reviews', { bookId });
-  const response = await fetchBooksApi<ReviewStats>(path);
   return response.data;
 };
 

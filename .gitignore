@@ -25,3 +25,10 @@ dist-ssr
 
 # JFrog用の設定ファイル
 .npmrc
+
+# 環境変数ファイル
+.env
+.env.development
+.env.production
+.env.local
+.env.*.local

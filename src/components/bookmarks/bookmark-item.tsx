@@ -35,6 +35,9 @@ export default function BookmarkItem({ bookmark }: Props) {
     queryClient.invalidateQueries({
       queryKey: queryKeys.getUserBookmarksInfinite(),
     });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getUserBookmarksByBookId(bookmark.book.id),
+    });
   };
 
   const updateMutation = useMutation({

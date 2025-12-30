@@ -123,7 +123,8 @@ export const isReviewedByUser = async (bookId: string) => {
   try {
     const response = await getUserReviewsByBookId(bookId);
     return response.totalItems !== 0;
-  } catch {
+  } catch (error) {
+    console.error('レビュー確認中にエラー:', error);
     return false;
   }
 };
@@ -134,7 +135,8 @@ export const isFavoritedByUser = async (bookId: string) => {
   try {
     const response = await getUserFavoritesByBookId(bookId);
     return response.totalItems !== 0;
-  } catch {
+  } catch (error) {
+    console.error('お気に入り確認中にエラー:', error);
     return false;
   }
 };

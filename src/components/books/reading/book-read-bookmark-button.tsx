@@ -42,6 +42,9 @@ export default function BookReadBookmarkButton({
     queryClient.invalidateQueries({
       queryKey: queryKeys.getUserBookmarksByBookId(bookId),
     });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getUserBookmarksInfinite(),
+    });
   };
 
   const createMutation = useMutation({
