@@ -48,8 +48,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const logout = async () => {
     try {
       await logoutUser();
-      setUserProfile(null);
-      window.location.href = '/';
+      // トップページへリダイレクト（vite.config.tsで設定しているbaseに合わせる）
+      // ページリロード後、checkAuthStatus()が自動的に認証状態を更新する
+      window.location.href = '/my-books/';
     } catch (error) {
       console.error('Complete logout failed:', error);
     }
