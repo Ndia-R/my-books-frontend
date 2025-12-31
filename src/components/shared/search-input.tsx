@@ -1,3 +1,4 @@
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSearchFilters } from '@/hooks/use-search-filters';
 import { buildQueryString } from '@/lib/utils';
@@ -37,7 +38,7 @@ export default function SearchInput() {
     <div className="w-44 sm:w-64">
       <form className="relative w-full" onSubmit={handleSubmit}>
         <Input
-          className="border-foreground/20 bg-background/20 pr-4 pl-8"
+          className="border-foreground/20 bg-background/20 pr-10 pl-4"
           type="search"
           placeholder="タイトルで検索"
           name="query"
@@ -45,8 +46,17 @@ export default function SearchInput() {
           spellCheck="false"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          aria-label="書籍検索"
         />
-        <Search className="absolute top-2.5 left-2.5 size-4" />
+        <Button
+          className="absolute top-0 right-0 rounded-l-none"
+          type="submit"
+          size="icon"
+          variant="ghost"
+          aria-label="検索"
+        >
+          <Search />
+        </Button>
       </form>
     </div>
   );
