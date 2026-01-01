@@ -59,6 +59,34 @@ export const formatTime = (dateString: string) => {
 };
 
 /**
+ * 相対時刻表示（○分前、○時間前など）に変換
+ * 7日以内: 相対時刻（例: "3分前"、"2時間前"、"昨日"）
+ * 7日より前: 絶対時刻（例: "2024年12月1日"）
+ * @param dateString yyyy-MM-ddTHH:mm:ss形式の文字列
+ * @returns 相対時刻または絶対時刻の文字列
+ */
+export const formatRelativeTime = (dateString: string): string => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffSeconds = Math.floor(diffMs / 1000);
+  const diffMinutes = Math.floor(diffSeconds / 60);
+  const diffHours = Math.floor(diffMinutes / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  const rtf = new Intl.RelativeTimeFormat('ja', { numeric: 'auto' });
+
+  // 7日以内: 相対時刻
+  if (diffSeconds < 60) return 'たった今';
+  if (diffMinutes < 60) return rtf.format(-diffMinutes, 'minute');
+  if (diffHours < 24) return rtf.format(-diffHours, 'hour');
+  if (diffDays < 7) return rtf.format(-diffDays, 'day');
+
+  // 7日より前: 絶対時刻
+  return formatDateJP(dateString);
+};
+
+/**
  * 価格をカンマ区切り数字文字列へ変換
  * @param price 価格
  * @returns カンマ区切り数字文字列

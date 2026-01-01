@@ -6,7 +6,12 @@ import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { deleteReview, updateReview } from '@/lib/api/reviews';
-import { buildPath, formatDateJP, formatTime } from '@/lib/utils';
+import {
+  buildPath,
+  formatDateJP,
+  formatRelativeTime,
+  formatTime,
+} from '@/lib/utils';
 import type { Review, ReviewUpdateParams } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SquarePenIcon } from 'lucide-react';
@@ -84,13 +89,13 @@ export default function MyReviewItem({ review }: Props) {
                 </Link>
 
                 <time
-                  className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
+                  className="text-muted-foreground mr-1 text-sm"
                   dateTime={
-                    Date.parse(review.createdAt) ? review.createdAt : ''
+                    Date.parse(review.updatedAt) ? review.updatedAt : ''
                   }
+                  title={`${formatDateJP(review.updatedAt)} ${formatTime(review.updatedAt)}`}
                 >
-                  <span>{formatDateJP(review.createdAt)}</span>
-                  <span>{formatTime(review.createdAt)}</span>
+                  {formatRelativeTime(review.updatedAt)}
                 </time>
               </div>
 

@@ -15,6 +15,7 @@ import {
   chapterNumberString,
   cn,
   formatDateJP,
+  formatRelativeTime,
   formatTime,
 } from '@/lib/utils';
 import type { Bookmark, BookmarkUpdateParams } from '@/types';
@@ -128,13 +129,13 @@ export default function BookmarkItem({ bookmark }: Props) {
                 </div>
 
                 <time
-                  className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
+                  className="text-muted-foreground mr-1 text-sm"
                   dateTime={
-                    Date.parse(bookmark.createdAt) ? bookmark.createdAt : ''
+                    Date.parse(bookmark.updatedAt) ? bookmark.updatedAt : ''
                   }
+                  title={`${formatDateJP(bookmark.updatedAt)} ${formatTime(bookmark.updatedAt)}`}
                 >
-                  <span>{formatDateJP(bookmark.createdAt)}</span>
-                  <span>{formatTime(bookmark.createdAt)}</span>
+                  {formatRelativeTime(bookmark.updatedAt)}
                 </time>
               </div>
 

@@ -94,7 +94,7 @@ export default function UserIconButton() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56 p-2 px-4" side="bottom" align="end">
-        <DropdownMenuLabel>
+        <DropdownMenuLabel className="px-0">
           <div className="flex items-center gap-x-2">
             <Avatar className="size-8">
               <AvatarImage
@@ -107,7 +107,9 @@ export default function UserIconButton() {
               </AvatarFallback>
             </Avatar>
             <div className="flex-1 overflow-hidden">
-              <p className="truncate text-lg">{userProfile?.displayName}</p>
+              <p className="truncate font-semibold">
+                {userProfile?.displayName}
+              </p>
               <p className="text-muted-foreground truncate text-sm font-normal">
                 {userProfile?.email}
               </p>

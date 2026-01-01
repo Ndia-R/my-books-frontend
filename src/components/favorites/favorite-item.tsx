@@ -13,7 +13,13 @@ import { queryKeys } from '@/constants/query-keys';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import usePrefetch from '@/hooks/use-prefetch';
 import { deleteFavoriteByBookId } from '@/lib/api/favorites';
-import { buildPath, cn, formatDateJP, formatTime } from '@/lib/utils';
+import {
+  buildPath,
+  cn,
+  formatDateJP,
+  formatRelativeTime,
+  formatTime,
+} from '@/lib/utils';
 import type { Favorite } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
@@ -125,13 +131,13 @@ export default function FavoriteItem({ favorite }: Props) {
               </div>
 
               <time
-                className="text-muted-foreground mr-1 flex gap-x-1 text-sm"
+                className="text-muted-foreground mr-1 text-sm"
                 dateTime={
-                  Date.parse(favorite.createdAt) ? favorite.createdAt : ''
+                  Date.parse(favorite.updatedAt) ? favorite.updatedAt : ''
                 }
+                title={`${formatDateJP(favorite.updatedAt)} ${formatTime(favorite.updatedAt)}`}
               >
-                <span>{formatDateJP(favorite.createdAt)}</span>
-                <span>{formatTime(favorite.createdAt)}</span>
+                {formatRelativeTime(favorite.updatedAt)}
               </time>
             </div>
 

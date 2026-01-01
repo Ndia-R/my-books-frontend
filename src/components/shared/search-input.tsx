@@ -35,7 +35,7 @@ export default function SearchInput() {
   };
 
   return (
-    <div className="w-44 sm:w-64">
+    <div className="w-48 sm:w-64">
       <form className="relative w-full" onSubmit={handleSubmit}>
         <Input
           className="border-foreground/20 bg-background/20 pr-10 pl-4"

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import { deleteReview, updateReview } from '@/lib/api/reviews';
-import { formatDateJP, formatTime } from '@/lib/utils';
+import { formatDateJP, formatRelativeTime, formatTime } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import type { Review, ReviewUpdateParams } from '@/types';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -67,18 +67,18 @@ export default function BookReviewItem({ review }: Props) {
               )}
             </div>
             <div className="flex flex-col gap-y-1">
-              <p className="-mb-1 text-lg leading-8 font-semibold sm:text-xl">
+              <p className="-mb-1 leading-8 font-semibold">
                 {review.displayName}
               </p>
               <div className="flex items-center">
                 <time
-                  className="text-muted-foreground mr-2 flex gap-x-1 text-sm"
+                  className="text-muted-foreground mr-2 text-sm"
                   dateTime={
-                    Date.parse(review.createdAt) ? review.createdAt : ''
+                    Date.parse(review.updatedAt) ? review.updatedAt : ''
                   }
+                  title={`${formatDateJP(review.updatedAt)} ${formatTime(review.updatedAt)}`}
                 >
-                  <span>{formatDateJP(review.createdAt)}</span>
-                  <span>{formatTime(review.createdAt)}</span>
+                  {formatRelativeTime(review.updatedAt)}
                 </time>
                 {userProfile?.id === review.userId && (
                   <Button
