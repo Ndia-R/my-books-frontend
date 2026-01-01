@@ -23,10 +23,7 @@ export default function SearchInput() {
 
     const newQuery = query.trim();
 
-    if (!newQuery) {
-      navigate('/');
-      return;
-    }
+    if (!newQuery) return;
 
     const queryString = buildQueryString({ q: newQuery, page: 1 });
     const searchUrl = '/search' + queryString;
