@@ -1,9 +1,11 @@
 export type UserProfile = {
   id: number;
-  email: string;
-  name: string;
   displayName: string;
   avatarPath: string;
+  username: string;
+  email: string;
+  familyName: string;
+  givenName: string;
 };
 
 export type UserProfileCounts = {
