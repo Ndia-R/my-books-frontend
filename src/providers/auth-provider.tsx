@@ -1,4 +1,5 @@
 import { BFF_BASE_URL } from '@/constants/constants';
+import type { RoleType } from '@/constants/roles';
 import { logoutUser } from '@/lib/api/auth';
 import { getUserProfile } from '@/lib/api/users';
 import { buildQueryString } from '@/lib/utils';
@@ -24,6 +25,7 @@ type AuthProviderState = {
   logout: () => Promise<void>;
   checkAuthStatus: () => Promise<void>;
   setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
+  hasRole: (role: RoleType) => boolean;
 };
 
 const AuthProviderContext = createContext<AuthProviderState | undefined>(
@@ -75,6 +77,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     checkAuthStatus();
   }, [checkAuthStatus]);
 
+  // 指定したロールをユーザーが持っているか確認する
+  const hasRole = useCallback(
+    (role: RoleType): boolean => {
+      return !!userProfile?.roles.includes(role);
+    },
+    [userProfile]
+  );
+
   const value = {
     isLoading,
     userProfile,
@@ -83,6 +93,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     logout,
     checkAuthStatus,
     setUserProfile,
+    hasRole,
   };
 
   return <AuthProviderContext value={value}>{children}</AuthProviderContext>;

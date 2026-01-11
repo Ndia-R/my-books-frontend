@@ -1,3 +1,5 @@
+import type { RoleType } from '@/constants/roles';
+
 export type UserProfile = {
   id: number;
   displayName: string;
@@ -6,6 +8,7 @@ export type UserProfile = {
   email: string;
   familyName: string;
   givenName: string;
+  roles: RoleType[];
 };
 
 export type UserProfileCounts = {

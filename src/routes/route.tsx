@@ -3,6 +3,7 @@ import BookDetailPage from '@/app/book/[bookId]/page';
 import BookmarksPage from '@/app/bookmarks/page';
 import DiscoverPage from '@/app/discover/page';
 import FavoritesPage from '@/app/favorites/page';
+import ForbiddenPage from '@/app/forbidden/page';
 import RootLayout from '@/app/layout';
 import LoginPage from '@/app/login/page';
 import MyReviewsPage from '@/app/my-reviews/page';
@@ -16,6 +17,7 @@ import BookReadTableOfContentsPage from '@/app/read/[bookId]/table-of-contents/p
 import SearchPage from '@/app/search/page';
 import SettingsPage from '@/app/settings/page';
 import SpecialFeaturesPage from '@/app/special-features/page';
+import { RoleType } from '@/constants/roles';
 import ProtectedRoute from '@/routes/protected-route';
 import {
   createBrowserRouter,
@@ -27,23 +29,18 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route path="/" element={<RootLayout />}>
+        {/* ---- 認証が不要な画面（ログインしていなくてもOK） ---- */}
         <Route index element={<RootPage />} />
 
         <Route path="login" element={<LoginPage />} />
         <Route path="auth-callback" element={<AuthCallbackPage />} />
+        <Route path="forbidden" element={<ForbiddenPage title="403" />} />
 
-        <Route path="book">
-          <Route path=":bookId" element={<BookDetailPage />} />
-        </Route>
-
-        <Route path="read">
-          <Route path=":bookId">
-            <Route
-              path="table-of-contents"
-              element={<BookReadTableOfContentsPage />}
-            />
-          </Route>
-        </Route>
+        <Route path="book/:bookId" element={<BookDetailPage />} />
+        <Route
+          path="read/:bookId/table-of-contents"
+          element={<BookReadTableOfContentsPage />}
+        />
 
         <Route path="search" element={<SearchPage />} />
         <Route path="discover" element={<DiscoverPage title="ジャンル" />} />
@@ -54,7 +51,7 @@ export const router = createBrowserRouter(
         />
         <Route path="settings" element={<SettingsPage title="設定" />} />
 
-        {/* 以下、認証が必要な画面 */}
+        {/* ---- 認証が必要な画面（すべてのロールOK） ---- */}
         <Route element={<ProtectedRoute />}>
           <Route
             path="favorites"
@@ -76,14 +73,23 @@ export const router = createBrowserRouter(
               element={<ChangeUserInfoPage title="ユーザー情報変更" />}
             />
           </Route>
-
-          <Route path="read/:bookId">
-            <Route path="chapter/:chapterNumber">
-              <Route path="page/:pageNumber" element={<BookReadPage />} />
-            </Route>
-          </Route>
         </Route>
 
+        {/* ---- 認証が必要な画面（すべてのロールOK） ---- */}
+        <Route
+          element={
+            <ProtectedRoute
+              permittedRoles={[RoleType.PremiumUser, RoleType.Admin]}
+            />
+          }
+        >
+          <Route
+            path="read/:bookId/chapter/:chapterNumber/page/:pageNumber"
+            element={<BookReadPage />}
+          />
+        </Route>
+
+        {/* ---- NotFound（上記すべてのパスに当てはまらなかった場合） ---- */}
         <Route path="*" element={<NotFoundPage title="404" />} />
       </Route>
     </Route>
