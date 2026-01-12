@@ -5,6 +5,58 @@ import {
   type HttpResponse,
 } from '@/types/infrastructure/http';
 
+// グローバルな401エラーハンドラー（AuthProviderから設定される）
+let globalUnauthorizedHandler: (() => void) | null = null;
+
+/**
+ * 401エラーを自動リダイレクト対象外とするエンドポイントのパターン
+ *
+ * これらのエンドポイントは認証状態チェックに使用されるため、
+ * 401エラーが発生しても自動リダイレクトせず、呼び出し側で処理します。
+ */
+const EXCLUDED_401_ENDPOINTS = [
+  '/me/profile', // AuthProvider の checkAuthStatus() で使用
+];
+
+/**
+ * 指定されたURLが401自動リダイレクト対象外かどうかを判定
+ *
+ * 完全一致またはパス終端での一致を確認します。
+ * 例:
+ * - "/me/profile" → 除外対象
+ * - "https://localhost/api/my-books/me/profile" → 除外対象
+ * - "https://localhost/api/my-books/me/profile?foo=bar" → 除外対象
+ * - "/me/profile-counts" → 除外対象外（profile の後に文字が続く）
+ */
+const shouldSkip401Redirect = (url: string): boolean => {
+  return EXCLUDED_401_ENDPOINTS.some((endpoint) => {
+    // URLからクエリパラメータを除外したパス部分を取得
+    const urlPath = url.split('?')[0];
+
+    // 完全一致の場合
+    if (urlPath === endpoint || urlPath.endsWith(endpoint)) {
+      // エンドポイント直後が終端であることを確認（他の文字が続いていない）
+      const endpointIndex = urlPath.lastIndexOf(endpoint);
+      const afterEndpoint = urlPath.slice(endpointIndex + endpoint.length);
+      return afterEndpoint === '' || afterEndpoint === '/';
+    }
+
+    return false;
+  });
+};
+
+/**
+ * グローバルな401エラーハンドラーを設定
+ *
+ * AuthProvider の初期化時に呼び出され、handleUnauthorized を登録します。
+ * httpFetch で401エラーが発生した際、このハンドラーが自動的に呼び出されます。
+ *
+ * @param handler - 401エラー時に呼び出されるハンドラー関数
+ */
+export const setUnauthorizedHandler = (handler: (() => void) | null) => {
+  globalUnauthorizedHandler = handler;
+};
+
 /**
  * 汎用HTTPクライアント関数
  *
@@ -38,6 +90,28 @@ export const httpFetch = async <T>(
       const errorResponse = isHttpErrorResponse(httpResponse.data)
         ? httpResponse.data
         : createFallbackErrorData(response);
+
+      // 401エラーの場合、除外エンドポイント以外はグローバルハンドラーを呼び出す
+      if (response.status === 401) {
+        console.log('[DEBUG] 401エラー検出:', {
+          url,
+          hasHandler: !!globalUnauthorizedHandler,
+          shouldSkip: shouldSkip401Redirect(url),
+        });
+
+        if (globalUnauthorizedHandler && !shouldSkip401Redirect(url)) {
+          console.log('[DEBUG] globalUnauthorizedHandler を呼び出します');
+          globalUnauthorizedHandler();
+        } else if (!globalUnauthorizedHandler) {
+          console.error(
+            '[ERROR] globalUnauthorizedHandler が登録されていません'
+          );
+        } else if (shouldSkip401Redirect(url)) {
+          console.log(
+            '[DEBUG] 401エラーですが、除外エンドポイントのためスキップします'
+          );
+        }
+      }
 
       throw new HttpError(
         errorResponse.message,
@@ -159,9 +233,7 @@ const parseHttpResponse = async <T>(
  * @param response - fetch APIのレスポンスオブジェクト
  * @returns フォールバックエラーデータ
  */
-const createFallbackErrorData = (
-  response: Response
-): HttpErrorResponse => {
+const createFallbackErrorData = (response: Response): HttpErrorResponse => {
   return {
     message: `HTTP ${response.status}: ${response.statusText}`,
     status: response.status.toString(),

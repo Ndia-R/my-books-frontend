@@ -1,6 +1,7 @@
 import { BFF_BASE_URL } from '@/constants/constants';
 import type { RoleType } from '@/constants/roles';
 import { logoutUser } from '@/lib/api/auth';
+import { setUnauthorizedHandler } from '@/lib/api/fetch';
 import { getUserProfile } from '@/lib/api/users';
 import { buildQueryString } from '@/lib/utils';
 import type { UserProfile } from '@/types';
@@ -23,9 +24,9 @@ type AuthProviderState = {
   isAuthenticated: boolean;
   login: (returnTo?: string) => void;
   logout: () => Promise<void>;
-  checkAuthStatus: () => Promise<void>;
   setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
   hasRole: (role: RoleType) => boolean;
+  handleUnauthorized: () => void;
 };
 
 const AuthProviderContext = createContext<AuthProviderState | undefined>(
@@ -37,6 +38,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   const isAuthenticated = useMemo(() => !!userProfile, [userProfile]);
+
+  // 401エラー発生時の処理（認証状態リセット + ログイン画面へリダイレクト）
+  const handleUnauthorized = useCallback(() => {
+    // 認証状態をリセット
+    setUserProfile(null);
+
+    // Viteの base パスを除外したアプリケーション内部パスを取得
+    const basePath = '/my-books';
+    let appPath = window.location.pathname;
+
+    // ベースパスで始まる場合は除外（例: /my-books → /）
+    if (appPath.startsWith(basePath)) {
+      appPath = appPath.slice(basePath.length) || '/';
+    }
+
+    const returnToPath = appPath + window.location.search;
+    const queryString = buildQueryString({ return_to: returnToPath });
+    const redirectUrl = `${BFF_BASE_URL}/login${queryString}`;
+
+    console.log('[DEBUG] handleUnauthorized:', {
+      BFF_BASE_URL,
+      'window.location.pathname': window.location.pathname,
+      appPath,
+      returnToPath,
+      queryString,
+      redirectUrl,
+    });
+
+    window.location.href = redirectUrl;
+  }, []);
 
   // ログイン処理（BFFログイン画面へリダイレクト）
   const login = (returnTo?: string) => {
@@ -58,30 +89,36 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  const checkAuthStatus = useCallback(async () => {
-    setIsLoading(true);
-    try {
-      const profile = await getUserProfile();
-      setUserProfile(profile);
-    } catch (e) {
-      // 認証エラーはここでは単にコンソールに出力
-      // 未認証状態として処理が継続される
-      console.error('Not authenticated or failed to fetch profile:', e);
-      setUserProfile(null);
-    } finally {
-      setIsLoading(false);
-    }
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      setIsLoading(true);
+      try {
+        const profile = await getUserProfile();
+        setUserProfile(profile);
+      } catch (e) {
+        // 認証エラーはここでは単にコンソールに出力
+        // 未認証状態として処理が継続される
+        console.error('Not authenticated or failed to fetch profile:', e);
+        setUserProfile(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuthStatus();
   }, []);
 
+  // グローバルな401エラーハンドラーを登録
   useEffect(() => {
-    checkAuthStatus();
-  }, [checkAuthStatus]);
+    setUnauthorizedHandler(handleUnauthorized);
+    return () => {
+      setUnauthorizedHandler(null);
+    };
+  }, [handleUnauthorized]);
 
   // 指定したロールをユーザーが持っているか確認する
   const hasRole = useCallback(
-    (role: RoleType): boolean => {
-      return !!userProfile?.roles.includes(role);
-    },
+    (role: RoleType) => !!userProfile?.roles.includes(role),
     [userProfile]
   );
 
@@ -91,9 +128,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isAuthenticated,
     login,
     logout,
-    checkAuthStatus,
     setUserProfile,
     hasRole,
+    handleUnauthorized,
   };
 
   return <AuthProviderContext value={value}>{children}</AuthProviderContext>;

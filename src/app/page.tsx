@@ -1,12 +1,4 @@
-import BooksSkeleton from '@/components/books/books-skeleton';
-import BookNewReleases from '@/components/books/discovery/book-new-releases';
-import GenresSkeleton from '@/components/genres/genres-skeleton';
-import GenresTopPage from '@/components/genres/genres-top-page';
 import Hero from '@/components/layout/hero';
-import ErrorElement from '@/components/shared/error-element';
-import { Separator } from '@/components/ui/separator';
-import { Suspense } from 'react';
-import { ErrorBoundary } from 'react-error-boundary';
 
 export default function Page() {
   return (
@@ -15,7 +7,7 @@ export default function Page() {
         <Hero />
       </section>
 
-      <section className="mb-6 flex flex-col sm:mb-16">
+      {/* <section className="mb-6 flex flex-col sm:mb-16">
         <h2 className="text-lg font-bold sm:text-xl">ジャンル</h2>
 
         <Separator className="bg-foreground/10 my-4" />
@@ -37,7 +29,7 @@ export default function Page() {
             <BookNewReleases />
           </Suspense>
         </ErrorBoundary>
-      </section>
+      </section> */}
     </>
   );
 }
