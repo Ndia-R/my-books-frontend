@@ -14,8 +14,9 @@ import { useAuth } from '@/providers/auth-provider';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { useDebouncedCallback } from 'use-debounce';
 
 type FavoriteStatus = {
   isFavorite: boolean;
@@ -37,6 +38,11 @@ export default function FavoriteCountIcon({
     useState<FavoriteStatus | null>(null);
   const [animationKey, setAnimationKey] = useState(0);
 
+  // 最新の楽観的更新状態を保持するref（debounce内で参照するため）
+  const latestOptimisticRef = useRef<FavoriteStatus | null>(null);
+  // 元のお気に入り状態を保持するref（debounce内で比較するため）
+  const originalFavoriteRef = useRef<boolean>(false);
+
   // お気に入り状態を取得（認証済みの場合のみ）
   const { data: isFavorite = false, isLoading: isFavoriteLoading } = useQuery({
     queryKey: queryKeys.isFavoritedByUser(bookId),
@@ -56,27 +62,30 @@ export default function FavoriteCountIcon({
     count: favoriteStats?.favoriteCount ?? 0,
   };
 
-  const handleClick = async () => {
-    if (!isAuthenticated) return;
+  // isFavoriteの値をrefに同期（debounce内で最新の値を参照するため）
+  useEffect(() => {
+    originalFavoriteRef.current = isFavorite;
+  }, [isFavorite]);
 
-    // 楽観的更新を設定
-    const newState: FavoriteStatus = {
-      isFavorite: !displayState.isFavorite,
-      count: displayState.count + (displayState.isFavorite ? -1 : 1),
-    };
-    setOptimisticUpdate(newState);
+  // debounceされたAPIリクエスト（連打時は最後のリクエストのみ実行）
+  const debouncedApiRequest = useDebouncedCallback(async () => {
+    const targetState = latestOptimisticRef.current;
+    if (!targetState) return;
 
-    // お気に入り追加時のみアニメーションキーを更新
-    if (!displayState.isFavorite) {
-      setAnimationKey((prev) => prev + 1);
+    // 元の状態と同じ場合はAPIリクエストをスキップ（往復クリックで戻った場合）
+    if (targetState.isFavorite === originalFavoriteRef.current) {
+      setOptimisticUpdate(null);
+      latestOptimisticRef.current = null;
+      return;
     }
 
-    // APIリクエストを送信する
     try {
-      if (displayState.isFavorite) {
-        await deleteFavoriteByBookId(bookId);
-      } else {
+      if (targetState.isFavorite) {
+        // 楽観的更新が「お気に入り済み」→ 追加リクエスト
         await createFavorite({ bookId });
+      } else {
+        // 楽観的更新が「お気に入りでない」→ 削除リクエスト
+        await deleteFavoriteByBookId(bookId);
       }
 
       // API成功後にキャッシュを無効化
@@ -91,13 +100,42 @@ export default function FavoriteCountIcon({
       });
       // すべてのリフェッチ完了後に楽観的更新をクリア
       setOptimisticUpdate(null);
+      latestOptimisticRef.current = null;
     } catch {
       // エラー時は楽観的更新をクリア
       setOptimisticUpdate(null);
+      latestOptimisticRef.current = null;
       toast.error('お気に入りの更新に失敗しました', {
         duration: TOAST_ERROR_DURATION,
       });
     }
+  }, 300);
+
+  // コンポーネントのアンマウント時にdebounceをキャンセル
+  useEffect(() => {
+    return () => {
+      debouncedApiRequest.cancel();
+    };
+  }, [debouncedApiRequest]);
+
+  const handleClick = () => {
+    if (!isAuthenticated) return;
+
+    // 楽観的更新を設定
+    const newState: FavoriteStatus = {
+      isFavorite: !displayState.isFavorite,
+      count: displayState.count + (displayState.isFavorite ? -1 : 1),
+    };
+    setOptimisticUpdate(newState);
+    latestOptimisticRef.current = newState;
+
+    // お気に入り追加時のみアニメーションキーを更新
+    if (!displayState.isFavorite) {
+      setAnimationKey((prev) => prev + 1);
+    }
+
+    // debounceされたAPIリクエストを呼び出し
+    debouncedApiRequest();
   };
 
   if (favoriteStatsLoading || isFavoriteLoading) {

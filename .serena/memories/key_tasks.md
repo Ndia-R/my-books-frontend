@@ -9,7 +9,7 @@
 - **`src/lib/api/http-client.ts`** (旧 `fetch-client.ts`)
   - `customFetch` を汎用HTTPクライアント関数として再設計し、完全なURLを受け取るように変更
   - `fetchBooksApi` ラッパー関数を追加: Books API専用、自動的にBOOKS_API_BASE_URLを付与
-  - `fetchBffApi` ラッパー関数を追加: BFF API専用、自動的にBFF_BASE_URLを付与
+  - `fetchBffApi` ラッパー関数を追加: BFF API専用、自動的にBFF_AIP_BASE_URLを付与
   - エラーハンドリングを改善: 型ガード `isHttpErrorResponse` を使用した安全な型チェック
   - JSDocコメントを追加してAPI仕様を明確化
 

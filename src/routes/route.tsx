@@ -17,6 +17,7 @@ import BookReadTableOfContentsPage from '@/app/read/[bookId]/table-of-contents/p
 import SearchPage from '@/app/search/page';
 import SettingsPage from '@/app/settings/page';
 import SpecialFeaturesPage from '@/app/special-features/page';
+import { APP_BASE_PATH } from '@/constants/constants';
 import { RoleType } from '@/constants/roles';
 import ProtectedRoute from '@/routes/protected-route';
 import {
@@ -96,8 +97,7 @@ export const router = createBrowserRouter(
   ),
   {
     // ベースパス設定: nginxのプロキシ設定と合わせる
-    // すべてのルーティングが /my-books 配下になる
-    // 例: / → /my-books/, /search → /my-books/search
-    basename: '/my-books',
+    // すべてのルーティングが APP_BASE_PATH 配下になる
+    basename: APP_BASE_PATH,
   }
 );

@@ -45,7 +45,7 @@ const queryClient = new QueryClient({
 });
 
 createRoot(document.getElementById('root')!).render(
-  // <StrictMode>
+  <StrictMode>
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <ThemeProvider>
@@ -54,5 +54,5 @@ createRoot(document.getElementById('root')!).render(
       </AuthProvider>
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-  // </StrictMode>
+  </StrictMode>
 );

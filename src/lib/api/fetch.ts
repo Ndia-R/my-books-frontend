@@ -1,4 +1,4 @@
-import { BFF_BASE_URL, BOOKS_API_BASE_URL } from '@/constants/constants';
+import { BFF_API_BASE_URL, BOOKS_API_BASE_URL } from '@/constants/constants';
 import {
   HttpError,
   type HttpErrorResponse,
@@ -93,22 +93,11 @@ export const httpFetch = async <T>(
 
       // 401エラーの場合、除外エンドポイント以外はグローバルハンドラーを呼び出す
       if (response.status === 401) {
-        console.log('[DEBUG] 401エラー検出:', {
-          url,
-          hasHandler: !!globalUnauthorizedHandler,
-          shouldSkip: shouldSkip401Redirect(url),
-        });
-
         if (globalUnauthorizedHandler && !shouldSkip401Redirect(url)) {
-          console.log('[DEBUG] globalUnauthorizedHandler を呼び出します');
           globalUnauthorizedHandler();
         } else if (!globalUnauthorizedHandler) {
           console.error(
             '[ERROR] globalUnauthorizedHandler が登録されていません'
-          );
-        } else if (shouldSkip401Redirect(url)) {
-          console.log(
-            '[DEBUG] 401エラーですが、除外エンドポイントのためスキップします'
           );
         }
       }
@@ -156,7 +145,7 @@ export const fetchBooksApi = async <T>(
 /**
  * BFF API専用のFetch関数
  *
- * httpFetchのラッパー関数で、BFF_BASE_URLを自動的に付与します。
+ * httpFetchのラッパー関数で、BFF_AIP_BASE_URLを自動的に付与します。
  * 認証関連のAPI（ログイン、ログアウト等）で使用します。
  *
  * @template T - レスポンスデータの型
@@ -169,7 +158,7 @@ export const fetchBffApi = async <T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<HttpResponse<T>> => {
-  return httpFetch<T>(`${BFF_BASE_URL}${endpoint}`, options);
+  return httpFetch<T>(`${BFF_API_BASE_URL}${endpoint}`, options);
 };
 
 /**

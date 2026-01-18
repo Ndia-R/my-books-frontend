@@ -1,4 +1,4 @@
-import { BFF_BASE_URL } from '@/constants/constants';
+import { APP_BASE_PATH, BFF_API_BASE_URL } from '@/constants/constants';
 import type { RoleType } from '@/constants/roles';
 import { logoutUser } from '@/lib/api/auth';
 import { setUnauthorizedHandler } from '@/lib/api/fetch';
@@ -45,7 +45,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUserProfile(null);
 
     // Viteの base パスを除外したアプリケーション内部パスを取得
-    const basePath = '/my-books';
+    const basePath = APP_BASE_PATH;
     let appPath = window.location.pathname;
 
     // ベースパスで始まる場合は除外（例: /my-books → /）
@@ -55,16 +55,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     const returnToPath = appPath + window.location.search;
     const queryString = buildQueryString({ return_to: returnToPath });
-    const redirectUrl = `${BFF_BASE_URL}/login${queryString}`;
-
-    console.log('[DEBUG] handleUnauthorized:', {
-      BFF_BASE_URL,
-      'window.location.pathname': window.location.pathname,
-      appPath,
-      returnToPath,
-      queryString,
-      redirectUrl,
-    });
+    const redirectUrl = `${BFF_API_BASE_URL}/login${queryString}`;
 
     window.location.href = redirectUrl;
   }, []);
@@ -74,7 +65,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     const returnToPath =
       returnTo || window.location.pathname + window.location.search;
     const queryString = buildQueryString({ return_to: returnToPath });
-    window.location.href = `${BFF_BASE_URL}/login${queryString}`;
+    window.location.href = `${BFF_API_BASE_URL}/login${queryString}`;
   };
 
   // 完全ログアウト（BFFセッション + Keycloakセッションクリア）
@@ -83,7 +74,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       await logoutUser();
       // トップページへリダイレクト（vite.config.tsで設定しているbaseに合わせる）
       // ページリロード後、checkAuthStatus()が自動的に認証状態を更新する
-      window.location.href = '/my-books/';
+      window.location.href = `${APP_BASE_PATH}/`;
     } catch (error) {
       console.error('Complete logout failed:', error);
     }
