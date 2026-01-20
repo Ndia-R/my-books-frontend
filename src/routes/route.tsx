@@ -55,9 +55,25 @@ export const router = createBrowserRouter(
         {/* ---- 認証が必要な画面（すべてのロールOK） ---- */}
         <Route element={<ProtectedRoute />}>
           <Route
+            path="profile"
+            element={<ProfilePage title="プロフィール" />}
+          />
+          <Route
+            path="profile/change-user-info"
+            element={<ChangeUserInfoPage title="ユーザー情報変更" />}
+          />
+          <Route
             path="favorites"
             element={<FavoritesPage title="お気に入り" />}
           />
+        </Route>
+
+        {/* ---- 認証が必要な画面（指定ロールのみ<PremiumUser, Admin>） ---- */}
+        <Route
+          element={
+            <ProtectedRoute roles={[RoleType.PremiumUser, RoleType.Admin]} />
+          }
+        >
           <Route
             path="bookmarks"
             element={<BookmarksPage title="ブックマーク" />}
@@ -66,24 +82,6 @@ export const router = createBrowserRouter(
             path="my-reviews"
             element={<MyReviewsPage title="マイレビュー" />}
           />
-
-          <Route path="profile">
-            <Route index element={<ProfilePage title="プロフィール" />} />
-            <Route
-              path="change-user-info"
-              element={<ChangeUserInfoPage title="ユーザー情報変更" />}
-            />
-          </Route>
-        </Route>
-
-        {/* ---- 認証が必要な画面（すべてのロールOK） ---- */}
-        <Route
-          element={
-            <ProtectedRoute
-              permittedRoles={[RoleType.PremiumUser, RoleType.Admin]}
-            />
-          }
-        >
           <Route
             path="read/:bookId/chapter/:chapterNumber/page/:pageNumber"
             element={<BookReadPage />}

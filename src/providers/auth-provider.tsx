@@ -22,10 +22,11 @@ type AuthProviderState = {
   isLoading: boolean;
   userProfile: UserProfile | null;
   isAuthenticated: boolean;
+  setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
   login: (returnTo?: string) => void;
   logout: () => Promise<void>;
-  setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
   hasRole: (role: RoleType) => boolean;
+  hasAnyRole: (roles: RoleType[]) => boolean;
   handleUnauthorized: () => void;
 };
 
@@ -38,6 +39,38 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
 
   const isAuthenticated = useMemo(() => !!userProfile, [userProfile]);
+
+  // ログイン処理（BFFログイン画面へリダイレクト）
+  const login = (returnTo?: string) => {
+    const returnToPath =
+      returnTo || window.location.pathname + window.location.search;
+    const queryString = buildQueryString({ return_to: returnToPath });
+    window.location.href = `${BFF_API_BASE_URL}/login${queryString}`;
+  };
+
+  // 完全ログアウト（BFFセッション + Keycloakセッションクリア）
+  const logout = async () => {
+    try {
+      await logoutUser();
+      // トップページへリダイレクト（vite.config.tsで設定しているbaseに合わせる）
+      // ページリロード後、checkAuthStatus()が自動的に認証状態を更新する
+      window.location.href = `${APP_BASE_PATH}/`;
+    } catch (error) {
+      console.error('Complete logout failed:', error);
+    }
+  };
+
+  // 指定したロールをユーザーが持っているか確認する
+  const hasRole = useCallback(
+    (role: RoleType) => !!userProfile?.roles.includes(role),
+    [userProfile]
+  );
+
+  // 指定した複数のロールのうち、いずれかをユーザーが持っているか確認する
+  const hasAnyRole = useCallback(
+    (roles: RoleType[]) => roles.some((role) => hasRole(role)),
+    [hasRole]
+  );
 
   // 401エラー発生時の処理（認証状態リセット + ログイン画面へリダイレクト）
   const handleUnauthorized = useCallback(() => {
@@ -59,26 +92,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     window.location.href = redirectUrl;
   }, []);
-
-  // ログイン処理（BFFログイン画面へリダイレクト）
-  const login = (returnTo?: string) => {
-    const returnToPath =
-      returnTo || window.location.pathname + window.location.search;
-    const queryString = buildQueryString({ return_to: returnToPath });
-    window.location.href = `${BFF_API_BASE_URL}/login${queryString}`;
-  };
-
-  // 完全ログアウト（BFFセッション + Keycloakセッションクリア）
-  const logout = async () => {
-    try {
-      await logoutUser();
-      // トップページへリダイレクト（vite.config.tsで設定しているbaseに合わせる）
-      // ページリロード後、checkAuthStatus()が自動的に認証状態を更新する
-      window.location.href = `${APP_BASE_PATH}/`;
-    } catch (error) {
-      console.error('Complete logout failed:', error);
-    }
-  };
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -107,20 +120,15 @@ export function AuthProvider({ children }: AuthProviderProps) {
     };
   }, [handleUnauthorized]);
 
-  // 指定したロールをユーザーが持っているか確認する
-  const hasRole = useCallback(
-    (role: RoleType) => !!userProfile?.roles.includes(role),
-    [userProfile]
-  );
-
   const value = {
     isLoading,
     userProfile,
     isAuthenticated,
+    setUserProfile,
     login,
     logout,
-    setUserProfile,
     hasRole,
+    hasAnyRole,
     handleUnauthorized,
   };
 

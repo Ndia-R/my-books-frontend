@@ -7,9 +7,9 @@ type Props = HTMLAttributes<HTMLDivElement> & {
 };
 
 export default function RoleGuard({ roles, children }: Props) {
-  const { hasRole } = useAuth();
+  const { hasAnyRole } = useAuth();
 
-  if (!roles.some((role) => hasRole(role))) return null;
+  if (!hasAnyRole(roles)) return null;
 
   return <>{children}</>;
 }

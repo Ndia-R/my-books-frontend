@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
+import { RoleType } from '@/constants/roles';
 import usePrefetch from '@/hooks/use-prefetch';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
@@ -23,19 +24,31 @@ import {
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
-const MENU_LIST: MenuItem[] = [
-  { label: 'お気に入り', href: '/favorites', icon: HeartIcon },
-  { label: 'ブックマーク', href: '/bookmarks', icon: BookmarkIcon },
-  { label: 'マイレビュー', href: '/my-reviews', icon: MessageSquareIcon },
-  { label: 'プロフィール', href: '/profile', icon: UserRoundIcon },
-];
-
 export default function UserIconButton() {
+  const { logout, userProfile, hasAnyRole } = useAuth();
+
+  const MENU_LIST: MenuItem[] = [
+    { label: 'プロフィール', href: '/profile', icon: UserRoundIcon },
+    { label: 'お気に入り', href: '/favorites', icon: HeartIcon },
+  ];
+
+  // プレミアムユーザーとアドミンユーザーはリスト項目追加
+  if (hasAnyRole([RoleType.PremiumUser, RoleType.Admin])) {
+    MENU_LIST.push({
+      label: 'ブックマーク',
+      href: '/bookmarks',
+      icon: BookmarkIcon,
+    });
+    MENU_LIST.push({
+      label: 'マイレビュー',
+      href: '/my-reviews',
+      icon: MessageSquareIcon,
+    });
+  }
+
   const [isOpen, setIsOpen] = useState(false);
 
   const navigate = useNavigate();
-
-  const { logout, userProfile } = useAuth();
 
   const handleClickLogout = () => {
     logout();
@@ -47,14 +60,17 @@ export default function UserIconButton() {
   };
 
   const {
+    prefetchUserProfile,
     prefetchUserFavoritesInfinite,
     prefetchUserBookmarksInfinite,
     prefetchUserReviewsInfinite,
-    prefetchUserProfile,
   } = usePrefetch();
 
   const handlePrefetch = async (href: string) => {
     switch (href) {
+      case '/profile':
+        await prefetchUserProfile();
+        break;
       case '/favorites':
         await prefetchUserFavoritesInfinite();
         break;
@@ -63,9 +79,6 @@ export default function UserIconButton() {
         break;
       case '/my-reviews':
         await prefetchUserReviewsInfinite();
-        break;
-      case '/profile':
-        await prefetchUserProfile();
         break;
       default:
         break;

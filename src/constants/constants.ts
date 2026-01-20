@@ -1,4 +1,4 @@
-import { BookSortOrder, ReviewSortOrder } from '@/constants/sort-types';
+import { BookSortOrder, ReviewSortOrder } from '@/constants/sort-orders';
 
 export const TITLE_LOGO = 'My Books';
 export const APP_TITLE = 'My Books';

@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
+import { RoleType } from '@/constants/roles';
 import { deleteReview, updateReview } from '@/lib/api/reviews';
 import { formatDateJP, formatRelativeTime, formatTime } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
@@ -19,7 +20,10 @@ type Props = {
 
 export default function BookReviewItem({ review }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const { userProfile } = useAuth();
+  const { userProfile, hasAnyRole } = useAuth();
+
+  const isOwnReview = userProfile?.id === review.userId;
+  const canEditReview = hasAnyRole([RoleType.PremiumUser, RoleType.Admin]);
 
   const queryClient = useQueryClient();
 
@@ -62,7 +66,7 @@ export default function BookReviewItem({ review }: Props) {
                   {review.displayName.slice(0, 1)}
                 </AvatarFallback>
               </Avatar>
-              {userProfile?.id === review.userId && (
+              {isOwnReview && (
                 <Badge className="absolute -right-1 -bottom-1 size-5 rounded-full" />
               )}
             </div>
@@ -80,7 +84,7 @@ export default function BookReviewItem({ review }: Props) {
                 >
                   {formatRelativeTime(review.updatedAt)}
                 </time>
-                {userProfile?.id === review.userId && (
+                {isOwnReview && canEditReview && (
                   <Button
                     className="text-muted-foreground size-8"
                     variant="ghost"

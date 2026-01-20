@@ -1,12 +1,8 @@
 import BookReviewList from '@/components/reviews/book-review-list';
 import ReviewCreateDialog from '@/components/reviews/review-create-dialog';
 import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { queryKeys } from '@/constants/query-keys';
+import { RoleType } from '@/constants/roles';
 import { getBookReviews } from '@/lib/api/books';
 import { createReview } from '@/lib/api/reviews';
 import { isReviewedByUser } from '@/lib/api/users';
@@ -39,10 +35,12 @@ export default function BookReviews({ bookId }: Props) {
   const reviews = data.pages.flatMap((page) => page.data);
 
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, hasAnyRole } = useAuth();
+  const canReview = hasAnyRole([RoleType.PremiumUser, RoleType.Admin]);
 
+  // すでにレビューをしているかどうかを取得
   // ログインしていない場合は、enabledオプションを指定してqueryFnを呼び出さないようにする
-  const { data: review } = useQuery({
+  const { data: isReviewed } = useQuery({
     queryKey: queryKeys.isReviewedByUser(bookId),
     queryFn: () => isReviewedByUser(bookId),
     enabled: isAuthenticated,
@@ -69,38 +67,29 @@ export default function BookReviews({ bookId }: Props) {
   return (
     <>
       <div className="mx-auto w-full pb-4 lg:w-3/4">
-        <div className="flex flex-col-reverse items-center justify-end gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
-          <p className="space-x-1">
-            <span className="text-muted-foreground">レビュー</span>
-            <span className="text-lg font-semibold sm:text-xl">
-              {totalItems}
-            </span>
-            <span className="text-muted-foreground text-sm">件</span>
-          </p>
-          {isAuthenticated ? (
-            <Button
-              className="w-44 bg-transparent"
-              variant="outline"
-              disabled={!!review}
-              onClick={() => setIsOpen(true)}
-            >
-              {review ? 'レビュー済み' : 'レビューする'}
-            </Button>
-          ) : (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  className="hover:border-primary/50 w-44 cursor-default bg-transparent opacity-50 hover:bg-transparent"
-                  variant="outline"
-                >
-                  レビューする
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                ログインしてこの本の「レビュー」を書きましょう
-              </TooltipContent>
-            </Tooltip>
-          )}
+        <div className="flex flex-col items-center gap-y-4 sm:flex-row sm:gap-x-4 sm:px-6">
+          <div className="flex-1"></div>
+          <div className="flex flex-1 justify-center">
+            {canReview && (
+              <Button
+                className="w-44 bg-transparent"
+                variant="outline"
+                disabled={isReviewed}
+                onClick={() => setIsOpen(true)}
+              >
+                {isReviewed ? 'レビュー済み' : 'レビューする'}
+              </Button>
+            )}
+          </div>
+          <div className="flex flex-1 justify-end">
+            <p className="space-x-1 sm:mr-2">
+              <span className="text-muted-foreground">レビュー</span>
+              <span className="text-lg font-semibold sm:text-xl">
+                {totalItems}
+              </span>
+              <span className="text-muted-foreground text-sm">件</span>
+            </p>
+          </div>
         </div>
 
         <BookReviewList reviews={reviews} />

@@ -5,7 +5,7 @@ import { defineConfig, loadEnv } from 'vite';
 
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
-  // 環境変数を読み込み
+  // 環境変数を読み込む
   const env = loadEnv(mode, process.cwd(), '');
 
   return {
@@ -25,7 +25,7 @@ export default defineConfig(({ mode }) => {
     // ベースパス設定: nginxのプロキシ設定と合わせる
     // アセット（JS/CSS/画像など）のパスが /my-books/ 配下に配置される
     // 環境変数から取得し、末尾スラッシュを追加
-    base: `${env.VITE_APP_BASE_PATH || '/my-books'}/`,
+    base: `${env.VITE_APP_BASE_PATH}/`,
     build: {
       rollupOptions: {
         output: {

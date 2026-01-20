@@ -1,3 +1,4 @@
+import { APP_BASE_PATH } from '@/constants/constants';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 type Theme = 'dark' | 'light' | 'system';
@@ -151,7 +152,7 @@ export function ThemeProvider({
     const link = document.createElement('link');
     link.id = 'theme-stylesheet';
     link.rel = 'stylesheet';
-    link.href = `${import.meta.env.BASE_URL}theme-styles/${themeColor}-theme.css`;
+    link.href = `${APP_BASE_PATH}/theme-styles/${themeColor}-theme.css`;
 
     document.head.appendChild(link);
   }, [themeColor]);

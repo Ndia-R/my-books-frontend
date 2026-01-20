@@ -1,12 +1,17 @@
 import CountUpNumber from '@/components/shared/count-up-number';
 import { queryKeys } from '@/constants/query-keys';
+import { RoleType } from '@/constants/roles';
 import usePrefetch from '@/hooks/use-prefetch';
 import { getUserProfileCounts } from '@/lib/api/users';
+import { useAuth } from '@/providers/auth-provider';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 
 export default function UserProfileCounts() {
+  const { hasAnyRole } = useAuth();
+  const canNavigate = hasAnyRole([RoleType.PremiumUser, RoleType.Admin]);
+
   const { data: userProfileCounts } = useSuspenseQuery({
     queryKey: queryKeys.getUserProfileCounts(),
     queryFn: () => getUserProfileCounts(),
@@ -50,10 +55,11 @@ export default function UserProfileCounts() {
         transition={{ duration: 0.5, delay: 0.1 }}
       >
         <Link
-          to="/bookmarks"
+          className={canNavigate ? undefined : 'pointer-events-none'}
+          to={canNavigate ? '/bookmarks' : '#'}
           aria-label="ブックマークページへ移動"
-          onMouseEnter={prefetchUserBookmarksInfinite}
-          onFocus={prefetchUserBookmarksInfinite}
+          onMouseEnter={canNavigate ? prefetchUserBookmarksInfinite : undefined}
+          onFocus={canNavigate ? prefetchUserBookmarksInfinite : undefined}
         >
           <div className="w-24 space-y-1 text-center">
             <p className="text-xl font-bold">
@@ -74,10 +80,11 @@ export default function UserProfileCounts() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <Link
-          to="/my-reviews"
+          className={canNavigate ? undefined : 'pointer-events-none'}
+          to={canNavigate ? '/my-reviews' : '#'}
           aria-label="マイレビューページへ移動"
-          onMouseEnter={prefetchUserReviewsInfinite}
-          onFocus={prefetchUserReviewsInfinite}
+          onMouseEnter={canNavigate ? prefetchUserReviewsInfinite : undefined}
+          onFocus={canNavigate ? prefetchUserReviewsInfinite : undefined}
         >
           <div className="w-24 space-y-1 text-center">
             <p className="text-xl font-bold">

@@ -2,7 +2,7 @@ import {
   DEFAULT_MY_PAGE_SIZE,
   DEFAULT_MY_PAGE_SORT,
 } from '@/constants/constants';
-import type { ReviewSortOrder } from '@/constants/sort-types';
+import type { ReviewSortOrder } from '@/constants/sort-orders';
 import { fetchBooksApi } from '@/lib/api/fetch';
 import { buildQueryString, getCsrfToken } from '@/lib/utils';
 import type {

@@ -1,4 +1,5 @@
 import { useAuth } from '@/providers/auth-provider';
+import { Loader2Icon } from 'lucide-react';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router';
 
@@ -17,7 +18,13 @@ export default function Page() {
   // リダイレクト中の表示（通常はすぐにリダイレクトされるため見えない）
   return (
     <div className="flex h-[calc(100vh-64px-140px)] items-center justify-center sm:h-[calc(100vh-64px-72px)]">
-      <p className="text-lg">ログインページに移動中...</p>
+      <div className="flex flex-col items-center gap-y-2">
+        <p className="text-lg">ログインページに移動中...</p>
+        <Loader2Icon
+          className="animate-spin"
+          aria-label="ログインページに移動中"
+        />
+      </div>
     </div>
   );
 }

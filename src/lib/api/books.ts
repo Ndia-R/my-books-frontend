@@ -4,7 +4,7 @@ import {
   DEFAULT_REVIEWS_SIZE,
   DEFAULT_REVIEWS_SORT,
 } from '@/constants/constants';
-import type { BookSortOrder, ReviewSortOrder } from '@/constants/sort-types';
+import type { BookSortOrder, ReviewSortOrder } from '@/constants/sort-orders';
 import { fetchBooksApi } from '@/lib/api/fetch';
 import { buildPath, buildQueryString } from '@/lib/utils';
 import type {

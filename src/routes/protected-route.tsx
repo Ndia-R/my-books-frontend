@@ -3,12 +3,12 @@ import { useAuth } from '@/providers/auth-provider';
 import { Navigate, Outlet, useLocation } from 'react-router';
 
 type Props = {
-  permittedRoles?: RoleType[];
+  roles?: RoleType[];
 };
 
-export default function ProtectedRoute({ permittedRoles }: Props) {
+export default function ProtectedRoute({ roles }: Props) {
   const location = useLocation();
-  const { isLoading, isAuthenticated, hasRole } = useAuth();
+  const { isLoading, isAuthenticated, hasAnyRole } = useAuth();
 
   if (isLoading) return null;
 
@@ -26,9 +26,8 @@ export default function ProtectedRoute({ permittedRoles }: Props) {
 
   // ロールの指定がある場合は、画面に必要なロールを持っているかチェックする
   // ロールを持っていない場合はアクセス権限なし画面へ遷移
-  if (permittedRoles) {
-    const hasPermittedRole = permittedRoles.some((role) => hasRole(role));
-    if (!hasPermittedRole) {
+  if (roles) {
+    if (!hasAnyRole(roles)) {
       return <Navigate to="/forbidden" replace />;
     }
   }
