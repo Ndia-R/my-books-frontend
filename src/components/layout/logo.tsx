@@ -31,10 +31,10 @@ export default function Logo({
         SIZE[size],
         className
       )}
-      to="/"
+      to={disableLink ? '#' : '/'}
       aria-label="トップページへ移動"
       aria-disabled={disableLink}
-      onClick={onClick}
+      onClick={disableLink ? undefined : onClick}
     >
       {TITLE_LOGO}
     </Link>

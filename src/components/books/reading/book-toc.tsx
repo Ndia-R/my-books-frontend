@@ -1,9 +1,4 @@
-import { Button, buttonVariants } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Button } from '@/components/ui/button';
 import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
@@ -11,7 +6,7 @@ import { getBookToc } from '@/lib/api/books';
 import { buildPath, chapterNumberString, cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 type Props = {
   bookId: string;
@@ -24,8 +19,8 @@ export default function BookToc({ bookId }: Props) {
   });
 
   const { isAuthenticated } = useAuth();
-
   const { prefetchBookReadContent } = usePrefetch();
+  const navigate = useNavigate();
 
   const handlePrefetch = async (bookId: string, chapterNumber: number) => {
     if (isAuthenticated) {
@@ -33,14 +28,17 @@ export default function BookToc({ bookId }: Props) {
     }
   };
 
-  const firstChapterPath = buildPath(
-    '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
-    {
-      bookId,
-      chapterNumber: 1,
-      pageNumber: 1,
-    }
-  );
+  const handleClick = () => {
+    const firstChapterPath = buildPath(
+      '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
+      {
+        bookId,
+        chapterNumber: 1,
+        pageNumber: 1,
+      }
+    );
+    navigate(firstChapterPath);
+  };
 
   return (
     <>
@@ -49,30 +47,15 @@ export default function BookToc({ bookId }: Props) {
       <div className="flex flex-col gap-y-12 px-4 py-12 sm:px-20">
         <div className="flex flex-col items-center gap-y-6 sm:items-start">
           <h1 className="text-3xl font-bold sm:text-5xl">{bookToc.title}</h1>
-
-          {isAuthenticated && bookToc.chapters.length ? (
-            <Link
-              className={cn(buttonVariants({ variant: 'outline' }), 'w-44')}
-              to={firstChapterPath}
-              onMouseEnter={() => handlePrefetch(bookId, 1)}
-              onFocus={() => handlePrefetch(bookId, 1)}
-            >
-              最初から読む
-            </Link>
-          ) : (
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button className="w-44 cursor-default" variant="outline">
-                  最初から読む
-                </Button>
-              </TooltipTrigger>
-              {bookToc.chapters.length ? (
-                <TooltipContent>
-                  ログインしてこの本を読みましょう
-                </TooltipContent>
-              ) : null}
-            </Tooltip>
-          )}
+          <Button
+            className="w-44"
+            disabled={bookToc.chapters.length === 0}
+            onClick={handleClick}
+            onMouseEnter={() => handlePrefetch(bookId, 1)}
+            onFocus={() => handlePrefetch(bookId, 1)}
+          >
+            {isAuthenticated ? '  最初から読む' : '試し読み'}
+          </Button>
         </div>
 
         {bookToc.chapters.length ? (
@@ -99,16 +82,18 @@ export default function BookToc({ bookId }: Props) {
                       'hover:text-primary text-base font-semibold sm:text-xl',
                       !isAuthenticated && 'pointer-events-none'
                     )}
-                    to={chapterPath}
+                    to={isAuthenticated ? chapterPath : '#'}
                     aria-label={`${chapter.chapterTitle}のページへ移動`}
-                  onMouseEnter={() =>
-                    handlePrefetch(bookId, chapter.chapterNumber)
-                  }
-                  onFocus={() => handlePrefetch(bookId, chapter.chapterNumber)}
-                >
-                  {chapter.chapterTitle}
-                </Link>
-              </li>
+                    onMouseEnter={() =>
+                      handlePrefetch(bookId, chapter.chapterNumber)
+                    }
+                    onFocus={() =>
+                      handlePrefetch(bookId, chapter.chapterNumber)
+                    }
+                  >
+                    {chapter.chapterTitle}
+                  </Link>
+                </li>
               );
             })}
           </ul>

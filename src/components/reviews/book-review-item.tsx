@@ -4,8 +4,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
+import { PermissionSet } from '@/constants/permission-sets';
 import { queryKeys } from '@/constants/query-keys';
-import { RoleType } from '@/constants/roles';
 import { deleteReview, updateReview } from '@/lib/api/reviews';
 import { formatDateJP, formatRelativeTime, formatTime } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
@@ -20,10 +20,13 @@ type Props = {
 
 export default function BookReviewItem({ review }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const { userProfile, hasAnyRole } = useAuth();
+  const { userProfile, hasAnyPermissionSet } = useAuth();
 
   const isOwnReview = userProfile?.id === review.userId;
-  const canEditReview = hasAnyRole([RoleType.PremiumUser, RoleType.Admin]);
+  const canEditReview = hasAnyPermissionSet([
+    PermissionSet.PremiumUser,
+    PermissionSet.Admin,
+  ]);
 
   const queryClient = useQueryClient();
 

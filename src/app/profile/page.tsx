@@ -8,7 +8,7 @@ import { APP_TITLE, AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import type { MenuItem } from '@/types';
-import { PaletteIcon, UserRoundPenIcon } from 'lucide-react';
+import { CrownIcon, PaletteIcon, UserRoundPenIcon } from 'lucide-react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Link } from 'react-router';
@@ -23,6 +23,11 @@ const CHANGE_LIST: MenuItem[] = [
     label: 'テーマ',
     href: '/settings',
     icon: PaletteIcon,
+  },
+  {
+    label: 'サブスクリプション',
+    href: '/subscription',
+    icon: CrownIcon,
   },
 ];
 
@@ -54,9 +59,12 @@ export default function Page({ title }: Props) {
                   {userProfile?.displayName.slice(0, 1)}
                 </AvatarFallback>
               </Avatar>
-              <div className="h-20 w-full p-4 text-center">
+              <div className="h-20 w-full space-y-2 p-4 text-center">
                 <p className="text-xl font-semibold">
                   {userProfile?.displayName}
+                  <span className="ml-2 text-xs">
+                    ({userProfile?.username})
+                  </span>
                 </p>
                 <p className="text-sm">{userProfile?.email}</p>
               </div>

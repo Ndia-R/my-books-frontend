@@ -1,35 +1,31 @@
-import type { RoleType } from '@/constants/roles';
+import type { PermissionSet } from '@/constants/permission-sets';
 import { useAuth } from '@/providers/auth-provider';
+import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router';
 
 type Props = {
-  roles?: RoleType[];
+  permissionSets?: PermissionSet[];
 };
 
-export default function ProtectedRoute({ roles }: Props) {
+export default function ProtectedRoute({ permissionSets }: Props) {
+  const { isLoading, isAuthenticated, hasAnyPermissionSet, login } = useAuth();
   const location = useLocation();
-  const { isLoading, isAuthenticated, hasAnyRole } = useAuth();
 
-  if (isLoading) return null;
+  // 未認証の場合、Keycloakログイン画面へ直接リダイレクト
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      login(location.pathname + location.search);
+    }
+  }, [isLoading, isAuthenticated, login, location.pathname, location.search]);
 
-  // ログインしていない場合は、ログイン後に戻るべきURL（クエリパラメータ含む）を
-  // stateで渡してログイン画面へ遷移
-  if (!isAuthenticated) {
-    return (
-      <Navigate
-        to="/login"
-        state={{ redirectTo: location.pathname + location.search }}
-        replace
-      />
-    );
+  // ローディング中または未認証の場合は何も表示しない
+  if (isLoading || !isAuthenticated) {
+    return null;
   }
 
-  // ロールの指定がある場合は、画面に必要なロールを持っているかチェックする
-  // ロールを持っていない場合はアクセス権限なし画面へ遷移
-  if (roles) {
-    if (!hasAnyRole(roles)) {
-      return <Navigate to="/forbidden" replace />;
-    }
+  // 権限セットを持っていない場合はアクセス権限なし画面へ遷移
+  if (permissionSets && !hasAnyPermissionSet(permissionSets)) {
+    return <Navigate to="/forbidden" replace />;
   }
 
   return <Outlet />;

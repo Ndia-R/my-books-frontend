@@ -1,4 +1,4 @@
-import type { RoleType } from '@/constants/roles';
+import type { PermissionSet } from '@/constants/permission-sets';
 
 export type UserProfile = {
   id: number;
@@ -8,7 +8,7 @@ export type UserProfile = {
   email: string;
   familyName: string;
   givenName: string;
-  roles: RoleType[];
+  permissionSets: PermissionSet[];
 };
 
 export type UserProfileCounts = {

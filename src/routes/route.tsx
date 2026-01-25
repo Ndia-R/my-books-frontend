@@ -5,7 +5,6 @@ import DiscoverPage from '@/app/discover/page';
 import FavoritesPage from '@/app/favorites/page';
 import ForbiddenPage from '@/app/forbidden/page';
 import RootLayout from '@/app/layout';
-import LoginPage from '@/app/login/page';
 import MyReviewsPage from '@/app/my-reviews/page';
 import NotFoundPage from '@/app/not-found';
 import RootPage from '@/app/page';
@@ -17,8 +16,9 @@ import BookReadTableOfContentsPage from '@/app/read/[bookId]/table-of-contents/p
 import SearchPage from '@/app/search/page';
 import SettingsPage from '@/app/settings/page';
 import SpecialFeaturesPage from '@/app/special-features/page';
+import SubscriptionPage from '@/app/subscription/page';
 import { APP_BASE_PATH } from '@/constants/constants';
-import { RoleType } from '@/constants/roles';
+import { PermissionSet } from '@/constants/permission-sets';
 import ProtectedRoute from '@/routes/protected-route';
 import {
   createBrowserRouter,
@@ -33,7 +33,6 @@ export const router = createBrowserRouter(
         {/* ---- 認証が不要な画面（ログインしていなくてもOK） ---- */}
         <Route index element={<RootPage />} />
 
-        <Route path="login" element={<LoginPage />} />
         <Route path="auth-callback" element={<AuthCallbackPage />} />
         <Route path="forbidden" element={<ForbiddenPage title="403" />} />
 
@@ -51,8 +50,12 @@ export const router = createBrowserRouter(
           element={<SpecialFeaturesPage title="特集" />}
         />
         <Route path="settings" element={<SettingsPage title="設定" />} />
+        <Route
+          path="subscription"
+          element={<SubscriptionPage title="サブスクリプション" />}
+        />
 
-        {/* ---- 認証が必要な画面（すべてのロールOK） ---- */}
+        {/* ---- 認証が必要な画面（すべての権限セットOK） ---- */}
         <Route element={<ProtectedRoute />}>
           <Route
             path="profile"
@@ -68,10 +71,12 @@ export const router = createBrowserRouter(
           />
         </Route>
 
-        {/* ---- 認証が必要な画面（指定ロールのみ<PremiumUser, Admin>） ---- */}
+        {/* ---- 認証が必要な画面（指定された権限セットのみ） ---- */}
         <Route
           element={
-            <ProtectedRoute roles={[RoleType.PremiumUser, RoleType.Admin]} />
+            <ProtectedRoute
+              permissionSets={[PermissionSet.PremiumUser, PermissionSet.Admin]}
+            />
           }
         >
           <Route

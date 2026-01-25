@@ -2,18 +2,23 @@ import Menu from '@/components/layout/menu';
 import ThemeToggleButton from '@/components/layout/theme-toggle-button';
 import UserIconButton from '@/components/layout/user-icon-button';
 import SearchInput from '@/components/shared/search-input';
-import { buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { motion } from 'motion/react';
-import { Link, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 
 type Props = {
   className?: string;
 };
 
 export default function Header({ className }: Props) {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, login } = useAuth();
   const location = useLocation();
 
   return (
@@ -33,13 +38,17 @@ export default function Header({ className }: Props) {
               {isAuthenticated ? (
                 <UserIconButton />
               ) : (
-                <Link
-                  className={buttonVariants({ variant: 'ghost' })}
-                  to="/login"
-                  state={{ redirectTo: location.pathname + location.search }}
-                >
-                  ログイン
-                </Link>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      onClick={() => login(location.pathname + location.search)}
+                    >
+                      ログイン
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>ログイン or 新規登録する</TooltipContent>
+                </Tooltip>
               )}
             </div>
           </div>

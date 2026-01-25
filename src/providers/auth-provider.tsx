@@ -1,5 +1,5 @@
 import { APP_BASE_PATH, BFF_API_BASE_URL } from '@/constants/constants';
-import type { RoleType } from '@/constants/roles';
+import type { PermissionSet } from '@/constants/permission-sets';
 import { logoutUser } from '@/lib/api/auth';
 import { setUnauthorizedHandler } from '@/lib/api/fetch';
 import { getUserProfile } from '@/lib/api/users';
@@ -25,8 +25,8 @@ type AuthProviderState = {
   setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
   login: (returnTo?: string) => void;
   logout: () => Promise<void>;
-  hasRole: (role: RoleType) => boolean;
-  hasAnyRole: (roles: RoleType[]) => boolean;
+  hasPermissionSet: (permissionSet: PermissionSet) => boolean;
+  hasAnyPermissionSet: (permissionSets: PermissionSet[]) => boolean;
   handleUnauthorized: () => void;
 };
 
@@ -60,16 +60,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  // 指定したロールをユーザーが持っているか確認する
-  const hasRole = useCallback(
-    (role: RoleType) => !!userProfile?.roles.includes(role),
+  // 指定した権限セットをユーザーが持っているか確認する
+  const hasPermissionSet = useCallback(
+    (permissionSet: PermissionSet) =>
+      !!userProfile?.permissionSets.includes(permissionSet),
     [userProfile]
   );
 
-  // 指定した複数のロールのうち、いずれかをユーザーが持っているか確認する
-  const hasAnyRole = useCallback(
-    (roles: RoleType[]) => roles.some((role) => hasRole(role)),
-    [hasRole]
+  // 指定した複数の権限セットのうち、いずれかをユーザーが持っているか確認する
+  const hasAnyPermissionSet = useCallback(
+    (permissionSets: PermissionSet[]) =>
+      permissionSets.some((permissionSet) => hasPermissionSet(permissionSet)),
+    [hasPermissionSet]
   );
 
   // 401エラー発生時の処理（認証状態リセット + ログイン画面へリダイレクト）
@@ -127,8 +129,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUserProfile,
     login,
     logout,
-    hasRole,
-    hasAnyRole,
+    hasPermissionSet,
+    hasAnyPermissionSet,
     handleUnauthorized,
   };
 

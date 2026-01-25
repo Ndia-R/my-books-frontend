@@ -84,28 +84,24 @@ export default function Page({ title }: Props) {
               onSubmit={handleSubmit}
             >
               <div>
-                <Label className="text-sm" htmlFor="user-name">
-                  ユーザー名
+                <Label className="text-sm" htmlFor="display-name">
+                  表示名
                 </Label>
-                <div className="relative">
-                  <Input
-                    className={cn(
-                      'border-foreground/20 my-2',
-                      !displayName.trim() && 'border-destructive'
-                    )}
-                    value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    type="text"
-                    id="user-name"
-                    autoComplete="off"
-                    spellCheck="false"
-                  />
-                </div>
+                <Input
+                  className={cn(
+                    'border-foreground/20 my-2',
+                    !displayName.trim() && 'border-destructive'
+                  )}
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  type="text"
+                  id="display-name"
+                  autoComplete="off"
+                  spellCheck="false"
+                />
 
                 {!displayName.trim() && (
-                  <p className="text-destructive text-sm">
-                    ユーザー名は必須です。
-                  </p>
+                  <p className="text-destructive text-sm">表示名は必須です。</p>
                 )}
               </div>
 

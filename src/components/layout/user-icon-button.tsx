@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
-import { RoleType } from '@/constants/roles';
+import { PermissionSet } from '@/constants/permission-sets';
 import usePrefetch from '@/hooks/use-prefetch';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
@@ -25,7 +25,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function UserIconButton() {
-  const { logout, userProfile, hasAnyRole } = useAuth();
+  const { logout, userProfile, hasAnyPermissionSet } = useAuth();
+  const isGeneralUser = hasAnyPermissionSet([PermissionSet.GeneralUser]);
 
   const MENU_LIST: MenuItem[] = [
     { label: 'プロフィール', href: '/profile', icon: UserRoundIcon },
@@ -33,7 +34,7 @@ export default function UserIconButton() {
   ];
 
   // プレミアムユーザーとアドミンユーザーはリスト項目追加
-  if (hasAnyRole([RoleType.PremiumUser, RoleType.Admin])) {
+  if (hasAnyPermissionSet([PermissionSet.PremiumUser, PermissionSet.Admin])) {
     MENU_LIST.push({
       label: 'ブックマーク',
       href: '/bookmarks',
@@ -129,6 +130,19 @@ export default function UserIconButton() {
             </div>
           </div>
         </DropdownMenuLabel>
+        {isGeneralUser && (
+          <>
+            <DropdownMenuSeparator />
+            <div className="my-2">
+              <Button
+                className="w-full"
+                onClick={() => handleClickMenuItem('/subscription')}
+              >
+                アップグレードする
+              </Button>
+            </div>
+          </>
+        )}
         <DropdownMenuSeparator />
         {MENU_LIST.map((item) => (
           <DropdownMenuItem
