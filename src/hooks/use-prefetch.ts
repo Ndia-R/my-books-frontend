@@ -2,6 +2,7 @@ import { CACHE_TIME } from '@/constants/cache-time';
 import { queryKeys } from '@/constants/query-keys';
 import {
   getBookChapterPageContent,
+  getBookChapterPagePreview,
   getBookDetails,
   getBookFavoriteStats,
   getBookToc,
@@ -67,6 +68,31 @@ export default function usePrefetch() {
       queryFn: () => getBookToc(bookId),
       staleTime: CACHE_TIME.FOREVER,
     });
+  };
+
+  // 書籍の内容（試し読み）
+  const prefetchBookReadPreview = async (
+    bookId: string,
+    chapterNumber: number = 1,
+    pageNumber: number = 1
+  ) => {
+    await Promise.all([
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.getBookToc(bookId),
+        queryFn: () => getBookToc(bookId),
+        staleTime: CACHE_TIME.FOREVER,
+      }),
+      queryClient.prefetchQuery({
+        queryKey: queryKeys.getBookChapterPagePreview(
+          bookId,
+          chapterNumber,
+          pageNumber
+        ),
+        queryFn: () =>
+          getBookChapterPagePreview(bookId, chapterNumber, pageNumber),
+        staleTime: CACHE_TIME.FOREVER,
+      }),
+    ]);
   };
 
   // 書籍の内容
@@ -173,6 +199,7 @@ export default function usePrefetch() {
     prefetchBookDiscover,
     prefetchBookDetail,
     prefetchBookToc,
+    prefetchBookReadPreview,
     prefetchBookReadContent,
     prefetchUserFavorites,
     prefetchUserFavoritesInfinite,

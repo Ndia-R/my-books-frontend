@@ -7,6 +7,12 @@ export const queryKeys = {
     ['searchBooksByGenre', genreIds, condition, page] as const,
   getBookDetails: (bookId: string) => ['getBookDetails', bookId] as const,
   getBookToc: (bookId: string) => ['getBookToc', bookId] as const,
+  getBookChapterPagePreview: (
+    bookId: string,
+    chapterNumber: number,
+    pageNumber: number
+  ) =>
+    ['getBookChapterPagePreview', bookId, chapterNumber, pageNumber] as const,
   getBookChapterPageContent: (
     bookId: string,
     chapterNumber: number,

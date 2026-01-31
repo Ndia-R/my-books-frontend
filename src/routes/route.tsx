@@ -11,6 +11,7 @@ import RootPage from '@/app/page';
 import ChangeUserInfoPage from '@/app/profile/change-user-info/page';
 import ProfilePage from '@/app/profile/page';
 import RankingPage from '@/app/ranking/page';
+import BookReadPreviewPage from '@/app/read-preview/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
 import BookReadPage from '@/app/read/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
 import BookReadTableOfContentsPage from '@/app/read/[bookId]/table-of-contents/page';
 import SearchPage from '@/app/search/page';
@@ -40,6 +41,11 @@ export const router = createBrowserRouter(
         <Route
           path="read/:bookId/table-of-contents"
           element={<BookReadTableOfContentsPage />}
+        />
+
+        <Route
+          path="read-preview/:bookId/chapter/:chapterNumber/page/:pageNumber"
+          element={<BookReadPreviewPage />}
         />
 
         <Route path="search" element={<SearchPage />} />

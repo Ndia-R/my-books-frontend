@@ -30,7 +30,9 @@ export default function BookToc({ bookId }: Props) {
 
   const handleClick = () => {
     const firstChapterPath = buildPath(
-      '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
+      isAuthenticated
+        ? '/read/:bookId/chapter/:chapterNumber/page/:pageNumber'
+        : '/read-preview/:bookId/chapter/:chapterNumber/page/:pageNumber',
       {
         bookId,
         chapterNumber: 1,

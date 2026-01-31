@@ -70,6 +70,20 @@ export const getBookToc = async (bookId: string) => {
   return response.data;
 };
 
+// 特定の書籍の閲覧ページ（試し読み）
+export const getBookChapterPagePreview = async (
+  bookId: string,
+  chapterNumber: number,
+  pageNumber: number
+) => {
+  const path = buildPath(
+    '/book-content/preview/books/:bookId/chapters/:chapterNumber/pages/:pageNumber',
+    { bookId, chapterNumber, pageNumber }
+  );
+  const response = await fetchBooksApi<BookChapterPageContent>(path);
+  return response.data;
+};
+
 // 特定の書籍の閲覧ページ
 export const getBookChapterPageContent = async (
   bookId: string,
