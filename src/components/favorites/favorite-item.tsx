@@ -72,7 +72,7 @@ export default function FavoriteItem({ favorite }: Props) {
     await prefetchBookDetail(favorite.book.id);
   };
 
-  const bookDetailPath = buildPath('/book/:bookId', {
+  const bookDetailPath = buildPath('/books/:bookId', {
     bookId: favorite.book.id,
   });
 

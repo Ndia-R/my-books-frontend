@@ -18,7 +18,7 @@ export default function BookItem({ book }: Props) {
     await prefetchBookDetail(book.id);
   };
 
-  const bookDetailPath = buildPath('/book/:bookId', { bookId: book.id });
+  const bookDetailPath = buildPath('/books/:bookId', { bookId: book.id });
 
   return (
     <Card className="px-2 py-3 sm:px-3 sm:py-4">

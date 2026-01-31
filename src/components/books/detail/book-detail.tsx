@@ -33,7 +33,7 @@ export default function BookDetail({ bookId }: Props) {
     await prefetchBookToc(bookId);
   };
 
-  const bookTocPath = buildPath('/read/:bookId/table-of-contents', { bookId });
+  const bookTocPath = buildPath('/books/:bookId/table-of-contents', { bookId });
 
   return (
     <>

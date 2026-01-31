@@ -49,7 +49,7 @@ export default function MyReviewItem({ review }: Props) {
     await prefetchBookDetail(review.book.id);
   };
 
-  const bookDetailPath = buildPath('/book/:bookId', {
+  const bookDetailPath = buildPath('/books/:bookId', {
     bookId: review.book.id,
   });
 
