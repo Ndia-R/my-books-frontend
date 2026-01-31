@@ -252,8 +252,8 @@ await fetchBooksApi(path, options);
 
 **ルート構造**:
 
-- 公開: `/`, `/book/:bookId`, `/search`, `/discover`, `/ranking`, `/special-features`, `/settings`
-- 保護: `/favorites`, `/bookmarks`, `/my-reviews`, `/profile`, `/read/:bookId/...`
+- 公開: `/`, `/books/:bookId`, `/search`, `/discover`, `/ranking`, `/special-features`, `/settings`
+- 保護: `/favorites`, `/bookmarks`, `/my-reviews`, `/profile`, `/read-content/:bookId/...`
 
 **App Router風のディレクトリ規約**:
 
@@ -262,10 +262,10 @@ await fetchBooksApi(path, options);
 **ディレクトリ構造とURLの対応**:
 
 ```
-/src/app/search/page.tsx              → /search
-/src/app/book/[bookId]/page.tsx       → /book/:bookId
-/src/app/read/[bookId]/chapter/       → /read/:bookId/chapter/:chapterNumber/
-  [chapterNumber]/page/[pageNumber]/     page/:pageNumber
+/src/app/search/page.tsx                      → /search
+/src/app/books/[bookId]/page.tsx              → /books/:bookId
+/src/app/read-content/[bookId]/chapter/       → /read-content/:bookId/chapter/:chapterNumber/
+  [chapterNumber]/page/[pageNumber]/             page/:pageNumber
   page.tsx
 ```
 

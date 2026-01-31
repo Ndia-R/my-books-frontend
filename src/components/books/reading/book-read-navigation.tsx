@@ -6,6 +6,93 @@ import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link } from 'react-router';
 
+type Props = {
+  bookToc: BookToc;
+  chapterNumber: number;
+  pageNumber: number;
+  isPreviewMode?: boolean;
+};
+
+export default function BookReadNavigation({
+  bookToc,
+  chapterNumber,
+  pageNumber,
+  isPreviewMode = false,
+}: Props) {
+  const { bookId, isFirstPage, isLastPage, next, prev } = getPageNavigation(
+    bookToc,
+    chapterNumber,
+    pageNumber
+  );
+
+  const { prefetchBookReadContent, prefetchBookReadPreview } = usePrefetch();
+
+  useEffect(() => {
+    if (!isLastPage) {
+      if (isPreviewMode) {
+        prefetchBookReadPreview(bookId, next.chapter, next.page);
+      } else {
+        prefetchBookReadContent(bookId, next.chapter, next.page);
+      }
+    }
+  }, [
+    bookId,
+    isLastPage,
+    next.chapter,
+    next.page,
+    isPreviewMode,
+    prefetchBookReadContent,
+    prefetchBookReadPreview,
+  ]);
+
+  const pathTemplate = isPreviewMode
+    ? '/read-preview/:bookId/chapter/:chapterNumber/page/:pageNumber'
+    : '/read-content/:bookId/chapter/:chapterNumber/page/:pageNumber';
+
+  const prevPagePath = buildPath(pathTemplate, {
+    bookId,
+    chapterNumber: prev.chapter,
+    pageNumber: prev.page,
+  });
+
+  const nextPagePath = buildPath(pathTemplate, {
+    bookId,
+    chapterNumber: next.chapter,
+    pageNumber: next.page,
+  });
+
+  return (
+    <div className="flex justify-between">
+      <Link
+        className={cn(
+          'flex items-center gap-x-2',
+          isFirstPage && 'pointer-events-none opacity-50',
+          buttonVariants({ variant: 'ghost' })
+        )}
+        to={prevPagePath}
+      >
+        <ChevronLeftIcon />
+        <span>前のページへ</span>
+      </Link>
+
+      <Link
+        className={cn(
+          'flex items-center gap-x-2',
+          isLastPage && 'pointer-events-none opacity-50',
+          buttonVariants({ variant: 'ghost' })
+        )}
+        to={nextPagePath}
+      >
+        <span>次のページへ</span>
+        <ChevronRightIcon />
+      </Link>
+    </div>
+  );
+}
+
+/**
+ * 書籍の目次情報から前後ページのナビゲーション情報を計算
+ */
 const getPageNavigation = (toc: BookToc, chapter: number, page: number) => {
   const chapters = toc.chapters;
   const currentChapter = chapters.find((c) => c.chapterNumber === chapter);
@@ -49,75 +136,3 @@ const getPageNavigation = (toc: BookToc, chapter: number, page: number) => {
     prev,
   };
 };
-
-type Props = {
-  bookToc: BookToc;
-  chapterNumber: number;
-  pageNumber: number;
-};
-
-export default function BookReadNavigation({
-  bookToc,
-  chapterNumber,
-  pageNumber,
-}: Props) {
-  const { bookId, isFirstPage, isLastPage, next, prev } = getPageNavigation(
-    bookToc,
-    chapterNumber,
-    pageNumber
-  );
-
-  const { prefetchBookReadContent } = usePrefetch();
-
-  useEffect(() => {
-    if (!isLastPage) {
-      prefetchBookReadContent(bookId, next.chapter, next.page);
-    }
-  }, [bookId, isLastPage, next.chapter, next.page, prefetchBookReadContent]);
-
-  const prevPagePath = buildPath(
-    '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
-    {
-      bookId,
-      chapterNumber: prev.chapter,
-      pageNumber: prev.page,
-    }
-  );
-
-  const nextPagePath = buildPath(
-    '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
-    {
-      bookId,
-      chapterNumber: next.chapter,
-      pageNumber: next.page,
-    }
-  );
-
-  return (
-    <div className="flex justify-between">
-      <Link
-        className={cn(
-          'flex items-center gap-x-2',
-          isFirstPage && 'pointer-events-none opacity-50',
-          buttonVariants({ variant: 'ghost' })
-        )}
-        to={prevPagePath}
-      >
-        <ChevronLeftIcon />
-        <span>前のページへ</span>
-      </Link>
-
-      <Link
-        className={cn(
-          'flex items-center gap-x-2',
-          isLastPage && 'pointer-events-none opacity-50',
-          buttonVariants({ variant: 'ghost' })
-        )}
-        to={nextPagePath}
-      >
-        <span>次のページへ</span>
-        <ChevronRightIcon />
-      </Link>
-    </div>
-  );
-}

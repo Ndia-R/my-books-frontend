@@ -288,7 +288,7 @@ export default function PermissionGuard({ permissionSets, children }: Props) {
 
 // Component.tsx
 {
-  <PermissionGuard permissionSets={ [PermissionSet.PremiumUser, PermissionSet.Admin] }>
+  <PermissionGuard permissionSets={ [PermissionSet.PremiumUser] }>
     <Button>有料コンテンツを読む</Button>
   </PermissionGuard>;
 }

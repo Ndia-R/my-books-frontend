@@ -3,54 +3,69 @@ import BookReadNavigation from '@/components/books/reading/book-read-navigation'
 import BookReadTocButton from '@/components/books/reading/book-read-toc-button';
 import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
-import { getBookChapterPageContent, getBookToc } from '@/lib/api/books';
+import {
+  getBookChapterPageContent,
+  getBookChapterPagePreview,
+  getBookToc,
+} from '@/lib/api/books';
 import { getUserBookmarksByBookId } from '@/lib/api/users';
 import { chapterNumberString } from '@/lib/utils';
 import type { BookmarkPage } from '@/types';
-import { useSuspenseQueries } from '@tanstack/react-query';
+import { useQuery, useSuspenseQueries } from '@tanstack/react-query';
 
 type Props = {
   bookId: string;
   chapterNumber: number;
   pageNumber: number;
+  isPreviewMode?: boolean;
 };
 
 export default function BookReadContent({
   bookId,
   chapterNumber,
   pageNumber,
+  isPreviewMode = false,
 }: Props) {
-  const [
-    { data: bookToc },
-    { data: bookChapterPageContent },
-    { data: bookmark },
-  ] = useSuspenseQueries({
-    queries: [
-      {
-        queryKey: queryKeys.getBookToc(bookId),
-        queryFn: () => getBookToc(bookId),
-      },
-      {
-        queryKey: queryKeys.getBookChapterPageContent(
-          bookId,
-          chapterNumber,
-          pageNumber
-        ),
-        queryFn: () =>
-          getBookChapterPageContent(bookId, chapterNumber, pageNumber),
-      },
-      {
-        queryKey: queryKeys.getUserBookmarksByBookId(bookId),
-        queryFn: () => getUserBookmarksByBookId(bookId),
-        select: (bookmarkPage: BookmarkPage) =>
-          bookmarkPage.data.find(
-            (bookmark) =>
-              bookmark.book.id === bookId &&
-              bookmark.chapterNumber === chapterNumber &&
-              bookmark.pageNumber === pageNumber
-          ),
-      },
-    ],
+  // 目次（TOC）と有料コンテンツor試し読みは useSuspenseQueries で取得
+  const [{ data: bookToc }, { data: bookChapterPageContent }] =
+    useSuspenseQueries({
+      queries: [
+        {
+          queryKey: queryKeys.getBookToc(bookId),
+          queryFn: () => getBookToc(bookId),
+        },
+        {
+          queryKey: isPreviewMode
+            ? queryKeys.getBookChapterPagePreview(
+                bookId,
+                chapterNumber,
+                pageNumber
+              )
+            : queryKeys.getBookChapterPageContent(
+                bookId,
+                chapterNumber,
+                pageNumber
+              ),
+          queryFn: () =>
+            isPreviewMode
+              ? getBookChapterPagePreview(bookId, chapterNumber, pageNumber)
+              : getBookChapterPageContent(bookId, chapterNumber, pageNumber),
+        },
+      ],
+    });
+
+  // ブックマークは通常モードのみ useQuery で取得
+  const { data: bookmark } = useQuery({
+    queryKey: queryKeys.getUserBookmarksByBookId(bookId),
+    queryFn: () => getUserBookmarksByBookId(bookId),
+    enabled: !isPreviewMode, // プレビューモード（試し読み）では実行しない
+    select: (bookmarkPage: BookmarkPage) =>
+      bookmarkPage.data.find(
+        (bookmark) =>
+          bookmark.book.id === bookId &&
+          bookmark.chapterNumber === chapterNumber &&
+          bookmark.pageNumber === pageNumber
+      ),
   });
 
   return (
@@ -70,10 +85,12 @@ export default function BookReadContent({
               {`${pageNumber}/${bookChapterPageContent.totalPagesInChapter}`}
             </p>
             <BookReadTocButton bookId={bookId} />
-            <BookReadBookmarkButton
-              bookChapterPageContent={bookChapterPageContent}
-              bookmark={bookmark}
-            />
+            {!isPreviewMode && (
+              <BookReadBookmarkButton
+                bookChapterPageContent={bookChapterPageContent}
+                bookmark={bookmark}
+              />
+            )}
           </div>
         </div>
 
@@ -83,6 +100,7 @@ export default function BookReadContent({
           bookToc={bookToc}
           chapterNumber={chapterNumber}
           pageNumber={pageNumber}
+          isPreviewMode={isPreviewMode}
         />
       </div>
     </>

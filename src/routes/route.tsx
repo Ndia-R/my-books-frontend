@@ -1,6 +1,7 @@
 import AuthCallbackPage from '@/app/auth-callback/page';
-import BookDetailPage from '@/app/book/[bookId]/page';
 import BookmarksPage from '@/app/bookmarks/page';
+import BookDetailPage from '@/app/books/[bookId]/page';
+import BookTableOfContentsPage from '@/app/books/[bookId]/table-of-contents/page';
 import DiscoverPage from '@/app/discover/page';
 import FavoritesPage from '@/app/favorites/page';
 import ForbiddenPage from '@/app/forbidden/page';
@@ -11,9 +12,8 @@ import RootPage from '@/app/page';
 import ChangeUserInfoPage from '@/app/profile/change-user-info/page';
 import ProfilePage from '@/app/profile/page';
 import RankingPage from '@/app/ranking/page';
+import BookReadContentPage from '@/app/read-content/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
 import BookReadPreviewPage from '@/app/read-preview/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
-import BookReadPage from '@/app/read/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
-import BookReadTableOfContentsPage from '@/app/read/[bookId]/table-of-contents/page';
 import SearchPage from '@/app/search/page';
 import SettingsPage from '@/app/settings/page';
 import SpecialFeaturesPage from '@/app/special-features/page';
@@ -37,10 +37,10 @@ export const router = createBrowserRouter(
         <Route path="auth-callback" element={<AuthCallbackPage />} />
         <Route path="forbidden" element={<ForbiddenPage title="403" />} />
 
-        <Route path="book/:bookId" element={<BookDetailPage />} />
+        <Route path="books/:bookId" element={<BookDetailPage />} />
         <Route
-          path="read/:bookId/table-of-contents"
-          element={<BookReadTableOfContentsPage />}
+          path="books/:bookId/table-of-contents"
+          element={<BookTableOfContentsPage />}
         />
 
         <Route
@@ -80,9 +80,7 @@ export const router = createBrowserRouter(
         {/* ---- 認証が必要な画面（指定された権限セットのみ） ---- */}
         <Route
           element={
-            <ProtectedRoute
-              permissionSets={[PermissionSet.PremiumUser, PermissionSet.Admin]}
-            />
+            <ProtectedRoute permissionSets={[PermissionSet.PremiumUser]} />
           }
         >
           <Route
@@ -94,8 +92,8 @@ export const router = createBrowserRouter(
             element={<MyReviewsPage title="マイレビュー" />}
           />
           <Route
-            path="read/:bookId/chapter/:chapterNumber/page/:pageNumber"
-            element={<BookReadPage />}
+            path="read-content/:bookId/chapter/:chapterNumber/page/:pageNumber"
+            element={<BookReadContentPage />}
           />
         </Route>
 

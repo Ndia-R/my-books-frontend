@@ -63,7 +63,7 @@ export default function BookmarkItem({ bookmark }: Props) {
   };
 
   const bookReadPath = buildPath(
-    '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
+    '/read-content/:bookId/chapter/:chapterNumber/page/:pageNumber',
     {
       bookId: bookmark.book.id,
       chapterNumber: bookmark.chapterNumber,

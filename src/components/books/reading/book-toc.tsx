@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { APP_TITLE } from '@/constants/constants';
+import { PermissionSet } from '@/constants/permission-sets';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { getBookToc } from '@/lib/api/books';
@@ -18,20 +19,22 @@ export default function BookToc({ bookId }: Props) {
     queryFn: () => getBookToc(bookId),
   });
 
-  const { isAuthenticated } = useAuth();
+  const { hasPermissionSet } = useAuth();
+  const canReadContent = hasPermissionSet(PermissionSet.PremiumUser);
+
   const { prefetchBookReadContent } = usePrefetch();
   const navigate = useNavigate();
 
   const handlePrefetch = async (bookId: string, chapterNumber: number) => {
-    if (isAuthenticated) {
+    if (canReadContent) {
       await prefetchBookReadContent(bookId, chapterNumber);
     }
   };
 
   const handleClick = () => {
     const firstChapterPath = buildPath(
-      isAuthenticated
-        ? '/read/:bookId/chapter/:chapterNumber/page/:pageNumber'
+      canReadContent
+        ? '/read-content/:bookId/chapter/:chapterNumber/page/:pageNumber'
         : '/read-preview/:bookId/chapter/:chapterNumber/page/:pageNumber',
       {
         bookId,
@@ -56,7 +59,7 @@ export default function BookToc({ bookId }: Props) {
             onMouseEnter={() => handlePrefetch(bookId, 1)}
             onFocus={() => handlePrefetch(bookId, 1)}
           >
-            {isAuthenticated ? '  最初から読む' : '試し読み'}
+            {canReadContent ? '  最初から読む' : '試し読み'}
           </Button>
         </div>
 
@@ -64,7 +67,7 @@ export default function BookToc({ bookId }: Props) {
           <ul className="flex flex-col gap-y-8">
             {bookToc.chapters.map((chapter) => {
               const chapterPath = buildPath(
-                '/read/:bookId/chapter/:chapterNumber/page/:pageNumber',
+                '/read-content/:bookId/chapter/:chapterNumber/page/:pageNumber',
                 {
                   bookId,
                   chapterNumber: chapter.chapterNumber,
@@ -82,9 +85,9 @@ export default function BookToc({ bookId }: Props) {
                   <Link
                     className={cn(
                       'hover:text-primary text-base font-semibold sm:text-xl',
-                      !isAuthenticated && 'pointer-events-none'
+                      !canReadContent && 'pointer-events-none'
                     )}
-                    to={isAuthenticated ? chapterPath : '#'}
+                    to={canReadContent ? chapterPath : '#'}
                     aria-label={`${chapter.chapterTitle}のページへ移動`}
                     onMouseEnter={() =>
                       handlePrefetch(bookId, chapter.chapterNumber)
