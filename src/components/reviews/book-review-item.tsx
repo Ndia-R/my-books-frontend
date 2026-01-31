@@ -20,13 +20,10 @@ type Props = {
 
 export default function BookReviewItem({ review }: Props) {
   const [isOpen, setIsOpen] = useState(false);
-  const { userProfile, hasAnyPermissionSet } = useAuth();
+  const { userProfile, hasPermissionSet } = useAuth();
 
   const isOwnReview = userProfile?.id === review.userId;
-  const canEditReview = hasAnyPermissionSet([
-    PermissionSet.PremiumUser,
-    PermissionSet.Admin,
-  ]);
+  const canEditReview = hasPermissionSet(PermissionSet.PremiumUser);
 
   const queryClient = useQueryClient();
 

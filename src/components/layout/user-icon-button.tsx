@@ -25,16 +25,16 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function UserIconButton() {
-  const { logout, userProfile, hasAnyPermissionSet } = useAuth();
-  const isGeneralUser = hasAnyPermissionSet([PermissionSet.GeneralUser]);
+  const { logout, userProfile, hasPermissionSet } = useAuth();
+  const isGeneralUser = hasPermissionSet(PermissionSet.GeneralUser);
 
   const MENU_LIST: MenuItem[] = [
     { label: 'プロフィール', href: '/profile', icon: UserRoundIcon },
     { label: 'お気に入り', href: '/favorites', icon: HeartIcon },
   ];
 
-  // プレミアムユーザーとアドミンユーザーはリスト項目追加
-  if (hasAnyPermissionSet([PermissionSet.PremiumUser, PermissionSet.Admin])) {
+  // プレミアムユーザーはリスト項目追加
+  if (hasPermissionSet(PermissionSet.PremiumUser)) {
     MENU_LIST.push({
       label: 'ブックマーク',
       href: '/bookmarks',

@@ -9,11 +9,8 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router';
 
 export default function UserProfileCounts() {
-  const { hasAnyPermissionSet } = useAuth();
-  const canNavigate = hasAnyPermissionSet([
-    PermissionSet.PremiumUser,
-    PermissionSet.Admin,
-  ]);
+  const { hasPermissionSet } = useAuth();
+  const canNavigate = hasPermissionSet(PermissionSet.PremiumUser);
 
   const { data: userProfileCounts } = useSuspenseQuery({
     queryKey: queryKeys.getUserProfileCounts(),

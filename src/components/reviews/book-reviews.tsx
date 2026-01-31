@@ -35,11 +35,9 @@ export default function BookReviews({ bookId }: Props) {
   const reviews = data.pages.flatMap((page) => page.data);
 
   const [isOpen, setIsOpen] = useState(false);
-  const { isAuthenticated, hasAnyPermissionSet } = useAuth();
-  const canReview = hasAnyPermissionSet([
-    PermissionSet.PremiumUser,
-    PermissionSet.Admin,
-  ]);
+
+  const { isAuthenticated, hasPermissionSet } = useAuth();
+  const canReview = hasPermissionSet(PermissionSet.PremiumUser);
 
   // すでにレビューをしているかどうかを取得
   // ログインしていない場合は、enabledオプションを指定してqueryFnを呼び出さないようにする
