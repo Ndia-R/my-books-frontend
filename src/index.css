@@ -177,6 +177,11 @@
     @apply bg-background text-foreground;
   }
 
+  /* スクロールバーが表示されるためのスペース（ガター）を常に確保する */
+  html {
+    scrollbar-gutter: stable;
+  }
+
   /* タイトルフォント */
   :root {
     --font-title: 'Poetsen One';
