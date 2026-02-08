@@ -53,3 +53,9 @@ export type BookChapterPageContent = {
   totalPagesInChapter: number;
   content: string;
 };
+
+export type BookPreviewSettingPublic = {
+  bookId: string;
+  maxChapter: number;
+  maxPage: number;
+};

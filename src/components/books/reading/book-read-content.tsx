@@ -1,15 +1,17 @@
 import BookReadBookmarkButton from '@/components/books/reading/book-read-bookmark-button';
 import BookReadNavigation from '@/components/books/reading/book-read-navigation';
 import BookReadTocButton from '@/components/books/reading/book-read-toc-button';
+import Paywall from '@/components/books/reading/paywall';
 import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import {
   getBookChapterPageContent,
   getBookChapterPagePreview,
+  getBookPreviewSettingPublic,
   getBookToc,
 } from '@/lib/api/books';
 import { getUserBookmarksByBookId } from '@/lib/api/users';
-import { chapterNumberString } from '@/lib/utils';
+import { chapterNumberString, cn, isLastPreviewPage } from '@/lib/utils';
 import type { BookmarkPage } from '@/types';
 import { useQuery, useSuspenseQueries } from '@tanstack/react-query';
 
@@ -26,33 +28,40 @@ export default function BookReadContent({
   pageNumber,
   isPreviewMode = false,
 }: Props) {
-  // 目次（TOC）と有料コンテンツor試し読みは useSuspenseQueries で取得
-  const [{ data: bookToc }, { data: bookChapterPageContent }] =
-    useSuspenseQueries({
-      queries: [
-        {
-          queryKey: queryKeys.getBookToc(bookId),
-          queryFn: () => getBookToc(bookId),
-        },
-        {
-          queryKey: isPreviewMode
-            ? queryKeys.getBookChapterPagePreview(
-                bookId,
-                chapterNumber,
-                pageNumber
-              )
-            : queryKeys.getBookChapterPageContent(
-                bookId,
-                chapterNumber,
-                pageNumber
-              ),
-          queryFn: () =>
-            isPreviewMode
-              ? getBookChapterPagePreview(bookId, chapterNumber, pageNumber)
-              : getBookChapterPageContent(bookId, chapterNumber, pageNumber),
-        },
-      ],
-    });
+  // 目次（TOC）、有料コンテンツor試し読み、試し読み設定を useSuspenseQueries で取得
+  const [
+    { data: bookToc },
+    { data: bookChapterPageContent },
+    { data: BookPreviewSettingPublic },
+  ] = useSuspenseQueries({
+    queries: [
+      {
+        queryKey: queryKeys.getBookToc(bookId),
+        queryFn: () => getBookToc(bookId),
+      },
+      {
+        queryKey: isPreviewMode
+          ? queryKeys.getBookChapterPagePreview(
+              bookId,
+              chapterNumber,
+              pageNumber
+            )
+          : queryKeys.getBookChapterPageContent(
+              bookId,
+              chapterNumber,
+              pageNumber
+            ),
+        queryFn: () =>
+          isPreviewMode
+            ? getBookChapterPagePreview(bookId, chapterNumber, pageNumber)
+            : getBookChapterPageContent(bookId, chapterNumber, pageNumber),
+      },
+      {
+        queryKey: queryKeys.getBookPreviewSettingPublic(bookId),
+        queryFn: () => getBookPreviewSettingPublic(bookId),
+      },
+    ],
+  });
 
   // ブックマークは通常モードのみ useQuery で取得
   const { data: bookmark } = useQuery({
@@ -67,6 +76,11 @@ export default function BookReadContent({
           bookmark.pageNumber === pageNumber
       ),
   });
+
+  // ペイウォール判定
+  const isPaywalled =
+    isPreviewMode &&
+    isLastPreviewPage(BookPreviewSettingPublic, bookChapterPageContent);
 
   return (
     <>
@@ -94,14 +108,26 @@ export default function BookReadContent({
           </div>
         </div>
 
-        <p className="whitespace-pre-wrap">{bookChapterPageContent.content}</p>
+        <p
+          className={cn(
+            'whitespace-pre-wrap',
+            isPaywalled &&
+              'mask-[linear-gradient(to_bottom,black_50%,transparent)] select-none'
+          )}
+        >
+          {bookChapterPageContent.content}
+        </p>
 
-        <BookReadNavigation
-          bookToc={bookToc}
-          chapterNumber={chapterNumber}
-          pageNumber={pageNumber}
-          isPreviewMode={isPreviewMode}
-        />
+        {isPaywalled ? (
+          <Paywall bookId={bookId} />
+        ) : (
+          <BookReadNavigation
+            bookToc={bookToc}
+            chapterNumber={chapterNumber}
+            pageNumber={pageNumber}
+            isPreviewMode={isPreviewMode}
+          />
+        )}
       </div>
     </>
   );

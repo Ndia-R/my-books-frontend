@@ -23,6 +23,8 @@ export const queryKeys = {
     ['getBookReviewsInfinite', bookId] as const,
   getBookFavoriteStats: (bookId: string) =>
     ['getBookFavoriteStats', bookId] as const,
+  getBookPreviewSettingPublic: (bookId: string) =>
+    ['getBookPreviewSettingPublic', bookId] as const,
 
   // Genres API
   getGenres: () => ['getGenres'] as const,

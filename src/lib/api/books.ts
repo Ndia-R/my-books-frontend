@@ -11,6 +11,7 @@ import type {
   BookChapterPageContent,
   BookDetails,
   BookPage,
+  BookPreviewSettingPublic,
   BookToc,
   FavoriteStats,
   ReviewPage,
@@ -108,6 +109,13 @@ export const getBookReviews = async (
   const path = buildPath('/books/:bookId/reviews', { bookId });
   const queryString = buildQueryString({ page, size, sort });
   const response = await fetchBooksApi<ReviewPage>(path + queryString);
+  return response.data;
+};
+
+// 特定の書籍の試し読み設定
+export const getBookPreviewSettingPublic = async (bookId: string) => {
+  const path = buildPath('/books/:bookId/preview-setting', { bookId });
+  const response = await fetchBooksApi<BookPreviewSettingPublic>(path);
   return response.data;
 };
 
