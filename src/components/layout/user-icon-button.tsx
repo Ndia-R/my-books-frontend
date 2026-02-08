@@ -136,9 +136,9 @@ export default function UserIconButton() {
             <div className="my-2">
               <Button
                 className="w-full"
-                onClick={() => handleClickMenuItem('/subscription')}
+                onClick={() => handleClickMenuItem('/settings/plan')}
               >
-                アップグレードする
+                プランをアップグレード
               </Button>
             </div>
           </>

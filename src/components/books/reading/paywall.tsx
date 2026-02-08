@@ -17,9 +17,9 @@ export default function Paywall({ bookId }: Props) {
       <div className="flex flex-wrap justify-center gap-4">
         <Link
           className={buttonVariants({ variant: 'default' })}
-          to="/subscription"
+          to="/settings/plan"
         >
-          サブスクリプションを見る
+          プランを見る
         </Link>
         <Link
           className={buttonVariants({ variant: 'outline' })}

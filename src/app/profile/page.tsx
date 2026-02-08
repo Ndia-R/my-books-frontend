@@ -21,12 +21,12 @@ const CHANGE_LIST: MenuItem[] = [
   },
   {
     label: 'テーマ',
-    href: '/settings',
+    href: '/settings/theme',
     icon: PaletteIcon,
   },
   {
-    label: 'サブスクリプション',
-    href: '/subscription',
+    label: 'プラン',
+    href: '/settings/plan',
     icon: CrownIcon,
   },
 ];

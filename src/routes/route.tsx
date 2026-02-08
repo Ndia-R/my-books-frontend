@@ -16,8 +16,9 @@ import BookReadContentPage from '@/app/read-content/[bookId]/chapter/[chapterNum
 import BookReadPreviewPage from '@/app/read-preview/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
 import SearchPage from '@/app/search/page';
 import SettingsPage from '@/app/settings/page';
+import PlanPage from '@/app/settings/plan/page';
+import ThemePage from '@/app/settings/theme/page';
 import SpecialFeaturesPage from '@/app/special-features/page';
-import SubscriptionPage from '@/app/subscription/page';
 import { APP_BASE_PATH } from '@/constants/constants';
 import { PermissionSet } from '@/constants/permission-sets';
 import ProtectedRoute from '@/routes/protected-route';
@@ -56,10 +57,7 @@ export const router = createBrowserRouter(
           element={<SpecialFeaturesPage title="特集" />}
         />
         <Route path="settings" element={<SettingsPage title="設定" />} />
-        <Route
-          path="subscription"
-          element={<SubscriptionPage title="サブスクリプション" />}
-        />
+        <Route path="settings/plan" element={<PlanPage title="プラン" />} />
 
         {/* ---- 認証が必要な画面（すべての権限セットOK） ---- */}
         <Route element={<ProtectedRoute />}>
@@ -75,6 +73,7 @@ export const router = createBrowserRouter(
             path="favorites"
             element={<FavoritesPage title="お気に入り" />}
           />
+          <Route path="settings/theme" element={<ThemePage title="テーマ" />} />
         </Route>
 
         {/* ---- 認証が必要な画面（指定された権限セットのみ） ---- */}
