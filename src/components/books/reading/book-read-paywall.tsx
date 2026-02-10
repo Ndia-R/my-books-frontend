@@ -6,7 +6,7 @@ type Props = {
   bookId: string;
 };
 
-export default function Paywall({ bookId }: Props) {
+export default function BookReadPaywall({ bookId }: Props) {
   return (
     <div className="flex flex-col items-center gap-y-6 py-12 text-center">
       <LockIcon className="text-muted-foreground size-10" />

@@ -1,7 +1,7 @@
 import BookReadBookmarkButton from '@/components/books/reading/book-read-bookmark-button';
 import BookReadNavigation from '@/components/books/reading/book-read-navigation';
+import BookReadPaywall from '@/components/books/reading/book-read-paywall';
 import BookReadTocButton from '@/components/books/reading/book-read-toc-button';
-import Paywall from '@/components/books/reading/paywall';
 import { APP_TITLE } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import {
@@ -120,7 +120,7 @@ export default function BookReadContent({
         </p>
 
         {isPaywalled ? (
-          <Paywall bookId={bookId} />
+          <BookReadPaywall bookId={bookId} />
         ) : (
           <BookReadNavigation
             bookToc={bookToc}
