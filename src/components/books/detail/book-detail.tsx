@@ -7,13 +7,9 @@ import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { getBookDetails } from '@/lib/api/books';
-import {
-  buildPath,
-  cn,
-  formatDateJP,
-  formatIsbn,
-  formatPrice,
-} from '@/lib/utils';
+import { formatDateJP, formatIsbn, formatPrice } from '@/lib/format';
+import { buildPath } from '@/lib/url-builder';
+import { cn } from '@/lib/utils';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 

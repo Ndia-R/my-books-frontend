@@ -1,7 +1,7 @@
 import FavoriteList from '@/components/favorites/favorite-list';
 import { queryKeys } from '@/constants/query-keys';
 import { getUserFavorites } from '@/lib/api/users';
-import type { FavoritePage } from '@/types';
+import type { FavoritePage } from '@/types/favorite';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect } from 'react';

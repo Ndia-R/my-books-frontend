@@ -12,7 +12,7 @@ import {
 import { updateUserProfile } from '@/lib/api/users';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
-import type { UpdateUserProfile } from '@/types';
+import type { UpdateUserProfile } from '@/types/user';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { type FormEvent, useState } from 'react';

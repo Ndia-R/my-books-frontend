@@ -13,14 +13,10 @@ import { queryKeys } from '@/constants/query-keys';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
 import usePrefetch from '@/hooks/use-prefetch';
 import { deleteFavoriteByBookId } from '@/lib/api/favorites';
-import {
-  buildPath,
-  cn,
-  formatDateJP,
-  formatRelativeTime,
-  formatTime,
-} from '@/lib/utils';
-import type { Favorite } from '@/types';
+import { formatDateJP, formatRelativeTime, formatTime } from '@/lib/format';
+import { buildPath } from '@/lib/url-builder';
+import { cn } from '@/lib/utils';
+import type { Favorite } from '@/types/favorite';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 import { Link } from 'react-router';

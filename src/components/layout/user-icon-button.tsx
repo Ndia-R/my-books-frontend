@@ -13,7 +13,7 @@ import { PermissionSet } from '@/constants/permission-sets';
 import usePrefetch from '@/hooks/use-prefetch';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
-import type { MenuItem } from '@/types';
+import type { MenuItem } from '@/types/ui';
 import {
   BookmarkIcon,
   HeartIcon,

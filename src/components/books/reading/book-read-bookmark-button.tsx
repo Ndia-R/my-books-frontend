@@ -13,12 +13,12 @@ import {
   updateBookmark,
 } from '@/lib/api/bookmarks';
 import { cn } from '@/lib/utils';
+import type { BookChapterPageContent } from '@/types/book';
 import type {
-  BookChapterPageContent,
   Bookmark,
   BookmarkRequest,
   BookmarkUpdateParams,
-} from '@/types';
+} from '@/types/bookmark';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BookmarkIcon } from 'lucide-react';
 import { useState } from 'react';

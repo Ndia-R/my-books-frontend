@@ -1,6 +1,6 @@
 import NavigateLink from '@/components/layout/navigate-link';
 import { cn } from '@/lib/utils';
-import type { MenuItem } from '@/types';
+import type { MenuItem } from '@/types/ui';
 import { AwardIcon, ChartLineIcon, SettingsIcon, TagIcon } from 'lucide-react';
 import { useLocation } from 'react-router';
 

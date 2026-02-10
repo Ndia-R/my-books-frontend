@@ -6,16 +6,16 @@ import {
 } from '@/constants/constants';
 import type { BookSortOrder, ReviewSortOrder } from '@/constants/sort-orders';
 import { fetchBooksApi } from '@/lib/api/fetch';
-import { buildPath, buildQueryString } from '@/lib/utils';
+import { buildPath, buildQueryString } from '@/lib/url-builder';
 import type {
   BookChapterPageContent,
   BookDetails,
   BookPage,
   BookPreviewSettingPublic,
   BookToc,
-  FavoriteStats,
-  ReviewPage,
-} from '@/types';
+} from '@/types/book';
+import type { FavoriteStats } from '@/types/favorite';
+import type { ReviewPage } from '@/types/review';
 
 // 最新の書籍リスト（１０冊分）
 export const getBooksNewReleases = async () => {

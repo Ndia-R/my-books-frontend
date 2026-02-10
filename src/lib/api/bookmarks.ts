@@ -1,6 +1,7 @@
 import { fetchBooksApi } from '@/lib/api/fetch';
-import { buildPath, getCsrfToken } from '@/lib/utils';
-import type { BookmarkRequest } from '@/types';
+import { buildPath } from '@/lib/url-builder';
+import { getCsrfToken } from '@/lib/utils';
+import type { BookmarkRequest } from '@/types/bookmark';
 
 // ブックマーク追加
 export const createBookmark = async (requestBody: BookmarkRequest) => {

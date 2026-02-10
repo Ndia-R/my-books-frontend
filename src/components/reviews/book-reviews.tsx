@@ -7,7 +7,7 @@ import { getBookReviews } from '@/lib/api/books';
 import { createReview } from '@/lib/api/reviews';
 import { isReviewedByUser } from '@/lib/api/users';
 import { useAuth } from '@/providers/auth-provider';
-import type { ReviewPage, ReviewRequest } from '@/types';
+import type { ReviewPage, ReviewRequest } from '@/types/review';
 import {
   useMutation,
   useQuery,

@@ -3,7 +3,7 @@ import {
   HttpError,
   type HttpErrorResponse,
   type HttpResponse,
-} from '@/types/infrastructure/http';
+} from '@/types/http';
 
 // グローバルな401エラーハンドラー（AuthProviderから設定される）
 let globalUnauthorizedHandler: (() => void) | null = null;

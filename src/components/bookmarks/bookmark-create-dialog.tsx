@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { TOAST_ERROR_DURATION } from '@/constants/constants';
-import type { BookmarkCreateMutation, BookmarkRequest } from '@/types';
+import type { BookmarkCreateMutation, BookmarkRequest } from '@/types/bookmark';
 import { Loader2Icon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';

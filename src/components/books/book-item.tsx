@@ -3,8 +3,9 @@ import ReviewCountIcon from '@/components/books/stats/review-count-icon';
 import { Card, CardContent } from '@/components/ui/card';
 import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import usePrefetch from '@/hooks/use-prefetch';
-import { buildPath, formatDateJP } from '@/lib/utils';
-import type { Book } from '@/types';
+import { formatDateJP } from '@/lib/format';
+import { buildPath } from '@/lib/url-builder';
+import type { Book } from '@/types/book';
 import { Link } from 'react-router';
 
 type Props = {

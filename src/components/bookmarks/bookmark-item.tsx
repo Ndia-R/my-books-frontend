@@ -11,14 +11,14 @@ import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { deleteBookmark, updateBookmark } from '@/lib/api/bookmarks';
 import {
-  buildPath,
   chapterNumberString,
-  cn,
   formatDateJP,
   formatRelativeTime,
   formatTime,
-} from '@/lib/utils';
-import type { Bookmark, BookmarkUpdateParams } from '@/types';
+} from '@/lib/format';
+import { buildPath } from '@/lib/url-builder';
+import { cn } from '@/lib/utils';
+import type { Bookmark, BookmarkUpdateParams } from '@/types/bookmark';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BookmarkIcon } from 'lucide-react';
 import { useState } from 'react';

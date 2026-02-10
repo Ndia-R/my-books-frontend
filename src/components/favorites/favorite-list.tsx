@@ -1,5 +1,5 @@
 import FavoriteItem from '@/components/favorites/favorite-item';
-import type { Favorite } from '@/types';
+import type { Favorite } from '@/types/favorite';
 
 type Props = {
   favorites: Favorite[];

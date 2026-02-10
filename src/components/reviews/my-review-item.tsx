@@ -6,13 +6,9 @@ import { BOOK_IMAGE_BASE_URL } from '@/constants/constants';
 import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
 import { deleteReview, updateReview } from '@/lib/api/reviews';
-import {
-  buildPath,
-  formatDateJP,
-  formatRelativeTime,
-  formatTime,
-} from '@/lib/utils';
-import type { Review, ReviewUpdateParams } from '@/types';
+import { formatDateJP, formatRelativeTime, formatTime } from '@/lib/format';
+import { buildPath } from '@/lib/url-builder';
+import type { Review, ReviewUpdateParams } from '@/types/review';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SquarePenIcon } from 'lucide-react';
 import { useState } from 'react';

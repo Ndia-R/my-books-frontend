@@ -1,6 +1,7 @@
 import { fetchBooksApi } from '@/lib/api/fetch';
-import { buildPath, getCsrfToken } from '@/lib/utils';
-import type { FavoriteRequest } from '@/types';
+import { buildPath } from '@/lib/url-builder';
+import { getCsrfToken } from '@/lib/utils';
+import type { FavoriteRequest } from '@/types/favorite';
 
 // お気に入り追加
 export const createFavorite = async (requestBody: FavoriteRequest) => {

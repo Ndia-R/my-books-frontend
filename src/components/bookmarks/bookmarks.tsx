@@ -1,7 +1,7 @@
 import BookmarkList from '@/components/bookmarks/bookmark-list';
 import { queryKeys } from '@/constants/query-keys';
 import { getUserBookmarks } from '@/lib/api/users';
-import type { BookmarkPage } from '@/types';
+import type { BookmarkPage } from '@/types/bookmark';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect } from 'react';

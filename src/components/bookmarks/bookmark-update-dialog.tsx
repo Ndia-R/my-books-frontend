@@ -15,7 +15,7 @@ import type {
   BookmarkRequest,
   BookmarkUpdateMutation,
   BookmarkUpdateParams,
-} from '@/types';
+} from '@/types/bookmark';
 import { Loader2Icon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';

@@ -11,8 +11,9 @@ import {
   getBookToc,
 } from '@/lib/api/books';
 import { getUserBookmarksByBookId } from '@/lib/api/users';
-import { chapterNumberString, cn, isLastPreviewPage } from '@/lib/utils';
-import type { BookmarkPage } from '@/types';
+import { chapterNumberString } from '@/lib/format';
+import { cn, isLastPreviewPage } from '@/lib/utils';
+import type { BookmarkPage } from '@/types/bookmark';
 import { useQuery, useSuspenseQueries } from '@tanstack/react-query';
 
 type Props = {

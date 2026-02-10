@@ -1,4 +1,4 @@
-import { HttpError } from '@/types/infrastructure/http';
+import { HttpError } from '@/types/http';
 
 type Props = {
   error?: unknown;
@@ -20,7 +20,7 @@ export default function ErrorElement({ error }: Props) {
     return (
       <div className="flex h-24 w-full flex-col items-center justify-center">
         <p className="font-semibold">エラーが発生しました</p>
-        <p className="text-sm text-muted-foreground">{error.message}</p>
+        <p className="text-muted-foreground text-sm">{error.message}</p>
       </div>
     );
   }

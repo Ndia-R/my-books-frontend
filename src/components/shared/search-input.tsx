@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useSearchFilters } from '@/hooks/use-search-filters';
-import { buildQueryString } from '@/lib/utils';
+import { buildQueryString } from '@/lib/url-builder';
 import { Search } from 'lucide-react';
 import { type FormEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';

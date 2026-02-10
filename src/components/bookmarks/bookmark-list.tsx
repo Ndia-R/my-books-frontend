@@ -1,5 +1,5 @@
 import BookmarkItem from '@/components/bookmarks/bookmark-item';
-import type { Bookmark } from '@/types';
+import type { Bookmark } from '@/types/bookmark';
 
 type Props = {
   bookmarks: Bookmark[];

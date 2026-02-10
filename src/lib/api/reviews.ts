@@ -1,6 +1,7 @@
 import { fetchBooksApi } from '@/lib/api/fetch';
-import { buildPath, getCsrfToken } from '@/lib/utils';
-import type { ReviewRequest } from '@/types';
+import { buildPath } from '@/lib/url-builder';
+import { getCsrfToken } from '@/lib/utils';
+import type { ReviewRequest } from '@/types/review';
 
 // レビュー作成
 export const createReview = async (requestBody: ReviewRequest) => {

@@ -1,7 +1,7 @@
 import Logo from '@/components/layout/logo';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import type { MenuItem } from '@/types';
+import type { MenuItem } from '@/types/ui';
 import {
   FacebookIcon,
   InstagramIcon,

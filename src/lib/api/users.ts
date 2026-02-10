@@ -4,15 +4,16 @@ import {
 } from '@/constants/constants';
 import type { ReviewSortOrder } from '@/constants/sort-orders';
 import { fetchBooksApi } from '@/lib/api/fetch';
-import { buildQueryString, getCsrfToken } from '@/lib/utils';
+import { buildQueryString } from '@/lib/url-builder';
+import { getCsrfToken } from '@/lib/utils';
+import type { BookmarkPage } from '@/types/bookmark';
+import type { FavoritePage } from '@/types/favorite';
+import type { ReviewPage } from '@/types/review';
 import type {
-  BookmarkPage,
-  FavoritePage,
-  ReviewPage,
   UpdateUserProfile,
   UserProfile,
   UserProfileCounts,
-} from '@/types';
+} from '@/types/user';
 
 // 自分のプロフィール情報
 export const getUserProfile = async () => {

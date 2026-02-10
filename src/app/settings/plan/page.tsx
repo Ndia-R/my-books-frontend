@@ -91,7 +91,7 @@ export default function Page({ title }: Props) {
                 <CardTitle className="text-3xl font-bold">
                   {plan.name}
                 </CardTitle>
-                <CardDescription className="text-sm">
+                <CardDescription className="text-foreground text-sm">
                   {plan.description}
                 </CardDescription>
                 <p className="mt-6 text-right">

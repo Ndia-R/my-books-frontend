@@ -1,5 +1,5 @@
 import MyReviewItem from '@/components/reviews/my-review-item';
-import type { Review } from '@/types';
+import type { Review } from '@/types/review';
 
 type Props = {
   reviews: Review[];

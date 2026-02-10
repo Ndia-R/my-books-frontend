@@ -8,7 +8,8 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { buildQueryString, cn } from '@/lib/utils';
+import { buildQueryString } from '@/lib/url-builder';
+import { cn } from '@/lib/utils';
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 

@@ -10,7 +10,7 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { TOAST_ERROR_DURATION } from '@/constants/constants';
 import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
-import type { ReviewCreateMutation, ReviewRequest } from '@/types';
+import type { ReviewCreateMutation, ReviewRequest } from '@/types/review';
 import { Loader2Icon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';

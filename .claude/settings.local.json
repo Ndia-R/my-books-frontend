@@ -10,7 +10,8 @@
       "Bash(grep:*)",
       "Bash(git rm:*)",
       "Bash(git commit -m \"$\\(cat <<''EOF''\nchore: 環境変数ファイルをgit管理から除外\n\n.env.development と .env.production をgit管理から削除。\nこれらのファイルは環境ごとに異なる設定を持つため、\n.env.example をテンプレートとして各自で作成する運用に変更。\n\n🤖 Generated with [Claude Code]\\(https://claude.com/claude-code\\)\n\nCo-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
-      "Bash(git push:*)"
+      "Bash(git push:*)",
+      "Bash(npm run lint:*)"
     ]
   }
 }

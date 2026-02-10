@@ -1,5 +1,6 @@
 import { fetchBffApi } from '@/lib/api/fetch';
-import { buildQueryString, getCsrfToken } from '@/lib/utils';
+import { buildQueryString } from '@/lib/url-builder';
+import { getCsrfToken } from '@/lib/utils';
 
 // 完全ログアウト（BFFセッション + Keycloakセッションクリア）
 export const logoutUser = async () => {

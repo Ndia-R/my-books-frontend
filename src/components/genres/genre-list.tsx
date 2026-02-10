@@ -1,5 +1,5 @@
 import GenreItem from '@/components/genres/genre-item';
-import type { Genre } from '@/types';
+import type { Genre } from '@/types/genre';
 
 type Props = {
   genres: Genre[];

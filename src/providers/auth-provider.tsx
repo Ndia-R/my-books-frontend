@@ -3,8 +3,8 @@ import type { PermissionSet } from '@/constants/permission-sets';
 import { logoutUser } from '@/lib/api/auth';
 import { setUnauthorizedHandler } from '@/lib/api/fetch';
 import { getUserProfile } from '@/lib/api/users';
-import { buildQueryString } from '@/lib/utils';
-import type { UserProfile } from '@/types';
+import { buildQueryString } from '@/lib/url-builder';
+import type { UserProfile } from '@/types/user';
 import {
   createContext,
   useCallback,

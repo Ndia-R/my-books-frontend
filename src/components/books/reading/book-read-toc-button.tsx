@@ -5,7 +5,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import usePrefetch from '@/hooks/use-prefetch';
-import { buildPath } from '@/lib/utils';
+import { buildPath } from '@/lib/url-builder';
 import { TableOfContentsIcon } from 'lucide-react';
 import { Link } from 'react-router';
 

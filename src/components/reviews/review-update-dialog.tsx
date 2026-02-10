@@ -16,7 +16,7 @@ import type {
   ReviewRequest,
   ReviewUpdateMutation,
   ReviewUpdateParams,
-} from '@/types';
+} from '@/types/review';
 import { Loader2Icon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';

@@ -7,7 +7,7 @@ import UserProfileCounts from '@/components/users/user-profile-counts';
 import { APP_TITLE, AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
-import type { MenuItem } from '@/types';
+import type { MenuItem } from '@/types/ui';
 import { CrownIcon, PaletteIcon, UserRoundPenIcon } from 'lucide-react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';

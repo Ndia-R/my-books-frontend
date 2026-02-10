@@ -1,5 +1,5 @@
-import type { Genre } from '@/types/domain/genre';
-import type { Page } from '@/types/infrastructure';
+import type { Genre } from '@/types/genre';
+import type { Page } from '@/types/pagination';
 
 export type Book = {
   id: string;

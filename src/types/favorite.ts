@@ -1,5 +1,5 @@
-import type { Book } from '@/types/domain/book';
-import type { Page } from '@/types/infrastructure';
+import type { Book } from '@/types/book';
+import type { Page } from '@/types/pagination';
 
 export type Favorite = {
   id: number;

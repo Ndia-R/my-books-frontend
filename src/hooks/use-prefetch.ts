@@ -16,7 +16,9 @@ import {
   getUserProfileCounts,
   getUserReviews,
 } from '@/lib/api/users';
-import type { BookmarkPage, FavoritePage, ReviewPage } from '@/types';
+import type { BookmarkPage } from '@/types/bookmark';
+import type { FavoritePage } from '@/types/favorite';
+import type { ReviewPage } from '@/types/review';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function usePrefetch() {
