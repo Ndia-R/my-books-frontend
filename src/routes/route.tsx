@@ -9,15 +9,15 @@ import RootLayout from '@/app/layout';
 import MyReviewsPage from '@/app/my-reviews/page';
 import NotFoundPage from '@/app/not-found';
 import RootPage from '@/app/page';
-import ChangeUserInfoPage from '@/app/profile/change-user-info/page';
+import PricingPage from '@/app/pricing/page';
 import ProfilePage from '@/app/profile/page';
 import RankingPage from '@/app/ranking/page';
 import BookReadContentPage from '@/app/read-content/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
 import BookReadPreviewPage from '@/app/read-preview/[bookId]/chapter/[chapterNumber]/page/[pageNumber]/page';
 import SearchPage from '@/app/search/page';
+import SettingAppearancePage from '@/app/settings/appearance/page';
 import SettingsPage from '@/app/settings/page';
-import PlanPage from '@/app/settings/plan/page';
-import ThemePage from '@/app/settings/theme/page';
+import SettingProfilePage from '@/app/settings/profile/page';
 import SpecialFeaturesPage from '@/app/special-features/page';
 import { APP_BASE_PATH } from '@/constants/constants';
 import { PermissionSet } from '@/constants/permission-sets';
@@ -57,7 +57,7 @@ export const router = createBrowserRouter(
           element={<SpecialFeaturesPage title="特集" />}
         />
         <Route path="settings" element={<SettingsPage title="設定" />} />
-        <Route path="settings/plan" element={<PlanPage title="プラン" />} />
+        <Route path="settings/plan" element={<PricingPage title="プラン" />} />
 
         {/* ---- 認証が必要な画面（すべての権限セットOK） ---- */}
         <Route element={<ProtectedRoute />}>
@@ -67,13 +67,16 @@ export const router = createBrowserRouter(
           />
           <Route
             path="profile/change-user-info"
-            element={<ChangeUserInfoPage title="ユーザー情報変更" />}
+            element={<SettingProfilePage title="ユーザー情報変更" />}
           />
           <Route
             path="favorites"
             element={<FavoritesPage title="お気に入り" />}
           />
-          <Route path="settings/theme" element={<ThemePage title="テーマ" />} />
+          <Route
+            path="settings/theme"
+            element={<SettingAppearancePage title="テーマ" />}
+          />
         </Route>
 
         {/* ---- 認証が必要な画面（指定された権限セットのみ） ---- */}

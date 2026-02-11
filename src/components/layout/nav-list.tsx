@@ -12,7 +12,7 @@ const NAV_LIST: MenuItem[] = [
   },
   { label: 'ランキング', href: '/ranking', icon: ChartLineIcon },
   { label: '特集', href: '/special-features', icon: AwardIcon },
-  { label: '設定', href: '/settings', icon: SettingsIcon },
+  { label: 'プラン', href: '/settings/plan', icon: SettingsIcon },
 ];
 
 type Props = {

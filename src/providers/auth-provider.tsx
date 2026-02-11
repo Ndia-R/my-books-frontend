@@ -24,6 +24,7 @@ type AuthProviderState = {
   isAuthenticated: boolean;
   setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
   login: (returnTo?: string) => void;
+  signup: (returnTo?: string) => void;
   logout: () => Promise<void>;
   hasPermissionSet: (permissionSet: PermissionSet) => boolean;
   hasAnyPermissionSet: (permissionSets: PermissionSet[]) => boolean;
@@ -46,6 +47,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
       returnTo || window.location.pathname + window.location.search;
     const queryString = buildQueryString({ return_to: returnToPath });
     window.location.href = `${BFF_API_BASE_URL}/login${queryString}`;
+  };
+
+  // サインアップ処理（BFFサインアップ画面へリダイレクト）
+  const signup = (returnTo?: string) => {
+    const returnToPath =
+      returnTo || window.location.pathname + window.location.search;
+    const queryString = buildQueryString({ return_to: returnToPath });
+    window.location.href = `${BFF_API_BASE_URL}/signup${queryString}`;
   };
 
   // 完全ログアウト（BFFセッション + Keycloakセッションクリア）
@@ -128,6 +137,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     isAuthenticated,
     setUserProfile,
     login,
+    signup,
     logout,
     hasPermissionSet,
     hasAnyPermissionSet,

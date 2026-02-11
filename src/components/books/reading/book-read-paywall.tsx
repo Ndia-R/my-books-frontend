@@ -12,7 +12,7 @@ export default function BookReadPaywall({ bookId }: Props) {
       <LockIcon className="text-muted-foreground size-10" />
       <h2 className="text-xl font-bold">試し読みはここまでです</h2>
       <p className="text-muted-foreground">
-        続きを読むにはサブスクリプションへの加入が必要です
+        続きを読むには有料会員への登録が必要です
       </p>
       <div className="flex flex-wrap justify-center gap-4">
         <Link
