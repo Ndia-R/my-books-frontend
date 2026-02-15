@@ -215,7 +215,7 @@ export default function FavoriteCountIcon({
             ? displayState.isFavorite
               ? 'お気に入りから削除'
               : 'お気に入りに追加'
-            : 'ログインしてこの本を「お気に入り」に加えましょう'}
+            : '無料登録してこの本を「お気に入り」に加えましょう'}
         </TooltipContent>
       </Tooltip>
 

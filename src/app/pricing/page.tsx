@@ -9,7 +9,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { APP_TITLE } from '@/constants/constants';
-import { PermissionSet } from '@/constants/permission-sets';
+import { Role } from '@/constants/roles';
+import { SubscriptionPlan } from '@/constants/subscription-plans';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { BookOpenIcon, CheckIcon, XIcon } from 'lucide-react';
@@ -20,11 +21,11 @@ type Props = {
 };
 
 export default function Page({ title }: Props) {
-  const { signup, isAuthenticated, hasPermissionSet } = useAuth();
+  const { signup, isAuthenticated, hasRole, hasPlan } = useAuth();
   const location = useLocation();
 
-  const isGeneralUser = hasPermissionSet(PermissionSet.GeneralUser);
-  const isPremiumUser = hasPermissionSet(PermissionSet.PremiumUser);
+  const isGeneralUser = hasRole(Role.USER) && hasPlan(SubscriptionPlan.FREE);
+  const isPremiumUser = hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
 
   const plans = [
     {

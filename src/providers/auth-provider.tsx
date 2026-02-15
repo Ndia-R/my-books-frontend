@@ -1,5 +1,6 @@
 import { APP_BASE_PATH, BFF_API_BASE_URL } from '@/constants/constants';
-import type { PermissionSet } from '@/constants/permission-sets';
+import { Role } from '@/constants/roles';
+import type { SubscriptionPlan } from '@/constants/subscription-plans';
 import { logoutUser } from '@/lib/api/auth';
 import { setUnauthorizedHandler } from '@/lib/api/fetch';
 import { getUserProfile } from '@/lib/api/users';
@@ -26,8 +27,10 @@ type AuthProviderState = {
   login: (returnTo?: string) => void;
   signup: (returnTo?: string) => void;
   logout: () => Promise<void>;
-  hasPermissionSet: (permissionSet: PermissionSet) => boolean;
-  hasAnyPermissionSet: (permissionSets: PermissionSet[]) => boolean;
+  hasRole: (role: Role) => boolean;
+  hasAnyRole: (roles: Role[]) => boolean;
+  hasPlan: (plan: SubscriptionPlan) => boolean;
+  hasAnyPlan: (plans: SubscriptionPlan[]) => boolean;
   handleUnauthorized: () => void;
 };
 
@@ -69,18 +72,34 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   };
 
-  // 指定した権限セットをユーザーが持っているか確認する
-  const hasPermissionSet = useCallback(
-    (permissionSet: PermissionSet) =>
-      !!userProfile?.permissionSets.includes(permissionSet),
+  // 指定したロールをユーザーが持っているか確認する
+  const hasRole = useCallback(
+    (role: Role) => {
+      // ADMINはすべてのロールを持っていると見なす
+      if (userProfile?.roles.includes(Role.ADMIN)) {
+        return true;
+      }
+      return !!userProfile?.roles.includes(role);
+    },
     [userProfile]
   );
 
-  // 指定した複数の権限セットのうち、いずれかをユーザーが持っているか確認する
-  const hasAnyPermissionSet = useCallback(
-    (permissionSets: PermissionSet[]) =>
-      permissionSets.some((permissionSet) => hasPermissionSet(permissionSet)),
-    [hasPermissionSet]
+  // 指定した複数のロールのうち、いずれかをユーザーが持っているか確認する
+  const hasAnyRole = useCallback(
+    (roles: Role[]) => roles.some((role) => hasRole(role)),
+    [hasRole]
+  );
+
+  // 指定したサブスクリプションプランをユーザーが持っているか確認する
+  const hasPlan = useCallback(
+    (plan: SubscriptionPlan) => userProfile?.subscriptionPlan === plan,
+    [userProfile]
+  );
+
+  // 指定した複数のサブスクリプションプランのうち、いずれかプランザーが持っているか確認する
+  const hasAnyPlan = useCallback(
+    (plans: SubscriptionPlan[]) => plans.some((plan) => hasPlan(plan)),
+    [hasPlan]
   );
 
   // 401エラー発生時の処理（認証状態リセット + ログイン画面へリダイレクト）
@@ -139,8 +158,10 @@ export function AuthProvider({ children }: AuthProviderProps) {
     login,
     signup,
     logout,
-    hasPermissionSet,
-    hasAnyPermissionSet,
+    hasRole,
+    hasAnyRole,
+    hasPlan,
+    hasAnyPlan,
     handleUnauthorized,
   };
 

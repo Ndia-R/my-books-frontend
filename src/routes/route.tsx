@@ -20,7 +20,7 @@ import SettingsPage from '@/app/settings/page';
 import SettingProfilePage from '@/app/settings/profile/page';
 import SpecialFeaturesPage from '@/app/special-features/page';
 import { APP_BASE_PATH } from '@/constants/constants';
-import { PermissionSet } from '@/constants/permission-sets';
+import { SubscriptionPlan } from '@/constants/subscription-plans';
 import ProtectedRoute from '@/routes/protected-route';
 import {
   createBrowserRouter,
@@ -59,7 +59,7 @@ export const router = createBrowserRouter(
         <Route path="settings" element={<SettingsPage title="設定" />} />
         <Route path="settings/plan" element={<PricingPage title="プラン" />} />
 
-        {/* ---- 認証が必要な画面（すべての権限セットOK） ---- */}
+        {/* ---- 認証が必要な画面（すべてのロールOK） ---- */}
         <Route element={<ProtectedRoute />}>
           <Route
             path="profile"
@@ -79,12 +79,8 @@ export const router = createBrowserRouter(
           />
         </Route>
 
-        {/* ---- 認証が必要な画面（指定された権限セットのみ） ---- */}
-        <Route
-          element={
-            <ProtectedRoute permissionSets={[PermissionSet.PremiumUser]} />
-          }
-        >
+        {/* ---- 認証が必要な画面（プレミアムユーザーのみ） ---- */}
+        <Route element={<ProtectedRoute plans={[SubscriptionPlan.PREMIUM]} />}>
           <Route
             path="bookmarks"
             element={<BookmarksPage title="ブックマーク" />}

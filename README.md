@@ -24,7 +24,7 @@ My Booksは、書籍の閲覧、レビュー、お気に入り、しおり機能
 - **React 19** - UIライブラリ
 - **TypeScript** - 型安全性
 - **Vite** - 高速なビルドツール
-- **React Router v7** - ファイルベースルーティング
+- **React Router v7** - ルーティング
 
 ### 状態管理・データフェッチ
 
@@ -76,15 +76,19 @@ npx prettier --write .
 
 ### 環境変数
 
-`.env`ファイルを作成し、以下の環境変数を設定してください：
+プロジェクトルートに`.env`ファイルを作成し、`.env.example`を参考に以下の環境変数を設定してください。
 
 ```env
+# APIサーバーのベースURL
 VITE_BASE_URL=http://localhost:8080
+
+# アプリケーションのベースパス（通常は変更不要）
+VITE_APP_BASE_PATH=/my-books
 ```
 
 ## プロジェクト構造
 
-このプロジェクトは **Next.js App Router風のディレクトリ構造** を採用しています（Vite + React Routerで実装）。
+このプロジェクトは、Next.js App Routerの規約にヒントを得たディレクトリ構造を採用していますが、ルーティングはVite環境で一般的な `react-router` による手動定義で行っています。
 
 ```
 /src
@@ -110,19 +114,12 @@ VITE_BASE_URL=http://localhost:8080
 │   ├── api/         # ドメイン別APIクライアント関数
 │   └── utils.ts     # ユーティリティ関数
 ├── providers/       # コンテキストプロバイダー（認証、テーマ）
-└── types/
-    ├── domain/      # ビジネスロジック型
-    └── infrastructure/ # 技術的な型
+└── types/           # アプリケーションで使用される型定義
 ```
 
-**ディレクトリ規約**:
-- `app/` - ページコンポーネント（`page.tsx`, `layout.tsx`）
-- `routes/` - React Routerのルート定義（手動設定が必要）
-- `components/` - 再利用可能なUIコンポーネント
-
-**Next.jsとの違い**:
-- ディレクトリ構造は同じですが、ルートは `/src/routes/route.tsx` で手動定義が必要です
-- 自動ルート生成機能はありません（React Routerの制約）
+**ディレクトリ・ルーティング規約**:
+- `app/` - ページコンポーネントを配置します（Next.js App Router風）。
+- `routes/` - `react-router` のルート定義を手動で行います。ファイルベースの自動ルーティングは行われません。
 
 ## コーディング規約
 

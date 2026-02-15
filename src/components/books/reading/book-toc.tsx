@@ -1,7 +1,8 @@
 import { Button } from '@/components/ui/button';
 import { APP_TITLE } from '@/constants/constants';
-import { PermissionSet } from '@/constants/permission-sets';
 import { queryKeys } from '@/constants/query-keys';
+import { Role } from '@/constants/roles';
+import { SubscriptionPlan } from '@/constants/subscription-plans';
 import usePrefetch from '@/hooks/use-prefetch';
 import { getBookToc } from '@/lib/api/books';
 import { chapterNumberString } from '@/lib/format';
@@ -21,8 +22,9 @@ export default function BookToc({ bookId }: Props) {
     queryFn: () => getBookToc(bookId),
   });
 
-  const { hasPermissionSet } = useAuth();
-  const canReadContent = hasPermissionSet(PermissionSet.PremiumUser);
+  const { hasRole, hasPlan } = useAuth();
+  const canReadContent =
+    hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
 
   const { prefetchBookReadContent } = usePrefetch();
   const navigate = useNavigate();

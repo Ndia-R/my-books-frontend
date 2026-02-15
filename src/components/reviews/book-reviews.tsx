@@ -1,8 +1,9 @@
 import BookReviewList from '@/components/reviews/book-review-list';
 import ReviewCreateDialog from '@/components/reviews/review-create-dialog';
 import { Button } from '@/components/ui/button';
-import { PermissionSet } from '@/constants/permission-sets';
 import { queryKeys } from '@/constants/query-keys';
+import { Role } from '@/constants/roles';
+import { SubscriptionPlan } from '@/constants/subscription-plans';
 import { getBookReviews } from '@/lib/api/books';
 import { createReview } from '@/lib/api/reviews';
 import { isReviewedByUser } from '@/lib/api/users';
@@ -36,8 +37,8 @@ export default function BookReviews({ bookId }: Props) {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const { isAuthenticated, hasPermissionSet } = useAuth();
-  const canReview = hasPermissionSet(PermissionSet.PremiumUser);
+  const { isAuthenticated, hasRole, hasPlan } = useAuth();
+  const canReview = hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
 
   // すでにレビューをしているかどうかを取得
   // ログインしていない場合は、enabledオプションを指定してqueryFnを呼び出さないようにする

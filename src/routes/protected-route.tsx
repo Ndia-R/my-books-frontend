@@ -1,14 +1,17 @@
-import type { PermissionSet } from '@/constants/permission-sets';
+import type { Role } from '@/constants/roles';
+import type { SubscriptionPlan } from '@/constants/subscription-plans';
 import { useAuth } from '@/providers/auth-provider';
 import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router';
 
 type Props = {
-  permissionSets?: PermissionSet[];
+  roles?: Role[];
+  plans?: SubscriptionPlan[];
 };
 
-export default function ProtectedRoute({ permissionSets }: Props) {
-  const { isLoading, isAuthenticated, hasAnyPermissionSet, login } = useAuth();
+export default function ProtectedRoute({ roles, plans }: Props) {
+  const { isLoading, isAuthenticated, hasAnyRole, hasAnyPlan, login } =
+    useAuth();
   const location = useLocation();
 
   // 未認証の場合、Keycloakログイン画面へ直接リダイレクト
@@ -23,8 +26,8 @@ export default function ProtectedRoute({ permissionSets }: Props) {
     return null;
   }
 
-  // 権限セットを持っていない場合はアクセス権限なし画面へ遷移
-  if (permissionSets && !hasAnyPermissionSet(permissionSets)) {
+  // ロールまたはプランを持っていない場合はアクセス権限なし画面へ遷移
+  if ((roles && !hasAnyRole(roles)) || (plans && !hasAnyPlan(plans))) {
     return <Navigate to="/forbidden" replace />;
   }
 

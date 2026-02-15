@@ -1,14 +1,17 @@
-import type { PermissionSet } from '@/constants/permission-sets';
+import type { Role } from '@/constants/roles';
+import type { SubscriptionPlan } from '@/constants/subscription-plans';
 
 export type UserProfile = {
   id: number;
   displayName: string;
   avatarPath: string;
+  subscriptionPlan: SubscriptionPlan;
+
   username: string;
   email: string;
   familyName: string;
   givenName: string;
-  permissionSets: PermissionSet[];
+  roles: Role[];
 };
 
 export type UserProfileCounts = {

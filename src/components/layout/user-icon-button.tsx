@@ -9,7 +9,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
-import { PermissionSet } from '@/constants/permission-sets';
+import { Role } from '@/constants/roles';
+import { SubscriptionPlan } from '@/constants/subscription-plans';
 import usePrefetch from '@/hooks/use-prefetch';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
@@ -25,22 +26,24 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 export default function UserIconButton() {
-  const { logout, userProfile, hasPermissionSet } = useAuth();
-  const isGeneralUser = hasPermissionSet(PermissionSet.GeneralUser);
+  const { logout, userProfile, hasRole, hasPlan } = useAuth();
 
-  const MENU_LIST: MenuItem[] = [
+  const isGeneralUser = hasRole(Role.USER) && hasPlan(SubscriptionPlan.FREE);
+  const isPremiumUser = hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
+
+  const menuList: MenuItem[] = [
     { label: 'プロフィール', href: '/profile', icon: UserRoundIcon },
     { label: 'お気に入り', href: '/favorites', icon: HeartIcon },
   ];
 
   // プレミアムユーザーはリスト項目追加
-  if (hasPermissionSet(PermissionSet.PremiumUser)) {
-    MENU_LIST.push({
+  if (isPremiumUser) {
+    menuList.push({
       label: 'ブックマーク',
       href: '/bookmarks',
       icon: BookmarkIcon,
     });
-    MENU_LIST.push({
+    menuList.push({
       label: 'マイレビュー',
       href: '/my-reviews',
       icon: MessageSquareIcon,
@@ -144,7 +147,7 @@ export default function UserIconButton() {
           </>
         )}
         <DropdownMenuSeparator />
-        {MENU_LIST.map((item) => (
+        {menuList.map((item) => (
           <DropdownMenuItem
             className={cn(
               location.pathname !== '/' &&

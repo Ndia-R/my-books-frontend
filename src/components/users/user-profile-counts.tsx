@@ -1,6 +1,7 @@
 import CountUpNumber from '@/components/shared/count-up-number';
-import { PermissionSet } from '@/constants/permission-sets';
 import { queryKeys } from '@/constants/query-keys';
+import { Role } from '@/constants/roles';
+import { SubscriptionPlan } from '@/constants/subscription-plans';
 import usePrefetch from '@/hooks/use-prefetch';
 import { getUserProfileCounts } from '@/lib/api/users';
 import { useAuth } from '@/providers/auth-provider';
@@ -9,8 +10,8 @@ import { motion } from 'motion/react';
 import { Link } from 'react-router';
 
 export default function UserProfileCounts() {
-  const { hasPermissionSet } = useAuth();
-  const canNavigate = hasPermissionSet(PermissionSet.PremiumUser);
+  const { hasRole, hasPlan } = useAuth();
+  const canNavigate = hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
 
   const { data: userProfileCounts } = useSuspenseQuery({
     queryKey: queryKeys.getUserProfileCounts(),
