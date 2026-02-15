@@ -1,3 +1,4 @@
+import type { Group } from '@/constants/groups';
 import type { Role } from '@/constants/roles';
 import type { SubscriptionPlan } from '@/constants/subscription-plans';
 
@@ -12,6 +13,7 @@ export type UserProfile = {
   familyName: string;
   givenName: string;
   roles: Role[];
+  groups: Group[];
 };
 
 export type UserProfileCounts = {
