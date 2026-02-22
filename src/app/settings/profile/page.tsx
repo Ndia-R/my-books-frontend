@@ -126,7 +126,7 @@ export default function Page({ title }: Props) {
               </Button>
 
               <Link
-                className={cn(buttonVariants({ variant: 'outline' }), 'w-full')}
+                className={cn(buttonVariants({ variant: 'ghost' }), 'w-full')}
                 to="/profile"
               >
                 キャンセル

@@ -1,10 +1,16 @@
 import mainVisualImage from '@/assets/main-visual.webp';
 import SearchInput from '@/components/shared/search-input';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { useAuth } from '@/providers/auth-provider';
 import { motion } from 'motion/react';
+import { Link } from 'react-router';
 
 export default function Hero() {
+  const { isAuthenticated } = useAuth();
+
   return (
-    <div className="relative flex h-125 items-center">
+    <div className="relative flex items-center sm:h-125">
       <div className="absolute top-10 right-0 overflow-hidden sm:right-8">
         <motion.div
           initial={{ x: 40, opacity: 0 }}
@@ -49,7 +55,21 @@ export default function Hero() {
           animate={{ y: 0, opacity: 100 }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <SearchInput />
+          <div className="flex flex-col gap-y-4">
+            <SearchInput />
+
+            {!isAuthenticated && (
+              <Link
+                className={cn(
+                  buttonVariants({ variant: 'default' }),
+                  'mb-8 w-48 sm:w-64'
+                )}
+                to="/settings/plan"
+              >
+                今すぐ始める
+              </Link>
+            )}
+          </div>
         </motion.div>
       </div>
     </div>

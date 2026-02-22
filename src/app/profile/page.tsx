@@ -1,17 +1,22 @@
 import Logo from '@/components/layout/logo';
 import ErrorElement from '@/components/shared/error-element';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { buttonVariants } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import UserProfileCounts from '@/components/users/user-profile-counts';
 import { APP_TITLE, AVATAR_IMAGE_BASE_URL } from '@/constants/constants';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import type { MenuItem } from '@/types/ui';
-import { CrownIcon, PaletteIcon, UserRoundPenIcon } from 'lucide-react';
+import {
+  CrownIcon,
+  LockKeyhole,
+  PaletteIcon,
+  UserRoundPenIcon,
+} from 'lucide-react';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
-import { Link } from 'react-router';
+import { Link, useLocation } from 'react-router';
 
 const CHANGE_LIST: MenuItem[] = [
   {
@@ -36,7 +41,8 @@ type Props = {
 };
 
 export default function Page({ title }: Props) {
-  const { userProfile } = useAuth();
+  const { userProfile, changePassword } = useAuth();
+  const location = useLocation();
 
   return (
     <>
@@ -99,6 +105,23 @@ export default function Page({ title }: Props) {
                   </Link>
                 </li>
               ))}
+              <li
+                className="flex items-center justify-between"
+                key="password-change"
+              >
+                <div className="flex items-center gap-x-3">
+                  <LockKeyhole className="size-4" />
+                  <p>パスワード変更</p>
+                </div>
+                <Button
+                  variant="outline"
+                  onClick={() =>
+                    changePassword(location.pathname + location.search)
+                  }
+                >
+                  変更
+                </Button>
+              </li>
             </ul>
           </CardContent>
         </Card>

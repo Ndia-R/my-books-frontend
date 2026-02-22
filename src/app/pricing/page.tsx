@@ -48,8 +48,8 @@ export default function Page({ title }: Props) {
       buttonAction: undefined,
     },
     {
-      name: 'スタンダード',
-      description: 'STANDARD (無料会員)',
+      name: 'フリー',
+      description: 'FREE (無料会員)',
       price: '¥0',
       priceSuffix: '/ 月',
       features: [

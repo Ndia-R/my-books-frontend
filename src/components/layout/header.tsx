@@ -3,11 +3,6 @@ import ThemeToggleButton from '@/components/layout/theme-toggle-button';
 import UserIconButton from '@/components/layout/user-icon-button';
 import SearchInput from '@/components/shared/search-input';
 import { Button } from '@/components/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
 import { motion } from 'motion/react';
@@ -38,17 +33,12 @@ export default function Header({ className }: Props) {
               {isAuthenticated ? (
                 <UserIconButton />
               ) : (
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      onClick={() => login(location.pathname + location.search)}
-                    >
-                      ログイン
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>ログイン or 新規登録する</TooltipContent>
-                </Tooltip>
+                <Button
+                  variant="ghost"
+                  onClick={() => login(location.pathname + location.search)}
+                >
+                  ログイン
+                </Button>
               )}
             </div>
           </div>

@@ -1,4 +1,5 @@
 import { APP_BASE_PATH, BFF_API_BASE_URL } from '@/constants/constants';
+import type { Group } from '@/constants/groups';
 import { Role } from '@/constants/roles';
 import type { SubscriptionPlan } from '@/constants/subscription-plans';
 import { logoutUser } from '@/lib/api/auth';
@@ -26,9 +27,12 @@ type AuthProviderState = {
   setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
   login: (returnTo?: string) => void;
   signup: (returnTo?: string) => void;
+  changePassword: (returnTo?: string) => void;
   logout: () => Promise<void>;
   hasRole: (role: Role) => boolean;
   hasAnyRole: (roles: Role[]) => boolean;
+  hasGroup: (group: Group) => boolean;
+  hasAnyGroup: (groups: Group[]) => boolean;
   hasPlan: (plan: SubscriptionPlan) => boolean;
   hasAnyPlan: (plans: SubscriptionPlan[]) => boolean;
   handleUnauthorized: () => void;
@@ -60,6 +64,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     window.location.href = `${BFF_API_BASE_URL}/signup${queryString}`;
   };
 
+  // パスワード変更処理（BFFパスワード変更画面へリダイレクト）
+  const changePassword = (returnTo?: string) => {
+    const returnToPath =
+      returnTo || window.location.pathname + window.location.search;
+    const queryString = buildQueryString({ return_to: returnToPath });
+    window.location.href = `${BFF_API_BASE_URL}/change-password${queryString}`;
+  };
+
   // 完全ログアウト（BFFセッション + Keycloakセッションクリア）
   const logout = async () => {
     try {
@@ -88,6 +100,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const hasAnyRole = useCallback(
     (roles: Role[]) => roles.some((role) => hasRole(role)),
     [hasRole]
+  );
+
+  // 指定したグループをユーザーが持っているか確認する
+  const hasGroup = useCallback(
+    (group: Group) => !!userProfile?.groups.includes(group),
+    [userProfile]
+  );
+
+  // 指定した複数のグループのうち、いずれかをユーザーが持っているか確認する
+  const hasAnyGroup = useCallback(
+    (groups: Group[]) => groups.some((group) => hasGroup(group)),
+    [hasGroup]
   );
 
   // 指定したサブスクリプションプランをユーザーが持っているか確認する
@@ -157,9 +181,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setUserProfile,
     login,
     signup,
+    changePassword,
     logout,
     hasRole,
     hasAnyRole,
+    hasGroup,
+    hasAnyGroup,
     hasPlan,
     hasAnyPlan,
     handleUnauthorized,
