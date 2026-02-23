@@ -10,6 +10,7 @@ import type { BookmarkPage } from '@/types/bookmark';
 import type { FavoritePage } from '@/types/favorite';
 import type { ReviewPage } from '@/types/review';
 import type {
+  UpdateSubscriptionPlan,
   UpdateUserProfile,
   UserProfile,
   UserProfileCounts,
@@ -116,6 +117,23 @@ export const updateUserProfile = async (requestBody: UpdateUserProfile) => {
     body: JSON.stringify(requestBody),
   };
   await fetchBooksApi(path, options);
+};
+
+// 自分のサブスクリプションプランを更新
+export const updateSubscriptionPlan = async (
+  requestBody: UpdateSubscriptionPlan
+) => {
+  const path = `/me/subscription`;
+  const options: RequestInit = {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-XSRF-TOKEN': getCsrfToken(),
+    },
+    body: JSON.stringify(requestBody),
+  };
+  const response = await fetchBooksApi<UserProfile>(path, options);
+  return response.data;
 };
 
 // この書籍をユーザーがレビューしているかどうか

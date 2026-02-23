@@ -26,3 +26,7 @@ export type UpdateUserProfile = {
   displayName: string;
   avatarPath: string;
 };
+
+export type UpdateSubscriptionPlan = {
+  subscriptionPlan: SubscriptionPlan;
+};

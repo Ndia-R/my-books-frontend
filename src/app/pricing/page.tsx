@@ -1,4 +1,5 @@
 import Logo from '@/components/layout/logo';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -8,24 +9,89 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { APP_TITLE } from '@/constants/constants';
+import { APP_TITLE, TOAST_ERROR_DURATION } from '@/constants/constants';
 import { Role } from '@/constants/roles';
 import { SubscriptionPlan } from '@/constants/subscription-plans';
+import { useConfirmDialog } from '@/hooks/use-confirm-dialog';
+import { updateSubscriptionPlan } from '@/lib/api/users';
 import { cn } from '@/lib/utils';
 import { useAuth } from '@/providers/auth-provider';
-import { BookOpenIcon, CheckIcon, XIcon } from 'lucide-react';
+import type { UpdateSubscriptionPlan } from '@/types/user';
+import { useMutation } from '@tanstack/react-query';
+import { BookOpenIcon, CheckIcon, CrownIcon, XIcon } from 'lucide-react';
 import { useLocation } from 'react-router';
+import { toast } from 'sonner';
 
 type Props = {
   title: string;
 };
 
 export default function Page({ title }: Props) {
-  const { signup, isAuthenticated, hasRole, hasPlan } = useAuth();
+  const { signup, isAuthenticated, hasRole, hasPlan, setUserProfile } =
+    useAuth();
   const location = useLocation();
 
   const isGeneralUser = hasRole(Role.USER) && hasPlan(SubscriptionPlan.FREE);
   const isPremiumUser = hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
+
+  const { confirmDialog } = useConfirmDialog();
+
+  const updateMutation = useMutation({
+    mutationFn: (requestBody: UpdateSubscriptionPlan) =>
+      updateSubscriptionPlan(requestBody),
+  });
+
+  const startSubscription = async () => {
+    const { isCancel } = await confirmDialog({
+      icon: 'info',
+      title: 'プレミアムプランに申し込みますか？',
+      message:
+        'プレミアムプランに申し込むと、月額980円で、すべての書籍を読み放題にできます。',
+      actionLabel: '申し込む',
+    });
+    if (isCancel) return;
+
+    const requestBody: UpdateSubscriptionPlan = {
+      subscriptionPlan: SubscriptionPlan.PREMIUM,
+    };
+    updateMutation.mutate(requestBody, {
+      onSuccess: (data) => {
+        setUserProfile(data);
+        toast.success('プランを変更しました');
+      },
+      onError: () => {
+        toast.error('プランの変更に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
+      },
+    });
+  };
+
+  const cancelSubscription = async () => {
+    const { isCancel } = await confirmDialog({
+      icon: 'warning',
+      title: 'プレミアムプランを解除しますか？',
+      message:
+        'プレミアムプランを解除すると、月額980円の料金が発生しなくなりますが、すべての書籍が読み放題でなくなります。',
+      actionLabel: '解除',
+    });
+    if (isCancel) return;
+
+    const requestBody: UpdateSubscriptionPlan = {
+      subscriptionPlan: SubscriptionPlan.FREE,
+    };
+    updateMutation.mutate(requestBody, {
+      onSuccess: (data) => {
+        setUserProfile(data);
+        toast.success('プランを変更しました');
+      },
+      onError: () => {
+        toast.error('プランの変更に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
+      },
+    });
+  };
 
   const plans = [
     {
@@ -82,10 +148,14 @@ export default function Page({ title }: Props) {
         { text: 'ブックマーク機能', icon: CheckIcon, canUse: true },
         { text: 'テーマの設定', icon: CheckIcon, canUse: true },
       ],
-      buttonTitle: isPremiumUser ? '登録解除' : '申し込み',
+      buttonTitle: !isAuthenticated
+        ? ''
+        : isPremiumUser
+          ? '登録解除'
+          : '申し込み',
       variant: isPremiumUser ? 'outline' : 'default',
       currentPlan: isPremiumUser,
-      buttonAction: isPremiumUser ? () => {} : () => {},
+      buttonAction: isPremiumUser ? cancelSubscription : startSubscription,
     },
   ];
 
@@ -99,16 +169,14 @@ export default function Page({ title }: Props) {
 
         <div className="mx-auto grid items-stretch gap-10 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
           {plans.map((plan) => (
-            <Card
-              className="relative w-80 overflow-hidden p-0 pb-6"
-              key={plan.name}
-            >
-              {plan.currentPlan && (
-                <div className="bg-primary text-primary-foreground absolute top-2 right-2 rounded px-3 py-1 text-sm font-medium shadow-2xl">
-                  現在のプラン
-                </div>
-              )}
-              <CardHeader className="from-secondary/50 to-primary w-full bg-linear-to-tr p-6">
+            <Card className="w-80 p-0 pb-6" key={plan.name}>
+              <CardHeader className="from-secondary/50 to-primary relative w-full rounded-t-xl bg-linear-to-tr p-6">
+                {plan.currentPlan && (
+                  <Badge className="absolute top-4 left-4 shadow-lg">
+                    <CrownIcon data-icon="inline-start" />
+                    現在のプラン
+                  </Badge>
+                )}
                 <CardTitle className="mt-6 text-3xl font-bold">
                   {plan.name}
                 </CardTitle>
