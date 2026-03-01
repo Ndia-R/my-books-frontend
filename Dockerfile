@@ -52,8 +52,8 @@ RUN npm ci
 # ソースコードをコピー
 COPY . .
 
-# 本番用ビルド
-RUN npm run build
+# 本番用ビルド（型チェックはCIで実施するためvite buildのみ実行）
+RUN npx vite build
 
 # ====================================
 # 本番環境: 実行ステージ（nginx）
