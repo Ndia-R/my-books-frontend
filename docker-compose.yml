@@ -1,0 +1,23 @@
+services:
+  my-books-frontend:
+    build:
+      context: .
+      target: development
+    ports:
+      - "5173:5173"
+      - "4173:4173"
+    environment:
+      TZ: Asia/Tokyo
+    volumes:
+      - .:/workspace
+      - node_modules:/workspace/node_modules
+    networks:
+      - vsv-emerald-network
+    command: sleep infinity
+
+volumes:
+  node_modules:
+
+networks:
+  vsv-emerald-network:
+    external: true

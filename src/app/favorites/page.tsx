@@ -1,0 +1,31 @@
+import Favorites from '@/components/favorites/favorites';
+import FavoritesSkeleton from '@/components/favorites/favorites-skeleton';
+import ErrorElement from '@/components/shared/error-element';
+import { Separator } from '@/components/ui/separator';
+import { APP_TITLE } from '@/constants/constants';
+import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+
+type Props = {
+  title: string;
+};
+
+export default function Page({ title }: Props) {
+  return (
+    <>
+      <title>{`${title} - ${APP_TITLE}`}</title>
+
+      <div className="my-4 flex h-10 items-center">
+        <h1 className="text-lg font-bold sm:text-xl">お気に入り</h1>
+      </div>
+
+      <Separator className="bg-foreground/10 my-4" />
+
+      <ErrorBoundary fallback={<ErrorElement />}>
+        <Suspense fallback={<FavoritesSkeleton />}>
+          <Favorites />
+        </Suspense>
+      </ErrorBoundary>
+    </>
+  );
+}
