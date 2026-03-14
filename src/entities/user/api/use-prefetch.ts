@@ -1,13 +1,13 @@
 import { getUserBookmarks } from '@/entities/bookmark/api/bookmarks';
 import { bookmarkQueryKeys } from '@/entities/bookmark/model/query-keys';
 import type { BookmarkPage } from '@/entities/bookmark/model/types';
+import { getUserFavorites } from '@/entities/favorite/api/favorites';
+import { favoriteQueryKeys } from '@/entities/favorite/model/query-keys';
 import type { FavoritePage } from '@/entities/favorite/model/types';
+import { getUserReviews } from '@/entities/review/api/reviews';
+import { reviewQueryKeys } from '@/entities/review/model/query-keys';
 import type { ReviewPage } from '@/entities/review/model/types';
-import {
-  getUserFavorites,
-  getUserProfileCounts,
-  getUserReviews,
-} from '@/entities/user/api/users';
+import { getUserProfileCounts } from '@/entities/user/api/users';
 import { userQueryKeys } from '@/entities/user/model/query-keys';
 import { CACHE_TIME } from '@/shared/config/cache-time';
 import { useQueryClient } from '@tanstack/react-query';
@@ -18,14 +18,14 @@ export function usePrefetchUser() {
   // ユーザーのお気に入り一覧
   const prefetchUserFavorites = async (page: number) => {
     await queryClient.prefetchQuery({
-      queryKey: userQueryKeys.getUserFavorites(page),
+      queryKey: favoriteQueryKeys.getUserFavorites(page),
       queryFn: () => getUserFavorites(page),
       staleTime: CACHE_TIME.MEDIUM,
     });
   };
   const prefetchUserFavoritesInfinite = async () => {
     await queryClient.prefetchInfiniteQuery({
-      queryKey: userQueryKeys.getUserFavoritesInfinite(),
+      queryKey: favoriteQueryKeys.getUserFavoritesInfinite(),
       queryFn: ({ pageParam }) => getUserFavorites(pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage: FavoritePage) =>
@@ -58,14 +58,14 @@ export function usePrefetchUser() {
   // ユーザーのレビュー一覧
   const prefetchUserReviews = async (page: number) => {
     await queryClient.prefetchQuery({
-      queryKey: userQueryKeys.getUserReviews(page),
+      queryKey: reviewQueryKeys.getUserReviews(page),
       queryFn: () => getUserReviews(page),
       staleTime: CACHE_TIME.MEDIUM,
     });
   };
   const prefetchUserReviewsInfinite = async () => {
     await queryClient.prefetchInfiniteQuery({
-      queryKey: userQueryKeys.getUserReviewsInfinite(),
+      queryKey: reviewQueryKeys.getUserReviewsInfinite(),
       queryFn: ({ pageParam }) => getUserReviews(pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage: ReviewPage) =>

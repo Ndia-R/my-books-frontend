@@ -1,10 +1,10 @@
 import { getBookFavoriteStats } from '@/entities/book/api/books';
+import { isFavoritedByUser } from '@/entities/favorite';
 import {
   createFavorite,
   deleteFavoriteByBookId,
 } from '@/entities/favorite/api/favorites';
 import { useAuth } from '@/entities/user';
-import { isFavoritedByUser } from '@/entities/user/api/users';
 import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';

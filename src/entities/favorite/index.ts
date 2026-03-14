@@ -1,4 +1,5 @@
 // model
+export { favoriteQueryKeys } from './model/query-keys';
 export type {
   Favorite,
   FavoritePage,
@@ -11,7 +12,7 @@ export {
   createFavorite,
   deleteFavorite,
   deleteFavoriteByBookId,
+  getUserFavorites,
+  getUserFavoritesByBookId,
+  isFavoritedByUser,
 } from './api/favorites';
-
-// ui
-export { default as FavoriteList } from './ui/favorite-list';

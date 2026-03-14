@@ -1,6 +1,6 @@
-import BookReviewItem from '@/widgets/book-reviews/ui/book-review-item';
+import type { Review } from '@/entities/review';
 import { Separator } from '@/shared/ui/separator';
-import type { Review } from '@/entities/review/model/types';
+import BookReviewItem from '@/widgets/book-reviews/ui/book-review-item';
 import { motion } from 'motion/react';
 
 type Props = {

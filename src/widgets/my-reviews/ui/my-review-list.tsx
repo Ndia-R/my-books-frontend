@@ -1,5 +1,5 @@
+import type { Review } from '@/entities/review';
 import MyReviewItem from '@/widgets/my-reviews/ui/my-review-item';
-import type { Review } from '@/entities/review/model/types';
 
 type Props = {
   reviews: Review[];

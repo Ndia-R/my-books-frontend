@@ -1,4 +1,4 @@
-import type { Favorite } from '@/entities/favorite/model/types';
+import type { Favorite } from '@/entities/favorite';
 import FavoriteItem from '@/widgets/favorites/ui/favorite-item';
 
 type Props = {
