@@ -1,4 +1,3 @@
-import { queryKeys } from '@/constants/query-keys';
 import type { BookChapterPageContent } from '@/entities/book/model/types';
 import {
   createBookmark,
@@ -12,6 +11,7 @@ import type {
 } from '@/entities/bookmark/model/types';
 import BookmarkCreateDialog from '@/features/bookmark/ui/bookmark-create-dialog';
 import BookmarkUpdateDialog from '@/features/bookmark/ui/bookmark-update-dialog';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';

@@ -1,7 +1,7 @@
-import { queryKeys } from '@/constants/query-keys';
 import type { ReviewPage } from '@/entities/review/model/types';
 import MyReviewList from '@/entities/review/ui/my-review-list';
 import { getUserReviews } from '@/entities/user/api/users';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect } from 'react';

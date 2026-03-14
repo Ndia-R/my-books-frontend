@@ -1,6 +1,6 @@
-import { queryKeys } from '@/constants/query-keys';
 import { getBooksNewReleases } from '@/entities/book/api/books';
 import BookList from '@/entities/book/ui/book-list';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function BookNewReleases() {

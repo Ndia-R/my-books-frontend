@@ -1,4 +1,3 @@
-import { queryKeys } from '@/constants/query-keys';
 import {
   getBookChapterPageContent,
   getBookChapterPagePreview,
@@ -10,6 +9,7 @@ import type { BookmarkPage } from '@/entities/bookmark/model/types';
 import { getUserBookmarksByBookId } from '@/entities/user/api/users';
 import { APP_TITLE } from '@/shared/config/constants';
 import { chapterNumberString } from '@/shared/lib/format';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import BookReadBookmarkButton from '@/widgets/book-reading/ui/book-read-bookmark-button';
 import BookReadNavigation from '@/widgets/book-reading/ui/book-read-navigation';

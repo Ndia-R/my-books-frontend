@@ -1,6 +1,6 @@
-import { queryKeys } from '@/constants/query-keys';
 import { getBookDetails } from '@/entities/book/api/books';
 import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 type Props = {

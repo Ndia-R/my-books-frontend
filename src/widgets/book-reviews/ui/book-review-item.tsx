@@ -1,4 +1,3 @@
-import { queryKeys } from '@/constants/query-keys';
 import { deleteReview, updateReview } from '@/entities/review/api/reviews';
 import type { Review, ReviewUpdateParams } from '@/entities/review/model/types';
 import { useAuth } from '@/entities/user';
@@ -11,6 +10,7 @@ import {
   formatRelativeTime,
   formatTime,
 } from '@/shared/lib/format';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';

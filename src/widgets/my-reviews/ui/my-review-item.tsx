@@ -1,15 +1,15 @@
-import { queryKeys } from '@/constants/query-keys';
 import { deleteReview, updateReview } from '@/entities/review/api/reviews';
 import type { Review, ReviewUpdateParams } from '@/entities/review/model/types';
 import ReviewUpdateDialog from '@/features/review/ui/review-update-dialog';
-import usePrefetch from '@/hooks/use-prefetch';
 import { buildPath } from '@/shared/api/url-builder';
 import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
+import usePrefetch from '@/shared/hooks/use-prefetch';
 import {
   formatDateJP,
   formatRelativeTime,
   formatTime,
 } from '@/shared/lib/format';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import Rating from '@/shared/ui/rating';

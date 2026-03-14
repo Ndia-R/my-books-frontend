@@ -1,4 +1,3 @@
-import { queryKeys } from '@/constants/query-keys';
 import {
   deleteBookmark,
   updateBookmark,
@@ -8,15 +7,16 @@ import type {
   BookmarkUpdateParams,
 } from '@/entities/bookmark/model/types';
 import BookmarkUpdateDialog from '@/features/bookmark/ui/bookmark-update-dialog';
-import usePrefetch from '@/hooks/use-prefetch';
 import { buildPath } from '@/shared/api/url-builder';
 import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
+import usePrefetch from '@/shared/hooks/use-prefetch';
 import {
   chapterNumberString,
   formatDateJP,
   formatRelativeTime,
   formatTime,
 } from '@/shared/lib/format';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';

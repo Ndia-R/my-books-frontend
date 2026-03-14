@@ -1,4 +1,4 @@
-import notFoundImage from '@/assets/not-found.webp';
+import notFoundImage from '@/shared/assets/not-found.webp';
 import { APP_TITLE } from '@/shared/config/constants';
 import { Link } from 'react-router';
 

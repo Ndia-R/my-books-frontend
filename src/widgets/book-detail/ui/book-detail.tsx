@@ -1,12 +1,12 @@
-import { queryKeys } from '@/constants/query-keys';
 import { getBookDetails } from '@/entities/book/api/books';
 import ReviewCountIcon from '@/entities/book/ui/review-count-icon';
 import GenreList from '@/entities/genre/ui/genre-list';
 import FavoriteCountIcon from '@/features/favorite-toggle/ui/favorite-count-icon';
-import usePrefetch from '@/hooks/use-prefetch';
 import { buildPath } from '@/shared/api/url-builder';
 import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
+import usePrefetch from '@/shared/hooks/use-prefetch';
 import { formatDateJP, formatIsbn, formatPrice } from '@/shared/lib/format';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import { buttonVariants } from '@/shared/ui/button';
 import Rating from '@/shared/ui/rating';

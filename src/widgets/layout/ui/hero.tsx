@@ -1,6 +1,6 @@
-import mainVisualImage from '@/assets/main-visual.webp';
 import { useAuth } from '@/entities/user';
 import SearchInput from '@/features/book-search/ui/search-input';
+import mainVisualImage from '@/shared/assets/main-visual.webp';
 import { cn } from '@/shared/lib/utils';
 import { buttonVariants } from '@/shared/ui/button';
 import { motion } from 'motion/react';

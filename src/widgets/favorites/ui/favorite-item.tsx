@@ -1,18 +1,18 @@
-import { queryKeys } from '@/constants/query-keys';
 import { deleteFavoriteByBookId } from '@/entities/favorite/api/favorites';
 import type { Favorite } from '@/entities/favorite/model/types';
-import usePrefetch from '@/hooks/use-prefetch';
 import { buildPath } from '@/shared/api/url-builder';
 import {
   BOOK_IMAGE_BASE_URL,
   TOAST_ERROR_DURATION,
 } from '@/shared/config/constants';
 import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
+import usePrefetch from '@/shared/hooks/use-prefetch';
 import {
   formatDateJP,
   formatRelativeTime,
   formatTime,
 } from '@/shared/lib/format';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';

@@ -1,4 +1,3 @@
-import { queryKeys } from '@/constants/query-keys';
 import { getBookFavoriteStats } from '@/entities/book/api/books';
 import {
   createFavorite,
@@ -7,6 +6,7 @@ import {
 import { useAuth } from '@/entities/user';
 import { isFavoritedByUser } from '@/entities/user/api/users';
 import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';

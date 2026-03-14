@@ -1,4 +1,3 @@
-import { queryKeys } from '@/constants/query-keys';
 import { getBookReviews } from '@/entities/book/api/books';
 import { createReview } from '@/entities/review/api/reviews';
 import type { ReviewPage, ReviewRequest } from '@/entities/review/model/types';
@@ -8,6 +7,7 @@ import { isReviewedByUser } from '@/entities/user/api/users';
 import ReviewCreateDialog from '@/features/review/ui/review-create-dialog';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { Button } from '@/shared/ui/button';
 import {
   useMutation,

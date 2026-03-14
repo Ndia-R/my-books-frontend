@@ -1,5 +1,5 @@
-import usePrefetch from '@/hooks/use-prefetch';
 import { buildPath } from '@/shared/api/url-builder';
+import usePrefetch from '@/shared/hooks/use-prefetch';
 import { buttonVariants } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { TableOfContentsIcon } from 'lucide-react';

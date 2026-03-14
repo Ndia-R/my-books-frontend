@@ -1,7 +1,7 @@
-import { queryKeys } from '@/constants/query-keys';
 import type { FavoritePage } from '@/entities/favorite/model/types';
 import FavoriteList from '@/entities/favorite/ui/favorite-list';
 import { getUserFavorites } from '@/entities/user/api/users';
+import { queryKeys } from '@/shared/lib/query-keys';
 import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { useEffect } from 'react';

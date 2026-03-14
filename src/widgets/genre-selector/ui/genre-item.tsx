@@ -1,6 +1,6 @@
 import type { Genre } from '@/entities/genre/model/types';
-import usePrefetch from '@/hooks/use-prefetch';
 import { buildQueryString } from '@/shared/api/url-builder';
+import usePrefetch from '@/shared/hooks/use-prefetch';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Link } from 'react-router';

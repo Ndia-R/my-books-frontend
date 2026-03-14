@@ -1,9 +1,9 @@
-import { queryKeys } from '@/constants/query-keys';
 import { useAuth } from '@/entities/user';
 import { getUserProfileCounts } from '@/entities/user/api/users';
-import usePrefetch from '@/hooks/use-prefetch';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
+import usePrefetch from '@/shared/hooks/use-prefetch';
+import { queryKeys } from '@/shared/lib/query-keys';
 import CountUpNumber from '@/shared/ui/count-up-number';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
