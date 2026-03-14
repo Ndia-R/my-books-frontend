@@ -1,11 +1,11 @@
-import { Card, CardContent } from '@/shared/ui/card';
 import { useRipple } from '@/shared/hooks/use-ripple';
-import { cn } from '@/shared/lib/utils';
 import type {
   BaseFont,
   ThemeColor,
   TitleFont,
-} from '@/app/providers/theme-provider';
+} from '@/shared/lib/theme-context';
+import { cn } from '@/shared/lib/utils';
+import { Card, CardContent } from '@/shared/ui/card';
 import React from 'react';
 
 export type ThemeCardProps = {

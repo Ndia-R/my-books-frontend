@@ -1,3 +1,9 @@
+import { useAuth } from '@/entities/user';
+import usePrefetch from '@/hooks/use-prefetch';
+import { AVATAR_IMAGE_BASE_URL } from '@/shared/config/constants';
+import { Role } from '@/shared/config/roles';
+import { SubscriptionPlan } from '@/shared/config/subscription-plans';
+import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import {
@@ -8,12 +14,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/shared/ui/dropdown-menu';
-import { AVATAR_IMAGE_BASE_URL } from '@/shared/config/constants';
-import { Role } from '@/shared/config/roles';
-import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import usePrefetch from '@/hooks/use-prefetch';
-import { cn } from '@/shared/lib/utils';
-import { useAuth } from '@/app/providers/auth-provider';
 import type { MenuItem } from '@/shared/ui/types';
 import {
   BookmarkIcon,

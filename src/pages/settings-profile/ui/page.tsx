@@ -1,18 +1,18 @@
-import Logo from '@/widgets/layout/ui/logo';
-import { Button, buttonVariants } from '@/shared/ui/button';
-import { Card, CardContent } from '@/shared/ui/card';
-import { Input } from '@/shared/ui/input';
-import { Label } from '@/shared/ui/label';
+import { useAuth } from '@/entities/user';
+import { updateUserProfile } from '@/entities/user/api/users';
+import type { UpdateUserProfile } from '@/entities/user/model/types';
 import AvatarCarousel from '@/entities/user/ui/avatar-carousel';
 import {
   APP_TITLE,
   DEFAULT_AVATAR_PATH,
   TOAST_ERROR_DURATION,
 } from '@/shared/config/constants';
-import { updateUserProfile } from '@/entities/user/api/users';
 import { cn } from '@/shared/lib/utils';
-import { useAuth } from '@/app/providers/auth-provider';
-import type { UpdateUserProfile } from '@/entities/user/model/types';
+import { Button, buttonVariants } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
+import { Input } from '@/shared/ui/input';
+import { Label } from '@/shared/ui/label';
+import Logo from '@/widgets/layout/ui/logo';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { type FormEvent, useState } from 'react';

@@ -1,7 +1,7 @@
-import Logo from '@/widgets/layout/ui/logo';
-import { buttonVariants } from '@/shared/ui/button';
 import { cn } from '@/shared/lib/utils';
+import { buttonVariants } from '@/shared/ui/button';
 import type { MenuItem } from '@/shared/ui/types';
+import Logo from '@/widgets/layout/ui/logo';
 import {
   FacebookIcon,
   InstagramIcon,

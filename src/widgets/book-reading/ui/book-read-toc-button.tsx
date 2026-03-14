@@ -1,11 +1,7 @@
-import { buttonVariants } from '@/shared/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/shared/ui/tooltip';
 import usePrefetch from '@/hooks/use-prefetch';
 import { buildPath } from '@/shared/api/url-builder';
+import { buttonVariants } from '@/shared/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { TableOfContentsIcon } from 'lucide-react';
 import { Link } from 'react-router';
 

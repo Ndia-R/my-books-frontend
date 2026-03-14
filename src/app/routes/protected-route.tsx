@@ -1,6 +1,6 @@
+import { useAuth } from '@/entities/user';
 import type { Role } from '@/shared/config/roles';
 import type { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import { useAuth } from '@/app/providers/auth-provider';
 import { useEffect } from 'react';
 import { Navigate, Outlet, useLocation } from 'react-router';
 

@@ -1,14 +1,14 @@
-import { Button } from '@/shared/ui/button';
-import { APP_TITLE } from '@/shared/config/constants';
 import { queryKeys } from '@/constants/query-keys';
+import { getBookToc } from '@/entities/book/api/books';
+import { useAuth } from '@/entities/user';
+import usePrefetch from '@/hooks/use-prefetch';
+import { buildPath } from '@/shared/api/url-builder';
+import { APP_TITLE } from '@/shared/config/constants';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import usePrefetch from '@/hooks/use-prefetch';
-import { getBookToc } from '@/entities/book/api/books';
 import { chapterNumberString } from '@/shared/lib/format';
-import { buildPath } from '@/shared/api/url-builder';
 import { cn } from '@/shared/lib/utils';
-import { useAuth } from '@/app/providers/auth-provider';
+import { Button } from '@/shared/ui/button';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router';
 

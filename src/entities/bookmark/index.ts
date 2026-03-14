@@ -1,19 +1,19 @@
 // model
 export type {
   Bookmark,
+  BookmarkCreateMutation,
+  BookmarkDeleteMutation,
   BookmarkPage,
   BookmarkRequest,
-  BookmarkCreateMutation,
-  BookmarkUpdateParams,
   BookmarkUpdateMutation,
-  BookmarkDeleteMutation,
+  BookmarkUpdateParams,
 } from './model/types';
 
 // api
 export {
   createBookmark,
-  updateBookmark,
   deleteBookmark,
+  updateBookmark,
 } from './api/bookmarks';
 
 // ui

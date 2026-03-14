@@ -1,27 +1,27 @@
+import RootLayout from '@/app/layout';
+import ProtectedRoute from '@/app/routes/protected-route';
 import AuthCallbackPage from '@/pages/auth-callback/ui/page';
-import BookmarksPage from '@/pages/bookmarks/ui/page';
 import BookDetailPage from '@/pages/book-detail/ui/page';
+import BookReadPreviewPage from '@/pages/book-preview/ui/page';
+import BookReadContentPage from '@/pages/book-reading/ui/page';
 import BookTableOfContentsPage from '@/pages/book-toc/ui/page';
+import BookmarksPage from '@/pages/bookmarks/ui/page';
 import DiscoverPage from '@/pages/discover/ui/page';
 import FavoritesPage from '@/pages/favorites/ui/page';
 import ForbiddenPage from '@/pages/forbidden/ui/page';
-import RootLayout from '@/app/layout';
+import RootPage from '@/pages/home/ui/page';
 import MyReviewsPage from '@/pages/my-reviews/ui/page';
 import NotFoundPage from '@/pages/not-found/ui/page';
-import RootPage from '@/pages/home/ui/page';
 import PricingPage from '@/pages/pricing/ui/page';
 import ProfilePage from '@/pages/profile/ui/page';
 import RankingPage from '@/pages/ranking/ui/page';
-import BookReadContentPage from '@/pages/book-reading/ui/page';
-import BookReadPreviewPage from '@/pages/book-preview/ui/page';
 import SearchPage from '@/pages/search/ui/page';
 import SettingAppearancePage from '@/pages/settings-appearance/ui/page';
-import SettingsPage from '@/pages/settings/ui/page';
 import SettingProfilePage from '@/pages/settings-profile/ui/page';
+import SettingsPage from '@/pages/settings/ui/page';
 import SpecialFeaturesPage from '@/pages/special-features/ui/page';
 import { APP_BASE_PATH } from '@/shared/config/constants';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import ProtectedRoute from '@/app/routes/protected-route';
 import {
   createBrowserRouter,
   createRoutesFromElements,

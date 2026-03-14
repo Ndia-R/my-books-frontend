@@ -1,6 +1,6 @@
+import { DEFAULT_BOOKS_SIZE } from '@/shared/config/constants';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { DEFAULT_BOOKS_SIZE } from '@/shared/config/constants';
 
 type Props = {
   withPagination?: boolean;

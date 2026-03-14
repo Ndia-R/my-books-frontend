@@ -1,6 +1,6 @@
-import { buttonVariants } from '@/shared/ui/button';
 import { TITLE_LOGO } from '@/shared/config/constants';
 import { cn } from '@/shared/lib/utils';
+import { buttonVariants } from '@/shared/ui/button';
 import { Link } from 'react-router';
 
 type Props = {

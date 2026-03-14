@@ -1,15 +1,15 @@
-import FavoriteCountIcon from '@/features/favorite-toggle/ui/favorite-count-icon';
+import { queryKeys } from '@/constants/query-keys';
+import { getBookDetails } from '@/entities/book/api/books';
 import ReviewCountIcon from '@/entities/book/ui/review-count-icon';
 import GenreList from '@/entities/genre/ui/genre-list';
-import Rating from '@/shared/ui/rating';
-import { buttonVariants } from '@/shared/ui/button';
-import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
-import { queryKeys } from '@/constants/query-keys';
+import FavoriteCountIcon from '@/features/favorite-toggle/ui/favorite-count-icon';
 import usePrefetch from '@/hooks/use-prefetch';
-import { getBookDetails } from '@/entities/book/api/books';
-import { formatDateJP, formatIsbn, formatPrice } from '@/shared/lib/format';
 import { buildPath } from '@/shared/api/url-builder';
+import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
+import { formatDateJP, formatIsbn, formatPrice } from '@/shared/lib/format';
 import { cn } from '@/shared/lib/utils';
+import { buttonVariants } from '@/shared/ui/button';
+import Rating from '@/shared/ui/rating';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { Link } from 'react-router';
 

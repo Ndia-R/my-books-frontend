@@ -1,17 +1,17 @@
+import { APP_TITLE } from '@/shared/config/constants';
+import {
+  type BaseFont,
+  type TitleFont,
+  useTheme,
+} from '@/shared/lib/theme-context';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
 import Hero from '@/widgets/layout/ui/hero';
 import Logo from '@/widgets/layout/ui/logo';
 import ThemeCard, {
   type ThemeCardProps,
 } from '@/widgets/settings/ui/theme-card';
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent } from '@/shared/ui/card';
-import { APP_TITLE } from '@/shared/config/constants';
-import { cn } from '@/shared/lib/utils';
-import {
-  type BaseFont,
-  type TitleFont,
-  useTheme,
-} from '@/app/providers/theme-provider';
 import { motion } from 'motion/react';
 
 const THEME_CARDS: ThemeCardProps[] = [

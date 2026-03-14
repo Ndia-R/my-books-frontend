@@ -1,16 +1,15 @@
-import { Button } from '@/shared/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/shared/ui/tooltip';
-import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { queryKeys } from '@/constants/query-keys';
 import { getBookFavoriteStats } from '@/entities/book/api/books';
-import { createFavorite, deleteFavoriteByBookId } from '@/entities/favorite/api/favorites';
+import {
+  createFavorite,
+  deleteFavoriteByBookId,
+} from '@/entities/favorite/api/favorites';
+import { useAuth } from '@/entities/user';
 import { isFavoritedByUser } from '@/entities/user/api/users';
+import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { cn } from '@/shared/lib/utils';
-import { useAuth } from '@/app/providers/auth-provider';
+import { Button } from '@/shared/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 import { AnimatePresence, motion } from 'motion/react';

@@ -1,9 +1,9 @@
-import Logo from '@/widgets/layout/ui/logo';
-import NavList from '@/widgets/layout/ui/nav-list';
+import { useWindowSize } from '@/shared/hooks/use-window-size';
 import { Button } from '@/shared/ui/button';
 import { DialogDescription, DialogTitle } from '@/shared/ui/dialog';
 import { Sheet, SheetContent, SheetTrigger } from '@/shared/ui/sheet';
-import { useWindowSize } from '@/shared/hooks/use-window-size';
+import Logo from '@/widgets/layout/ui/logo';
+import NavList from '@/widgets/layout/ui/nav-list';
 import { VisuallyHidden } from '@radix-ui/react-visually-hidden';
 import { MenuIcon } from 'lucide-react';
 import { useState } from 'react';

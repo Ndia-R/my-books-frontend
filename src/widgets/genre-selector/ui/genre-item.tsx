@@ -1,8 +1,8 @@
-import { Button } from '@/shared/ui/button';
+import type { Genre } from '@/entities/genre/model/types';
 import usePrefetch from '@/hooks/use-prefetch';
 import { buildQueryString } from '@/shared/api/url-builder';
 import { cn } from '@/shared/lib/utils';
-import type { Genre } from '@/entities/genre/model/types';
+import { Button } from '@/shared/ui/button';
 import { Link } from 'react-router';
 
 type Props = {

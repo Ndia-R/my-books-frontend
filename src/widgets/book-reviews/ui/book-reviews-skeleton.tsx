@@ -1,6 +1,6 @@
+import { DEFAULT_REVIEWS_SIZE } from '@/shared/config/constants';
 import { Separator } from '@/shared/ui/separator';
 import { Skeleton } from '@/shared/ui/skeleton';
-import { DEFAULT_REVIEWS_SIZE } from '@/shared/config/constants';
 
 const ReviewItemSkeleton = () => {
   return (

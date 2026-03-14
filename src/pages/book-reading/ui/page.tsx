@@ -1,7 +1,7 @@
+import ErrorElement from '@/shared/ui/error-element';
 import BookReadBackground from '@/widgets/book-reading/ui/book-read-background';
 import BookReadContent from '@/widgets/book-reading/ui/book-read-content';
 import BookReadContentSkeleton from '@/widgets/book-reading/ui/book-read-content-skeleton';
-import ErrorElement from '@/shared/ui/error-element';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';

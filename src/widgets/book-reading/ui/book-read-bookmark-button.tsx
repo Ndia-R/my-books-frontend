@@ -1,24 +1,20 @@
-import BookmarkCreateDialog from '@/features/bookmark/ui/bookmark-create-dialog';
-import BookmarkUpdateDialog from '@/features/bookmark/ui/bookmark-update-dialog';
-import { Button } from '@/shared/ui/button';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/shared/ui/tooltip';
 import { queryKeys } from '@/constants/query-keys';
+import type { BookChapterPageContent } from '@/entities/book/model/types';
 import {
   createBookmark,
   deleteBookmark,
   updateBookmark,
 } from '@/entities/bookmark/api/bookmarks';
-import { cn } from '@/shared/lib/utils';
-import type { BookChapterPageContent } from '@/entities/book/model/types';
 import type {
   Bookmark,
   BookmarkRequest,
   BookmarkUpdateParams,
 } from '@/entities/bookmark/model/types';
+import BookmarkCreateDialog from '@/features/bookmark/ui/bookmark-create-dialog';
+import BookmarkUpdateDialog from '@/features/bookmark/ui/bookmark-update-dialog';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BookmarkIcon } from 'lucide-react';
 import { useState } from 'react';

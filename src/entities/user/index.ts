@@ -1,29 +1,30 @@
 // model
+export { useAuth } from './model/auth-context';
+export { userQueryKeys } from './model/query-keys';
 export type {
+  UpdateSubscriptionPlan,
+  UpdateUserProfile,
   UserProfile,
   UserProfileCounts,
-  UpdateUserProfile,
-  UpdateSubscriptionPlan,
 } from './model/types';
-export { userQueryKeys } from './model/query-keys';
 
 // api
+export { logoutUser } from './api/auth';
+export { usePrefetchUser } from './api/use-prefetch';
 export {
+  getUserBookmarks,
+  getUserBookmarksByBookId,
+  getUserFavorites,
+  getUserFavoritesByBookId,
   getUserProfile,
   getUserProfileCounts,
   getUserReviews,
-  getUserFavorites,
-  getUserBookmarks,
   getUserReviewsByBookId,
-  getUserFavoritesByBookId,
-  getUserBookmarksByBookId,
-  updateUserProfile,
-  updateSubscriptionPlan,
-  isReviewedByUser,
   isFavoritedByUser,
+  isReviewedByUser,
+  updateSubscriptionPlan,
+  updateUserProfile,
 } from './api/users';
-export { logoutUser } from './api/auth';
-export { usePrefetchUser } from './api/use-prefetch';
 
 // ui
 export { default as AvatarCarousel } from './ui/avatar-carousel';

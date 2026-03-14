@@ -1,5 +1,3 @@
-import { CACHE_TIME } from '@/shared/config/cache-time';
-import { bookQueryKeys } from '@/entities/book/model/query-keys';
 import {
   getBookChapterPageContent,
   getBookChapterPagePreview,
@@ -9,8 +7,10 @@ import {
   searchBooksByGenre,
   searchBooksByTitleKeyword,
 } from '@/entities/book/api/books';
+import { bookQueryKeys } from '@/entities/book/model/query-keys';
 import { getUserBookmarksByBookId } from '@/entities/user/api/users';
 import { userQueryKeys } from '@/entities/user/model/query-keys';
+import { CACHE_TIME } from '@/shared/config/cache-time';
 import { useQueryClient } from '@tanstack/react-query';
 
 export function usePrefetchBook() {

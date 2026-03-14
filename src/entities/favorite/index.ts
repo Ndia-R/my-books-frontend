@@ -2,8 +2,8 @@
 export type {
   Favorite,
   FavoritePage,
-  FavoriteStats,
   FavoriteRequest,
+  FavoriteStats,
 } from './model/types';
 
 // api

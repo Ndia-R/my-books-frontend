@@ -1,14 +1,14 @@
-import BookReviewList from '@/entities/review/ui/book-review-list';
-import ReviewCreateDialog from '@/features/review/ui/review-create-dialog';
-import { Button } from '@/shared/ui/button';
 import { queryKeys } from '@/constants/query-keys';
-import { Role } from '@/shared/config/roles';
-import { SubscriptionPlan } from '@/shared/config/subscription-plans';
 import { getBookReviews } from '@/entities/book/api/books';
 import { createReview } from '@/entities/review/api/reviews';
-import { isReviewedByUser } from '@/entities/user/api/users';
-import { useAuth } from '@/app/providers/auth-provider';
 import type { ReviewPage, ReviewRequest } from '@/entities/review/model/types';
+import BookReviewList from '@/entities/review/ui/book-review-list';
+import { useAuth } from '@/entities/user';
+import { isReviewedByUser } from '@/entities/user/api/users';
+import ReviewCreateDialog from '@/features/review/ui/review-create-dialog';
+import { Role } from '@/shared/config/roles';
+import { SubscriptionPlan } from '@/shared/config/subscription-plans';
+import { Button } from '@/shared/ui/button';
 import {
   useMutation,
   useQuery,

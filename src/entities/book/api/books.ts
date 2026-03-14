@@ -1,12 +1,3 @@
-import {
-  DEFAULT_BOOKS_SIZE,
-  DEFAULT_BOOKS_SORT,
-  DEFAULT_REVIEWS_SIZE,
-  DEFAULT_REVIEWS_SORT,
-} from '@/shared/config/constants';
-import type { BookSortOrder, ReviewSortOrder } from '@/shared/config/sort-orders';
-import { fetchBooksApi } from '@/shared/api/fetch';
-import { buildPath, buildQueryString } from '@/shared/api/url-builder';
 import type {
   BookChapterPageContent,
   BookDetails,
@@ -16,6 +7,18 @@ import type {
 } from '@/entities/book/model/types';
 import type { FavoriteStats } from '@/entities/favorite/model/types';
 import type { ReviewPage } from '@/entities/review/model/types';
+import { fetchBooksApi } from '@/shared/api/fetch';
+import { buildPath, buildQueryString } from '@/shared/api/url-builder';
+import {
+  DEFAULT_BOOKS_SIZE,
+  DEFAULT_BOOKS_SORT,
+  DEFAULT_REVIEWS_SIZE,
+  DEFAULT_REVIEWS_SORT,
+} from '@/shared/config/constants';
+import type {
+  BookSortOrder,
+  ReviewSortOrder,
+} from '@/shared/config/sort-orders';
 
 // 最新の書籍リスト（１０冊分）
 export const getBooksNewReleases = async () => {

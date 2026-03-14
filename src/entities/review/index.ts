@@ -1,18 +1,18 @@
 // model
 export type {
   Review,
-  ReviewPage,
-  ReviewStats,
-  ReviewRequest,
-  SelfReviewExists,
   ReviewCreateMutation,
-  ReviewUpdateParams,
-  ReviewUpdateMutation,
   ReviewDeleteMutation,
+  ReviewPage,
+  ReviewRequest,
+  ReviewStats,
+  ReviewUpdateMutation,
+  ReviewUpdateParams,
+  SelfReviewExists,
 } from './model/types';
 
 // api
-export { createReview, updateReview, deleteReview } from './api/reviews';
+export { createReview, deleteReview, updateReview } from './api/reviews';
 
 // ui
 export { default as BookReviewList } from './ui/book-review-list';

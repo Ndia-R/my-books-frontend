@@ -1,7 +1,7 @@
+import type { FavoriteRequest } from '@/entities/favorite/model/types';
 import { fetchBooksApi } from '@/shared/api/fetch';
 import { buildPath } from '@/shared/api/url-builder';
 import { getCsrfToken } from '@/shared/lib/utils';
-import type { FavoriteRequest } from '@/entities/favorite/model/types';
 
 // お気に入り追加
 export const createFavorite = async (requestBody: FavoriteRequest) => {

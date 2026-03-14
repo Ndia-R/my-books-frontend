@@ -1,4 +1,11 @@
-import Logo from '@/widgets/layout/ui/logo';
+import { useAuth } from '@/entities/user';
+import { updateSubscriptionPlan } from '@/entities/user/api/users';
+import type { UpdateSubscriptionPlan } from '@/entities/user/model/types';
+import { APP_TITLE, TOAST_ERROR_DURATION } from '@/shared/config/constants';
+import { Role } from '@/shared/config/roles';
+import { SubscriptionPlan } from '@/shared/config/subscription-plans';
+import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
+import { cn } from '@/shared/lib/utils';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import {
@@ -9,14 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui/card';
-import { APP_TITLE, TOAST_ERROR_DURATION } from '@/shared/config/constants';
-import { Role } from '@/shared/config/roles';
-import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
-import { updateSubscriptionPlan } from '@/entities/user/api/users';
-import { cn } from '@/shared/lib/utils';
-import { useAuth } from '@/app/providers/auth-provider';
-import type { UpdateSubscriptionPlan } from '@/entities/user/model/types';
+import Logo from '@/widgets/layout/ui/logo';
 import { useMutation } from '@tanstack/react-query';
 import { BookOpenIcon, CheckIcon, CrownIcon, XIcon } from 'lucide-react';
 import { useLocation } from 'react-router';

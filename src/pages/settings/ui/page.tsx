@@ -1,7 +1,7 @@
+import { useAuth } from '@/entities/user';
+import { APP_TITLE } from '@/shared/config/constants';
 import { Button } from '@/shared/ui/button';
 import { Separator } from '@/shared/ui/separator';
-import { APP_TITLE } from '@/shared/config/constants';
-import { useAuth } from '@/app/providers/auth-provider';
 import { CrownIcon, PaletteIcon } from 'lucide-react';
 import { useNavigate } from 'react-router';
 

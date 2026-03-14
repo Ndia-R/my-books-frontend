@@ -1,8 +1,8 @@
-import { buttonVariants } from '@/shared/ui/button';
+import type { BookToc } from '@/entities/book/model/types';
 import usePrefetch from '@/hooks/use-prefetch';
 import { buildPath } from '@/shared/api/url-builder';
 import { cn } from '@/shared/lib/utils';
-import type { BookToc } from '@/entities/book/model/types';
+import { buttonVariants } from '@/shared/ui/button';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useEffect } from 'react';
 import { Link } from 'react-router';

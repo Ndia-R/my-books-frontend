@@ -1,10 +1,10 @@
+import { useAuth } from '@/entities/user';
+import SearchInput from '@/features/book-search/ui/search-input';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
 import Menu from '@/widgets/layout/ui/menu';
 import ThemeToggleButton from '@/widgets/layout/ui/theme-toggle-button';
 import UserIconButton from '@/widgets/layout/ui/user-icon-button';
-import SearchInput from '@/features/book-search/ui/search-input';
-import { Button } from '@/shared/ui/button';
-import { cn } from '@/shared/lib/utils';
-import { useAuth } from '@/app/providers/auth-provider';
 import { motion } from 'motion/react';
 import { useLocation } from 'react-router';
 

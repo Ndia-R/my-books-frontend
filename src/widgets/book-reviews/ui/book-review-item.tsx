@@ -1,16 +1,20 @@
+import { queryKeys } from '@/constants/query-keys';
+import { deleteReview, updateReview } from '@/entities/review/api/reviews';
+import type { Review, ReviewUpdateParams } from '@/entities/review/model/types';
+import { useAuth } from '@/entities/user';
 import ReviewUpdateDialog from '@/features/review/ui/review-update-dialog';
-import Rating from '@/shared/ui/rating';
+import { AVATAR_IMAGE_BASE_URL } from '@/shared/config/constants';
+import { Role } from '@/shared/config/roles';
+import { SubscriptionPlan } from '@/shared/config/subscription-plans';
+import {
+  formatDateJP,
+  formatRelativeTime,
+  formatTime,
+} from '@/shared/lib/format';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
-import { AVATAR_IMAGE_BASE_URL } from '@/shared/config/constants';
-import { queryKeys } from '@/constants/query-keys';
-import { Role } from '@/shared/config/roles';
-import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import { deleteReview, updateReview } from '@/entities/review/api/reviews';
-import { formatDateJP, formatRelativeTime, formatTime } from '@/shared/lib/format';
-import { useAuth } from '@/app/providers/auth-provider';
-import type { Review, ReviewUpdateParams } from '@/entities/review/model/types';
+import Rating from '@/shared/ui/rating';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SquarePenIcon } from 'lucide-react';
 import { useState } from 'react';

@@ -1,24 +1,26 @@
-import BookmarkUpdateDialog from '@/features/bookmark/ui/bookmark-update-dialog';
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent } from '@/shared/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/shared/ui/tooltip';
-import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
 import { queryKeys } from '@/constants/query-keys';
+import {
+  deleteBookmark,
+  updateBookmark,
+} from '@/entities/bookmark/api/bookmarks';
+import type {
+  Bookmark,
+  BookmarkUpdateParams,
+} from '@/entities/bookmark/model/types';
+import BookmarkUpdateDialog from '@/features/bookmark/ui/bookmark-update-dialog';
 import usePrefetch from '@/hooks/use-prefetch';
-import { deleteBookmark, updateBookmark } from '@/entities/bookmark/api/bookmarks';
+import { buildPath } from '@/shared/api/url-builder';
+import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
 import {
   chapterNumberString,
   formatDateJP,
   formatRelativeTime,
   formatTime,
 } from '@/shared/lib/format';
-import { buildPath } from '@/shared/api/url-builder';
 import { cn } from '@/shared/lib/utils';
-import type { Bookmark, BookmarkUpdateParams } from '@/entities/bookmark/model/types';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { BookmarkIcon } from 'lucide-react';
 import { useState } from 'react';

@@ -1,7 +1,7 @@
+import type { BookmarkRequest } from '@/entities/bookmark/model/types';
 import { fetchBooksApi } from '@/shared/api/fetch';
 import { buildPath } from '@/shared/api/url-builder';
 import { getCsrfToken } from '@/shared/lib/utils';
-import type { BookmarkRequest } from '@/entities/bookmark/model/types';
 
 // ブックマーク追加
 export const createBookmark = async (requestBody: BookmarkRequest) => {

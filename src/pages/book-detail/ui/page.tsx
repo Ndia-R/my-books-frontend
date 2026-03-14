@@ -1,9 +1,9 @@
+import { useAuth } from '@/entities/user';
+import ErrorElement from '@/shared/ui/error-element';
 import BookDetail from '@/widgets/book-detail/ui/book-detail';
 import BookDetailSkeleton from '@/widgets/book-detail/ui/book-detail-skeleton';
 import BookReviews from '@/widgets/book-reviews/ui/book-reviews';
 import BookReviewsSkeleton from '@/widgets/book-reviews/ui/book-reviews-skeleton';
-import ErrorElement from '@/shared/ui/error-element';
-import { useAuth } from '@/app/providers/auth-provider';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useParams } from 'react-router';

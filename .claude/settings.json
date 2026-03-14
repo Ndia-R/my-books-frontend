@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(wc -l /workspace/src/components/**/*.tsx)"
+      "Bash(wc -l /workspace/src/components/**/*.tsx)",
+      "WebSearch"
     ],
     "additionalDirectories": [
       "/workspace/src/components/ui",

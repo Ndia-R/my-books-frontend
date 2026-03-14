@@ -1,6 +1,6 @@
+import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
 import { Label } from '@/shared/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/shared/ui/radio-group';
-import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
 import { useState } from 'react';
 
 const CONDITION_LIST = [

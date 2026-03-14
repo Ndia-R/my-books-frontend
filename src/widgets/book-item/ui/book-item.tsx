@@ -1,11 +1,11 @@
+import type { Book } from '@/entities/book/model/types';
 import AverageRatingIcon from '@/entities/book/ui/average-rating-icon';
 import ReviewCountIcon from '@/entities/book/ui/review-count-icon';
-import { Card, CardContent } from '@/shared/ui/card';
-import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
 import usePrefetch from '@/hooks/use-prefetch';
-import { formatDateJP } from '@/shared/lib/format';
 import { buildPath } from '@/shared/api/url-builder';
-import type { Book } from '@/entities/book/model/types';
+import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
+import { formatDateJP } from '@/shared/lib/format';
+import { Card, CardContent } from '@/shared/ui/card';
 import { Link } from 'react-router';
 
 type Props = {

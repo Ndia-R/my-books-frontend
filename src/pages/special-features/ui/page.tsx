@@ -1,5 +1,5 @@
-import { Separator } from '@/shared/ui/separator';
 import { APP_TITLE } from '@/shared/config/constants';
+import { Separator } from '@/shared/ui/separator';
 
 type Props = {
   title: string;

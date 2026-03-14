@@ -1,46 +1,18 @@
+import { logoutUser } from '@/entities/user/api/auth';
+import { getUserProfile } from '@/entities/user/api/users';
+import { AuthProviderContext } from '@/entities/user/model/auth-context';
+import type { UserProfile } from '@/entities/user/model/types';
+import { setUnauthorizedHandler } from '@/shared/api/fetch';
+import { buildQueryString } from '@/shared/api/url-builder';
 import { APP_BASE_PATH, BFF_API_BASE_URL } from '@/shared/config/constants';
 import type { Group } from '@/shared/config/groups';
 import { Role } from '@/shared/config/roles';
 import type { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import { logoutUser } from '@/entities/user/api/auth';
-import { setUnauthorizedHandler } from '@/shared/api/fetch';
-import { getUserProfile } from '@/entities/user/api/users';
-import { buildQueryString } from '@/shared/api/url-builder';
-import type { UserProfile } from '@/entities/user/model/types';
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type AuthProviderProps = {
   children: React.ReactNode;
 };
-
-type AuthProviderState = {
-  isLoading: boolean;
-  userProfile: UserProfile | null;
-  isAuthenticated: boolean;
-  setUserProfile: React.Dispatch<React.SetStateAction<UserProfile | null>>;
-  login: (returnTo?: string) => void;
-  signup: (returnTo?: string) => void;
-  changePassword: (returnTo?: string) => void;
-  logout: () => Promise<void>;
-  hasRole: (role: Role) => boolean;
-  hasAnyRole: (roles: Role[]) => boolean;
-  hasGroup: (group: Group) => boolean;
-  hasAnyGroup: (groups: Group[]) => boolean;
-  hasPlan: (plan: SubscriptionPlan) => boolean;
-  hasAnyPlan: (plans: SubscriptionPlan[]) => boolean;
-  handleUnauthorized: () => void;
-};
-
-const AuthProviderContext = createContext<AuthProviderState | undefined>(
-  undefined
-);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -194,13 +166,3 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return <AuthProviderContext value={value}>{children}</AuthProviderContext>;
 }
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const useAuth = () => {
-  const context = useContext(AuthProviderContext);
-
-  if (context === undefined)
-    throw new Error('useAuth must be used within an AuthProvider');
-
-  return context;
-};

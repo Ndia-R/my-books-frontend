@@ -1,4 +1,6 @@
 // import Pagination from '@/components/shared/pagination';
+import { buildQueryString } from '@/shared/api/url-builder';
+import { cn } from '@/shared/lib/utils';
 import {
   Pagination,
   PaginationContent,
@@ -8,8 +10,6 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/shared/ui/pagination';
-import { buildQueryString } from '@/shared/api/url-builder';
-import { cn } from '@/shared/lib/utils';
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 

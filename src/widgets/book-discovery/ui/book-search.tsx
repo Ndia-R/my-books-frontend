@@ -1,8 +1,8 @@
+import { queryKeys } from '@/constants/query-keys';
+import { searchBooksByTitleKeyword } from '@/entities/book/api/books';
 import BookList from '@/entities/book/ui/book-list';
 import SearchPagination from '@/features/book-search/ui/search-pagination';
-import { queryKeys } from '@/constants/query-keys';
 import usePrefetch from '@/hooks/use-prefetch';
-import { searchBooksByTitleKeyword } from '@/entities/book/api/books';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 

@@ -1,10 +1,10 @@
-import CountUpNumber from '@/shared/ui/count-up-number';
 import { queryKeys } from '@/constants/query-keys';
+import { useAuth } from '@/entities/user';
+import { getUserProfileCounts } from '@/entities/user/api/users';
+import usePrefetch from '@/hooks/use-prefetch';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import usePrefetch from '@/hooks/use-prefetch';
-import { getUserProfileCounts } from '@/entities/user/api/users';
-import { useAuth } from '@/app/providers/auth-provider';
+import CountUpNumber from '@/shared/ui/count-up-number';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';

@@ -1,8 +1,8 @@
 import mainVisualImage from '@/assets/main-visual.webp';
+import { useAuth } from '@/entities/user';
 import SearchInput from '@/features/book-search/ui/search-input';
-import { buttonVariants } from '@/shared/ui/button';
 import { cn } from '@/shared/lib/utils';
-import { useAuth } from '@/app/providers/auth-provider';
+import { buttonVariants } from '@/shared/ui/button';
 import { motion } from 'motion/react';
 import { Link } from 'react-router';
 

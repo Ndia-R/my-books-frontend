@@ -1,7 +1,7 @@
-import GenreList from '@/entities/genre/ui/genre-list';
 import { queryKeys } from '@/constants/query-keys';
-import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
 import { getGenres } from '@/entities/genre/api/genres';
+import GenreList from '@/entities/genre/ui/genre-list';
+import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function GenresSelector() {
@@ -15,7 +15,9 @@ export default function GenresSelector() {
   const { genreIds, condition, updateQueryParams } = useSearchFilters();
 
   // クエリ文字列から配列へ直接派生
-  const selectedGenreIds = genreIds.split(',').map((genreId) => Number(genreId));
+  const selectedGenreIds = genreIds
+    .split(',')
+    .map((genreId) => Number(genreId));
 
   const handleClick = (genreId: number) => {
     let newGenreIds = selectedGenreIds.includes(genreId)

@@ -1,22 +1,22 @@
-import { Button } from '@/shared/ui/button';
-import { Card, CardContent } from '@/shared/ui/card';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/shared/ui/tooltip';
+import { queryKeys } from '@/constants/query-keys';
+import { deleteFavoriteByBookId } from '@/entities/favorite/api/favorites';
+import type { Favorite } from '@/entities/favorite/model/types';
+import usePrefetch from '@/hooks/use-prefetch';
+import { buildPath } from '@/shared/api/url-builder';
 import {
   BOOK_IMAGE_BASE_URL,
   TOAST_ERROR_DURATION,
 } from '@/shared/config/constants';
-import { queryKeys } from '@/constants/query-keys';
 import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
-import usePrefetch from '@/hooks/use-prefetch';
-import { deleteFavoriteByBookId } from '@/entities/favorite/api/favorites';
-import { formatDateJP, formatRelativeTime, formatTime } from '@/shared/lib/format';
-import { buildPath } from '@/shared/api/url-builder';
+import {
+  formatDateJP,
+  formatRelativeTime,
+  formatTime,
+} from '@/shared/lib/format';
 import { cn } from '@/shared/lib/utils';
-import type { Favorite } from '@/entities/favorite/model/types';
+import { Button } from '@/shared/ui/button';
+import { Card, CardContent } from '@/shared/ui/card';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { HeartIcon } from 'lucide-react';
 import { Link } from 'react-router';

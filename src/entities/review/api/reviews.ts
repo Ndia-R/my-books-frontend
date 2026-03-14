@@ -1,7 +1,7 @@
+import type { ReviewRequest } from '@/entities/review/model/types';
 import { fetchBooksApi } from '@/shared/api/fetch';
 import { buildPath } from '@/shared/api/url-builder';
 import { getCsrfToken } from '@/shared/lib/utils';
-import type { ReviewRequest } from '@/entities/review/model/types';
 
 // レビュー作成
 export const createReview = async (requestBody: ReviewRequest) => {

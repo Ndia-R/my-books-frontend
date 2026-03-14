@@ -4,7 +4,7 @@ import BookReadContentSkeleton from '@/widgets/book-reading/ui/book-read-content
 import ErrorElement from '@/shared/ui/error-element';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
 import { buildPath } from '@/shared/api/url-builder';
-import { useAuth } from '@/app/providers/auth-provider';
+import { useAuth } from '@/entities/user';
 import { Suspense, useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useNavigate, useParams } from 'react-router';

@@ -1,8 +1,3 @@
-import BookReadBookmarkButton from '@/widgets/book-reading/ui/book-read-bookmark-button';
-import BookReadNavigation from '@/widgets/book-reading/ui/book-read-navigation';
-import BookReadPaywall from '@/widgets/book-reading/ui/book-read-paywall';
-import BookReadTocButton from '@/widgets/book-reading/ui/book-read-toc-button';
-import { APP_TITLE } from '@/shared/config/constants';
 import { queryKeys } from '@/constants/query-keys';
 import {
   getBookChapterPageContent,
@@ -10,11 +5,16 @@ import {
   getBookPreviewSettingPublic,
   getBookToc,
 } from '@/entities/book/api/books';
-import { getUserBookmarksByBookId } from '@/entities/user/api/users';
-import { chapterNumberString } from '@/shared/lib/format';
-import { cn } from '@/shared/lib/utils';
 import { isLastPreviewPage } from '@/entities/book/lib/utils';
 import type { BookmarkPage } from '@/entities/bookmark/model/types';
+import { getUserBookmarksByBookId } from '@/entities/user/api/users';
+import { APP_TITLE } from '@/shared/config/constants';
+import { chapterNumberString } from '@/shared/lib/format';
+import { cn } from '@/shared/lib/utils';
+import BookReadBookmarkButton from '@/widgets/book-reading/ui/book-read-bookmark-button';
+import BookReadNavigation from '@/widgets/book-reading/ui/book-read-navigation';
+import BookReadPaywall from '@/widgets/book-reading/ui/book-read-paywall';
+import BookReadTocButton from '@/widgets/book-reading/ui/book-read-toc-button';
 import { useQuery, useSuspenseQueries } from '@tanstack/react-query';
 
 type Props = {

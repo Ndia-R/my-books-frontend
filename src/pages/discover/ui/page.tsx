@@ -1,12 +1,12 @@
 import BooksSkeleton from '@/entities/book/ui/books-skeleton';
+import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
+import { APP_TITLE } from '@/shared/config/constants';
+import ErrorElement from '@/shared/ui/error-element';
+import { Separator } from '@/shared/ui/separator';
 import BookDiscovery from '@/widgets/book-discovery/ui/book-discovery';
 import GenresConditionSelector from '@/widgets/genre-selector/ui/genres-condition-selector';
 import GenresSelector from '@/widgets/genre-selector/ui/genres-selector';
 import GenresSkeleton from '@/widgets/genre-selector/ui/genres-skeleton';
-import ErrorElement from '@/shared/ui/error-element';
-import { Separator } from '@/shared/ui/separator';
-import { APP_TITLE } from '@/shared/config/constants';
-import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 

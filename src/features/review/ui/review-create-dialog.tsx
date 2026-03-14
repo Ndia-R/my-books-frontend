@@ -1,4 +1,9 @@
-import Rating from '@/shared/ui/rating';
+import type {
+  ReviewCreateMutation,
+  ReviewRequest,
+} from '@/entities/review/model/types';
+import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
+import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
 import { Button } from '@/shared/ui/button';
 import {
   Dialog,
@@ -7,10 +12,8 @@ import {
   DialogFooter,
   DialogTitle,
 } from '@/shared/ui/dialog';
+import Rating from '@/shared/ui/rating';
 import { Textarea } from '@/shared/ui/textarea';
-import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
-import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
-import type { ReviewCreateMutation, ReviewRequest } from '@/entities/review/model/types';
 import { Loader2Icon } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
