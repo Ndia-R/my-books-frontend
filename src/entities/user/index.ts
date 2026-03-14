@@ -12,8 +12,6 @@ export type {
 export { logoutUser } from './api/auth';
 export { usePrefetchUser } from './api/use-prefetch';
 export {
-  getUserBookmarks,
-  getUserBookmarksByBookId,
   getUserFavorites,
   getUserFavoritesByBookId,
   getUserProfile,

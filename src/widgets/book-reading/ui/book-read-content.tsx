@@ -5,8 +5,8 @@ import {
   getBookToc,
 } from '@/entities/book/api/books';
 import { isLastPreviewPage } from '@/entities/book/lib/utils';
+import { getUserBookmarksByBookId } from '@/entities/bookmark/api/bookmarks';
 import type { BookmarkPage } from '@/entities/bookmark/model/types';
-import { getUserBookmarksByBookId } from '@/entities/user/api/users';
 import { APP_TITLE } from '@/shared/config/constants';
 import { chapterNumberString } from '@/shared/lib/format';
 import { queryKeys } from '@/shared/lib/query-keys';

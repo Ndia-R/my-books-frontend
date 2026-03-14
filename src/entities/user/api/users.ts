@@ -1,12 +1,3 @@
-import {
-  DEFAULT_MY_PAGE_SIZE,
-  DEFAULT_MY_PAGE_SORT,
-} from '@/shared/config/constants';
-import type { ReviewSortOrder } from '@/shared/config/sort-orders';
-import { fetchBooksApi } from '@/shared/api/fetch';
-import { buildQueryString } from '@/shared/api/url-builder';
-import { getCsrfToken } from '@/shared/lib/utils';
-import type { BookmarkPage } from '@/entities/bookmark/model/types';
 import type { FavoritePage } from '@/entities/favorite/model/types';
 import type { ReviewPage } from '@/entities/review/model/types';
 import type {
@@ -15,6 +6,14 @@ import type {
   UserProfile,
   UserProfileCounts,
 } from '@/entities/user/model/types';
+import { fetchBooksApi } from '@/shared/api/fetch';
+import { buildQueryString } from '@/shared/api/url-builder';
+import {
+  DEFAULT_MY_PAGE_SIZE,
+  DEFAULT_MY_PAGE_SORT,
+} from '@/shared/config/constants';
+import type { ReviewSortOrder } from '@/shared/config/sort-orders';
+import { getCsrfToken } from '@/shared/lib/utils';
 
 // 自分のプロフィール情報
 export const getUserProfile = async () => {
@@ -54,18 +53,6 @@ export const getUserFavorites = async (
   return response.data;
 };
 
-// 自分のブックマーク一覧
-export const getUserBookmarks = async (
-  page: number = 1,
-  size: number = DEFAULT_MY_PAGE_SIZE,
-  sort: ReviewSortOrder = DEFAULT_MY_PAGE_SORT
-) => {
-  const path = `/me/bookmarks`;
-  const queryString = buildQueryString({ page, size, sort });
-  const response = await fetchBooksApi<BookmarkPage>(path + queryString);
-  return response.data;
-};
-
 // 自分が投稿した特定の書籍のレビュー
 export const getUserReviewsByBookId = async (
   bookId: string,
@@ -89,19 +76,6 @@ export const getUserFavoritesByBookId = async (
   const path = `/me/favorites`;
   const queryString = buildQueryString({ bookId, page, size, sort });
   const response = await fetchBooksApi<FavoritePage>(path + queryString);
-  return response.data;
-};
-
-// 自分の追加した特定の書籍のブックマーク
-export const getUserBookmarksByBookId = async (
-  bookId: string,
-  page: number = 1,
-  size: number = DEFAULT_MY_PAGE_SIZE,
-  sort: ReviewSortOrder = DEFAULT_MY_PAGE_SORT
-) => {
-  const path = `/me/bookmarks`;
-  const queryString = buildQueryString({ bookId, page, size, sort });
-  const response = await fetchBooksApi<BookmarkPage>(path + queryString);
   return response.data;
 };
 

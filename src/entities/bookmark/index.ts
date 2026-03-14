@@ -1,4 +1,5 @@
 // model
+export { bookmarkQueryKeys } from './model/query-keys';
 export type {
   Bookmark,
   BookmarkCreateMutation,
@@ -13,8 +14,7 @@ export type {
 export {
   createBookmark,
   deleteBookmark,
+  getUserBookmarks,
+  getUserBookmarksByBookId,
   updateBookmark,
 } from './api/bookmarks';
-
-// ui
-export { default as BookmarkList } from './ui/bookmark-list';

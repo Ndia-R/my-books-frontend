@@ -1,4 +1,4 @@
-import type { Bookmark } from '@/entities/bookmark/model/types';
+import type { Bookmark } from '@/entities/bookmark';
 import BookmarkItem from '@/widgets/bookmarks/ui/bookmark-item';
 
 type Props = {

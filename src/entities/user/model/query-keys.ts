@@ -5,12 +5,6 @@ export const userQueryKeys = {
   getUserReviewsInfinite: () => ['getUserReviewsInfinite'] as const,
   getUserFavorites: (page: number) => ['getUserFavorites', page] as const,
   getUserFavoritesInfinite: () => ['getUserFavoritesInfinite'] as const,
-  getUserBookmarks: (page: number) => ['getUserBookmarks', page] as const,
-  getUserBookmarksInfinite: () => ['getUserBookmarksInfinite'] as const,
-  getUserBookmarksByBookId: (bookId: string) =>
-    ['getUserBookmarksByBookId', bookId] as const,
-  isReviewedByUser: (bookId: string) =>
-    ['isReviewedByUser', bookId] as const,
-  isFavoritedByUser: (bookId: string) =>
-    ['isFavoritedByUser', bookId] as const,
+  isReviewedByUser: (bookId: string) => ['isReviewedByUser', bookId] as const,
+  isFavoritedByUser: (bookId: string) => ['isFavoritedByUser', bookId] as const,
 } as const;

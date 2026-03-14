@@ -1,6 +1,14 @@
-import type { BookmarkRequest } from '@/entities/bookmark/model/types';
+import type {
+  BookmarkPage,
+  BookmarkRequest,
+} from '@/entities/bookmark/model/types';
 import { fetchBooksApi } from '@/shared/api/fetch';
-import { buildPath } from '@/shared/api/url-builder';
+import { buildPath, buildQueryString } from '@/shared/api/url-builder';
+import {
+  DEFAULT_MY_PAGE_SIZE,
+  DEFAULT_MY_PAGE_SORT,
+} from '@/shared/config/constants';
+import type { ReviewSortOrder } from '@/shared/config/sort-orders';
 import { getCsrfToken } from '@/shared/lib/utils';
 
 // ブックマーク追加
@@ -44,4 +52,29 @@ export const deleteBookmark = async (bookmarkId: number) => {
     },
   };
   await fetchBooksApi(path, options);
+};
+
+// 自分のブックマーク一覧
+export const getUserBookmarks = async (
+  page: number = 1,
+  size: number = DEFAULT_MY_PAGE_SIZE,
+  sort: ReviewSortOrder = DEFAULT_MY_PAGE_SORT
+) => {
+  const path = `/me/bookmarks`;
+  const queryString = buildQueryString({ page, size, sort });
+  const response = await fetchBooksApi<BookmarkPage>(path + queryString);
+  return response.data;
+};
+
+// 自分の追加した特定の書籍のブックマーク
+export const getUserBookmarksByBookId = async (
+  bookId: string,
+  page: number = 1,
+  size: number = DEFAULT_MY_PAGE_SIZE,
+  sort: ReviewSortOrder = DEFAULT_MY_PAGE_SORT
+) => {
+  const path = `/me/bookmarks`;
+  const queryString = buildQueryString({ bookId, page, size, sort });
+  const response = await fetchBooksApi<BookmarkPage>(path + queryString);
+  return response.data;
 };

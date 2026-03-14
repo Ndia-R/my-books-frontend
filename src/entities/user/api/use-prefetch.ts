@@ -1,14 +1,15 @@
-import { CACHE_TIME } from '@/shared/config/cache-time';
-import { userQueryKeys } from '@/entities/user/model/query-keys';
+import { getUserBookmarks } from '@/entities/bookmark/api/bookmarks';
+import { bookmarkQueryKeys } from '@/entities/bookmark/model/query-keys';
+import type { BookmarkPage } from '@/entities/bookmark/model/types';
+import type { FavoritePage } from '@/entities/favorite/model/types';
+import type { ReviewPage } from '@/entities/review/model/types';
 import {
-  getUserBookmarks,
   getUserFavorites,
   getUserProfileCounts,
   getUserReviews,
 } from '@/entities/user/api/users';
-import type { BookmarkPage } from '@/entities/bookmark/model/types';
-import type { FavoritePage } from '@/entities/favorite/model/types';
-import type { ReviewPage } from '@/entities/review/model/types';
+import { userQueryKeys } from '@/entities/user/model/query-keys';
+import { CACHE_TIME } from '@/shared/config/cache-time';
 import { useQueryClient } from '@tanstack/react-query';
 
 export function usePrefetchUser() {
@@ -37,14 +38,14 @@ export function usePrefetchUser() {
   // ユーザーのブックマーク一覧
   const prefetchUserBookmarks = async (page: number) => {
     await queryClient.prefetchQuery({
-      queryKey: userQueryKeys.getUserBookmarks(page),
+      queryKey: bookmarkQueryKeys.getUserBookmarks(page),
       queryFn: () => getUserBookmarks(page),
       staleTime: CACHE_TIME.MEDIUM,
     });
   };
   const prefetchUserBookmarksInfinite = async () => {
     await queryClient.prefetchInfiniteQuery({
-      queryKey: userQueryKeys.getUserBookmarksInfinite(),
+      queryKey: bookmarkQueryKeys.getUserBookmarksInfinite(),
       queryFn: ({ pageParam }) => getUserBookmarks(pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage: BookmarkPage) =>
