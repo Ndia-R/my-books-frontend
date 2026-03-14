@@ -2,6 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(wc -l /workspace/src/components/**/*.tsx)"
+    ],
+    "additionalDirectories": [
+      "/workspace/src/components/ui",
+      "/dev"
     ]
   }
 }

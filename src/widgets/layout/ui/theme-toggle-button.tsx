@@ -1,0 +1,24 @@
+import { Button } from '@/shared/ui/button';
+import { useTheme } from '@/app/providers/theme-provider';
+import { MoonIcon, SunIcon } from 'lucide-react';
+
+export default function ThemeToggleButton() {
+  const { theme, setTheme } = useTheme();
+
+  const handleClick = () => {
+    setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  return (
+    <Button
+      variant="ghost"
+      size="icon"
+      aria-label={
+        theme === 'light' ? 'ダークモードに切り替え' : 'ライトモードに切り替え'
+      }
+      onClick={handleClick}
+    >
+      {theme === 'light' ? <MoonIcon /> : <SunIcon />}
+    </Button>
+  );
+}
