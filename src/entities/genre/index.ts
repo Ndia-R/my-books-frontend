@@ -6,4 +6,5 @@ export type { Genre } from './model/types';
 export { getGenres } from './api/genres';
 
 // ui
+export { default as GenreItem } from './ui/genre-item';
 export { default as GenreList } from './ui/genre-list';

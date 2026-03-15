@@ -1,5 +1,5 @@
 import type { Book } from '@/entities/book/model/types';
-import BookItem from '@/widgets/book-item/ui/book-item';
+import BookItem from '@/entities/book/ui/book-item';
 
 type Props = {
   books: Book[];

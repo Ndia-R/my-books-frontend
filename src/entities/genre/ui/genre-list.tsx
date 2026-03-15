@@ -1,5 +1,5 @@
 import type { Genre } from '@/entities/genre/model/types';
-import GenreItem from '@/widgets/genre-selector/ui/genre-item';
+import GenreItem from '@/entities/genre/ui/genre-item';
 
 type Props = {
   genres: Genre[];

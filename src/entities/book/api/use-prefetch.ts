@@ -8,9 +8,6 @@ import {
   searchBooksByTitleKeyword,
 } from '@/entities/book/api/books';
 import { bookQueryKeys } from '@/entities/book/model/query-keys';
-import { getUserBookmarksByBookId } from '@/entities/bookmark/api/bookmarks';
-import { bookmarkQueryKeys } from '@/entities/bookmark/model/query-keys';
-
 import { CACHE_TIME } from '@/shared/config/cache-time';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -111,11 +108,6 @@ export function usePrefetchBook() {
         queryFn: () =>
           getBookChapterPageContent(bookId, chapterNumber, pageNumber),
         staleTime: CACHE_TIME.FOREVER,
-      }),
-      queryClient.prefetchQuery({
-        queryKey: bookmarkQueryKeys.getUserBookmarksByBookId(bookId),
-        queryFn: () => getUserBookmarksByBookId(bookId),
-        staleTime: CACHE_TIME.MEDIUM,
       }),
     ]);
   };
