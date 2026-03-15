@@ -1,12 +1,12 @@
 import type { ReviewPage, ReviewRequest } from '@/entities/review/model/types';
+import { getCsrfToken } from '@/shared/api/csrf';
 import { fetchBooksApi } from '@/shared/api/fetch';
-import { buildPath, buildQueryString } from '@/shared/api/url-builder';
 import {
   DEFAULT_MY_PAGE_SIZE,
   DEFAULT_MY_PAGE_SORT,
 } from '@/shared/config/constants';
 import type { ReviewSortOrder } from '@/shared/config/sort-orders';
-import { getCsrfToken } from '@/shared/lib/utils';
+import { buildPath, buildQueryString } from '@/shared/lib/url-builder';
 
 // レビュー作成
 export const createReview = async (requestBody: ReviewRequest) => {

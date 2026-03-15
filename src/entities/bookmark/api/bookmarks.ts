@@ -2,14 +2,14 @@ import type {
   BookmarkPage,
   BookmarkRequest,
 } from '@/entities/bookmark/model/types';
+import { getCsrfToken } from '@/shared/api/csrf';
 import { fetchBooksApi } from '@/shared/api/fetch';
-import { buildPath, buildQueryString } from '@/shared/api/url-builder';
 import {
   DEFAULT_MY_PAGE_SIZE,
   DEFAULT_MY_PAGE_SORT,
 } from '@/shared/config/constants';
 import type { ReviewSortOrder } from '@/shared/config/sort-orders';
-import { getCsrfToken } from '@/shared/lib/utils';
+import { buildPath, buildQueryString } from '@/shared/lib/url-builder';
 
 // ブックマーク追加
 export const createBookmark = async (requestBody: BookmarkRequest) => {

@@ -4,8 +4,8 @@ import type {
   UserProfile,
   UserProfileCounts,
 } from '@/entities/user/model/types';
+import { getCsrfToken } from '@/shared/api/csrf';
 import { fetchBooksApi } from '@/shared/api/fetch';
-import { getCsrfToken } from '@/shared/lib/utils';
 
 // 自分のプロフィール情報
 export const getUserProfile = async () => {

@@ -1,5 +1,5 @@
 import { usePrefetchBook } from '@/entities/book';
-import { buildPath } from '@/shared/api/url-builder';
+import { buildPath } from '@/shared/lib/url-builder';
 import { buttonVariants } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { TableOfContentsIcon } from 'lucide-react';

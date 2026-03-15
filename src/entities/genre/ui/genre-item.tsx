@@ -1,6 +1,6 @@
 import type { Genre } from '@/entities/genre/model/types';
-import { buildQueryString } from '@/shared/api/url-builder';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
+import { buildQueryString } from '@/shared/lib/url-builder';
 import { Button } from '@/shared/ui/button';
 import { Link } from 'react-router';
 

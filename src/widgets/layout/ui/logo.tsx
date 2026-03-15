@@ -1,5 +1,5 @@
 import { TITLE_LOGO } from '@/shared/config/constants';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import { buttonVariants } from '@/shared/ui/button';
 import { Link } from 'react-router';
 

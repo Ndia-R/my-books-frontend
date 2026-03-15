@@ -8,7 +8,6 @@ import type {
 import type { FavoriteStats } from '@/entities/favorite';
 import type { ReviewPage } from '@/entities/review';
 import { fetchBooksApi } from '@/shared/api/fetch';
-import { buildPath, buildQueryString } from '@/shared/api/url-builder';
 import {
   DEFAULT_BOOKS_SIZE,
   DEFAULT_BOOKS_SORT,
@@ -19,6 +18,7 @@ import type {
   BookSortOrder,
   ReviewSortOrder,
 } from '@/shared/config/sort-orders';
+import { buildPath, buildQueryString } from '@/shared/lib/url-builder';
 
 // 最新の書籍リスト（１０冊分）
 export const getBooksNewReleases = async () => {

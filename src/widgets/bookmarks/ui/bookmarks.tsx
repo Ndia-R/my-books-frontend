@@ -10,7 +10,7 @@ import {
   type BookmarkUpdateParams,
 } from '@/entities/bookmark';
 import { BookmarkUpdateDialog } from '@/features/bookmark';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import {

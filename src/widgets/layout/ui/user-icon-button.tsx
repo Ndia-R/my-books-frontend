@@ -2,7 +2,7 @@ import { useAuth, usePrefetchUser } from '@/entities/user';
 import { AVATAR_IMAGE_BASE_URL } from '@/shared/config/constants';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
 import {

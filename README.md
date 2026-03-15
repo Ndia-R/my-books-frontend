@@ -1,166 +1,141 @@
 # My Books
 
-React 19 + TypeScript + Vite で構築された日本語の書籍発見・読書プラットフォーム。
+React 19 + TypeScript + Vite で構築された日本語の書籍発見・読書プラットフォームのフロントエンドです。
 
-## 概要
+## 主な機能
 
-My Booksは、書籍の閲覧、レビュー、お気に入り、しおり機能を提供する認証済みユーザー向けWebアプリケーションです。
-
-### 主な機能
-
-- 📚 書籍の検索・閲覧（タイトル検索、ジャンル検索）
-- 📖 オンライン読書インターフェース（目次、ページ送り）
-- ⭐ レビューの投稿・閲覧・管理
-- ❤️ お気に入り登録
-- 🔖 しおり機能
-- 👤 ユーザープロフィール管理
-- 🌓 ダークモード対応
-- 🎨 カスタムテーマカラー
+- 書籍の検索・閲覧（タイトル検索、ジャンル検索、ランキング、特集）
+- オンライン読書インターフェース（目次、ページ送り）
+- レビューの投稿・閲覧・管理
+- お気に入り登録
+- しおり機能
+- ユーザープロフィール管理
+- ダークモード対応・カスタムテーマカラー
 
 ## 技術スタック
 
-### コア
+| カテゴリ         | ライブラリ                     |
+| ---------------- | ------------------------------ |
+| UI               | React 19, TypeScript           |
+| ビルド           | Vite                           |
+| ルーティング     | React Router v7                |
+| サーバー状態管理 | TanStack Query v5              |
+| スタイリング     | Tailwind CSS v4, Radix UI, CVA |
+| アニメーション   | Motion                         |
+| テーマ           | next-themes                    |
+| アイコン         | Lucide React                   |
+| 通知             | Sonner                         |
 
-- **React 19** - UIライブラリ
-- **TypeScript** - 型安全性
-- **Vite** - 高速なビルドツール
-- **React Router v7** - ルーティング
-
-### 状態管理・データフェッチ
-
-- **TanStack Query v5** - サーバー状態管理
-- **Context API** - クライアント状態管理（認証、テーマ）
-
-### UI・スタイリング
-
-- **Tailwind CSS v4** - ユーティリティファーストCSS
-- **Radix UI** - アクセシブルなヘッドレスコンポーネント
-- **CVA** - バリアント管理
-- **Motion** - アニメーション
-- **Lucide React** - アイコン
-- **next-themes** - テーマ管理
-
-### その他
-
-- **React Compiler** - 自動パフォーマンス最適化
-- **Prettier** - コードフォーマッター（Tailwindクラス並び替え対応）
-
-## 開発環境のセットアップ
+## セットアップ
 
 ### 必要要件
 
-- Node.js 18以上
-- npm または yarn
+- Node.js 18 以上
 
 ### インストール
 
 ```bash
-# 依存関係のインストール
 npm install
-
-# 開発サーバーの起動
 npm run dev
-
-# 本番用ビルド
-npm run build
-
-# ビルドのプレビュー
-npm run preview
-
-# コードのLint
-npm run lint
-
-# コードのフォーマット
-npx prettier --write .
 ```
 
-### 環境変数
+## スクリプト
 
-プロジェクトルートに`.env`ファイルを作成し、`.env.example`を参考に以下の環境変数を設定してください。
+```bash
+npm run dev      # 開発サーバー起動
+npm run build    # 型チェック + 本番ビルド
+npm run preview  # ビルド結果のプレビュー
+npm run lint     # ESLint
+npx prettier --write .  # コードフォーマット
+```
+
+## 環境変数
+
+`.env.example` を参照して、`.env.development` または `.env.production` を作成します。
 
 ```env
-# APIサーバーのベースURL
 VITE_BASE_URL=http://localhost:8080
-
-# アプリケーションのベースパス（通常は変更不要）
 VITE_APP_BASE_PATH=/my-books
 ```
 
-## プロジェクト構造
+## ディレクトリ構成（FSD）
 
-このプロジェクトは、Next.js App Routerの規約にヒントを得たディレクトリ構造を採用していますが、ルーティングはVite環境で一般的な `react-router` による手動定義で行っています。
+このプロジェクトは **Feature-Sliced Design (FSD)** に基づいて構成されています。
 
 ```
-/src
-├── app/                # ページコンポーネント（Next.js App Router風）
-│   ├── layout.tsx     # ルートレイアウト
-│   ├── page.tsx       # 各ページコンポーネント
-│   ├── [feature]/     # 機能別ディレクトリ
-│   │   └── page.tsx   # ページファイル
-│   └── [param]/       # 動的ルート（例: [bookId]）
-├── routes/            # ルーティング設定
-│   ├── route.tsx      # React Routerのルート定義
-│   └── protected-route.tsx # 認証保護
-├── components/        # 機能別に整理されたReactコンポーネント
-│   ├── books/        # 書籍検索、詳細、読書インターフェース
-│   ├── bookmarks/    # しおり管理
-│   ├── favorites/    # お気に入りUI
-│   ├── reviews/      # レビュー作成・表示
-│   ├── layout/       # Header, Footer, Menu
-│   └── ui/           # 再利用可能なベースUIコンポーネント
-├── constants/        # アプリ定数、クエリキー、ソートタイプ
-├── hooks/            # カスタムフック
-├── lib/
-│   ├── api/         # ドメイン別APIクライアント関数
-│   └── utils.ts     # ユーティリティ関数
-├── providers/       # コンテキストプロバイダー（認証、テーマ）
-└── types/           # アプリケーションで使用される型定義
+src/
+  app/        # アプリの初期化・ルーティング・全体設定
+  pages/      # 画面単位のコンポーネント（20画面）
+  widgets/    # 画面を構成する中規模UIブロック（13種）
+  features/   # ユーザーの目的に直結する機能（5種）
+  entities/   # ドメインエンティティ（6種）
+  shared/     # 共有UI・ユーティリティ・設定
 ```
 
-**ディレクトリ・ルーティング規約**:
-- `app/` - ページコンポーネントを配置します（Next.js App Router風）。
-- `routes/` - `react-router` のルート定義を手動で行います。ファイルベースの自動ルーティングは行われません。
+### 各レイヤーの内容
+
+**pages/** — 画面コンポーネント
+
+| パス                               | 画面           | 認証       |
+| ---------------------------------- | -------------- | ---------- |
+| `/`                                | ホーム         | 不要       |
+| `/search`                          | 書籍検索       | 不要       |
+| `/discover`                        | ジャンル検索   | 不要       |
+| `/ranking`                         | ランキング     | 不要       |
+| `/special-features`                | 特集           | 不要       |
+| `/books/:bookId`                   | 書籍詳細       | 不要       |
+| `/books/:bookId/table-of-contents` | 目次           | 不要       |
+| `/read-preview/:bookId/...`        | プレビュー閲覧 | 不要       |
+| `/settings`                        | 設定           | 不要       |
+| `/favorites`                       | お気に入り     | 必要       |
+| `/profile`                         | プロフィール   | 必要       |
+| `/bookmarks`                       | しおり         | プレミアム |
+| `/my-reviews`                      | マイレビュー   | プレミアム |
+| `/read-content/:bookId/...`        | 読書           | プレミアム |
+
+**widgets/** — `book-detail`, `book-discovery`, `book-reviews`, `book-toc`, `book-reading`, `bookmarks`, `favorites`, `genres`, `my-reviews`, `settings`, `user-profile`, `layout`
+
+**features/** — `book-search`（検索・ページネーション）, `review`（レビューCRUD）, `favorite-toggle`, `bookmark`, `profile`
+
+**entities/** — `book`, `review`, `user`, `favorite`, `bookmark`, `genre`（各エンティティにAPI・型・UIを内包）
+
+**shared/** — `ui/`（Button, Dialog, Card等20種以上）, `lib/`（ユーティリティ）, `hooks/`, `api/`（HTTPクライアント）, `config/`（定数・設定）
 
 ## コーディング規約
 
 ### URL構築
 
-セキュリティとメンテナンス性のため、URL構築にはヘルパー関数を使用してください：
+セキュリティとメンテナンス性のため、URL構築にはヘルパー関数を使用します。
 
 ```typescript
-// クエリ文字列の構築
+// クエリ文字列の構築（自動エンコード、undefined/null除外）
 const queryString = buildQueryString({ q: '本', page: 1, size: 20 });
 
-// パスパラメータの構築
+// パスパラメータの構築（自動エンコード、必須パラメータ検証）
 const path = buildPath('/books/:bookId/reviews', { bookId });
 
 // 組み合わせ
 const response = await fetchBooksApi<ReviewPage>(path + queryString);
 ```
 
-### 変数命名
-
-- URLパスを格納する変数は `path` を使用（`endpoint` ではない）
-- クエリ文字列を格納する変数は `queryString` を使用
-
 ### データフェッチ
 
-- サーバー状態管理には TanStack Query の `useSuspenseQuery` を使用
-- ローディング/エラー状態は Suspense + Error Boundary で処理
-- 無限スクロールには `useSuspenseInfiniteQuery` を使用
+```typescript
+// Suspenseパターン（推奨）
+const { data } = useSuspenseQuery({
+  queryKey: queryKeys.getBookDetail(bookId),
+  queryFn: () => fetchBookDetail(bookId),
+});
 
-## ドキュメント
+// ローディング/エラー状態は Suspense + Error Boundary で処理
+<ErrorBoundary fallback={<ErrorElement />}>
+  <Suspense fallback={<SkeletonLoader />}>
+    <DataComponent />
+  </Suspense>
+</ErrorBoundary>
+```
 
-詳細な開発ガイドは [CLAUDE.md](./CLAUDE.md) を参照してください。以下の情報が含まれています：
+## 開発ガイド
 
-- アーキテクチャ詳細
-- TanStack Queryのパターン
-- 認証フロー
-- API統合方法
-- ユーティリティ関数リファレンス
-- コンポーネントパターン
-- ベストプラクティス
-
-## ライセンス
-
-このプロジェクトはプライベートプロジェクトです。
+- FSDのルールは `docs/fsd-guidelines.md` を参照してください。
+- 詳細な開発情報（APIパターン、認証フロー、コンポーネント実装例等）は `CLAUDE.md` に記載しています。

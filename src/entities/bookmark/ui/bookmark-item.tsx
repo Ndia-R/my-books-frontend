@@ -1,5 +1,4 @@
 import type { Bookmark } from '@/entities/bookmark/model/types';
-import { buildPath } from '@/shared/api/url-builder';
 import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
 import {
   chapterNumberString,
@@ -7,6 +6,7 @@ import {
   formatRelativeTime,
   formatTime,
 } from '@/shared/lib/format';
+import { buildPath } from '@/shared/lib/url-builder';
 import { Card, CardContent } from '@/shared/ui/card';
 import type { ReactNode } from 'react';
 import { Link } from 'react-router';

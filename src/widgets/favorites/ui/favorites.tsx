@@ -9,7 +9,7 @@ import {
 } from '@/entities/favorite';
 import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import {

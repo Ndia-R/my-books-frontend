@@ -9,7 +9,7 @@ import {
   DEFAULT_AVATAR_PATH,
   TOAST_ERROR_DURATION,
 } from '@/shared/config/constants';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import { Button, buttonVariants } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Input } from '@/shared/ui/input';

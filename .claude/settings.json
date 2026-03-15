@@ -11,11 +11,11 @@
       "Bash(for widget:*)",
       "Read(//workspace/src/widgets/**)",
       "Bash(/tmp/circular_dep_analysis.txt:*)",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(ls -la /workspace/src/entities/*/)",
+      "Bash(wc -l /workspace/src/entities/*/model/*.ts /workspace/src/entities/*/api/*.ts)",
+      "Read(//workspace/{depth=NF-4; if \\(depth==0\\) print \"\"\"\"\"\"\"\"shared/\"\"\"\"\"\"\"\"; else printf \"\"\"\"\"\"\"\"%s%s/**)"
     ],
-    "additionalDirectories": [
-      "/workspace/src/components/ui",
-      "/dev"
-    ]
+    "additionalDirectories": ["/workspace/src/components/ui", "/dev"]
   }
 }

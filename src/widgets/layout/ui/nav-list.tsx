@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import type { MenuItem } from '@/shared/ui/types';
 import NavigateLink from '@/widgets/layout/ui/navigate-link';
 import { AwardIcon, ChartLineIcon, SettingsIcon, TagIcon } from 'lucide-react';

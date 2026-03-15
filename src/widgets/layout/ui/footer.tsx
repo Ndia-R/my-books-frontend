@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import { buttonVariants } from '@/shared/ui/button';
 import type { MenuItem } from '@/shared/ui/types';
 import Logo from '@/widgets/layout/ui/logo';

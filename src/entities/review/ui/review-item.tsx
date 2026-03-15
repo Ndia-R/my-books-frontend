@@ -37,13 +37,13 @@ export default function ReviewItem({ review, isOwnReview, action }: Props) {
             )}
           </div>
           <div className="flex flex-col gap-y-1">
-            <p className="-mb-1 leading-8 font-semibold">{review.displayName}</p>
+            <p className="-mb-1 leading-8 font-semibold">
+              {review.displayName}
+            </p>
             <div className="flex items-center">
               <time
                 className="text-muted-foreground mr-2 text-sm"
-                dateTime={
-                  Date.parse(review.updatedAt) ? review.updatedAt : ''
-                }
+                dateTime={Date.parse(review.updatedAt) ? review.updatedAt : ''}
                 title={`${formatDateJP(review.updatedAt)} ${formatTime(review.updatedAt)}`}
               >
                 {formatRelativeTime(review.updatedAt)}

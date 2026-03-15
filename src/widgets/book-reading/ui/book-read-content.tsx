@@ -12,8 +12,8 @@ import {
   type BookmarkPage,
 } from '@/entities/bookmark';
 import { APP_TITLE } from '@/shared/config/constants';
+import { cn } from '@/shared/lib/cn';
 import { chapterNumberString } from '@/shared/lib/format';
-import { cn } from '@/shared/lib/utils';
 import BookReadBookmarkButton from '@/widgets/book-reading/ui/book-read-bookmark-button';
 import BookReadNavigation from '@/widgets/book-reading/ui/book-read-navigation';
 import BookReadPaywall from '@/widgets/book-reading/ui/book-read-paywall';

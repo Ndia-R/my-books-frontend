@@ -6,10 +6,10 @@ import {
 } from '@/entities/book';
 import { GenreList } from '@/entities/genre';
 import { FavoriteCountIcon } from '@/features/favorite-toggle';
-import { buildPath } from '@/shared/api/url-builder';
 import { APP_TITLE, BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
+import { cn } from '@/shared/lib/cn';
 import { formatDateJP, formatIsbn, formatPrice } from '@/shared/lib/format';
-import { cn } from '@/shared/lib/utils';
+import { buildPath } from '@/shared/lib/url-builder';
 import { buttonVariants } from '@/shared/ui/button';
 import Rating from '@/shared/ui/rating';
 import { useSuspenseQuery } from '@tanstack/react-query';

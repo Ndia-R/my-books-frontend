@@ -1,10 +1,10 @@
 import { APP_TITLE } from '@/shared/config/constants';
+import { cn } from '@/shared/lib/cn';
 import {
   type BaseFont,
   type TitleFont,
   useTheme,
 } from '@/shared/lib/theme-context';
-import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Hero, Logo } from '@/widgets/layout';

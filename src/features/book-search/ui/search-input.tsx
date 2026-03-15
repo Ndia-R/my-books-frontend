@@ -1,5 +1,5 @@
 import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
-import { buildQueryString } from '@/shared/api/url-builder';
+import { buildQueryString } from '@/shared/lib/url-builder';
 import { Button } from '@/shared/ui/button';
 import { Input } from '@/shared/ui/input';
 import { Search } from 'lucide-react';

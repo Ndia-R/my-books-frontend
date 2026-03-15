@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import { StarHalfIcon, StarIcon } from 'lucide-react';
 import { useState } from 'react';
 

@@ -1,11 +1,11 @@
 import type { Review } from '@/entities/review/model/types';
-import { buildPath } from '@/shared/api/url-builder';
 import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
 import {
   formatDateJP,
   formatRelativeTime,
   formatTime,
 } from '@/shared/lib/format';
+import { buildPath } from '@/shared/lib/url-builder';
 import { Card, CardContent } from '@/shared/ui/card';
 import Rating from '@/shared/ui/rating';
 import type { ReactNode } from 'react';

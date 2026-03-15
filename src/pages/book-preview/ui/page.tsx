@@ -1,12 +1,12 @@
+import { useAuth } from '@/entities/user';
+import { SubscriptionPlan } from '@/shared/config/subscription-plans';
+import { buildPath } from '@/shared/lib/url-builder';
+import ErrorElement from '@/shared/ui/error-element';
 import {
   BookReadBackground,
   BookReadContent,
   BookReadContentSkeleton,
 } from '@/widgets/book-reading';
-import ErrorElement from '@/shared/ui/error-element';
-import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import { buildPath } from '@/shared/api/url-builder';
-import { useAuth } from '@/entities/user';
 import { Suspense, useEffect } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useNavigate, useParams } from 'react-router';

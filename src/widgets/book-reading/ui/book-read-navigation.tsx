@@ -1,6 +1,6 @@
 import { usePrefetchBook, type BookToc } from '@/entities/book';
-import { buildPath } from '@/shared/api/url-builder';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
+import { buildPath } from '@/shared/lib/url-builder';
 import { buttonVariants } from '@/shared/ui/button';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useEffect } from 'react';

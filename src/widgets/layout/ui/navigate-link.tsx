@@ -1,4 +1,4 @@
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import type { HTMLAttributes } from 'react';
 import { Link } from 'react-router';
 

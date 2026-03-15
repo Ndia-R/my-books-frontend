@@ -2,9 +2,9 @@ import { usePrefetchBook } from '@/entities/book/api/use-prefetch';
 import type { Book } from '@/entities/book/model/types';
 import AverageRatingIcon from '@/entities/book/ui/average-rating-icon';
 import ReviewCountIcon from '@/entities/book/ui/review-count-icon';
-import { buildPath } from '@/shared/api/url-builder';
 import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
 import { formatDateJP } from '@/shared/lib/format';
+import { buildPath } from '@/shared/lib/url-builder';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Link } from 'react-router';
 

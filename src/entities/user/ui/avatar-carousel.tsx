@@ -1,11 +1,8 @@
+import SwipeArea from '@/entities/user/ui/swipe-area';
+import { AVATAR_IMAGE_BASE_URL, AVATAR_PATHS } from '@/shared/config/constants';
+import { cn } from '@/shared/lib/cn';
 import { Avatar, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
-import SwipeArea from '@/entities/user/ui/swipe-area';
-import {
-  AVATAR_IMAGE_BASE_URL,
-  AVATAR_PATHS,
-} from '@/shared/config/constants';
-import { cn } from '@/shared/lib/utils';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { useRef, useState } from 'react';
 

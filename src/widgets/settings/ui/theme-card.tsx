@@ -1,10 +1,10 @@
 import { useRipple } from '@/shared/hooks/use-ripple';
+import { cn } from '@/shared/lib/cn';
 import type {
   BaseFont,
   ThemeColor,
   TitleFont,
 } from '@/shared/lib/theme-context';
-import { cn } from '@/shared/lib/utils';
 import { Card, CardContent } from '@/shared/ui/card';
 import React from 'react';
 

@@ -7,7 +7,7 @@ import { APP_TITLE, TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
 import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import { Badge } from '@/shared/ui/badge';
 import { Button } from '@/shared/ui/button';
 import {

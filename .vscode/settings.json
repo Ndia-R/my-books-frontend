@@ -18,7 +18,7 @@
 
   // ファイル保存時
   "editor.codeActionsOnSave": {
-    "source.organizeImports": "explicit", // 未使用のimport文を削除し、import文の順番を並べ替え
+    "source.organizeImports": "explicit" // 未使用のimport文を削除し、import文の順番を並べ替え
   },
 
   // 改行コードの規定値

@@ -1,3 +1,8 @@
+import {
+  CONFIRM_DIALOG_EVENT,
+  type ConfirmDialogOptions,
+} from '@/shared/hooks/use-confirm-dialog';
+import { cn } from '@/shared/lib/cn';
 import { Button } from '@/shared/ui/button';
 import {
   Dialog,
@@ -8,11 +13,6 @@ import {
   DialogTitle,
 } from '@/shared/ui/dialog';
 import { Textarea } from '@/shared/ui/textarea';
-import {
-  CONFIRM_DIALOG_EVENT,
-  type ConfirmDialogOptions,
-} from '@/shared/hooks/use-confirm-dialog';
-import { cn } from '@/shared/lib/utils';
 import {
   AlertTriangleIcon,
   CheckCircle2Icon,

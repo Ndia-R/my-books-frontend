@@ -1,6 +1,6 @@
 import { useAuth } from '@/entities/user';
 import { APP_TITLE, AVATAR_IMAGE_BASE_URL } from '@/shared/config/constants';
-import { cn } from '@/shared/lib/utils';
+import { cn } from '@/shared/lib/cn';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button, buttonVariants } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
