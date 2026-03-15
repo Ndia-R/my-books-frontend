@@ -5,9 +5,15 @@ type Props = {
   genres: Genre[];
   activeIds?: number[];
   onClick?: (genreId: number) => void;
+  onItemPrefetch?: (genre: Genre) => void;
 };
 
-export default function GenreList({ genres, activeIds, onClick }: Props) {
+export default function GenreList({
+  genres,
+  activeIds,
+  onClick,
+  onItemPrefetch,
+}: Props) {
   return (
     <ul className="flex flex-wrap gap-1">
       {genres.map((genre) => (
@@ -16,6 +22,9 @@ export default function GenreList({ genres, activeIds, onClick }: Props) {
             genre={genre}
             isActive={activeIds?.includes(genre.id)}
             onClick={onClick}
+            onPrefetch={
+              onItemPrefetch ? () => onItemPrefetch(genre) : undefined
+            }
           />
         </li>
       ))}

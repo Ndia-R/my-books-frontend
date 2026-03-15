@@ -1,5 +1,7 @@
+import { usePrefetchBook } from '@/entities/book';
 import {
   BookmarkList,
+  bookmarkQueryKeys,
   deleteBookmark,
   getUserBookmarks,
   updateBookmark,
@@ -7,8 +9,7 @@ import {
   type BookmarkPage,
   type BookmarkUpdateParams,
 } from '@/entities/bookmark';
-import BookmarkUpdateDialog from '@/features/bookmark/ui/bookmark-update-dialog';
-import { queryKeys } from '@/shared/lib/query-keys';
+import { BookmarkUpdateDialog } from '@/features/bookmark';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
@@ -27,10 +28,10 @@ function BookmarkEditAction({ bookmark }: { bookmark: Bookmark }) {
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.getUserBookmarksInfinite(),
+      queryKey: bookmarkQueryKeys.getUserBookmarksInfinite(),
     });
     queryClient.invalidateQueries({
-      queryKey: queryKeys.getUserBookmarksByBookId(bookmark.book.id),
+      queryKey: bookmarkQueryKeys.getUserBookmarksByBookId(bookmark.book.id),
     });
   };
 
@@ -79,7 +80,7 @@ function BookmarkEditAction({ bookmark }: { bookmark: Bookmark }) {
 export default function Bookmarks() {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useSuspenseInfiniteQuery({
-      queryKey: queryKeys.getUserBookmarksInfinite(),
+      queryKey: bookmarkQueryKeys.getUserBookmarksInfinite(),
       queryFn: ({ pageParam }) => getUserBookmarks(pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage: BookmarkPage) =>
@@ -88,6 +89,8 @@ export default function Bookmarks() {
 
   const totalItems = data.pages[0].totalItems;
   const bookmarks = data.pages.flatMap((page) => page.data);
+
+  const { prefetchBookReadContent } = usePrefetchBook();
 
   const { ref, inView } = useInView();
   useEffect(() => {
@@ -105,6 +108,13 @@ export default function Bookmarks() {
 
       <BookmarkList
         bookmarks={bookmarks}
+        onItemPrefetch={(bookmark) =>
+          prefetchBookReadContent(
+            bookmark.book.id,
+            bookmark.chapterNumber,
+            bookmark.pageNumber
+          )
+        }
         renderAction={(bookmark) => <BookmarkEditAction bookmark={bookmark} />}
       />
 

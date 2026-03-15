@@ -1,7 +1,6 @@
 import type { Bookmark } from '@/entities/bookmark/model/types';
 import { buildPath } from '@/shared/api/url-builder';
 import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
-import usePrefetch from '@/shared/hooks/use-prefetch';
 import {
   chapterNumberString,
   formatDateJP,
@@ -15,19 +14,10 @@ import { Link } from 'react-router';
 type Props = {
   bookmark: Bookmark;
   action?: ReactNode;
+  onPrefetch?: () => void;
 };
 
-export default function BookmarkItem({ bookmark, action }: Props) {
-  const { prefetchBookReadContent } = usePrefetch();
-
-  const handlePrefetch = async () => {
-    await prefetchBookReadContent(
-      bookmark.book.id,
-      bookmark.chapterNumber,
-      bookmark.pageNumber
-    );
-  };
-
+export default function BookmarkItem({ bookmark, action, onPrefetch }: Props) {
   const bookReadPath = buildPath(
     '/read-content/:bookId/chapter/:chapterNumber/page/:pageNumber',
     {
@@ -46,8 +36,8 @@ export default function BookmarkItem({ bookmark, action }: Props) {
               className="size-fit"
               to={bookReadPath}
               aria-label={`${bookmark.book.title}のブックマークページへ移動`}
-              onMouseEnter={handlePrefetch}
-              onFocus={handlePrefetch}
+              onMouseEnter={onPrefetch}
+              onFocus={onPrefetch}
             >
               <img
                 className="h-24 rounded-xs object-cover sm:h-28"
@@ -64,8 +54,8 @@ export default function BookmarkItem({ bookmark, action }: Props) {
                   className="size-fit"
                   to={bookReadPath}
                   aria-label={`${bookmark.book.title}のブックマークページへ移動`}
-                  onMouseEnter={handlePrefetch}
-                  onFocus={handlePrefetch}
+                  onMouseEnter={onPrefetch}
+                  onFocus={onPrefetch}
                 >
                   <h2 className="hover:text-primary text-lg leading-8 font-semibold sm:text-xl">
                     {bookmark.book.title}

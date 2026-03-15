@@ -1,4 +1,4 @@
-import FavoriteListSkeleton from '@/entities/favorite/ui/favorite-list-skeleton';
+import { FavoriteListSkeleton } from '@/entities/favorite';
 
 export default function FavoritesSkeleton() {
   return (

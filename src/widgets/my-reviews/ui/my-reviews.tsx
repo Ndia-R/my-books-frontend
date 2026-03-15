@@ -1,14 +1,15 @@
+import { usePrefetchBook } from '@/entities/book';
 import {
   deleteReview,
   getUserReviews,
   MyReviewList,
+  reviewQueryKeys,
   updateReview,
   type Review,
   type ReviewPage,
   type ReviewUpdateParams,
 } from '@/entities/review';
-import ReviewUpdateDialog from '@/features/review/ui/review-update-dialog';
-import { queryKeys } from '@/shared/lib/query-keys';
+import { ReviewUpdateDialog } from '@/features/review';
 import { Button } from '@/shared/ui/button';
 import {
   useMutation,
@@ -25,7 +26,7 @@ function ReviewEditAction({ review }: { review: Review }) {
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.getUserReviewsInfinite(),
+      queryKey: reviewQueryKeys.getUserReviewsInfinite(),
     });
   };
 
@@ -65,7 +66,7 @@ function ReviewEditAction({ review }: { review: Review }) {
 export default function MyReviews() {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useSuspenseInfiniteQuery({
-      queryKey: queryKeys.getUserReviewsInfinite(),
+      queryKey: reviewQueryKeys.getUserReviewsInfinite(),
       queryFn: ({ pageParam }) => getUserReviews(pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage: ReviewPage) =>
@@ -74,6 +75,8 @@ export default function MyReviews() {
 
   const totalItems = data.pages[0].totalItems;
   const reviews = data.pages.flatMap((page) => page.data);
+
+  const { prefetchBookDetail } = usePrefetchBook();
 
   const { ref, inView } = useInView();
   useEffect(() => {
@@ -91,6 +94,7 @@ export default function MyReviews() {
 
       <MyReviewList
         reviews={reviews}
+        onItemPrefetch={(review) => prefetchBookDetail(review.book.id)}
         renderAction={(review) => <ReviewEditAction review={review} />}
       />
 

@@ -1,5 +1,5 @@
+import { usePrefetchBook } from '@/entities/book';
 import { buildPath } from '@/shared/api/url-builder';
-import usePrefetch from '@/shared/hooks/use-prefetch';
 import { buttonVariants } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
 import { TableOfContentsIcon } from 'lucide-react';
@@ -10,7 +10,7 @@ type Props = {
 };
 
 export default function BookReadTocButton({ bookId }: Props) {
-  const { prefetchBookToc } = usePrefetch();
+  const { prefetchBookToc } = usePrefetchBook();
 
   const handlePrefetch = async () => {
     await prefetchBookToc(bookId);

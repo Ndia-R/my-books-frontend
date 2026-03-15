@@ -1,5 +1,5 @@
 import { useAuth } from '@/entities/user';
-import SearchInput from '@/features/book-search/ui/search-input';
+import { SearchInput } from '@/features/book-search';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import Menu from '@/widgets/layout/ui/menu';

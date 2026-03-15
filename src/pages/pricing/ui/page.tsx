@@ -1,6 +1,8 @@
-import { useAuth } from '@/entities/user';
-import { updateSubscriptionPlan } from '@/entities/user/api/users';
-import type { UpdateSubscriptionPlan } from '@/entities/user/model/types';
+import {
+  updateSubscriptionPlan,
+  useAuth,
+  type UpdateSubscriptionPlan,
+} from '@/entities/user';
 import { APP_TITLE, TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';

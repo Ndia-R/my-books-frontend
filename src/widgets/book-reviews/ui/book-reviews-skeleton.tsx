@@ -1,4 +1,4 @@
-import ReviewListSkeleton from '@/entities/review/ui/review-list-skeleton';
+import { ReviewListSkeleton } from '@/entities/review';
 import { Skeleton } from '@/shared/ui/skeleton';
 
 export default function BookReviewsSkeleton() {

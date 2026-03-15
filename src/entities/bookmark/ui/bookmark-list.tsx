@@ -5,9 +5,14 @@ import type { ReactNode } from 'react';
 type Props = {
   bookmarks: Bookmark[];
   renderAction?: (bookmark: Bookmark) => ReactNode;
+  onItemPrefetch?: (bookmark: Bookmark) => void;
 };
 
-export default function BookmarkList({ bookmarks, renderAction }: Props) {
+export default function BookmarkList({
+  bookmarks,
+  renderAction,
+  onItemPrefetch,
+}: Props) {
   return (
     <ul className="flex flex-col gap-y-2">
       {bookmarks.map((bookmark) => (
@@ -16,6 +21,9 @@ export default function BookmarkList({ bookmarks, renderAction }: Props) {
             <BookmarkItem
               bookmark={bookmark}
               action={renderAction?.(bookmark)}
+              onPrefetch={
+                onItemPrefetch ? () => onItemPrefetch(bookmark) : undefined
+              }
             />
           </article>
         </li>

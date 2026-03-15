@@ -1,4 +1,4 @@
-import BookmarkListSkeleton from '@/entities/bookmark/ui/bookmark-list-skeleton';
+import { BookmarkListSkeleton } from '@/entities/bookmark';
 
 export default function BookmarksSkeleton() {
   return (

@@ -1,13 +1,14 @@
+import { usePrefetchBook } from '@/entities/book';
 import {
   deleteFavoriteByBookId,
   FavoriteList,
+  favoriteQueryKeys,
   getUserFavorites,
   type Favorite,
   type FavoritePage,
 } from '@/entities/favorite';
 import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
-import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
@@ -26,7 +27,7 @@ function FavoriteDeleteAction({ favorite }: { favorite: Favorite }) {
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.getUserFavoritesInfinite(),
+      queryKey: favoriteQueryKeys.getUserFavoritesInfinite(),
     });
   };
 
@@ -81,7 +82,7 @@ function FavoriteDeleteAction({ favorite }: { favorite: Favorite }) {
 export default function Favorites() {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useSuspenseInfiniteQuery({
-      queryKey: queryKeys.getUserFavoritesInfinite(),
+      queryKey: favoriteQueryKeys.getUserFavoritesInfinite(),
       queryFn: ({ pageParam }) => getUserFavorites(pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage: FavoritePage) =>
@@ -90,6 +91,8 @@ export default function Favorites() {
 
   const totalItems = data.pages[0].totalItems;
   const favorites = data.pages.flatMap((page) => page.data);
+
+  const { prefetchBookDetail } = usePrefetchBook();
 
   const { ref, inView } = useInView();
   useEffect(() => {
@@ -107,6 +110,7 @@ export default function Favorites() {
 
       <FavoriteList
         favorites={favorites}
+        onItemPrefetch={(favorite) => prefetchBookDetail(favorite.book.id)}
         renderAction={(favorite) => (
           <FavoriteDeleteAction favorite={favorite} />
         )}

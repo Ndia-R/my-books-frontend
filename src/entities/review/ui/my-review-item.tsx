@@ -1,7 +1,6 @@
 import type { Review } from '@/entities/review/model/types';
 import { buildPath } from '@/shared/api/url-builder';
 import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
-import usePrefetch from '@/shared/hooks/use-prefetch';
 import {
   formatDateJP,
   formatRelativeTime,
@@ -15,15 +14,10 @@ import { Link } from 'react-router';
 type Props = {
   review: Review;
   action?: ReactNode;
+  onPrefetch?: () => void;
 };
 
-export default function MyReviewItem({ review, action }: Props) {
-  const { prefetchBookDetail } = usePrefetch();
-
-  const handlePrefetch = async () => {
-    await prefetchBookDetail(review.book.id);
-  };
-
+export default function MyReviewItem({ review, action, onPrefetch }: Props) {
   const bookDetailPath = buildPath('/books/:bookId', {
     bookId: review.book.id,
   });
@@ -37,8 +31,8 @@ export default function MyReviewItem({ review, action }: Props) {
               className="size-fit"
               to={bookDetailPath}
               aria-label={`${review.book.title}の詳細ページへ移動`}
-              onMouseEnter={handlePrefetch}
-              onFocus={handlePrefetch}
+              onMouseEnter={onPrefetch}
+              onFocus={onPrefetch}
             >
               <img
                 className="h-24 rounded-xs object-cover sm:h-28"
@@ -54,8 +48,8 @@ export default function MyReviewItem({ review, action }: Props) {
                 className="size-fit"
                 to={bookDetailPath}
                 aria-label={`${review.book.title}の詳細ページへ移動`}
-                onMouseEnter={handlePrefetch}
-                onFocus={handlePrefetch}
+                onMouseEnter={onPrefetch}
+                onFocus={onPrefetch}
               >
                 <h2 className="hover:text-primary text-lg leading-8 font-semibold sm:text-xl">
                   {review.book.title}
@@ -64,9 +58,7 @@ export default function MyReviewItem({ review, action }: Props) {
 
               <time
                 className="text-muted-foreground mr-1 text-sm"
-                dateTime={
-                  Date.parse(review.updatedAt) ? review.updatedAt : ''
-                }
+                dateTime={Date.parse(review.updatedAt) ? review.updatedAt : ''}
                 title={`${formatDateJP(review.updatedAt)} ${formatTime(review.updatedAt)}`}
               >
                 {formatRelativeTime(review.updatedAt)}

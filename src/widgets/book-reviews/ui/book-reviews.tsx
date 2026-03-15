@@ -1,21 +1,20 @@
-import { getBookReviews } from '@/entities/book/api/books';
+import { bookQueryKeys, getBookReviews } from '@/entities/book';
 import {
+  createReview,
   deleteReview,
   isReviewedByUser,
   ReviewList,
+  reviewQueryKeys,
   updateReview,
   type Review,
   type ReviewPage,
   type ReviewRequest,
   type ReviewUpdateParams,
 } from '@/entities/review';
-import { createReview } from '@/entities/review/api/reviews';
 import { useAuth } from '@/entities/user';
-import ReviewCreateDialog from '@/features/review/ui/review-create-dialog';
-import ReviewUpdateDialog from '@/features/review/ui/review-update-dialog';
+import { ReviewCreateDialog, ReviewUpdateDialog } from '@/features/review';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import { queryKeys } from '@/shared/lib/query-keys';
 import { Button } from '@/shared/ui/button';
 import {
   useMutation,
@@ -36,13 +35,13 @@ function ReviewEditAction({ review }: { review: Review }) {
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.getBookReviewsInfinite(review.book.id),
+      queryKey: bookQueryKeys.getBookReviewsInfinite(review.book.id),
     });
     queryClient.invalidateQueries({
-      queryKey: queryKeys.isReviewedByUser(review.book.id),
+      queryKey: reviewQueryKeys.isReviewedByUser(review.book.id),
     });
     queryClient.invalidateQueries({
-      queryKey: queryKeys.getBookDetails(review.book.id),
+      queryKey: bookQueryKeys.getBookDetails(review.book.id),
     });
   };
 
@@ -82,7 +81,7 @@ function ReviewEditAction({ review }: { review: Review }) {
 export default function BookReviews({ bookId }: Props) {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useSuspenseInfiniteQuery({
-      queryKey: queryKeys.getBookReviewsInfinite(bookId),
+      queryKey: bookQueryKeys.getBookReviewsInfinite(bookId),
       queryFn: ({ pageParam }) => getBookReviews(bookId, pageParam),
       initialPageParam: 1,
       getNextPageParam: (lastPage: ReviewPage) =>
@@ -101,7 +100,7 @@ export default function BookReviews({ bookId }: Props) {
   // すでにレビューをしているかどうかを取得
   // ログインしていない場合は、enabledオプションを指定してqueryFnを呼び出さないようにする
   const { data: isReviewed } = useQuery({
-    queryKey: queryKeys.isReviewedByUser(bookId),
+    queryKey: reviewQueryKeys.isReviewedByUser(bookId),
     queryFn: () => isReviewedByUser(bookId),
     enabled: isAuthenticated,
     retry: false,
@@ -113,13 +112,13 @@ export default function BookReviews({ bookId }: Props) {
     mutationFn: (requestBody: ReviewRequest) => createReview(requestBody),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.getBookReviewsInfinite(bookId),
+        queryKey: bookQueryKeys.getBookReviewsInfinite(bookId),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.isReviewedByUser(bookId),
+        queryKey: reviewQueryKeys.isReviewedByUser(bookId),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.getBookDetails(bookId),
+        queryKey: bookQueryKeys.getBookDetails(bookId),
       });
     },
   });

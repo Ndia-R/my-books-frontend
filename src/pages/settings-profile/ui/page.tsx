@@ -1,7 +1,9 @@
-import { useAuth } from '@/entities/user';
-import { updateUserProfile } from '@/entities/user/api/users';
-import type { UpdateUserProfile } from '@/entities/user/model/types';
-import AvatarCarousel from '@/entities/user/ui/avatar-carousel';
+import {
+  AvatarCarousel,
+  updateUserProfile,
+  type UpdateUserProfile,
+  useAuth,
+} from '@/entities/user';
 import {
   APP_TITLE,
   DEFAULT_AVATAR_PATH,

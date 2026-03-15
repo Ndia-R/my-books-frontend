@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(wc -l /workspace/src/components/**/*.tsx)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(for entity:*)",
+      "Bash(do echo:*)",
+      "Read(//workspace/src/entities/**)",
+      "Bash(for feature:*)",
+      "Read(//workspace/src/features/**)",
+      "Bash(for widget:*)",
+      "Read(//workspace/src/widgets/**)",
+      "Bash(/tmp/circular_dep_analysis.txt:*)",
+      "Read(//tmp/**)"
     ],
     "additionalDirectories": [
       "/workspace/src/components/ui",

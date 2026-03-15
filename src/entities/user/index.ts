@@ -1,5 +1,5 @@
 // model
-export { useAuth } from './model/auth-context';
+export { AuthProviderContext, useAuth } from './model/auth-context';
 export { userQueryKeys } from './model/query-keys';
 export type {
   UpdateSubscriptionPlan,

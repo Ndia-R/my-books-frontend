@@ -1,12 +1,10 @@
-import { getGenres } from '@/entities/genre/api/genres';
-import GenreList from '@/entities/genre/ui/genre-list';
-import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
-import { queryKeys } from '@/shared/lib/query-keys';
+import { GenreList, genreQueryKeys, getGenres } from '@/entities/genre';
+import { useSearchFilters } from '@/features/book-search';
 import { useSuspenseQuery } from '@tanstack/react-query';
 
 export default function GenresSelector() {
   const { data: genres } = useSuspenseQuery({
-    queryKey: queryKeys.getGenres(),
+    queryKey: genreQueryKeys.getGenres(),
     queryFn: () => getGenres(),
     staleTime: Infinity,
     gcTime: Infinity,

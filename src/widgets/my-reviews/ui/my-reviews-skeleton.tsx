@@ -1,4 +1,4 @@
-import MyReviewListSkeleton from '@/entities/review/ui/my-review-list-skeleton';
+import { MyReviewListSkeleton } from '@/entities/review';
 
 export default function MyReviewsSkeleton() {
   return (

@@ -1,12 +1,12 @@
-import { getBookFavoriteStats } from '@/entities/book/api/books';
-import { isFavoritedByUser } from '@/entities/favorite';
+import { bookQueryKeys, getBookFavoriteStats } from '@/entities/book';
 import {
   createFavorite,
   deleteFavoriteByBookId,
-} from '@/entities/favorite/api/favorites';
+  favoriteQueryKeys,
+  isFavoritedByUser,
+} from '@/entities/favorite';
 import { useAuth } from '@/entities/user';
 import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
-import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
@@ -44,14 +44,14 @@ export default function FavoriteCountIcon({
 
   // お気に入り状態を取得（認証済みの場合のみ）
   const { data: isFavorite = false, isLoading: isFavoriteLoading } = useQuery({
-    queryKey: queryKeys.isFavoritedByUser(bookId),
+    queryKey: favoriteQueryKeys.isFavoritedByUser(bookId),
     queryFn: () => isFavoritedByUser(bookId),
     enabled: isAuthenticated,
   });
 
   // お気に入り数を取得
   const { data: favoriteStats, isLoading: favoriteStatsLoading } = useQuery({
-    queryKey: queryKeys.getBookFavoriteStats(bookId),
+    queryKey: bookQueryKeys.getBookFavoriteStats(bookId),
     queryFn: () => getBookFavoriteStats(bookId),
   });
 
@@ -89,13 +89,13 @@ export default function FavoriteCountIcon({
 
       // API成功後にキャッシュを無効化
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.isFavoritedByUser(bookId),
+        queryKey: favoriteQueryKeys.isFavoritedByUser(bookId),
       });
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.getBookFavoriteStats(bookId),
+        queryKey: bookQueryKeys.getBookFavoriteStats(bookId),
       });
       await queryClient.invalidateQueries({
-        queryKey: queryKeys.getUserFavoritesInfinite(),
+        queryKey: favoriteQueryKeys.getUserFavoritesInfinite(),
       });
       // すべてのリフェッチ完了後に楽観的更新をクリア
       setOptimisticUpdate(null);

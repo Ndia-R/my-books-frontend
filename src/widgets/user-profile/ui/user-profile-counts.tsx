@@ -1,9 +1,11 @@
-import { useAuth } from '@/entities/user';
-import { getUserProfileCounts } from '@/entities/user/api/users';
+import {
+  getUserProfileCounts,
+  useAuth,
+  usePrefetchUser,
+  userQueryKeys,
+} from '@/entities/user';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import usePrefetch from '@/shared/hooks/use-prefetch';
-import { queryKeys } from '@/shared/lib/query-keys';
 import CountUpNumber from '@/shared/ui/count-up-number';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { motion } from 'motion/react';
@@ -14,7 +16,7 @@ export default function UserProfileCounts() {
   const canNavigate = hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
 
   const { data: userProfileCounts } = useSuspenseQuery({
-    queryKey: queryKeys.getUserProfileCounts(),
+    queryKey: userQueryKeys.getUserProfileCounts(),
     queryFn: () => getUserProfileCounts(),
   });
 
@@ -22,7 +24,7 @@ export default function UserProfileCounts() {
     prefetchUserFavoritesInfinite,
     prefetchUserBookmarksInfinite,
     prefetchUserReviewsInfinite,
-  } = usePrefetch();
+  } = usePrefetchUser();
 
   return (
     <div className="flex justify-between">

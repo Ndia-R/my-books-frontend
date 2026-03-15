@@ -1,7 +1,9 @@
-import { logoutUser } from '@/entities/user/api/auth';
-import { getUserProfile } from '@/entities/user/api/users';
-import { AuthProviderContext } from '@/entities/user/model/auth-context';
-import type { UserProfile } from '@/entities/user/model/types';
+import {
+  AuthProviderContext,
+  getUserProfile,
+  logoutUser,
+  type UserProfile,
+} from '@/entities/user';
 import { setUnauthorizedHandler } from '@/shared/api/fetch';
 import { buildQueryString } from '@/shared/api/url-builder';
 import { APP_BASE_PATH, BFF_API_BASE_URL } from '@/shared/config/constants';

@@ -1,4 +1,4 @@
-import type { Book } from '@/entities/book/model/types';
+import type { Book } from '@/entities/book';
 import type { Page } from '@/shared/api/pagination';
 import type { UseMutationResult } from '@tanstack/react-query';
 

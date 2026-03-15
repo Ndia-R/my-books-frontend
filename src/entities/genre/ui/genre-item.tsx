@@ -1,6 +1,5 @@
 import type { Genre } from '@/entities/genre/model/types';
 import { buildQueryString } from '@/shared/api/url-builder';
-import usePrefetch from '@/shared/hooks/use-prefetch';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Link } from 'react-router';
@@ -9,15 +8,15 @@ type Props = {
   genre: Genre;
   isActive?: boolean;
   onClick?: (genreId: number) => void;
+  onPrefetch?: () => void;
 };
 
-export default function GenreItem({ genre, isActive = false, onClick }: Props) {
-  const { prefetchBookDiscover } = usePrefetch();
-
-  const handlePrefetch = async () => {
-    await prefetchBookDiscover(String(genre.id), 'SINGLE');
-  };
-
+export default function GenreItem({
+  genre,
+  isActive = false,
+  onClick,
+  onPrefetch,
+}: Props) {
   const buttonProps = {
     className: cn(
       isActive &&
@@ -40,8 +39,8 @@ export default function GenreItem({ genre, isActive = false, onClick }: Props) {
   ) : (
     <Button
       {...buttonProps}
-      onMouseEnter={handlePrefetch}
-      onFocus={handlePrefetch}
+      onMouseEnter={onPrefetch}
+      onFocus={onPrefetch}
       asChild
     >
       <Link

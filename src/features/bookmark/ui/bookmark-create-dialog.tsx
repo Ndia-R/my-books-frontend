@@ -1,7 +1,7 @@
 import type {
   BookmarkCreateMutation,
   BookmarkRequest,
-} from '@/entities/bookmark/model/types';
+} from '@/entities/bookmark';
 import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { Button } from '@/shared/ui/button';
 import {

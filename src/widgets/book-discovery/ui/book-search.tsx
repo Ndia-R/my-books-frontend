@@ -1,8 +1,10 @@
-import { searchBooksByTitleKeyword } from '@/entities/book/api/books';
-import BookList from '@/entities/book/ui/book-list';
-import SearchPagination from '@/features/book-search/ui/search-pagination';
-import usePrefetch from '@/shared/hooks/use-prefetch';
-import { queryKeys } from '@/shared/lib/query-keys';
+import {
+  BookList,
+  bookQueryKeys,
+  searchBooksByTitleKeyword,
+  usePrefetchBook,
+} from '@/entities/book';
+import { SearchPagination } from '@/features/book-search';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useEffect } from 'react';
 
@@ -13,11 +15,11 @@ type Props = {
 
 export default function BookSearch({ q, page }: Props) {
   const { data: bookPage } = useSuspenseQuery({
-    queryKey: queryKeys.searchBooksByTitleKeyword(q, page),
+    queryKey: bookQueryKeys.searchBooksByTitleKeyword(q, page),
     queryFn: () => searchBooksByTitleKeyword(q, page),
   });
 
-  const { prefetchBookSearch } = usePrefetch();
+  const { prefetchBookSearch } = usePrefetchBook();
 
   useEffect(() => {
     if (bookPage.hasNext) {

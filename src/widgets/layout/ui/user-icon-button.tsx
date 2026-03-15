@@ -1,8 +1,7 @@
-import { useAuth } from '@/entities/user';
+import { useAuth, usePrefetchUser } from '@/entities/user';
 import { AVATAR_IMAGE_BASE_URL } from '@/shared/config/constants';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import usePrefetch from '@/shared/hooks/use-prefetch';
 import { cn } from '@/shared/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar';
 import { Button } from '@/shared/ui/button';
@@ -68,7 +67,7 @@ export default function UserIconButton() {
     prefetchUserFavoritesInfinite,
     prefetchUserBookmarksInfinite,
     prefetchUserReviewsInfinite,
-  } = usePrefetch();
+  } = usePrefetchUser();
 
   const handlePrefetch = async (href: string) => {
     switch (href) {

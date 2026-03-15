@@ -1,12 +1,10 @@
-import { getBookToc } from '@/entities/book/api/books';
+import { bookQueryKeys, getBookToc, usePrefetchBook } from '@/entities/book';
 import { useAuth } from '@/entities/user';
 import { buildPath } from '@/shared/api/url-builder';
 import { APP_TITLE } from '@/shared/config/constants';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
-import usePrefetch from '@/shared/hooks/use-prefetch';
 import { chapterNumberString } from '@/shared/lib/format';
-import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { useSuspenseQuery } from '@tanstack/react-query';
@@ -18,7 +16,7 @@ type Props = {
 
 export default function BookToc({ bookId }: Props) {
   const { data: bookToc } = useSuspenseQuery({
-    queryKey: queryKeys.getBookToc(bookId),
+    queryKey: bookQueryKeys.getBookToc(bookId),
     queryFn: () => getBookToc(bookId),
   });
 
@@ -26,7 +24,7 @@ export default function BookToc({ bookId }: Props) {
   const canReadContent =
     hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
 
-  const { prefetchBookReadContent } = usePrefetch();
+  const { prefetchBookReadContent } = usePrefetchBook();
   const navigate = useNavigate();
 
   const handlePrefetch = async (bookId: string, chapterNumber: number) => {

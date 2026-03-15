@@ -1,7 +1,6 @@
 import type { Favorite } from '@/entities/favorite/model/types';
 import { buildPath } from '@/shared/api/url-builder';
 import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
-import usePrefetch from '@/shared/hooks/use-prefetch';
 import {
   formatDateJP,
   formatRelativeTime,
@@ -14,15 +13,10 @@ import { Link } from 'react-router';
 type Props = {
   favorite: Favorite;
   action?: ReactNode;
+  onPrefetch?: () => void;
 };
 
-export default function FavoriteItem({ favorite, action }: Props) {
-  const { prefetchBookDetail } = usePrefetch();
-
-  const handlePrefetch = async () => {
-    await prefetchBookDetail(favorite.book.id);
-  };
-
+export default function FavoriteItem({ favorite, action, onPrefetch }: Props) {
   const bookDetailPath = buildPath('/books/:bookId', {
     bookId: favorite.book.id,
   });
@@ -36,8 +30,8 @@ export default function FavoriteItem({ favorite, action }: Props) {
               className="size-fit"
               to={bookDetailPath}
               aria-label={`${favorite.book.title}の詳細ページへ移動`}
-              onMouseEnter={handlePrefetch}
-              onFocus={handlePrefetch}
+              onMouseEnter={onPrefetch}
+              onFocus={onPrefetch}
             >
               <img
                 className="h-24 rounded-xs object-cover sm:h-28"
@@ -54,8 +48,8 @@ export default function FavoriteItem({ favorite, action }: Props) {
                   className="size-fit"
                   to={bookDetailPath}
                   aria-label={`${favorite.book.title}の詳細ページへ移動`}
-                  onMouseEnter={handlePrefetch}
-                  onFocus={handlePrefetch}
+                  onMouseEnter={onPrefetch}
+                  onFocus={onPrefetch}
                 >
                   <h2 className="hover:text-primary text-lg leading-8 font-semibold sm:text-xl">
                     {favorite.book.title}

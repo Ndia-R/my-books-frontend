@@ -1,4 +1,4 @@
-import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
+import { useSearchFilters } from '@/features/book-search';
 import { Label } from '@/shared/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/shared/ui/radio-group';
 import { useState } from 'react';

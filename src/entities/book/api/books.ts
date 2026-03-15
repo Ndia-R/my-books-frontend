@@ -5,8 +5,8 @@ import type {
   BookPreviewSettingPublic,
   BookToc,
 } from '@/entities/book/model/types';
-import type { FavoriteStats } from '@/entities/favorite/model/types';
-import type { ReviewPage } from '@/entities/review/model/types';
+import type { FavoriteStats } from '@/entities/favorite';
+import type { ReviewPage } from '@/entities/review';
 import { fetchBooksApi } from '@/shared/api/fetch';
 import { buildPath, buildQueryString } from '@/shared/api/url-builder';
 import {

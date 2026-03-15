@@ -1,15 +1,18 @@
 import {
+  bookQueryKeys,
   getBookChapterPageContent,
   getBookChapterPagePreview,
   getBookPreviewSettingPublic,
   getBookToc,
-} from '@/entities/book/api/books';
-import { isLastPreviewPage } from '@/entities/book/lib/utils';
-import { getUserBookmarksByBookId } from '@/entities/bookmark/api/bookmarks';
-import type { BookmarkPage } from '@/entities/bookmark/model/types';
+  isLastPreviewPage,
+} from '@/entities/book';
+import {
+  bookmarkQueryKeys,
+  getUserBookmarksByBookId,
+  type BookmarkPage,
+} from '@/entities/bookmark';
 import { APP_TITLE } from '@/shared/config/constants';
 import { chapterNumberString } from '@/shared/lib/format';
-import { queryKeys } from '@/shared/lib/query-keys';
 import { cn } from '@/shared/lib/utils';
 import BookReadBookmarkButton from '@/widgets/book-reading/ui/book-read-bookmark-button';
 import BookReadNavigation from '@/widgets/book-reading/ui/book-read-navigation';
@@ -38,17 +41,17 @@ export default function BookReadContent({
   ] = useSuspenseQueries({
     queries: [
       {
-        queryKey: queryKeys.getBookToc(bookId),
+        queryKey: bookQueryKeys.getBookToc(bookId),
         queryFn: () => getBookToc(bookId),
       },
       {
         queryKey: isPreviewMode
-          ? queryKeys.getBookChapterPagePreview(
+          ? bookQueryKeys.getBookChapterPagePreview(
               bookId,
               chapterNumber,
               pageNumber
             )
-          : queryKeys.getBookChapterPageContent(
+          : bookQueryKeys.getBookChapterPageContent(
               bookId,
               chapterNumber,
               pageNumber
@@ -59,7 +62,7 @@ export default function BookReadContent({
             : getBookChapterPageContent(bookId, chapterNumber, pageNumber),
       },
       {
-        queryKey: queryKeys.getBookPreviewSettingPublic(bookId),
+        queryKey: bookQueryKeys.getBookPreviewSettingPublic(bookId),
         queryFn: () => getBookPreviewSettingPublic(bookId),
       },
     ],
@@ -67,7 +70,7 @@ export default function BookReadContent({
 
   // ブックマークは通常モードのみ useQuery で取得
   const { data: bookmark } = useQuery({
-    queryKey: queryKeys.getUserBookmarksByBookId(bookId),
+    queryKey: bookmarkQueryKeys.getUserBookmarksByBookId(bookId),
     queryFn: () => getUserBookmarksByBookId(bookId),
     enabled: !isPreviewMode, // プレビューモード（試し読み）では実行しない
     select: (bookmarkPage: BookmarkPage) =>

@@ -4,7 +4,7 @@ import type {
   ReviewRequest,
   ReviewUpdateMutation,
   ReviewUpdateParams,
-} from '@/entities/review/model/types';
+} from '@/entities/review';
 import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
 import { Button } from '@/shared/ui/button';

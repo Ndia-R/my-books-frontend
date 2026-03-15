@@ -4,7 +4,7 @@ import type {
   BookmarkRequest,
   BookmarkUpdateMutation,
   BookmarkUpdateParams,
-} from '@/entities/bookmark/model/types';
+} from '@/entities/bookmark';
 import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
 import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
 import { Button } from '@/shared/ui/button';

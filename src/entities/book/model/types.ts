@@ -1,4 +1,4 @@
-import type { Genre } from '@/entities/genre/model/types';
+import type { Genre } from '@/entities/genre';
 import type { Page } from '@/shared/api/pagination';
 
 export type Book = {

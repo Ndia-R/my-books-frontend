@@ -1,12 +1,18 @@
-import { getUserBookmarks } from '@/entities/bookmark/api/bookmarks';
-import { bookmarkQueryKeys } from '@/entities/bookmark/model/query-keys';
-import type { BookmarkPage } from '@/entities/bookmark/model/types';
-import { getUserFavorites } from '@/entities/favorite/api/favorites';
-import { favoriteQueryKeys } from '@/entities/favorite/model/query-keys';
-import type { FavoritePage } from '@/entities/favorite/model/types';
-import { getUserReviews } from '@/entities/review/api/reviews';
-import { reviewQueryKeys } from '@/entities/review/model/query-keys';
-import type { ReviewPage } from '@/entities/review/model/types';
+import {
+  bookmarkQueryKeys,
+  getUserBookmarks,
+  type BookmarkPage,
+} from '@/entities/bookmark';
+import {
+  favoriteQueryKeys,
+  getUserFavorites,
+  type FavoritePage,
+} from '@/entities/favorite';
+import {
+  getUserReviews,
+  reviewQueryKeys,
+  type ReviewPage,
+} from '@/entities/review';
 import { getUserProfileCounts } from '@/entities/user/api/users';
 import { userQueryKeys } from '@/entities/user/model/query-keys';
 import { CACHE_TIME } from '@/shared/config/cache-time';

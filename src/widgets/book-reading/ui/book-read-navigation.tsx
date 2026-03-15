@@ -1,6 +1,5 @@
-import type { BookToc } from '@/entities/book/model/types';
+import { usePrefetchBook, type BookToc } from '@/entities/book';
 import { buildPath } from '@/shared/api/url-builder';
-import usePrefetch from '@/shared/hooks/use-prefetch';
 import { cn } from '@/shared/lib/utils';
 import { buttonVariants } from '@/shared/ui/button';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
@@ -26,7 +25,8 @@ export default function BookReadNavigation({
     pageNumber
   );
 
-  const { prefetchBookReadContent, prefetchBookReadPreview } = usePrefetch();
+  const { prefetchBookReadContent, prefetchBookReadPreview } =
+    usePrefetchBook();
 
   useEffect(() => {
     if (!isLastPage) {

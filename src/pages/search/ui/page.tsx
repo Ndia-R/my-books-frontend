@@ -1,4 +1,4 @@
-import { useSearchFilters } from '@/features/book-search/model/use-search-filters';
+import { useSearchFilters } from '@/features/book-search';
 import { APP_TITLE } from '@/shared/config/constants';
 import ErrorElement from '@/shared/ui/error-element';
 import { Separator } from '@/shared/ui/separator';

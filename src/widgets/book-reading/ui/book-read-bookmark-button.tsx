@@ -1,17 +1,17 @@
-import type { BookChapterPageContent } from '@/entities/book/model/types';
+import { type BookChapterPageContent } from '@/entities/book';
 import {
+  bookmarkQueryKeys,
   createBookmark,
   deleteBookmark,
   updateBookmark,
-} from '@/entities/bookmark/api/bookmarks';
-import type {
-  Bookmark,
-  BookmarkRequest,
-  BookmarkUpdateParams,
-} from '@/entities/bookmark/model/types';
-import BookmarkCreateDialog from '@/features/bookmark/ui/bookmark-create-dialog';
-import BookmarkUpdateDialog from '@/features/bookmark/ui/bookmark-update-dialog';
-import { queryKeys } from '@/shared/lib/query-keys';
+  type Bookmark,
+  type BookmarkRequest,
+  type BookmarkUpdateParams,
+} from '@/entities/bookmark';
+import {
+  BookmarkCreateDialog,
+  BookmarkUpdateDialog,
+} from '@/features/bookmark';
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
@@ -36,10 +36,10 @@ export default function BookReadBookmarkButton({
 
   const onSuccess = () => {
     queryClient.invalidateQueries({
-      queryKey: queryKeys.getUserBookmarksByBookId(bookId),
+      queryKey: bookmarkQueryKeys.getUserBookmarksByBookId(bookId),
     });
     queryClient.invalidateQueries({
-      queryKey: queryKeys.getUserBookmarksInfinite(),
+      queryKey: bookmarkQueryKeys.getUserBookmarksInfinite(),
     });
   };
 
