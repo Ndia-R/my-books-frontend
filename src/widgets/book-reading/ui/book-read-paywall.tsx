@@ -1,3 +1,4 @@
+import { buildPath } from '@/shared/lib/url-builder';
 import { buttonVariants } from '@/shared/ui/button';
 import { LockIcon } from 'lucide-react';
 import { Link } from 'react-router';
@@ -7,6 +8,8 @@ type Props = {
 };
 
 export default function BookReadPaywall({ bookId }: Props) {
+  const bookDetailPath = buildPath('/books/:bookId', { bookId });
+
   return (
     <div className="flex flex-col items-center gap-y-6 py-12 text-center">
       <LockIcon className="text-muted-foreground size-10" />
@@ -23,7 +26,7 @@ export default function BookReadPaywall({ bookId }: Props) {
         </Link>
         <Link
           className={buttonVariants({ variant: 'outline' })}
-          to={`/books/${bookId}`}
+          to={bookDetailPath}
         >
           書籍の詳細に戻る
         </Link>

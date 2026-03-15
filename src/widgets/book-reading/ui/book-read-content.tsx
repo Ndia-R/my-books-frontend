@@ -14,11 +14,11 @@ import {
 import { APP_TITLE } from '@/shared/config/constants';
 import { cn } from '@/shared/lib/cn';
 import { chapterNumberString } from '@/shared/lib/format';
-import BookReadBookmarkButton from '@/widgets/book-reading/ui/book-read-bookmark-button';
-import BookReadNavigation from '@/widgets/book-reading/ui/book-read-navigation';
-import BookReadPaywall from '@/widgets/book-reading/ui/book-read-paywall';
-import BookReadTocButton from '@/widgets/book-reading/ui/book-read-toc-button';
 import { useQuery, useSuspenseQueries } from '@tanstack/react-query';
+import BookReadBookmarkButton from './book-read-bookmark-button';
+import BookReadNavigation from './book-read-navigation';
+import BookReadPaywall from './book-read-paywall';
+import BookReadTocButton from './book-read-toc-button';
 
 type Props = {
   bookId: string;
@@ -37,7 +37,7 @@ export default function BookReadContent({
   const [
     { data: bookToc },
     { data: bookChapterPageContent },
-    { data: BookPreviewSettingPublic },
+    { data: bookPreviewSettingPublic },
   ] = useSuspenseQueries({
     queries: [
       {
@@ -85,7 +85,7 @@ export default function BookReadContent({
   // ペイウォール判定
   const isPaywalled =
     isPreviewMode &&
-    isLastPreviewPage(BookPreviewSettingPublic, bookChapterPageContent);
+    isLastPreviewPage(bookPreviewSettingPublic, bookChapterPageContent);
 
   return (
     <>
