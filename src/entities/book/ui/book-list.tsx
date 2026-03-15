@@ -3,22 +3,18 @@ import BookItem from '@/entities/book/ui/book-item';
 
 type Props = {
   books: Book[];
+  onItemPrefetch?: (book: Book) => void;
 };
 
-export default function BookList({ books }: Props) {
-  if (!books.length) {
-    return (
-      <div className="flex h-32 items-center justify-center">
-        <p>見つかりませんでした</p>
-      </div>
-    );
-  }
-
+export default function BookList({ books, onItemPrefetch }: Props) {
   return (
     <div className="grid grid-cols-2 justify-items-center gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 lg:grid-cols-5">
       {books.map((book) => (
         <article key={book.id}>
-          <BookItem book={book} />
+          <BookItem
+            book={book}
+            onPrefetch={onItemPrefetch ? () => onItemPrefetch(book) : undefined}
+          />
         </article>
       ))}
     </div>

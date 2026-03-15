@@ -92,11 +92,17 @@ export default function MyReviews() {
         <span className="text-muted-foreground text-sm">件</span>
       </p>
 
-      <MyReviewList
-        reviews={reviews}
-        onItemPrefetch={(review) => prefetchBookDetail(review.book.id)}
-        renderAction={(review) => <ReviewEditAction review={review} />}
-      />
+      {reviews.length === 0 ? (
+        <div className="flex h-32 items-center justify-center">
+          <p>まだレビューはありません</p>
+        </div>
+      ) : (
+        <MyReviewList
+          reviews={reviews}
+          onItemPrefetch={(review) => prefetchBookDetail(review.book.id)}
+          renderAction={(review) => <ReviewEditAction review={review} />}
+        />
+      )}
 
       {hasNextPage && (
         <div ref={ref} className="flex h-16 items-center justify-center">

@@ -106,17 +106,25 @@ export default function Bookmarks() {
         <span className="text-muted-foreground text-sm">件</span>
       </p>
 
-      <BookmarkList
-        bookmarks={bookmarks}
-        onItemPrefetch={(bookmark) =>
-          prefetchBookReadContent(
-            bookmark.book.id,
-            bookmark.chapterNumber,
-            bookmark.pageNumber
-          )
-        }
-        renderAction={(bookmark) => <BookmarkEditAction bookmark={bookmark} />}
-      />
+      {bookmarks.length === 0 ? (
+        <div className="flex h-32 items-center justify-center">
+          <p>ブックマークがありません</p>
+        </div>
+      ) : (
+        <BookmarkList
+          bookmarks={bookmarks}
+          onItemPrefetch={(bookmark) =>
+            prefetchBookReadContent(
+              bookmark.book.id,
+              bookmark.chapterNumber,
+              bookmark.pageNumber
+            )
+          }
+          renderAction={(bookmark) => (
+            <BookmarkEditAction bookmark={bookmark} />
+          )}
+        />
+      )}
 
       {hasNextPage && (
         <div ref={ref} className="flex h-16 items-center justify-center">

@@ -108,13 +108,19 @@ export default function Favorites() {
         <span className="text-muted-foreground text-sm">件</span>
       </p>
 
-      <FavoriteList
-        favorites={favorites}
-        onItemPrefetch={(favorite) => prefetchBookDetail(favorite.book.id)}
-        renderAction={(favorite) => (
-          <FavoriteDeleteAction favorite={favorite} />
-        )}
-      />
+      {favorites.length === 0 ? (
+        <div className="flex h-32 items-center justify-center">
+          <p>お気に入りがありません</p>
+        </div>
+      ) : (
+        <FavoriteList
+          favorites={favorites}
+          onItemPrefetch={(favorite) => prefetchBookDetail(favorite.book.id)}
+          renderAction={(favorite) => (
+            <FavoriteDeleteAction favorite={favorite} />
+          )}
+        />
+      )}
 
       {hasNextPage && (
         <div ref={ref} className="flex h-16 items-center justify-center">

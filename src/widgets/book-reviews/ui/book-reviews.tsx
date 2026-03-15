@@ -151,16 +151,22 @@ export default function BookReviews({ bookId }: Props) {
           </div>
         </div>
 
-        <ReviewList
-          reviews={reviews}
-          getIsOwnReview={(review) => userProfile?.id === review.userId}
-          renderAction={(review) => {
-            const isOwnReview = userProfile?.id === review.userId;
-            return isOwnReview && canEditReview ? (
-              <ReviewEditAction review={review} />
-            ) : null;
-          }}
-        />
+        {reviews.length === 0 ? (
+          <div className="flex h-32 items-center justify-center">
+            <p>まだレビューはありません</p>
+          </div>
+        ) : (
+          <ReviewList
+            reviews={reviews}
+            getIsOwnReview={(review) => userProfile?.id === review.userId}
+            renderAction={(review) => {
+              const isOwnReview = userProfile?.id === review.userId;
+              return isOwnReview && canEditReview ? (
+                <ReviewEditAction review={review} />
+              ) : null;
+            }}
+          />
+        )}
 
         {hasNextPage && (
           <div className="flex justify-center">

@@ -20,7 +20,7 @@ export default function BookDiscovery({ genreIds, condition, page }: Props) {
     queryFn: () => searchBooksByGenre(genreIds, condition, page),
   });
 
-  const { prefetchBookDiscover } = usePrefetchBook();
+  const { prefetchBookDetail, prefetchBookDiscover } = usePrefetchBook();
 
   useEffect(() => {
     if (bookPage.hasNext) {
@@ -42,7 +42,16 @@ export default function BookDiscovery({ genreIds, condition, page }: Props) {
         totalPages={bookPage.totalPages}
       />
 
-      <BookList books={bookPage.data} />
+      {bookPage.data.length === 0 ? (
+        <div className="flex h-32 items-center justify-center">
+          <p>条件に合う書籍が見つかりませんでした</p>
+        </div>
+      ) : (
+        <BookList
+          books={bookPage.data}
+          onItemPrefetch={(book) => prefetchBookDetail(book.id)}
+        />
+      )}
 
       <SearchPagination
         currentPage={bookPage.currentPage}

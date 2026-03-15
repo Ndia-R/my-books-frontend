@@ -19,7 +19,7 @@ export default function BookSearch({ q, page }: Props) {
     queryFn: () => searchBooksByTitleKeyword(q, page),
   });
 
-  const { prefetchBookSearch } = usePrefetchBook();
+  const { prefetchBookDetail, prefetchBookSearch } = usePrefetchBook();
 
   useEffect(() => {
     if (bookPage.hasNext) {
@@ -41,7 +41,16 @@ export default function BookSearch({ q, page }: Props) {
         totalPages={bookPage.totalPages}
       />
 
-      <BookList books={bookPage.data} />
+      {bookPage.data.length === 0 ? (
+        <div className="flex h-32 items-center justify-center">
+          <p>「{q}」に一致する書籍が見つかりませんでした</p>
+        </div>
+      ) : (
+        <BookList
+          books={bookPage.data}
+          onItemPrefetch={(book) => prefetchBookDetail(book.id)}
+        />
+      )}
 
       <SearchPagination
         currentPage={bookPage.currentPage}

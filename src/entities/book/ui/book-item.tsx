@@ -1,4 +1,3 @@
-import { usePrefetchBook } from '@/entities/book/api/use-prefetch';
 import type { Book } from '@/entities/book/model/types';
 import AverageRatingIcon from '@/entities/book/ui/average-rating-icon';
 import ReviewCountIcon from '@/entities/book/ui/review-count-icon';
@@ -10,15 +9,10 @@ import { Link } from 'react-router';
 
 type Props = {
   book: Book;
+  onPrefetch?: () => void;
 };
 
-export default function BookItem({ book }: Props) {
-  const { prefetchBookDetail } = usePrefetchBook();
-
-  const handlePrefetch = async () => {
-    await prefetchBookDetail(book.id);
-  };
-
+export default function BookItem({ book, onPrefetch }: Props) {
   const bookDetailPath = buildPath('/books/:bookId', { bookId: book.id });
 
   return (
@@ -28,8 +22,8 @@ export default function BookItem({ book }: Props) {
           className="size-fit"
           to={bookDetailPath}
           aria-label={`${book.title}の詳細ページへ移動`}
-          onMouseEnter={handlePrefetch}
-          onFocus={handlePrefetch}
+          onMouseEnter={onPrefetch}
+          onFocus={onPrefetch}
         >
           <img
             className="mb-1 h-44 rounded-xs object-cover sm:mb-0 sm:h-52"
@@ -41,8 +35,8 @@ export default function BookItem({ book }: Props) {
           className="hover:text-primary flex h-10 items-center justify-center text-sm font-semibold sm:h-12 sm:text-base"
           to={bookDetailPath}
           aria-label={`${book.title}の詳細ページへ移動`}
-          onMouseEnter={handlePrefetch}
-          onFocus={handlePrefetch}
+          onMouseEnter={onPrefetch}
+          onFocus={onPrefetch}
         >
           <h2 className="line-clamp-2 text-center">{book.title}</h2>
         </Link>
