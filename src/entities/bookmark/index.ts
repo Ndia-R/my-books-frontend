@@ -18,3 +18,8 @@ export {
   getUserBookmarksByBookId,
   updateBookmark,
 } from './api/bookmarks';
+
+// ui
+export { default as BookmarkItem } from './ui/bookmark-item';
+export { default as BookmarkList } from './ui/bookmark-list';
+export { default as BookmarkListSkeleton } from './ui/bookmark-list-skeleton';

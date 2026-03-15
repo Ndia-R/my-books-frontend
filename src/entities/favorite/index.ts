@@ -16,3 +16,8 @@ export {
   getUserFavoritesByBookId,
   isFavoritedByUser,
 } from './api/favorites';
+
+// ui
+export { default as FavoriteItem } from './ui/favorite-item';
+export { default as FavoriteList } from './ui/favorite-list';
+export { default as FavoriteListSkeleton } from './ui/favorite-list-skeleton';

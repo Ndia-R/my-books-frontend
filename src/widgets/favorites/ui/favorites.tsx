@@ -1,11 +1,82 @@
-import type { FavoritePage } from '@/entities/favorite';
-import { getUserFavorites } from '@/entities/favorite';
+import {
+  deleteFavoriteByBookId,
+  FavoriteList,
+  getUserFavorites,
+  type Favorite,
+  type FavoritePage,
+} from '@/entities/favorite';
+import { TOAST_ERROR_DURATION } from '@/shared/config/constants';
+import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
 import { queryKeys } from '@/shared/lib/query-keys';
-import FavoriteList from '@/widgets/favorites/ui/favorite-list';
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { Loader2Icon } from 'lucide-react';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+} from '@tanstack/react-query';
+import { HeartIcon, Loader2Icon } from 'lucide-react';
 import { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { toast } from 'sonner';
+
+function FavoriteDeleteAction({ favorite }: { favorite: Favorite }) {
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getUserFavoritesInfinite(),
+    });
+  };
+
+  const deleteMutation = useMutation({
+    mutationFn: (bookId: string) => deleteFavoriteByBookId(bookId),
+    onSuccess,
+  });
+
+  const { confirmDialog } = useConfirmDialog();
+
+  const handleClickDelete = async () => {
+    const { isCancel } = await confirmDialog({
+      icon: 'warning',
+      title: 'このお気に入りを削除しますか？',
+      message: 'お気に入りリストから削除されます。',
+    });
+    if (isCancel) return;
+
+    deleteMutation.mutate(favorite.book.id, {
+      onSuccess: () => {
+        toast.success('お気に入りリストから削除しました');
+      },
+      onError: () => {
+        toast.error('お気に入りの削除に失敗しました', {
+          duration: TOAST_ERROR_DURATION,
+        });
+      },
+    });
+  };
+
+  return (
+    <Tooltip>
+      <TooltipTrigger asChild>
+        <Button
+          className={cn(
+            'text-muted-foreground hover:text-primary size-8',
+            'text-primary bg-transparent'
+          )}
+          variant="ghost"
+          size="icon"
+          aria-label="お気に入り"
+          onClick={() => handleClickDelete()}
+        >
+          <HeartIcon className="fill-primary" />
+        </Button>
+      </TooltipTrigger>
+      <TooltipContent>お気に入りから削除</TooltipContent>
+    </Tooltip>
+  );
+}
 
 export default function Favorites() {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
@@ -34,7 +105,12 @@ export default function Favorites() {
         <span className="text-muted-foreground text-sm">件</span>
       </p>
 
-      <FavoriteList favorites={favorites} />
+      <FavoriteList
+        favorites={favorites}
+        renderAction={(favorite) => (
+          <FavoriteDeleteAction favorite={favorite} />
+        )}
+      />
 
       {hasNextPage && (
         <div ref={ref} className="flex h-16 items-center justify-center">

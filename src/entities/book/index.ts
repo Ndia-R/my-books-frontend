@@ -32,5 +32,5 @@ export { isLastPreviewPage } from './lib/utils';
 export { default as AverageRatingIcon } from './ui/average-rating-icon';
 export { default as BookItem } from './ui/book-item';
 export { default as BookList } from './ui/book-list';
-export { default as BooksSkeleton } from './ui/books-skeleton';
+export { default as BookListSkeleton } from './ui/book-list-skeleton';
 export { default as ReviewCountIcon } from './ui/review-count-icon';

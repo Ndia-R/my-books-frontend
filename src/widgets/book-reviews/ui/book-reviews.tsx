@@ -1,26 +1,83 @@
 import { getBookReviews } from '@/entities/book/api/books';
-import { isReviewedByUser } from '@/entities/review';
+import {
+  deleteReview,
+  isReviewedByUser,
+  ReviewList,
+  updateReview,
+  type Review,
+  type ReviewPage,
+  type ReviewRequest,
+  type ReviewUpdateParams,
+} from '@/entities/review';
 import { createReview } from '@/entities/review/api/reviews';
-import type { ReviewPage, ReviewRequest } from '@/entities/review/model/types';
 import { useAuth } from '@/entities/user';
 import ReviewCreateDialog from '@/features/review/ui/review-create-dialog';
+import ReviewUpdateDialog from '@/features/review/ui/review-update-dialog';
 import { Role } from '@/shared/config/roles';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
 import { queryKeys } from '@/shared/lib/query-keys';
 import { Button } from '@/shared/ui/button';
-import BookReviewList from '@/widgets/book-reviews/ui/book-review-list';
 import {
   useMutation,
   useQuery,
   useQueryClient,
   useSuspenseInfiniteQuery,
 } from '@tanstack/react-query';
-import { Loader2Icon } from 'lucide-react';
+import { Loader2Icon, SquarePenIcon } from 'lucide-react';
 import { useState } from 'react';
 
 type Props = {
   bookId: string;
 };
+
+function ReviewEditAction({ review }: { review: Review }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getBookReviewsInfinite(review.book.id),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.isReviewedByUser(review.book.id),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getBookDetails(review.book.id),
+    });
+  };
+
+  const updateMutation = useMutation({
+    mutationFn: ({ reviewId, requestBody }: ReviewUpdateParams) =>
+      updateReview(reviewId, requestBody),
+    onSuccess,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (reviewId: number) => deleteReview(reviewId),
+    onSuccess,
+  });
+
+  return (
+    <>
+      <Button
+        className="text-muted-foreground size-8"
+        variant="ghost"
+        size="icon"
+        aria-label="レビューを編集"
+        onClick={() => setIsOpen(true)}
+      >
+        <SquarePenIcon />
+      </Button>
+      <ReviewUpdateDialog
+        review={review}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        updateMutation={updateMutation}
+        deleteMutation={deleteMutation}
+      />
+    </>
+  );
+}
 
 export default function BookReviews({ bookId }: Props) {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
@@ -37,8 +94,9 @@ export default function BookReviews({ bookId }: Props) {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const { isAuthenticated, hasRole, hasPlan } = useAuth();
+  const { isAuthenticated, userProfile, hasRole, hasPlan } = useAuth();
   const canReview = hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
+  const canEditReview = hasRole(Role.USER) && hasPlan(SubscriptionPlan.PREMIUM);
 
   // すでにレビューをしているかどうかを取得
   // ログインしていない場合は、enabledオプションを指定してqueryFnを呼び出さないようにする
@@ -94,7 +152,16 @@ export default function BookReviews({ bookId }: Props) {
           </div>
         </div>
 
-        <BookReviewList reviews={reviews} />
+        <ReviewList
+          reviews={reviews}
+          getIsOwnReview={(review) => userProfile?.id === review.userId}
+          renderAction={(review) => {
+            const isOwnReview = userProfile?.id === review.userId;
+            return isOwnReview && canEditReview ? (
+              <ReviewEditAction review={review} />
+            ) : null;
+          }}
+        />
 
         {hasNextPage && (
           <div className="flex justify-center">

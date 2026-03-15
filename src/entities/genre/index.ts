@@ -8,3 +8,4 @@ export { getGenres } from './api/genres';
 // ui
 export { default as GenreItem } from './ui/genre-item';
 export { default as GenreList } from './ui/genre-list';
+export { default as GenreListSkeleton } from './ui/genre-list-skeleton';

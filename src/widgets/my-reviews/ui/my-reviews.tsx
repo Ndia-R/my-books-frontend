@@ -1,11 +1,66 @@
-import type { ReviewPage } from '@/entities/review';
-import { getUserReviews } from '@/entities/review';
+import {
+  deleteReview,
+  getUserReviews,
+  MyReviewList,
+  updateReview,
+  type Review,
+  type ReviewPage,
+  type ReviewUpdateParams,
+} from '@/entities/review';
+import ReviewUpdateDialog from '@/features/review/ui/review-update-dialog';
 import { queryKeys } from '@/shared/lib/query-keys';
-import MyReviewList from '@/widgets/my-reviews/ui/my-review-list';
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { Loader2Icon } from 'lucide-react';
-import { useEffect } from 'react';
+import { Button } from '@/shared/ui/button';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+} from '@tanstack/react-query';
+import { Loader2Icon, SquarePenIcon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+
+function ReviewEditAction({ review }: { review: Review }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getUserReviewsInfinite(),
+    });
+  };
+
+  const updateMutation = useMutation({
+    mutationFn: ({ reviewId, requestBody }: ReviewUpdateParams) =>
+      updateReview(reviewId, requestBody),
+    onSuccess,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (reviewId: number) => deleteReview(reviewId),
+    onSuccess,
+  });
+
+  return (
+    <>
+      <Button
+        className="text-muted-foreground size-8"
+        variant="ghost"
+        size="icon"
+        aria-label="レビューを編集"
+        onClick={() => setIsOpen(true)}
+      >
+        <SquarePenIcon />
+      </Button>
+      <ReviewUpdateDialog
+        review={review}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        updateMutation={updateMutation}
+        deleteMutation={deleteMutation}
+      />
+    </>
+  );
+}
 
 export default function MyReviews() {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
@@ -34,7 +89,10 @@ export default function MyReviews() {
         <span className="text-muted-foreground text-sm">件</span>
       </p>
 
-      <MyReviewList reviews={reviews} />
+      <MyReviewList
+        reviews={reviews}
+        renderAction={(review) => <ReviewEditAction review={review} />}
+      />
 
       {hasNextPage && (
         <div ref={ref} className="flex h-16 items-center justify-center">

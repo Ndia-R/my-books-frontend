@@ -1,11 +1,80 @@
-import type { BookmarkPage } from '@/entities/bookmark';
-import { getUserBookmarks } from '@/entities/bookmark';
+import {
+  BookmarkList,
+  deleteBookmark,
+  getUserBookmarks,
+  updateBookmark,
+  type Bookmark,
+  type BookmarkPage,
+  type BookmarkUpdateParams,
+} from '@/entities/bookmark';
+import BookmarkUpdateDialog from '@/features/bookmark/ui/bookmark-update-dialog';
 import { queryKeys } from '@/shared/lib/query-keys';
-import BookmarkList from '@/widgets/bookmarks/ui/bookmark-list';
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
-import { Loader2Icon } from 'lucide-react';
-import { useEffect } from 'react';
+import { cn } from '@/shared/lib/utils';
+import { Button } from '@/shared/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseInfiniteQuery,
+} from '@tanstack/react-query';
+import { BookmarkIcon, Loader2Icon } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
+
+function BookmarkEditAction({ bookmark }: { bookmark: Bookmark }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  const onSuccess = () => {
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getUserBookmarksInfinite(),
+    });
+    queryClient.invalidateQueries({
+      queryKey: queryKeys.getUserBookmarksByBookId(bookmark.book.id),
+    });
+  };
+
+  const updateMutation = useMutation({
+    mutationFn: ({ bookmarkId, requestBody }: BookmarkUpdateParams) =>
+      updateBookmark(bookmarkId, requestBody),
+    onSuccess,
+  });
+
+  const deleteMutation = useMutation({
+    mutationFn: (bookmarkId: number) => deleteBookmark(bookmarkId),
+    onSuccess,
+  });
+
+  return (
+    <>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Button
+            className={cn(
+              'text-muted-foreground hover:text-primary size-8',
+              bookmark && 'text-primary bg-transparent'
+            )}
+            variant="ghost"
+            size="icon"
+            aria-label="ブックマーク"
+            onClick={() => setIsOpen(true)}
+          >
+            <BookmarkIcon className={cn(bookmark && 'fill-primary')} />
+          </Button>
+        </TooltipTrigger>
+        <TooltipContent>ブックマークを編集</TooltipContent>
+      </Tooltip>
+
+      <BookmarkUpdateDialog
+        bookmark={bookmark}
+        isOpen={isOpen}
+        setIsOpen={setIsOpen}
+        updateMutation={updateMutation}
+        deleteMutation={deleteMutation}
+      />
+    </>
+  );
+}
 
 export default function Bookmarks() {
   const { data, hasNextPage, isFetchingNextPage, fetchNextPage } =
@@ -34,7 +103,10 @@ export default function Bookmarks() {
         <span className="text-muted-foreground text-sm">件</span>
       </p>
 
-      <BookmarkList bookmarks={bookmarks} />
+      <BookmarkList
+        bookmarks={bookmarks}
+        renderAction={(bookmark) => <BookmarkEditAction bookmark={bookmark} />}
+      />
 
       {hasNextPage && (
         <div ref={ref} className="flex h-16 items-center justify-center">

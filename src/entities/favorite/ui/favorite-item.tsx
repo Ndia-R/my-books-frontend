@@ -1,67 +1,22 @@
-import { deleteFavoriteByBookId } from '@/entities/favorite/api/favorites';
 import type { Favorite } from '@/entities/favorite/model/types';
 import { buildPath } from '@/shared/api/url-builder';
-import {
-  BOOK_IMAGE_BASE_URL,
-  TOAST_ERROR_DURATION,
-} from '@/shared/config/constants';
-import { useConfirmDialog } from '@/shared/hooks/use-confirm-dialog';
+import { BOOK_IMAGE_BASE_URL } from '@/shared/config/constants';
 import usePrefetch from '@/shared/hooks/use-prefetch';
 import {
   formatDateJP,
   formatRelativeTime,
   formatTime,
 } from '@/shared/lib/format';
-import { queryKeys } from '@/shared/lib/query-keys';
-import { cn } from '@/shared/lib/utils';
-import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/tooltip';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { HeartIcon } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router';
-import { toast } from 'sonner';
 
 type Props = {
   favorite: Favorite;
+  action?: ReactNode;
 };
 
-export default function FavoriteItem({ favorite }: Props) {
-  const queryClient = useQueryClient();
-
-  const onSuccess = () => {
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.getUserFavoritesInfinite(),
-    });
-  };
-
-  const deleteMutation = useMutation({
-    mutationFn: (bookId: string) => deleteFavoriteByBookId(bookId),
-    onSuccess,
-  });
-
-  const { confirmDialog } = useConfirmDialog();
-
-  const handleClickDelete = async () => {
-    const { isCancel } = await confirmDialog({
-      icon: 'warning',
-      title: 'このお気に入りを削除しますか？',
-      message: 'お気に入りリストから削除されます。',
-    });
-    if (isCancel) return;
-
-    deleteMutation.mutate(favorite.book.id, {
-      onSuccess: () => {
-        toast.success('お気に入りリストから削除しました');
-      },
-      onError: () => {
-        toast.error('お気に入りの削除に失敗しました', {
-          duration: TOAST_ERROR_DURATION,
-        });
-      },
-    });
-  };
-
+export default function FavoriteItem({ favorite, action }: Props) {
   const { prefetchBookDetail } = usePrefetch();
 
   const handlePrefetch = async () => {
@@ -107,23 +62,7 @@ export default function FavoriteItem({ favorite }: Props) {
                   </h2>
                 </Link>
 
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      className={cn(
-                        'text-muted-foreground hover:text-primary size-8',
-                        'text-primary bg-transparent'
-                      )}
-                      variant="ghost"
-                      size="icon"
-                      aria-label="お気に入り"
-                      onClick={() => handleClickDelete()}
-                    >
-                      <HeartIcon className="fill-primary" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>お気に入りから削除</TooltipContent>
-                </Tooltip>
+                {action}
               </div>
 
               <time

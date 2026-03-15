@@ -1,8 +1,8 @@
+import BookmarksSkeleton from '@/widgets/bookmarks/ui/bookmarks-skeleton';
 import { APP_TITLE } from '@/shared/config/constants';
 import ErrorElement from '@/shared/ui/error-element';
 import { Separator } from '@/shared/ui/separator';
 import Bookmarks from '@/widgets/bookmarks/ui/bookmarks';
-import BookmarksSkeleton from '@/widgets/bookmarks/ui/bookmarks-skeleton';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
