@@ -1,6 +1,8 @@
-import BookReadBackground from '@/widgets/book-reading/ui/book-read-background';
-import BookReadContent from '@/widgets/book-reading/ui/book-read-content';
-import BookReadContentSkeleton from '@/widgets/book-reading/ui/book-read-content-skeleton';
+import {
+  BookReadBackground,
+  BookReadContent,
+  BookReadContentSkeleton,
+} from '@/widgets/book-reading';
 import ErrorElement from '@/shared/ui/error-element';
 import { SubscriptionPlan } from '@/shared/config/subscription-plans';
 import { buildPath } from '@/shared/api/url-builder';

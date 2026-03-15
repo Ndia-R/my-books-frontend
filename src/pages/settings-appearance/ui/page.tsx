@@ -7,11 +7,8 @@ import {
 import { cn } from '@/shared/lib/utils';
 import { Button } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
-import Hero from '@/widgets/layout/ui/hero';
-import Logo from '@/widgets/layout/ui/logo';
-import ThemeCard, {
-  type ThemeCardProps,
-} from '@/widgets/settings/ui/theme-card';
+import { Hero, Logo } from '@/widgets/layout';
+import { ThemeCard, type ThemeCardProps } from '@/widgets/settings';
 import { motion } from 'motion/react';
 
 const THEME_CARDS: ThemeCardProps[] = [

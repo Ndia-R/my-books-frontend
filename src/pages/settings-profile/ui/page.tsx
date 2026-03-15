@@ -14,7 +14,7 @@ import { Button, buttonVariants } from '@/shared/ui/button';
 import { Card, CardContent } from '@/shared/ui/card';
 import { Input } from '@/shared/ui/input';
 import { Label } from '@/shared/ui/label';
-import Logo from '@/widgets/layout/ui/logo';
+import { Logo } from '@/widgets/layout';
 import { useMutation } from '@tanstack/react-query';
 import { Loader2Icon } from 'lucide-react';
 import { type FormEvent, useState } from 'react';

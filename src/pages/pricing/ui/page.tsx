@@ -18,7 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/shared/ui/card';
-import Logo from '@/widgets/layout/ui/logo';
+import { Logo } from '@/widgets/layout';
 import { useMutation } from '@tanstack/react-query';
 import { BookOpenIcon, CheckIcon, CrownIcon, XIcon } from 'lucide-react';
 import { useLocation } from 'react-router';

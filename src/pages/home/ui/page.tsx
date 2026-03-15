@@ -1,10 +1,8 @@
 import ErrorElement from '@/shared/ui/error-element';
 import { Separator } from '@/shared/ui/separator';
-import BookNewReleases from '@/widgets/book-discovery/ui/book-new-releases';
-import BooksSkeleton from '@/widgets/book-discovery/ui/books-skeleton';
-import GenresTopPage from '@/widgets/genres/ui/genres-top-page';
-import GenresSkeleton from '@/widgets/genres/ui/genres-skeleton';
-import Hero from '@/widgets/layout/ui/hero';
+import { BookNewReleases, BooksSkeleton } from '@/widgets/book-discovery';
+import { GenresSkeleton, GenresTopPage } from '@/widgets/genres';
+import { Hero } from '@/widgets/layout';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 

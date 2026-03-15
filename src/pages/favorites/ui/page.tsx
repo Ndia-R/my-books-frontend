@@ -1,8 +1,7 @@
-import FavoritesSkeleton from '@/widgets/favorites/ui/favorites-skeleton';
 import { APP_TITLE } from '@/shared/config/constants';
 import ErrorElement from '@/shared/ui/error-element';
 import { Separator } from '@/shared/ui/separator';
-import Favorites from '@/widgets/favorites/ui/favorites';
+import { Favorites, FavoritesSkeleton } from '@/widgets/favorites';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 

@@ -6,8 +6,8 @@ import { Button, buttonVariants } from '@/shared/ui/button';
 import { Card, CardContent, CardHeader } from '@/shared/ui/card';
 import ErrorElement from '@/shared/ui/error-element';
 import type { MenuItem } from '@/shared/ui/types';
-import Logo from '@/widgets/layout/ui/logo';
-import UserProfileCounts from '@/widgets/user-profile/ui/user-profile-counts';
+import { Logo } from '@/widgets/layout';
+import { UserProfileCounts } from '@/widgets/user-profile';
 import {
   CrownIcon,
   LockKeyhole,

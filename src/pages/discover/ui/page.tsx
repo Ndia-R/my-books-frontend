@@ -2,11 +2,12 @@ import { useSearchFilters } from '@/features/book-search';
 import { APP_TITLE } from '@/shared/config/constants';
 import ErrorElement from '@/shared/ui/error-element';
 import { Separator } from '@/shared/ui/separator';
-import BookDiscovery from '@/widgets/book-discovery/ui/book-discovery';
-import BooksSkeleton from '@/widgets/book-discovery/ui/books-skeleton';
-import GenresConditionSelector from '@/widgets/genres/ui/genres-condition-selector';
-import GenresSelector from '@/widgets/genres/ui/genres-selector';
-import GenresSkeleton from '@/widgets/genres/ui/genres-skeleton';
+import { BookDiscovery, BooksSkeleton } from '@/widgets/book-discovery';
+import {
+  GenresConditionSelector,
+  GenresSelector,
+  GenresSkeleton,
+} from '@/widgets/genres';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 

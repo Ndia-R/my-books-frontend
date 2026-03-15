@@ -1,7 +1,6 @@
 import ConfirmDialog from '@/shared/ui/confirm-dialog';
 import { Toaster } from '@/shared/ui/sonner';
-import Footer from '@/widgets/layout/ui/footer';
-import Header from '@/widgets/layout/ui/header';
+import { Footer, Header } from '@/widgets/layout';
 import { Outlet, ScrollRestoration } from 'react-router';
 
 export default function Layout() {

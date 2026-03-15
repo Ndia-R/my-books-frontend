@@ -2,8 +2,7 @@ import { useSearchFilters } from '@/features/book-search';
 import { APP_TITLE } from '@/shared/config/constants';
 import ErrorElement from '@/shared/ui/error-element';
 import { Separator } from '@/shared/ui/separator';
-import BookSearch from '@/widgets/book-discovery/ui/book-search';
-import BooksSkeleton from '@/widgets/book-discovery/ui/books-skeleton';
+import { BookSearch, BooksSkeleton } from '@/widgets/book-discovery';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 

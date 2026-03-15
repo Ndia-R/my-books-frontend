@@ -1,8 +1,7 @@
 import { APP_TITLE } from '@/shared/config/constants';
 import ErrorElement from '@/shared/ui/error-element';
 import { Separator } from '@/shared/ui/separator';
-import MyReviews from '@/widgets/my-reviews/ui/my-reviews';
-import MyReviewsSkeleton from '@/widgets/my-reviews/ui/my-reviews-skeleton';
+import { MyReviews, MyReviewsSkeleton } from '@/widgets/my-reviews';
 import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
